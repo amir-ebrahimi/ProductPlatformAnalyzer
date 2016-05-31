@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!-- Process should finish -->
+<!-- Operations: scan-barcode
+				, mount
+				, test_frame_rigid -->
+
+<!-- Variants: frame-rigid, Operations: scan-barcode -->
+
+<!-- VariantGroups: frame, Variants: frame-rigid -->
+
+<!-- Constraints: frame-rigid -->
+<testData>
+<operations>
+	<operation>
+		<operationName>scan-barcode</operationName>
+		<displayName>Scan barcode</displayName>
+		<operationPrecondition></operationPrecondition>
+		<operationPostcondition></operationPostcondition>
+	</operation>
+</operations>
+<variants>
+	<variant>
+		<variantName>frame-rigid</variantName>
+		<variantIndex>1</variantIndex>
+		<variantDisplayName>frame rigid</variantDisplayName>
+		<variantManufacturingOps>
+			<operationRef>scan-barcode</operationRef>
+		</variantManufacturingOps>
+	</variant>
+</variants>
+<variantGroups>
+	<variantGroup>
+		<variantGroupName>frame</variantGroupName>
+		<groupCardinality>choose exactly one</groupCardinality>
+		<variantRefs>
+			<variantRef>frame-rigid</variantRef>
+		</variantRefs>
+	</variantGroup>
+</variantGroups>
+<constraints>
+	<constraint>frame-rigid</constraint>
+</constraints>
+<variantOperationMappings>
+	<variantOperationMapping>
+		<variantRefs>
+			<variantRef>frame-rigid</variantRef>
+		</variantRefs>
+		<operationRefs>
+			<operationRef>scan-barcode</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+</variantOperationMappings>
+</testData>

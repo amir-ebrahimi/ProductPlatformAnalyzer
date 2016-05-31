@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Z3">
+      <HintPath>C:\z3-Unstable\build\Microsoft.Z3.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="FrameworkWrapper.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomTestCreator.cs" />
+    <Compile Include="xsd\xmlfile.cs" />
+    <Compile Include="Z3Solver.cs" />
+    <Compile Include="Z3SolverEngineer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
