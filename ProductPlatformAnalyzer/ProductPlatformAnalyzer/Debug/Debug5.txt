@@ -1838,3 +1838,950 @@
          run-axel-test_E_3_4
          put-on-sensor_I_3_4
          put-on-sensor_E_3_4))); Constraint 496 , Source: overallGoal
+(assert axel-test); Constraint 497 , Source: GroupCardinality
+(assert axel1); Constraint 498 , Source: GroupCardinality
+(assert Virtual-V); Constraint 499 , Source: GroupCardinality
+(assert axel1); Constraint 500 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 501 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 502 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 503 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 504 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 505 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 506 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 507 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 508 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 509 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 510 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 511 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 512 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 513 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 514 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 515 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 516 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 517 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 518 , Source: formula4-InactiveOperations
+(assert (not run-axel-test_PreCondition_3_0)); Constraint 519 , Source: formula5-Precondition
+(assert (=> (and run-axel-test_I_3_0 run-axel-test_PreCondition_3_0)
+    run-axel-test_E_3_1)); Constraint 520 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_0 run-axel-test_PreCondition_3_0))
+    (and (=> run-axel-test_I_3_0 run-axel-test_I_3_1)
+         (=> run-axel-test_I_3_1 run-axel-test_I_3_0)))); Constraint 521 , Source: formula5.2
+(assert (or run-axel-test_I_3_0
+    run-axel-test_E_3_0
+    run-axel-test_F_3_0
+    run-axel-test_U_3_0)); Constraint 522 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_0
+               (and (and (not run-axel-test_I_3_0) (not run-axel-test_E_3_0))
+                    (not run-axel-test_U_3_0))))
+      (a!2 (=> run-axel-test_U_3_0
+               (and (and (not run-axel-test_I_3_0) (not run-axel-test_E_3_0))
+                    (not run-axel-test_F_3_0)))))
+  (and (=> run-axel-test_I_3_0
+           (and (not run-axel-test_E_3_0)
+                (not run-axel-test_F_3_0)
+                (not run-axel-test_U_3_0)))
+       (=> run-axel-test_E_3_0
+           (and (not run-axel-test_I_3_0)
+                (not run-axel-test_F_3_0)
+                (not run-axel-test_U_3_0)))
+       a!1
+       a!2))); Constraint 523 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_0); Constraint 524 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_0 run-axel-test_PostCondition_3_0)
+    run-axel-test_F_3_1)); Constraint 525 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_0 run-axel-test_U_3_1)
+     (=> run-axel-test_U_3_1 run-axel-test_U_3_0))); Constraint 526 , Source: formula5.6
+(assert (=> run-axel-test_F_3_0 run-axel-test_F_3_1)); Constraint 527 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_0); Constraint 528 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_0 put-on-sensor_PreCondition_3_0)
+    put-on-sensor_E_3_1)); Constraint 529 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_0)
+    (and (=> put-on-sensor_I_3_0 put-on-sensor_I_3_1)
+         (=> put-on-sensor_I_3_1 put-on-sensor_I_3_0)))); Constraint 530 , Source: formula5.2
+(assert (or put-on-sensor_I_3_0
+    put-on-sensor_E_3_0
+    put-on-sensor_F_3_0
+    put-on-sensor_U_3_0)); Constraint 531 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_0
+               (and (and (not put-on-sensor_I_3_0) (not put-on-sensor_E_3_0))
+                    (not put-on-sensor_U_3_0))))
+      (a!2 (=> put-on-sensor_U_3_0
+               (and (and (not put-on-sensor_I_3_0) (not put-on-sensor_E_3_0))
+                    (not put-on-sensor_F_3_0)))))
+  (and (=> put-on-sensor_I_3_0
+           (and (not put-on-sensor_E_3_0)
+                (not put-on-sensor_F_3_0)
+                (not put-on-sensor_U_3_0)))
+       (=> put-on-sensor_E_3_0
+           (and (not put-on-sensor_I_3_0)
+                (not put-on-sensor_F_3_0)
+                (not put-on-sensor_U_3_0)))
+       a!1
+       a!2))); Constraint 532 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_0); Constraint 533 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_0 put-on-sensor_PostCondition_3_0)
+    put-on-sensor_F_3_1)); Constraint 534 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_0 put-on-sensor_U_3_1)
+     (=> put-on-sensor_U_3_1 put-on-sensor_U_3_0))); Constraint 535 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_0 put-on-sensor_F_3_1)); Constraint 536 , Source: formula5.7
+(assert axel-test); Constraint 537 , Source: GroupCardinality
+(assert axel1); Constraint 538 , Source: GroupCardinality
+(assert Virtual-V); Constraint 539 , Source: GroupCardinality
+(assert axel1); Constraint 540 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 541 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 542 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 543 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 544 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 545 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 546 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 547 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 548 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 549 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 550 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 551 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 552 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 553 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 554 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 555 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 556 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 557 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 558 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 559 , Source: formula4-InactiveOperations
+(assert (not run-axel-test_PreCondition_3_1)); Constraint 560 , Source: formula5-Precondition
+(assert (=> (and run-axel-test_I_3_1 run-axel-test_PreCondition_3_1)
+    run-axel-test_E_3_2)); Constraint 561 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_1 run-axel-test_PreCondition_3_1))
+    (and (=> run-axel-test_I_3_1 run-axel-test_I_3_2)
+         (=> run-axel-test_I_3_2 run-axel-test_I_3_1)))); Constraint 562 , Source: formula5.2
+(assert (or run-axel-test_I_3_1
+    run-axel-test_E_3_1
+    run-axel-test_F_3_1
+    run-axel-test_U_3_1)); Constraint 563 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_1
+               (and (and (not run-axel-test_I_3_1) (not run-axel-test_E_3_1))
+                    (not run-axel-test_U_3_1))))
+      (a!2 (=> run-axel-test_U_3_1
+               (and (and (not run-axel-test_I_3_1) (not run-axel-test_E_3_1))
+                    (not run-axel-test_F_3_1)))))
+  (and (=> run-axel-test_I_3_1
+           (and (not run-axel-test_E_3_1)
+                (not run-axel-test_F_3_1)
+                (not run-axel-test_U_3_1)))
+       (=> run-axel-test_E_3_1
+           (and (not run-axel-test_I_3_1)
+                (not run-axel-test_F_3_1)
+                (not run-axel-test_U_3_1)))
+       a!1
+       a!2))); Constraint 564 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_1); Constraint 565 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_1 run-axel-test_PostCondition_3_1)
+    run-axel-test_F_3_2)); Constraint 566 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_1 run-axel-test_U_3_2)
+     (=> run-axel-test_U_3_2 run-axel-test_U_3_1))); Constraint 567 , Source: formula5.6
+(assert (=> run-axel-test_F_3_1 run-axel-test_F_3_2)); Constraint 568 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_1); Constraint 569 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_1 put-on-sensor_PreCondition_3_1)
+    put-on-sensor_E_3_2)); Constraint 570 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_1)
+    (and (=> put-on-sensor_I_3_1 put-on-sensor_I_3_2)
+         (=> put-on-sensor_I_3_2 put-on-sensor_I_3_1)))); Constraint 571 , Source: formula5.2
+(assert (or put-on-sensor_I_3_1
+    put-on-sensor_E_3_1
+    put-on-sensor_F_3_1
+    put-on-sensor_U_3_1)); Constraint 572 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_1
+               (and (and (not put-on-sensor_I_3_1) (not put-on-sensor_E_3_1))
+                    (not put-on-sensor_U_3_1))))
+      (a!2 (=> put-on-sensor_U_3_1
+               (and (and (not put-on-sensor_I_3_1) (not put-on-sensor_E_3_1))
+                    (not put-on-sensor_F_3_1)))))
+  (and (=> put-on-sensor_I_3_1
+           (and (not put-on-sensor_E_3_1)
+                (not put-on-sensor_F_3_1)
+                (not put-on-sensor_U_3_1)))
+       (=> put-on-sensor_E_3_1
+           (and (not put-on-sensor_I_3_1)
+                (not put-on-sensor_F_3_1)
+                (not put-on-sensor_U_3_1)))
+       a!1
+       a!2))); Constraint 573 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_1); Constraint 574 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_1 put-on-sensor_PostCondition_3_1)
+    put-on-sensor_F_3_2)); Constraint 575 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_1 put-on-sensor_U_3_2)
+     (=> put-on-sensor_U_3_2 put-on-sensor_U_3_1))); Constraint 576 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_1 put-on-sensor_F_3_2)); Constraint 577 , Source: formula5.7
+(assert axel-test); Constraint 578 , Source: GroupCardinality
+(assert axel1); Constraint 579 , Source: GroupCardinality
+(assert Virtual-V); Constraint 580 , Source: GroupCardinality
+(assert axel1); Constraint 581 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 582 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 583 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 584 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 585 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 586 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 587 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 588 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 589 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 590 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 591 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 592 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 593 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 594 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 595 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 596 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 597 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 598 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 599 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 600 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 601 , Source: formula4-InactiveOperations
+(assert (=> (and run-axel-test_I_3_2 put-on-sensor_F_3_2) run-axel-test_E_3_3)); Constraint 602 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_2 put-on-sensor_F_3_2))
+    (and (=> run-axel-test_I_3_2 run-axel-test_I_3_3)
+         (=> run-axel-test_I_3_3 run-axel-test_I_3_2)))); Constraint 603 , Source: formula5.2
+(assert (or run-axel-test_I_3_2
+    run-axel-test_E_3_2
+    run-axel-test_F_3_2
+    run-axel-test_U_3_2)); Constraint 604 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_2
+               (and (and (not run-axel-test_I_3_2) (not run-axel-test_E_3_2))
+                    (not run-axel-test_U_3_2))))
+      (a!2 (=> run-axel-test_U_3_2
+               (and (and (not run-axel-test_I_3_2) (not run-axel-test_E_3_2))
+                    (not run-axel-test_F_3_2)))))
+  (and (=> run-axel-test_I_3_2
+           (and (not run-axel-test_E_3_2)
+                (not run-axel-test_F_3_2)
+                (not run-axel-test_U_3_2)))
+       (=> run-axel-test_E_3_2
+           (and (not run-axel-test_I_3_2)
+                (not run-axel-test_F_3_2)
+                (not run-axel-test_U_3_2)))
+       a!1
+       a!2))); Constraint 605 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_2); Constraint 606 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_2 run-axel-test_PostCondition_3_2)
+    run-axel-test_F_3_3)); Constraint 607 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_2 run-axel-test_U_3_3)
+     (=> run-axel-test_U_3_3 run-axel-test_U_3_2))); Constraint 608 , Source: formula5.6
+(assert (=> run-axel-test_F_3_2 run-axel-test_F_3_3)); Constraint 609 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_2); Constraint 610 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_2 put-on-sensor_PreCondition_3_2)
+    put-on-sensor_E_3_3)); Constraint 611 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_2)
+    (and (=> put-on-sensor_I_3_2 put-on-sensor_I_3_3)
+         (=> put-on-sensor_I_3_3 put-on-sensor_I_3_2)))); Constraint 612 , Source: formula5.2
+(assert (or put-on-sensor_I_3_2
+    put-on-sensor_E_3_2
+    put-on-sensor_F_3_2
+    put-on-sensor_U_3_2)); Constraint 613 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_2
+               (and (and (not put-on-sensor_I_3_2) (not put-on-sensor_E_3_2))
+                    (not put-on-sensor_U_3_2))))
+      (a!2 (=> put-on-sensor_U_3_2
+               (and (and (not put-on-sensor_I_3_2) (not put-on-sensor_E_3_2))
+                    (not put-on-sensor_F_3_2)))))
+  (and (=> put-on-sensor_I_3_2
+           (and (not put-on-sensor_E_3_2)
+                (not put-on-sensor_F_3_2)
+                (not put-on-sensor_U_3_2)))
+       (=> put-on-sensor_E_3_2
+           (and (not put-on-sensor_I_3_2)
+                (not put-on-sensor_F_3_2)
+                (not put-on-sensor_U_3_2)))
+       a!1
+       a!2))); Constraint 614 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_2); Constraint 615 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_2 put-on-sensor_PostCondition_3_2)
+    put-on-sensor_F_3_3)); Constraint 616 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_2 put-on-sensor_U_3_3)
+     (=> put-on-sensor_U_3_3 put-on-sensor_U_3_2))); Constraint 617 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_2 put-on-sensor_F_3_3)); Constraint 618 , Source: formula5.7
+(assert axel-test); Constraint 619 , Source: GroupCardinality
+(assert axel1); Constraint 620 , Source: GroupCardinality
+(assert Virtual-V); Constraint 621 , Source: GroupCardinality
+(assert axel1); Constraint 622 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 623 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 624 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 625 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 626 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 627 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 628 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 629 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 630 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 631 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 632 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 633 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 634 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 635 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 636 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 637 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 638 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 639 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 640 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 641 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 642 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 643 , Source: formula4-InactiveOperations
+(assert (=> (and run-axel-test_I_3_3 put-on-sensor_F_3_2) run-axel-test_E_3_4)); Constraint 644 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_3 put-on-sensor_F_3_2))
+    (and (=> run-axel-test_I_3_3 run-axel-test_I_3_4)
+         (=> run-axel-test_I_3_4 run-axel-test_I_3_3)))); Constraint 645 , Source: formula5.2
+(assert (or run-axel-test_I_3_3
+    run-axel-test_E_3_3
+    run-axel-test_F_3_3
+    run-axel-test_U_3_3)); Constraint 646 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_3
+               (and (and (not run-axel-test_I_3_3) (not run-axel-test_E_3_3))
+                    (not run-axel-test_U_3_3))))
+      (a!2 (=> run-axel-test_U_3_3
+               (and (and (not run-axel-test_I_3_3) (not run-axel-test_E_3_3))
+                    (not run-axel-test_F_3_3)))))
+  (and (=> run-axel-test_I_3_3
+           (and (not run-axel-test_E_3_3)
+                (not run-axel-test_F_3_3)
+                (not run-axel-test_U_3_3)))
+       (=> run-axel-test_E_3_3
+           (and (not run-axel-test_I_3_3)
+                (not run-axel-test_F_3_3)
+                (not run-axel-test_U_3_3)))
+       a!1
+       a!2))); Constraint 647 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_3); Constraint 648 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_3 run-axel-test_PostCondition_3_3)
+    run-axel-test_F_3_4)); Constraint 649 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_3 run-axel-test_U_3_4)
+     (=> run-axel-test_U_3_4 run-axel-test_U_3_3))); Constraint 650 , Source: formula5.6
+(assert (=> run-axel-test_F_3_3 run-axel-test_F_3_4)); Constraint 651 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_3); Constraint 652 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_3 put-on-sensor_PreCondition_3_3)
+    put-on-sensor_E_3_4)); Constraint 653 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_3)
+    (and (=> put-on-sensor_I_3_3 put-on-sensor_I_3_4)
+         (=> put-on-sensor_I_3_4 put-on-sensor_I_3_3)))); Constraint 654 , Source: formula5.2
+(assert (or put-on-sensor_I_3_3
+    put-on-sensor_E_3_3
+    put-on-sensor_F_3_3
+    put-on-sensor_U_3_3)); Constraint 655 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_3
+               (and (and (not put-on-sensor_I_3_3) (not put-on-sensor_E_3_3))
+                    (not put-on-sensor_U_3_3))))
+      (a!2 (=> put-on-sensor_U_3_3
+               (and (and (not put-on-sensor_I_3_3) (not put-on-sensor_E_3_3))
+                    (not put-on-sensor_F_3_3)))))
+  (and (=> put-on-sensor_I_3_3
+           (and (not put-on-sensor_E_3_3)
+                (not put-on-sensor_F_3_3)
+                (not put-on-sensor_U_3_3)))
+       (=> put-on-sensor_E_3_3
+           (and (not put-on-sensor_I_3_3)
+                (not put-on-sensor_F_3_3)
+                (not put-on-sensor_U_3_3)))
+       a!1
+       a!2))); Constraint 656 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_3); Constraint 657 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_3 put-on-sensor_PostCondition_3_3)
+    put-on-sensor_F_3_4)); Constraint 658 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_3 put-on-sensor_U_3_4)
+     (=> put-on-sensor_U_3_4 put-on-sensor_U_3_3))); Constraint 659 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_3 put-on-sensor_F_3_4)); Constraint 660 , Source: formula5.7
+(assert axel-test); Constraint 661 , Source: GroupCardinality
+(assert axel1); Constraint 662 , Source: GroupCardinality
+(assert Virtual-V); Constraint 663 , Source: GroupCardinality
+(assert axel1); Constraint 664 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 665 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 666 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 667 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 668 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 669 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 670 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 671 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 672 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 673 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 674 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 675 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 676 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 677 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 678 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 679 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 680 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 681 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 682 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 683 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 684 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 685 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 686 , Source: formula4-InactiveOperations
+(assert (=> (and run-axel-test_I_3_4 put-on-sensor_F_3_2) run-axel-test_E_3_5)); Constraint 687 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_4 put-on-sensor_F_3_2))
+    (and (=> run-axel-test_I_3_4 run-axel-test_I_3_5)
+         (=> run-axel-test_I_3_5 run-axel-test_I_3_4)))); Constraint 688 , Source: formula5.2
+(assert (or run-axel-test_I_3_4
+    run-axel-test_E_3_4
+    run-axel-test_F_3_4
+    run-axel-test_U_3_4)); Constraint 689 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_4
+               (and (and (not run-axel-test_I_3_4) (not run-axel-test_E_3_4))
+                    (not run-axel-test_U_3_4))))
+      (a!2 (=> run-axel-test_U_3_4
+               (and (and (not run-axel-test_I_3_4) (not run-axel-test_E_3_4))
+                    (not run-axel-test_F_3_4)))))
+  (and (=> run-axel-test_I_3_4
+           (and (not run-axel-test_E_3_4)
+                (not run-axel-test_F_3_4)
+                (not run-axel-test_U_3_4)))
+       (=> run-axel-test_E_3_4
+           (and (not run-axel-test_I_3_4)
+                (not run-axel-test_F_3_4)
+                (not run-axel-test_U_3_4)))
+       a!1
+       a!2))); Constraint 690 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_4); Constraint 691 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_4 run-axel-test_PostCondition_3_4)
+    run-axel-test_F_3_5)); Constraint 692 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_4 run-axel-test_U_3_5)
+     (=> run-axel-test_U_3_5 run-axel-test_U_3_4))); Constraint 693 , Source: formula5.6
+(assert (=> run-axel-test_F_3_4 run-axel-test_F_3_5)); Constraint 694 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_4); Constraint 695 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_4 put-on-sensor_PreCondition_3_4)
+    put-on-sensor_E_3_5)); Constraint 696 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_4)
+    (and (=> put-on-sensor_I_3_4 put-on-sensor_I_3_5)
+         (=> put-on-sensor_I_3_5 put-on-sensor_I_3_4)))); Constraint 697 , Source: formula5.2
+(assert (or put-on-sensor_I_3_4
+    put-on-sensor_E_3_4
+    put-on-sensor_F_3_4
+    put-on-sensor_U_3_4)); Constraint 698 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_4
+               (and (and (not put-on-sensor_I_3_4) (not put-on-sensor_E_3_4))
+                    (not put-on-sensor_U_3_4))))
+      (a!2 (=> put-on-sensor_U_3_4
+               (and (and (not put-on-sensor_I_3_4) (not put-on-sensor_E_3_4))
+                    (not put-on-sensor_F_3_4)))))
+  (and (=> put-on-sensor_I_3_4
+           (and (not put-on-sensor_E_3_4)
+                (not put-on-sensor_F_3_4)
+                (not put-on-sensor_U_3_4)))
+       (=> put-on-sensor_E_3_4
+           (and (not put-on-sensor_I_3_4)
+                (not put-on-sensor_F_3_4)
+                (not put-on-sensor_U_3_4)))
+       a!1
+       a!2))); Constraint 699 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_4); Constraint 700 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_4 put-on-sensor_PostCondition_3_4)
+    put-on-sensor_F_3_5)); Constraint 701 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_4 put-on-sensor_U_3_5)
+     (=> put-on-sensor_U_3_5 put-on-sensor_U_3_4))); Constraint 702 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_4 put-on-sensor_F_3_5)); Constraint 703 , Source: formula5.7
+(declare-const run-axel-test_I_3_6 Bool)
+(declare-const run-axel-test_E_3_6 Bool)
+(declare-const run-axel-test_F_3_6 Bool)
+(declare-const run-axel-test_U_3_6 Bool)
+(declare-const run-axel-test_PreCondition_3_6 Bool)
+(declare-const run-axel-test_PostCondition_3_6 Bool)
+(declare-const put-on-sensor_I_3_6 Bool)
+(declare-const put-on-sensor_E_3_6 Bool)
+(declare-const put-on-sensor_F_3_6 Bool)
+(declare-const put-on-sensor_U_3_6 Bool)
+(declare-const put-on-sensor_PreCondition_3_6 Bool)
+(declare-const put-on-sensor_PostCondition_3_6 Bool)
+(declare-const remove-sensor_I_0_5 Bool)
+(declare-const remove-sensor_E_0_5 Bool)
+(declare-const remove-sensor_F_0_5 Bool)
+(declare-const remove-sensor_U_0_5 Bool)
+(assert axel-test); Constraint 704 , Source: GroupCardinality
+(assert axel1); Constraint 705 , Source: GroupCardinality
+(assert Virtual-V); Constraint 706 , Source: GroupCardinality
+(assert axel1); Constraint 707 , Source: formula3
+(assert (and (=> run-axel-test_I_3_0 Virtual-V)
+     (=> Virtual-V run-axel-test_I_3_0)
+     (not run-axel-test_E_3_0)
+     (not run-axel-test_F_3_0)
+     (=> run-axel-test_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) run-axel-test_U_3_0))); Constraint 708 , Source: formula4-ActiveOperations
+(assert (and (=> put-on-sensor_I_3_0 Virtual-V)
+     (=> Virtual-V put-on-sensor_I_3_0)
+     (not put-on-sensor_E_3_0)
+     (not put-on-sensor_F_3_0)
+     (=> put-on-sensor_U_3_0 (not Virtual-V))
+     (=> (not Virtual-V) put-on-sensor_U_3_0))); Constraint 709 , Source: formula4-ActiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 710 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 711 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 712 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 713 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 714 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 715 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 716 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 717 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 718 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 719 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 720 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 721 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 722 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 723 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 724 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 725 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 726 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 727 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 728 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 729 , Source: formula4-InactiveOperations
+(assert (and (not remove-sensor_I_0_0)
+     (not remove-sensor_E_0_0)
+     (not remove-sensor_F_0_0)
+     remove-sensor_U_0_0)); Constraint 730 , Source: formula4-InactiveOperations
+(assert (=> (and run-axel-test_I_3_5 put-on-sensor_F_3_2) run-axel-test_E_3_6)); Constraint 731 , Source: formula5.1
+(assert (=> (not (and run-axel-test_I_3_5 put-on-sensor_F_3_2))
+    (and (=> run-axel-test_I_3_5 run-axel-test_I_3_6)
+         (=> run-axel-test_I_3_6 run-axel-test_I_3_5)))); Constraint 732 , Source: formula5.2
+(assert (or run-axel-test_I_3_5
+    run-axel-test_E_3_5
+    run-axel-test_F_3_5
+    run-axel-test_U_3_5)); Constraint 733 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-axel-test_F_3_5
+               (and (and (not run-axel-test_I_3_5) (not run-axel-test_E_3_5))
+                    (not run-axel-test_U_3_5))))
+      (a!2 (=> run-axel-test_U_3_5
+               (and (and (not run-axel-test_I_3_5) (not run-axel-test_E_3_5))
+                    (not run-axel-test_F_3_5)))))
+  (and (=> run-axel-test_I_3_5
+           (and (not run-axel-test_E_3_5)
+                (not run-axel-test_F_3_5)
+                (not run-axel-test_U_3_5)))
+       (=> run-axel-test_E_3_5
+           (and (not run-axel-test_I_3_5)
+                (not run-axel-test_F_3_5)
+                (not run-axel-test_U_3_5)))
+       a!1
+       a!2))); Constraint 734 , Source: formula5.3-Secondpart
+(assert run-axel-test_PostCondition_3_5); Constraint 735 , Source: formula5.4-Postcondition
+(assert (=> (and run-axel-test_E_3_5 run-axel-test_PostCondition_3_5)
+    run-axel-test_F_3_6)); Constraint 736 , Source: formula5.4
+(assert (and (=> run-axel-test_U_3_5 run-axel-test_U_3_6)
+     (=> run-axel-test_U_3_6 run-axel-test_U_3_5))); Constraint 737 , Source: formula5.6
+(assert (=> run-axel-test_F_3_5 run-axel-test_F_3_6)); Constraint 738 , Source: formula5.7
+(assert put-on-sensor_PreCondition_3_5); Constraint 739 , Source: formula5-Precondition
+(assert (=> (and put-on-sensor_I_3_5 put-on-sensor_PreCondition_3_5)
+    put-on-sensor_E_3_6)); Constraint 740 , Source: formula5.1
+(assert (=> (not put-on-sensor_I_3_5)
+    (and (=> put-on-sensor_I_3_5 put-on-sensor_I_3_6)
+         (=> put-on-sensor_I_3_6 put-on-sensor_I_3_5)))); Constraint 741 , Source: formula5.2
+(assert (or put-on-sensor_I_3_5
+    put-on-sensor_E_3_5
+    put-on-sensor_F_3_5
+    put-on-sensor_U_3_5)); Constraint 742 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> put-on-sensor_F_3_5
+               (and (and (not put-on-sensor_I_3_5) (not put-on-sensor_E_3_5))
+                    (not put-on-sensor_U_3_5))))
+      (a!2 (=> put-on-sensor_U_3_5
+               (and (and (not put-on-sensor_I_3_5) (not put-on-sensor_E_3_5))
+                    (not put-on-sensor_F_3_5)))))
+  (and (=> put-on-sensor_I_3_5
+           (and (not put-on-sensor_E_3_5)
+                (not put-on-sensor_F_3_5)
+                (not put-on-sensor_U_3_5)))
+       (=> put-on-sensor_E_3_5
+           (and (not put-on-sensor_I_3_5)
+                (not put-on-sensor_F_3_5)
+                (not put-on-sensor_U_3_5)))
+       a!1
+       a!2))); Constraint 743 , Source: formula5.3-Secondpart
+(assert put-on-sensor_PostCondition_3_5); Constraint 744 , Source: formula5.4-Postcondition
+(assert (=> (and put-on-sensor_E_3_5 put-on-sensor_PostCondition_3_5)
+    put-on-sensor_F_3_6)); Constraint 745 , Source: formula5.4
+(assert (and (=> put-on-sensor_U_3_5 put-on-sensor_U_3_6)
+     (=> put-on-sensor_U_3_6 put-on-sensor_U_3_5))); Constraint 746 , Source: formula5.6
+(assert (=> put-on-sensor_F_3_5 put-on-sensor_F_3_6)); Constraint 747 , Source: formula5.7
+(assert run-axel-test_PostCondition_3_5); Constraint 748 , Source: formula7-Postcondition
+(assert put-on-sensor_PreCondition_3_5); Constraint 749 , Source: formula7-Precondition
+(assert put-on-sensor_PostCondition_3_5); Constraint 750 , Source: formula7-Postcondition
+(assert (and (or (and (not put-on-sensor_F_3_2) run-axel-test_I_3_5)
+         (and (not run-axel-test_PostCondition_3_5) run-axel-test_E_3_5)
+         run-axel-test_F_3_5
+         run-axel-test_U_3_5)
+     (or (and (not put-on-sensor_PreCondition_3_5) put-on-sensor_I_3_5)
+         (and (not put-on-sensor_PostCondition_3_5) put-on-sensor_E_3_5)
+         put-on-sensor_F_3_5
+         put-on-sensor_U_3_5)
+     (or run-axel-test_I_3_5
+         run-axel-test_E_3_5
+         put-on-sensor_I_3_5
+         put-on-sensor_E_3_5))); Constraint 751 , Source: overallGoal

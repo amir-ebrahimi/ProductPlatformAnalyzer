@@ -56,6 +56,21 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Debug\Debug0.txt" />
+    <Content Include="Debug\Debug1.txt" />
+    <Content Include="Debug\Debug2.txt" />
+    <Content Include="Debug\Debug3.txt" />
+    <Content Include="Debug\Debug4.txt" />
+    <Content Include="Test\TestData1.xml" />
+    <Content Include="Test\TestData2.xml" />
+    <Content Include="Test\TestData3.xml" />
+    <Content Include="Test\TestData4.xml" />
+    <Content Include="Test\TestData5.xml" />
+    <Content Include="Test\TestData6.xml" />
+    <Content Include="Test\TestData7.xml" />
+    <Content Include="Test\TestData8.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

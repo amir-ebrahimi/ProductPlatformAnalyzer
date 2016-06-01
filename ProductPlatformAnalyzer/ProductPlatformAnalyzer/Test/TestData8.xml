@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!-- Testcase axel_test
+		 Truck variant: 1_axel, 2_axel
+		 Test variant: axel_inspection, test_break
+		 Operations: inspect_axel, run-break_test
+
+		 1_axel and axel_inspection -> inspect_axel.1
+		 2_axel and axel_inspection -> inspect_axel.2
+		 1_axel and test_break -> run_break_test
+		 2_axel and test_break -> run_break_test
+
+		 Condition: 
+
+	Mods on output:
+		Choose exactly one with 1 variant
+		[one-axel and axel-test] => run test
+			Variant operation mapping [V] -> Op
+-->
+<testData>
+<operations>
+	<operation>
+		<operationName>run-break-test</operationName>
+		<displayName>run break test</displayName>
+	</operation>
+	<operation>
+		<operationName>inspect</operationName>
+		<displayName>inspect</displayName>
+	</operation>
+</operations>
+<variants>
+	<variant>
+		<variantName>one-axel</variantName>
+		<variantIndex>1</variantIndex>
+		<variantDisplayName>one axel</variantDisplayName>
+		<variantManufacturingOps>
+			<operationName>inspect</operationName>
+		</variantManufacturingOps>
+	</variant>
+	<variant>
+		<variantName>two-axel</variantName>
+		<variantIndex>2</variantIndex>
+		<variantDisplayName>two axel</variantDisplayName>
+		<variantManufacturingOps>
+			<operationName>inspect</operationName>
+		</variantManufacturingOps>
+	</variant>
+	<variant>
+		<variantName>inspect-axel</variantName>
+		<variantIndex>3</variantIndex>
+		<variantDisplayName>inspect axel</variantDisplayName>
+		<variantManufacturingOps>
+			<operationName>inspect</operationName>
+		</variantManufacturingOps>
+	</variant>
+	<variant>
+		<variantName>break-test</variantName>
+		<variantIndex>4</variantIndex>
+		<variantDisplayName>break test</variantDisplayName>
+		<variantManufacturingOps>
+			<operationName>run-break-test</operationName>
+		</variantManufacturingOps>
+	</variant>
+</variants>
+<variantGroups>
+	<variantGroup>
+		<variantGroupName>test</variantGroupName>
+		<groupCardinality>choose at least one</groupCardinality>
+		<variantRefs>
+			<variantRef>break-test</variantRef>
+			<variantRef>inspect-axel</variantRef>
+		</variantRefs>
+	</variantGroup>
+	<variantGroup>
+		<variantGroupName>axel</variantGroupName>
+		<groupCardinality>choose at least one</groupCardinality>
+		<variantRefs>
+			<variantRef>one-axel</variantRef>
+			<variantRef>two-axel</variantRef>
+		</variantRefs>
+	</variantGroup>
+</variantGroups>
+<constraints>
+</constraints>
+<variantOperationMappings>
+	<variantOperationMapping>
+		<variantRefs>
+	    	<variantRef>inspect-axel</variantRef>
+	    	<variantRef>one-axel</variantRef>
+	    </variantRefs>
+		<operationRefs>
+		   <operationRef>inspect</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+	<variantOperationMapping>
+		<variantRefs>
+	    	<variantRef>break-test</variantRef>
+	    	<variantRef>one-axel</variantRef>
+	    </variantRefs>
+		<operationRefs>
+		   <operationRef>run-break-test</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+	<variantOperationMapping>
+		<variantRefs>
+	    	<variantRef>inspect-axel</variantRef>
+	    	<variantRef>one-axel</variantRef>
+	    </variantRefs>
+		<operationRefs>
+		   <operationRef>inspect</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+	<variantOperationMapping>
+		<variantRefs>
+	    	<variantRef>break-test</variantRef>
+	    	<variantRef>one-axel</variantRef>
+	    </variantRefs>
+		<operationRefs>
+		   <operationRef>run-break-test</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+</variantOperationMappings>
+</testData>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- Testcase axel_test
+		 Truck variant: axel1
+		 Test variant: test_axel
+		 Operations: run_test_axel, put on sensor
+
+		 	O_test_axel pre -> put on sensor
+
+		 axel1 and test_axel -> run_test_axel 
+		 Conditions: test_axel, axel1
+
+	Mods on output:
+		Choose exactly one with 1 variant
+		not axel-test => put-on sensor, but keep other assertions made from operand belonging to variant
+			(make progress for operand not belonging to variant without forcing start condition) 
+-->
+<testData>
+<operations>
+	<operation>
+		<operationName>put-on-sensor</operationName>
+		<displayName>put on sensor</displayName>
+	</operation>
+	<operation>
+		<operationName>remove-sensor</operationName>
+		<displayName>remove sensor</displayName>
+	</operation>
+	<operation>
+		<operationName>run-axel-test</operationName>
+		<displayName>run axel test</displayName>
+		<operationPrecondition>
+			<operationName>put-on-sensor_F_3_2</operationName>
+		</operationPrecondition>
+	</operation>
+</operations>
+<variants>
+	<variant>
+		<variantName>axel1</variantName>
+		<variantIndex>1</variantIndex>
+		<variantDisplayName>axel1</variantDisplayName>
+	</variant>
+	<variant>
+		<variantName>axel-test</variantName>
+		<variantIndex>2</variantIndex>
+		<variantDisplayName>axel test</variantDisplayName>
+	</variant>
+  <variant>
+    <variantName>Virtual-V</variantName>
+    <variantIndex>3</variantIndex>
+    <variantDisplayName>Virtual V</variantDisplayName>
+  </variant>
+</variants>
+<variantGroups>
+	<variantGroup>
+		<variantGroupName>test</variantGroupName>
+		<groupCardinality>choose exactly one</groupCardinality>
+		<variantRefs>
+			<variantRef>axel-test</variantRef>
+		</variantRefs>
+	</variantGroup>
+	<variantGroup>
+		<variantGroupName>axel</variantGroupName>
+		<groupCardinality>choose exactly one</groupCardinality>
+		<variantRefs>
+			<variantRef>axel1</variantRef>
+		</variantRefs>
+	</variantGroup>
+  <variantGroup>
+    <variantGroupName>Virtual-VG</variantGroupName>
+    <groupCardinality>choose exactly one</groupCardinality>
+    <variantRefs>
+      <variantRef>Virtual-V</variantRef>
+    </variantRefs>
+  </variantGroup>
+</variantGroups>
+<constraints>
+  <constraint>axel1</constraint>
+  <constraint>axel-test</constraint>
+  <constraint>or and and axel1 axel-test Virtual-V not and axel1 axel-test</constraint>
+</constraints>
+<variantOperationMappings>
+	<variantOperationMapping>
+		<variantRefs>
+	    	<variantRef>Virtual-V</variantRef>
+		</variantRefs>
+		<operationRefs>
+		   <operationRef>run-axel-test</operationRef>
+		   <operationRef>put-on-sensor</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+</variantOperationMappings>
+</testData>
