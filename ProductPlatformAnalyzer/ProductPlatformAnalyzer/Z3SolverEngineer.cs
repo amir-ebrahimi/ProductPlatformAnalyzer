@@ -128,7 +128,7 @@ namespace ProductPlatformAnalyzer
                     //forula 4
                     initializeFVariantOperation2Z3Constraints();
 
-                    //formula 5 and 6 and New Formula
+                    //formula 5 and New Formula
                     convertFOperations2Z3ConstraintNewVersion(i);
                     if (lOpSeqAnalysis)
                     {
@@ -584,6 +584,57 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                //Loop over the variant-operation mappings
+                //For each mapping find the current variant and current operations
+                List<variantOperations> lVariantOperations = lFrameworkWrapper.getVariantsOperations();
+
+                //Next state of operation
+                int lNewState = pState + 1;
+
+                foreach (variantOperations lCurrentVariantOperations in lVariantOperations)
+                {
+                    variant lCurrentVariant = lCurrentVariantOperations.getVariant();
+                    List<operation> lOperationList = lCurrentVariantOperations.getOperations();
+                        if (lOperationList != null)
+                        {
+                            foreach (operation lOperation in lOperationList)
+                            {
+                                resetCurrentStateOperationVariables(lOperation, lCurrentVariant, pState);
+
+                                resetNextStateOperationVariables(lOperation, lCurrentVariant, lNewState);
+
+                                resetOperationPrecondition(lOperation, lCurrentVariant, pState, "formula5-Precondition");
+
+                                BoolExpr lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PostCondition_" + lCurrentVariant.index + "_" + pState.ToString());
+
+                                //(O_I_k_j and Pre_k_j) => O_E_k_j+1
+                                createFormula51();
+
+                                // not (O_I_k_j and Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
+                                createFormula52(lOperation);
+
+                                //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                                //We should show
+                                //or O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                                //and (=> O_I_k_j (and (not O_E_k_j) (not O_F_k_j) (not O_U_k_j)))
+                                //    (=> O_E_k_j (and (not O_I_k_j) (not O_F_k_j) (not O_U_k_j)))
+                                //    (=> O_F_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_U_k_j)))
+                                //    (=> O_U_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_F_k_j)))
+                                createFormula53();
+
+                                //(O_E_k_j AND Post_k_j) => O_F_k_j+1
+                                createFormula54(pState, lOperation, lCurrentVariant);
+
+                                //O_U_k_j => O_U_k_j+1
+                                createFormula56();
+
+                                //O_F_k_j => O_F_k_j+1
+                                createFormula57();
+                            }
+                        }
+                }
+                
+                /*
                 //Loop over variant list
                 //For each variant find the variant in variant-operation mapping table
                 //For each operation in this list make the following operation boolean variables
@@ -642,6 +693,7 @@ namespace ProductPlatformAnalyzer
                 //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
                 //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
                 //createFormula6(pState);
+                 */
             }
             catch (Exception ex)
             {

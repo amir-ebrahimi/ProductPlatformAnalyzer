@@ -148,251 +148,141 @@
 			<variantName>Frame-Rigid</variantName>
 			<variantIndex>1</variantIndex>
 			<variantDisplayName>Frame Rigid</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Load-AGV</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Frame-Tractor</variantName>
 			<variantIndex>2</variantIndex>
 			<variantDisplayName>Frame Tractor</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Load-AGV</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Cab-Red</variantName>
 			<variantIndex>3</variantIndex>
 			<variantDisplayName>Cab Red</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Cab-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Cab-Yellow</variantName>
 			<variantIndex>4</variantIndex>
 			<variantDisplayName>Cab Yellow</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Cab-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Engine</variantName>
 			<variantIndex>5</variantIndex>
 			<variantDisplayName>Engine</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Drop-Engine-and-Attach-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>FWU-Single-Wheel-Axle</variantName>
 			<variantIndex>6</variantIndex>
 			<variantDisplayName>FWU-Single-Wheel-Axle</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Attach-Single-Axle</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>FRWU-Single-Wheel-Axle</variantName>
 			<variantIndex>7</variantIndex>
 			<variantDisplayName>FRWU-Single-Wheel-Axle</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Attach-Single-Axle</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>FRWU-Double-Wheel-Axle</variantName>
 			<variantIndex>8</variantIndex>
 			<variantDisplayName>FRWU-Double-Wheel-Axle</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Attach-Double-Axle</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>SRWU-Single-Wheel-Axle</variantName>
 			<variantIndex>9</variantIndex>
 			<variantDisplayName>SRWU-Single-Wheel-Axle</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Attach-Single-Axle</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>SRWU-Double-Wheel-Axle</variantName>
 			<variantIndex>10</variantIndex>
 			<variantDisplayName>SRWU-Double-Wheel-Axle</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Attach-Double-Axle</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>LAP-Accessories-Plate</variantName>
 			<variantIndex>11</variantIndex>
 			<variantDisplayName>LAP-Accessories-Plate</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Accessory-Plate-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>LAP-Fuel-Tank</variantName>
 			<variantIndex>12</variantIndex>
 			<variantDisplayName>LAP-Fuel-Tank</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Fuel-Tank-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>RAP-Accessories-Plate</variantName>
 			<variantIndex>13</variantIndex>
 			<variantDisplayName>RAP-Accessories-Plate</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Accessory-Plate-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>RAP-Fuel-Tank</variantName>
 			<variantIndex>14</variantIndex>
 			<variantDisplayName>RAP-Fuel-Tank</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Fuel-Tank-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Fifth-Wheel</variantName>
 			<variantIndex>15</variantIndex>
 			<variantDisplayName>Fifth-Wheel</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Fifth-Wheel-to-Frame</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Side-Panel-Red</variantName>
 			<variantIndex>16</variantIndex>
 			<variantDisplayName>Side-Panel-Red</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Side-Panel</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Side-Panel-Yellow</variantName>
 			<variantIndex>17</variantIndex>
 			<variantDisplayName>Side-Panel-Yellow</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Side-Panel</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Grey-Side-Cover</variantName>
 			<variantIndex>18</variantIndex>
 			<variantDisplayName>Grey-Side-Cover</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Attach-Side-Cover</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Heavy-Horn</variantName>
 			<variantIndex>19</variantIndex>
 			<variantDisplayName>Heavy-Horn</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Heavy-Horn-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Light-Horn</variantName>
 			<variantIndex>20</variantIndex>
 			<variantDisplayName>Light-Horn</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Light-Horn-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Heavy-Engine</variantName>
 			<variantIndex>21</variantIndex>
 			<variantDisplayName>Heavy-Engine</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Setup-Heavy-Engine-Sound</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Light-Engine</variantName>
 			<variantIndex>22</variantIndex>
 			<variantDisplayName>Light-Engine</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Setup-Light-Engine-Sound</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Interior-Lights</variantName>
 			<variantIndex>23</variantIndex>
 			<variantDisplayName>Interior-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Interior-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Working-Lights</variantName>
 			<variantIndex>24</variantIndex>
 			<variantDisplayName>Working-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Working-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Beamer-Lights</variantName>
 			<variantIndex>25</variantIndex>
 			<variantDisplayName>Beamer-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Beamer-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Rotational-Lights</variantName>
 			<variantIndex>26</variantIndex>
 			<variantDisplayName>Rotational-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Rotational-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Front-Lights</variantName>
 			<variantIndex>27</variantIndex>
 			<variantDisplayName>Front-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Front-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		<variant>
 			<variantName>Indicator-Lights</variantName>
 			<variantIndex>28</variantIndex>
 			<variantDisplayName>Indicator-Lights</variantDisplayName>
-			<variantManufacturingOps>
-				<operationRef>Secure-Part-ID</operationRef>
-				<operationRef>Place-and-Secure-Front-Lights-to-Cab</operationRef>
-			</variantManufacturingOps>
 		</variant>
 		
 	</variants>

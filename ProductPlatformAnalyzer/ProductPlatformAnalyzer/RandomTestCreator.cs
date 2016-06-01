@@ -200,10 +200,13 @@ namespace ProductPlatformAnalyzer
         {
             for (int i = 0; i < maxVariantNumber; i++)
             {
-                lFrameworkWrapper.CreateVariantInstance("V-" + i
+/*                lFrameworkWrapper.CreateVariantInstance("V-" + i
                                                         , i
                                                         , "V-" + i
-                                                        , pickASeriesOfRandomOperations());
+                                                        , pickASeriesOfRandomOperations());*/
+                lFrameworkWrapper.CreateVariantInstance("V-" + i
+                                                        , i
+                                                        , "V-" + i);
             }
         }
 

@@ -466,7 +466,8 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void CreateVariantInstance(String pName, int pIndex, String pDisplayName, List<String> pManufacturingOperation)
+//        public void CreateVariantInstance(String pName, int pIndex, String pDisplayName, List<String> pManufacturingOperation)
+        public void CreateVariantInstance(String pName, int pIndex, String pDisplayName)
         {
             try
             {
@@ -474,7 +475,7 @@ namespace ProductPlatformAnalyzer
                 tempVariant.names = pName;
                 tempVariant.index = pIndex;
                 tempVariant.displayName = pDisplayName;
-                if (pManufacturingOperation != null)
+                /*if (pManufacturingOperation != null)
                 {
                     List<operation> lManOperations = new List<operation>();
                     foreach (String lManufacturingOperationName in pManufacturingOperation)
@@ -482,15 +483,14 @@ namespace ProductPlatformAnalyzer
                         lManOperations.Add(findOperationWithName(lManufacturingOperationName));
                     }
                     tempVariant.manOperations = lManOperations;
-                }
+                }*/
                 addVariant(tempVariant);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("error in CreateVariantInstance, pName: " + pName
                                                                 + " ,pIndex: " + pIndex.ToString()
-                                                                + " ,pDisplayName: " + pDisplayName
-                                                                + " ,pManufacturingOperation: " + ReturnStringElements(pManufacturingOperation));
+                                                                + " ,pDisplayName: " + pDisplayName);
                 Console.WriteLine(ex.Message);
             }
         }
@@ -666,7 +666,7 @@ namespace ProductPlatformAnalyzer
 
                 foreach (XmlNode lNode in nodeList)
                 {
-                    List<string> lVariantManufacturingOperations = new List<string>();
+                    /*List<string> lVariantManufacturingOperations = new List<string>();
 
                     XmlNodeList variantManufacturingOperationsNodeList = lNode["variantManufacturingOps"].ChildNodes;
                     foreach (XmlNode lManufacturingOp in variantManufacturingOperationsNodeList)
@@ -674,10 +674,13 @@ namespace ProductPlatformAnalyzer
                         lVariantManufacturingOperations.Add(lManufacturingOp.InnerText);
                     }
 
-                    CreateVariantInstance(getXMLNodeAttributeInnerText(lNode,"variantName")
+                    CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
+                                            , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
+                                            , getXMLNodeAttributeInnerText(lNode, "variantDisplayName")
+                                            , lVariantManufacturingOperations);*/
+                    CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
                                             , int.Parse(getXMLNodeAttributeInnerText(lNode,"variantIndex"))
-                                            , getXMLNodeAttributeInnerText(lNode,"variantDisplayName")
-                                            , lVariantManufacturingOperations);
+                                            , getXMLNodeAttributeInnerText(lNode,"variantDisplayName"));
                 }
             }
             catch (Exception ex)
@@ -730,7 +733,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void createTestData1()
+        /*public void createTestData1()
         {
             //no deadlock, just one config, one operation
             CreateOperationInstance("Scan-barcode", "Scan barcode", null, null);
@@ -1027,7 +1030,7 @@ namespace ProductPlatformAnalyzer
             CreateVariantOperationMappingInstance("Grey-side-cover", new List<string> { "Secure-Part-ID", "Attach-Side-Cover" });
             CreateVariantOperationMappingInstance("Fifth-wheel", new List<string> { "Secure-Part-ID", "Attach-Fifth-Wheel-to-Frame" });
             CreateVariantOperationMappingInstance("Wheel", new List<string> { "Secure-Part-ID", "Attach-Wheels-to-Axles" });
-        }
+        }*/
 
     }
 }

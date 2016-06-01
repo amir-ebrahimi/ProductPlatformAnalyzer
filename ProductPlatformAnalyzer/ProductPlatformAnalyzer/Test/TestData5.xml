@@ -43,18 +43,11 @@
 		<variantName>frame-rigid</variantName>
 		<variantIndex>1</variantIndex>
 		<variantDisplayName>frame rigid</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>scan-barcode</operationName>
-			<operationName>test_frame_rigid</operationName>
-		</variantManufacturingOps>
 	</variant>
 	<variant>
 		<variantName>frame-tractor</variantName>
 		<variantIndex>2</variantIndex>
 		<variantDisplayName>frame tractor</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>mount</operationName>
-		</variantManufacturingOps>
 	</variant>
 </variants>
 <variantGroups>

@@ -23,9 +23,6 @@
 		<variantName>frame-rigid</variantName>
 		<variantIndex>1</variantIndex>
 		<variantDisplayName>frame rigid</variantDisplayName>
-		<variantManufacturingOps>
-			<operationRef>scan-barcode</operationRef>
-		</variantManufacturingOps>
 	</variant>
 </variants>
 <variantGroups>
