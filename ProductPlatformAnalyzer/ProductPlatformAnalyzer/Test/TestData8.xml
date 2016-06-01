@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!-- Testcase axel_test
-		 Truck variant: 1_axel, 2_axel
+		 Truck variant: axel1, axel2
 		 Test variant: axel_inspection, test_break
 		 Operations: inspect_axel, run-break_test
 
-		 1_axel and axel_inspection -> inspect_axel.1
-		 2_axel and axel_inspection -> inspect_axel.2
-		 1_axel and test_break -> run_break_test
-		 2_axel and test_break -> run_break_test
+		 axel1 and axel_inspection -> inspect_axel1
+		 axel2 and axel_inspection -> inspect_axel2
+		 axel1 and test_break -> run_break_test
+		 axel2 and test_break -> run_break_test
 
 		 Condition: 
 
@@ -29,36 +29,24 @@
 </operations>
 <variants>
 	<variant>
-		<variantName>one-axel</variantName>
+		<variantName>axel1</variantName>
 		<variantIndex>1</variantIndex>
-		<variantDisplayName>one axel</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>inspect</operationName>
-		</variantManufacturingOps>
+		<variantDisplayName>axel 1</variantDisplayName>
 	</variant>
 	<variant>
-		<variantName>two-axel</variantName>
+		<variantName>axel2</variantName>
 		<variantIndex>2</variantIndex>
-		<variantDisplayName>two axel</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>inspect</operationName>
-		</variantManufacturingOps>
+		<variantDisplayName>axel2</variantDisplayName>
 	</variant>
 	<variant>
 		<variantName>inspect-axel</variantName>
 		<variantIndex>3</variantIndex>
 		<variantDisplayName>inspect axel</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>inspect</operationName>
-		</variantManufacturingOps>
 	</variant>
 	<variant>
 		<variantName>break-test</variantName>
 		<variantIndex>4</variantIndex>
 		<variantDisplayName>break test</variantDisplayName>
-		<variantManufacturingOps>
-			<operationName>run-break-test</operationName>
-		</variantManufacturingOps>
 	</variant>
 </variants>
 <variantGroups>
@@ -74,8 +62,8 @@
 		<variantGroupName>axel</variantGroupName>
 		<groupCardinality>choose at least one</groupCardinality>
 		<variantRefs>
-			<variantRef>one-axel</variantRef>
-			<variantRef>two-axel</variantRef>
+			<variantRef>axel1</variantRef>
+			<variantRef>axel2</variantRef>
 		</variantRefs>
 	</variantGroup>
 </variantGroups>
@@ -94,7 +82,7 @@
 	<variantOperationMapping>
 		<variantRefs>
 	    	<variantRef>break-test</variantRef>
-	    	<variantRef>one-axel</variantRef>
+	    	<variantRef>axel1</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>
@@ -103,7 +91,7 @@
 	<variantOperationMapping>
 		<variantRefs>
 	    	<variantRef>inspect-axel</variantRef>
-	    	<variantRef>one-axel</variantRef>
+	    	<variantRef>axel1</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>inspect</operationRef>
@@ -112,7 +100,7 @@
 	<variantOperationMapping>
 		<variantRefs>
 	    	<variantRef>break-test</variantRef>
-	    	<variantRef>one-axel</variantRef>
+	    	<variantRef>axel1</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>

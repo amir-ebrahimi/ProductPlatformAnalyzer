@@ -618,10 +618,10 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//constraints");
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//constraint");
 
                 foreach (XmlNode lNode in nodeList)
-                    addConstraint(getXMLNodeAttributeInnerText(lNode,"constraint"));
+                    addConstraint(getXMLNodeAttributeInnerText(lNode,"logic"));
             }
             catch (Exception ex)
             {

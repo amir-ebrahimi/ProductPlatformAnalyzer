@@ -390,22 +390,54 @@
 	
 	</variantGroups>
 	<constraints>
-		<constraint>or (and Heavy-Engine Heavy-Horn) (and Light-Engine Light-Horn)</constraint>
-		<constraint>Front-Lights</constraint>
-		<constraint>or (and Heavy-Engine (or Beamer-Lights Rotational-Lights)) (and (not Heavy-Engine) (and (not Beamer-Lights) (not Rotational-Lights)))</constraint>
-		<constraint>or (and Beamer-Lights (not Rotational-Lights)) (or (and (not Beamer-Lights) Rotational-Lights) (and (not Beamer-Lights) (not Rotational-Lights)))</constraint>
-		<constraint>or (and Cab-Red Interior-Lights) (and (not Cab-Red) (not Interior-Lights))</constraint>
-		<constraint>or (and Frame-Tractor Light-Engine) (and Frame-Rigid Heavy-Engine)</constraint>
-		<constraint>or (and SRWU-Single-Wheel-Axle Beamer-Lights) (or (and SRWU-Double-Wheel-Axle Rotational-Lights) (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</constraint>
-		<constraint>or (and Working-Lights LAP-Accessories-Plate) (and (not Working-Lights) (not LAP-Accessories-Plate))</constraint>
-		<constraint>or (and Frame-Tractor FRWU-Double-Wheel-Axle) (and Frame-Rigid (or FRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle))</constraint>
-		<constraint>or (and SRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle) (or (and SRWU-Double-Wheel-Axle (or FRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle)) (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</constraint>
-		<constraint>or (and Frame-Tractor (or (and Cab-Red (and Side-Panel-Red (not Side-Panel-Yellow))) (and Cab-Yellow (and Side-Panel-Yellow (not Side-Panel-Red))))) (and (and Frame-Rigid (not Side-Panel-Red)) (not Side-Panel-Yellow))</constraint>
-		<constraint>or (and Frame-Rigid (or SRWU-Single-Wheel-Axle SRWU-Double-Wheel-Axle)) (and Frame-Tractor (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</constraint>
-		<constraint>or (and Frame-Rigid (not Fifth-Wheel)) (and Frame-Tractor Fifth-Wheel)</constraint>
-		<constraint>or (and Frame-Tractor (not Grey-Side-Cover)) (and Frame-Rigid Grey-Side-Cover)</constraint>
-		<constraint>or (and Frame-Rigid (or Cab-Red Cab-Yellow)) (and Frame-Tractor (or Cab-Red Cab-Yellow))</constraint>
-		<constraint>or (and LAP-Accessories-Plate RAP-Fuel-Tank) (and RAP-Accessories-Plate LAP-Fuel-Tank)</constraint>
+		<constraint>
+      <logic>or (and Heavy-Engine Heavy-Horn) (and Light-Engine Light-Horn)</logic>
+    </constraint>
+		<constraint>
+      <logic>Front-Lights</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Heavy-Engine (or Beamer-Lights Rotational-Lights)) (and (not Heavy-Engine) (and (not Beamer-Lights) (not Rotational-Lights)))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Beamer-Lights (not Rotational-Lights)) (or (and (not Beamer-Lights) Rotational-Lights) (and (not Beamer-Lights) (not Rotational-Lights)))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Cab-Red Interior-Lights) (and (not Cab-Red) (not Interior-Lights))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Tractor Light-Engine) (and Frame-Rigid Heavy-Engine)</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and SRWU-Single-Wheel-Axle Beamer-Lights) (or (and SRWU-Double-Wheel-Axle Rotational-Lights) (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Working-Lights LAP-Accessories-Plate) (and (not Working-Lights) (not LAP-Accessories-Plate))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Tractor FRWU-Double-Wheel-Axle) (and Frame-Rigid (or FRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and SRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle) (or (and SRWU-Double-Wheel-Axle (or FRWU-Single-Wheel-Axle FRWU-Double-Wheel-Axle)) (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Tractor (or (and Cab-Red (and Side-Panel-Red (not Side-Panel-Yellow))) (and Cab-Yellow (and Side-Panel-Yellow (not Side-Panel-Red))))) (and (and Frame-Rigid (not Side-Panel-Red)) (not Side-Panel-Yellow))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Rigid (or SRWU-Single-Wheel-Axle SRWU-Double-Wheel-Axle)) (and Frame-Tractor (and (not SRWU-Single-Wheel-Axle) (not SRWU-Double-Wheel-Axle)))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Rigid (not Fifth-Wheel)) (and Frame-Tractor Fifth-Wheel)</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Tractor (not Grey-Side-Cover)) (and Frame-Rigid Grey-Side-Cover)</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and Frame-Rigid (or Cab-Red Cab-Yellow)) (and Frame-Tractor (or Cab-Red Cab-Yellow))</logic>
+    </constraint>
+		<constraint>
+      <logic>or (and LAP-Accessories-Plate RAP-Fuel-Tank) (and RAP-Accessories-Plate LAP-Fuel-Tank)</logic>
+    </constraint>
 	</constraints>
 	<variantOperationMappings>
 		<variantOperationMapping>

@@ -73,9 +73,15 @@
   </variantGroup>
 </variantGroups>
 <constraints>
-  <constraint>axel1</constraint>
-  <constraint>axel-test</constraint>
-  <constraint>or and and axel1 axel-test Virtual-V not and axel1 axel-test</constraint>
+  <constraint>
+    <logic>axel1</logic>
+  </constraint>
+  <constraint>
+    <logic>axel-test</logic>
+  </constraint>
+  <constraint>
+    <logic>or (and (and axel1 axel-test) Virtual-V) (not (and axel1 axel-test))</logic>
+  </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>
