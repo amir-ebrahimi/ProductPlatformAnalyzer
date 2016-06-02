@@ -791,12 +791,21 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("Time: " + stopwatch.Elapsed);
                 Model resultModel = iSolver.Model;
 
+                OutputHandler output = new OutputHandler();
+
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                 {
                     Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
                     if (lCurrentExpr != null)
-                        Console.WriteLine(lCurrentExpr.ToString() + " = " + resultModel.Evaluate(lCurrentExpr));
+                    {
+                        string value = "" + resultModel.Evaluate(lCurrentExpr);
+                        //Console.WriteLine(lCurrentExpr.ToString() + " = " + value);
+                        output.addExp(lCurrentExpr.ToString(), value);
+                    }
                 }
+
+                output.SortAfterState();
+                output.Print();
 
                 //foreach (Expr lExpression in ExpressionList)
                 //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="FrameworkWrapper.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="OutputHandler.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomTestCreator.cs" />
