@@ -291,25 +291,27 @@ namespace ProductPlatformAnalyzer
                 //Formula 2
                 List<variant> lVariants = pVariantGroup.variant;
 
+                List<String> lVariantNames = new List<string>();
+                foreach (variant lVariant in lVariants)
+                    lVariantNames.Add(lVariant.names);
+
                 switch (pVariantGroup.gCardinality)
                 {
                     case "choose exactly one":
                         {
-                            List<String> lVariantNames = new List<string>();
-                            foreach (variant lVariant in lVariants)
-                                lVariantNames.Add(lVariant.names);
-
                             lZ3Solver.AddXorOperator2Constraints(lVariantNames, "GroupCardinality");
 
                             break;
                         }
                     case "choose at least one":
                         {
-                            List<String> lVariantNames = new List<string>();
-                            foreach (variant lVariant in lVariants)
-                                lVariantNames.Add(lVariant.names);
-
                             lZ3Solver.AddOrOperator2Constraints(lVariantNames, "GroupCardinality");
+
+                            break;
+                        }
+                    case "choose all":
+                        {
+                            lZ3Solver.AddAndOperator2Constraints(lVariantNames, "GroupCardinality");
 
                             break;
                         }

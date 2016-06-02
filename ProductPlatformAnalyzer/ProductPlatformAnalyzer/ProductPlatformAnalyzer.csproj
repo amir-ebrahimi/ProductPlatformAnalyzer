@@ -69,7 +69,9 @@
     <Content Include="Test\TestData5.xml" />
     <Content Include="Test\TestData6.xml" />
     <Content Include="Test\TestData7.xml" />
-    <Content Include="Test\TestData8.xml" />
+    <Content Include="Test\TestData8.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
