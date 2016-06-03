@@ -28,7 +28,7 @@
 		<operationPostcondition></operationPostcondition>
 	</operation>
 	<operation>
-		<operationName>test_frame_rigid</operationName>
+		<operationName>test-frame-rigid</operationName>
 		<displayName>Test frame rigid</displayName>
 		<operationPrecondition>
 			<operationName>mount_F_2_2</operationName>
@@ -61,7 +61,7 @@
 	</variantGroup>
 </variantGroups>
 <constraints>
-	<constraint>frame-rigid</constraint>
+	<constraint><logic>frame-rigid</logic></constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>
@@ -70,7 +70,7 @@
 		</variantRefs>
 	    <operationRefs>
 	      <operationRef>scan-barcode</operationRef>
-	      <operationRef>test_frame_rigid</operationRef>
+	      <operationRef>test-frame-rigid</operationRef>
 		</operationRefs>
 	</variantOperationMapping>
 	<variantOperationMapping>

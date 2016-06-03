@@ -43,7 +43,7 @@
 	</variantGroup>
 </variantGroups>
 <constraints>
-	<constraint>frame-rigid</constraint>
+	<constraint><logic>frame-rigid</logic></constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>

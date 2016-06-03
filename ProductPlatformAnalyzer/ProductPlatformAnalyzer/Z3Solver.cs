@@ -805,7 +805,9 @@ namespace ProductPlatformAnalyzer
                 }
 
                 output.SortAfterState();
-                output.Print();
+                // output.printOpTransformations();
+                output.printCounterExample();
+                //output.Print();
 
                 //foreach (Expr lExpression in ExpressionList)
                 //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));

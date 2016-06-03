@@ -130,6 +130,7 @@ namespace ProductPlatformAnalyzer
 
                     //formula 5 and New Formula
                     convertFOperations2Z3ConstraintNewVersion(i);
+
                     if (lOpSeqAnalysis)
                     {
                         if (i == pState)
