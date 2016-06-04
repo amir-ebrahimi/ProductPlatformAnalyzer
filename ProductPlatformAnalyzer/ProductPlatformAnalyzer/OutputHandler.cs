@@ -159,11 +159,13 @@ namespace ProductPlatformAnalyzer
 
         internal void printCounterExample()
         {
+            int lastState = getLastState();
+
             Console.WriteLine("\nVariants:");
             printVariants();
 
             Console.WriteLine("\nOperation states:");
-            printOpState(0);
+            printOpState(lastState);
 
             Console.WriteLine("\nFalse pre/post-conditions:");
             printConditionsState(0);
@@ -193,6 +195,19 @@ namespace ProductPlatformAnalyzer
                     Console.WriteLine(exp.ToString());
                 }
             }
+        }
+
+        private int getLastState()
+        {
+            int lastState = 0;
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state > lastState)
+                {
+                    lastState = exp.state;
+                }
+            }
+            return lastState-1;
         }
     }
 }

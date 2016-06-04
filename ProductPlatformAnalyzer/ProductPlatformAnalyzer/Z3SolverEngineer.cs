@@ -1258,6 +1258,7 @@ namespace ProductPlatformAnalyzer
                             break;
                         //                        lZ3SolverEngineer.ResetAnalyzer();
                         Console.ReadKey();
+                        ResetAnalyzer();
                     }
                     Console.ReadKey();
                 }
