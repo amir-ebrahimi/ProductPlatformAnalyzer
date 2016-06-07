@@ -35,7 +35,9 @@
 	</variantGroup>
 </variantGroups>
 <constraints>
-	<constraint><logic>frame-rigid</logic></constraint>
+	<constraint>
+    <logic>frame-rigid</logic>
+  </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>

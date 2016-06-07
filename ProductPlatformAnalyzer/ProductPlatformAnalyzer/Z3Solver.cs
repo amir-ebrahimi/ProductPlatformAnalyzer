@@ -773,12 +773,13 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool CheckSatisfiability(bool done)
+        public bool CheckSatisfiability(int pState, bool done)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Status sat = iSolver.Check();
+            Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
+            Status sat = iSolver.Check(lExprToCheck);
 
             stopwatch.Stop();
 

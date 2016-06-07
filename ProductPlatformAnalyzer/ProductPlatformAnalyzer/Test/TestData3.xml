@@ -51,7 +51,9 @@
 	</variantGroup>
 </variantGroups>
 <constraints>
-	<constraint><logic>frame-tractor</logic></constraint>
+	<constraint>
+    <logic>frame-tractor</logic>
+  </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>

@@ -115,11 +115,11 @@ namespace ProductPlatformAnalyzer
 
                 //loadInitialData(pFile);
 
-                for (int i = 0; i <= pState; i++)
-                {
+//                for (int i = 0; i <= pState; i++)
+//                {
 
                     convertFVariants2Z3Variants();
-                    convertFOperations2Z3Operations(i);
+                    convertFOperations2Z3Operations(pState);
 
                     //formula 2
                     produceVariantGroupGCardinalityConstraints();
@@ -129,27 +129,27 @@ namespace ProductPlatformAnalyzer
                     initializeFVariantOperation2Z3Constraints();
 
                     //formula 5 and New Formula
-                    convertFOperations2Z3ConstraintNewVersion(i);
+                    convertFOperations2Z3ConstraintNewVersion(pState);
 
                     if (lOpSeqAnalysis)
                     {
-                        if (i == pState && !done)
+                        if (!done)
                             //formula 7 and 8
-                            convertFGoals2Z3GoalsVersion2(i);
+                            convertFGoals2Z3GoalsVersion2(pState);
                     }
-                }
+//                }
 
                 if (!done)
                 {
                     Console.WriteLine("Analysis No: " + pState);
-                    lTestResult = analyseZ3Model(done);
+                    lTestResult = analyseZ3Model(pState, done);
 
                     lZ3Solver.WriteDebugFile(pState);
                 }
                 else
                 {
                     Console.WriteLine("Finished: ");
-                    lTestResult = analyseZ3Model(done);
+                    lTestResult = analyseZ3Model(pState, done);
                 }
 
             }
@@ -161,10 +161,10 @@ namespace ProductPlatformAnalyzer
             return lTestResult;
         }
 
-        private bool analyseZ3Model(bool done)
+        private bool analyseZ3Model(int pState, bool done)
         {
             //returns the result of checking the satisfiability;
-            return lZ3Solver.CheckSatisfiability(done);
+            return lZ3Solver.CheckSatisfiability(pState, done);
         }
 
         public void convertFVariants2Z3Variants()
@@ -1120,6 +1120,9 @@ namespace ProductPlatformAnalyzer
             {
                 BoolExpr lOverallGoal = null;
 
+                //This boolean expression is used to refer to this overall goal
+                lZ3Solver.AddBooleanExpression("P" + pState);
+
                 List<variant> localVariantList = lFrameworkWrapper.getVariantList();
 
                 BoolExpr lFormula7 = createFormula7(localVariantList, pState);
@@ -1128,7 +1131,10 @@ namespace ProductPlatformAnalyzer
 
                 lOverallGoal = lZ3Solver.AndOperator(new List<BoolExpr>() { lFormula7, lFormula8 });
                 if (lOverallGoal != null)
-                    lZ3Solver.AddConstraintToSolver(lOverallGoal, "overallGoal");
+                    //lZ3Solver.AddConstraintToSolver(lOverallGoal, "overallGoal");
+                    lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName("P" + pState)
+                                                                , lOverallGoal
+                                                                , "overallGoal");
             }
             catch (Exception ex)
             {
@@ -1267,7 +1273,7 @@ namespace ProductPlatformAnalyzer
                             break;
                         //                        lZ3SolverEngineer.ResetAnalyzer();
                         Console.ReadKey();
-                        ResetAnalyzer();
+                        //ResetAnalyzer();
 
                         if (i == lNoOfCycles -1)
                         {
