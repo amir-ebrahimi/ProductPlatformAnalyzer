@@ -773,7 +773,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool CheckSatisfiability()
+        public bool CheckSatisfiability(bool done)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -787,8 +787,6 @@ namespace ProductPlatformAnalyzer
             if (sat == Status.SATISFIABLE)
             {
                 lSatisfiabilityResult = true;
-                Console.WriteLine("Satisfiable");
-                Console.WriteLine("Time: " + stopwatch.Elapsed);
                 Model resultModel = iSolver.Model;
 
                 OutputHandler output = new OutputHandler();
@@ -799,15 +797,22 @@ namespace ProductPlatformAnalyzer
                     if (lCurrentExpr != null)
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
-                        //Console.WriteLine(lCurrentExpr.ToString() + " = " + value);
                         output.addExp(lCurrentExpr.ToString(), value);
+                        output.SortAfterState();
                     }
                 }
 
-                output.SortAfterState();
-                // output.printOpTransformations();
-                output.printCounterExample();
-                //output.Print();
+                if (done)
+                {
+                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+                    output.printOpTransformations();
+                }
+                else
+                {
+                    Console.WriteLine("Satisfiable");
+                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+                    output.printCounterExample();
+                }
 
                 //foreach (Expr lExpression in ExpressionList)
                 //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));

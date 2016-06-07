@@ -106,6 +106,10 @@ namespace ProductPlatformAnalyzer
 
         public void printOpTransformations()
         {
+            Console.WriteLine("\nVariants: ");
+            printVariants();
+
+            Console.WriteLine("\nOperations in order: ");
             foreach (OutputExp exp in outputResult)
             {
                 OutputExp nextOp = findNextOp(exp);
@@ -125,7 +129,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (exp.name.Contains("_"))
                     {
-                        if (first.state == (exp.state + 1) &&
+                        if ((first.state +1) == exp.state &&
                             String.Equals(first.operation, exp.operation) &&
                             String.Equals(nextOpState(first.opState), exp.opState) &&
                             first.variant == exp.variant &&
@@ -164,7 +168,7 @@ namespace ProductPlatformAnalyzer
             Console.WriteLine("\nVariants:");
             printVariants();
 
-            Console.WriteLine("\nOperation states:");
+            Console.WriteLine("\nOperation in last state:");
             printOpState(lastState);
 
             Console.WriteLine("\nFalse pre/post-conditions:");

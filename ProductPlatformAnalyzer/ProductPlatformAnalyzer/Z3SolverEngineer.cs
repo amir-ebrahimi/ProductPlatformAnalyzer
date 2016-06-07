@@ -105,7 +105,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool testConstraintConvertion(int pState, String pFile)
+        public bool testConstraintConvertion(int pState, String pFile, bool done)
         {
             bool lTestResult = false;
             try
@@ -133,16 +133,24 @@ namespace ProductPlatformAnalyzer
 
                     if (lOpSeqAnalysis)
                     {
-                        if (i == pState)
+                        if (i == pState && !done)
                             //formula 7 and 8
                             convertFGoals2Z3GoalsVersion2(i);
                     }
                 }
 
-                Console.WriteLine("Analysis No: " + pState);
-                lTestResult = analyseZ3Model();
+                if (!done)
+                {
+                    Console.WriteLine("Analysis No: " + pState);
+                    lTestResult = analyseZ3Model(done);
 
-                lZ3Solver.WriteDebugFile(pState);
+                    lZ3Solver.WriteDebugFile(pState);
+                }
+                else
+                {
+                    Console.WriteLine("Finished: ");
+                    lTestResult = analyseZ3Model(done);
+                }
 
             }
             catch (Exception ex)
@@ -153,10 +161,10 @@ namespace ProductPlatformAnalyzer
             return lTestResult;
         }
 
-        private bool analyseZ3Model()
+        private bool analyseZ3Model(bool done)
         {
             //returns the result of checking the satisfiability;
-            return lZ3Solver.CheckSatisfiability();
+            return lZ3Solver.CheckSatisfiability(done);
         }
 
         public void convertFVariants2Z3Variants()
@@ -1247,18 +1255,26 @@ namespace ProductPlatformAnalyzer
                     //Each operation will have two transitions
                     int lNoOfCycles = lNoOfOperations * 2;
 
+                    bool done = false;
 
                     bool lTestResult = false;
                     lZ3Solver.PrepareDebugDirectory();
                     for (int i = 0; i < lNoOfCycles; i++)
                     {
-                        lTestResult = testConstraintConvertion(i, file);
+                        lTestResult = testConstraintConvertion(i, file, done);
 
                         if (lTestResult)
                             break;
                         //                        lZ3SolverEngineer.ResetAnalyzer();
                         Console.ReadKey();
                         ResetAnalyzer();
+
+                        if (i == lNoOfCycles -1)
+                        {
+                            done = true;
+                            lTestResult = testConstraintConvertion(i, file, done);
+                        }
+
                     }
                     Console.ReadKey();
                 }
