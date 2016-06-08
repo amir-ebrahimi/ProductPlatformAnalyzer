@@ -60,10 +60,23 @@ namespace ProductPlatformAnalyzer
             outputResult = new List<OutputExp>();
         }
 
-        public void addExp(string name, string value)
+        public void addExp(string name, string value, int pState)
         {
-            OutputExp temp = new OutputExp(name, value);
-            outputResult.Add(temp);
+            if (!goalState(name, pState))
+            {
+                OutputExp temp = new OutputExp(name, value);
+                outputResult.Add(temp);
+            }
+        }
+
+        private bool goalState(string name, int pState)
+        {
+            for (int i = 0; i <= pState; i++)
+            {
+                if (String.Equals(name, ("P" + i)))
+                    return true;
+            }
+            return false;
         }
 
         public void Print()

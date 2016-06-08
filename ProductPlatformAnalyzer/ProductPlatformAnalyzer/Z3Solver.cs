@@ -778,8 +778,19 @@ namespace ProductPlatformAnalyzer
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
-            Status sat = iSolver.Check(lExprToCheck);
+            Status sat;
+
+            if (done)
+            {
+                sat = iSolver.Check();
+            }
+            else
+            {
+                Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
+                sat = iSolver.Check(lExprToCheck);
+            }
+
+            
 
             stopwatch.Stop();
 
@@ -798,7 +809,7 @@ namespace ProductPlatformAnalyzer
                     if (lCurrentExpr != null)
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
-                        output.addExp(lCurrentExpr.ToString(), value);
+                        output.addExp(lCurrentExpr.ToString(), value, pState);
                         output.SortAfterState();
                     }
                 }

@@ -23,6 +23,9 @@
 	<operation>
 		<operationName>remove-sensor</operationName>
 		<displayName>remove sensor</displayName>
+		<operationPrecondition>
+			<operationName>run-axel-test_E_3_3</operationName>
+		</operationPrecondition>
 	</operation>
 	<operation>
 		<operationName>run-axel-test</operationName>
@@ -30,6 +33,9 @@
 		<operationPrecondition>
 			<operationName>put-on-sensor_F_3_2</operationName>
 		</operationPrecondition>
+		<operationPostcondition>
+			<operationName>remove-sensor_F_3_5</operationName>
+		</operationPostcondition>
 	</operation>
 </operations>
 <variants>
@@ -91,6 +97,7 @@
 		<operationRefs>
 		   <operationRef>run-axel-test</operationRef>
 		   <operationRef>put-on-sensor</operationRef>
+		   <operationRef>remove-sensor</operationRef>
 		</operationRefs>
 	</variantOperationMapping>
 </variantOperationMappings>

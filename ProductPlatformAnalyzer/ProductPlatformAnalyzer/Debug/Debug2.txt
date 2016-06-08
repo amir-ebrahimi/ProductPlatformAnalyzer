@@ -1,453 +1,644 @@
-(declare-const frame-rigid Bool)
-(declare-const frame-tractor Bool)
-(declare-const scan-barcode_I_1_0 Bool)
-(declare-const scan-barcode_E_1_0 Bool)
-(declare-const scan-barcode_F_1_0 Bool)
-(declare-const scan-barcode_U_1_0 Bool)
-(declare-const scan-barcode_PreCondition_1_0 Bool)
-(declare-const scan-barcode_PostCondition_1_0 Bool)
-(declare-const scan-barcode_I_1_1 Bool)
-(declare-const scan-barcode_E_1_1 Bool)
-(declare-const scan-barcode_F_1_1 Bool)
-(declare-const scan-barcode_U_1_1 Bool)
-(declare-const scan-barcode_PreCondition_1_1 Bool)
-(declare-const scan-barcode_PostCondition_1_1 Bool)
-(declare-const test-frame-rigid_I_1_0 Bool)
-(declare-const test-frame-rigid_E_1_0 Bool)
-(declare-const test-frame-rigid_F_1_0 Bool)
-(declare-const test-frame-rigid_U_1_0 Bool)
-(declare-const test-frame-rigid_PreCondition_1_0 Bool)
-(declare-const test-frame-rigid_PostCondition_1_0 Bool)
-(declare-const test-frame-rigid_I_1_1 Bool)
-(declare-const test-frame-rigid_E_1_1 Bool)
-(declare-const test-frame-rigid_F_1_1 Bool)
-(declare-const test-frame-rigid_U_1_1 Bool)
-(declare-const test-frame-rigid_PreCondition_1_1 Bool)
-(declare-const test-frame-rigid_PostCondition_1_1 Bool)
-(declare-const mount_I_2_0 Bool)
-(declare-const mount_E_2_0 Bool)
-(declare-const mount_F_2_0 Bool)
-(declare-const mount_U_2_0 Bool)
-(declare-const mount_PreCondition_2_0 Bool)
-(declare-const mount_PostCondition_2_0 Bool)
-(declare-const mount_I_2_1 Bool)
-(declare-const mount_E_2_1 Bool)
-(declare-const mount_F_2_1 Bool)
-(declare-const mount_U_2_1 Bool)
-(declare-const mount_PreCondition_2_1 Bool)
-(declare-const mount_PostCondition_2_1 Bool)
-(assert (or (and frame-rigid (not frame-tractor)) (and (not frame-rigid) frame-tractor))); Constraint 1 , Source: GroupCardinality
-(assert frame-rigid); Constraint 2 , Source: formula3
-(assert (and (=> scan-barcode_I_1_0 frame-rigid)
-     (=> frame-rigid scan-barcode_I_1_0)
-     (not scan-barcode_E_1_0)
-     (not scan-barcode_F_1_0)
-     (=> scan-barcode_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) scan-barcode_U_1_0))); Constraint 3 , Source: formula4-ActiveOperations
-(assert (and (=> test-frame-rigid_I_1_0 frame-rigid)
-     (=> frame-rigid test-frame-rigid_I_1_0)
-     (not test-frame-rigid_E_1_0)
-     (not test-frame-rigid_F_1_0)
-     (=> test-frame-rigid_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) test-frame-rigid_U_1_0))); Constraint 4 , Source: formula4-ActiveOperations
-(assert (and (=> mount_I_2_0 frame-tractor)
-     (=> frame-tractor mount_I_2_0)
-     (not mount_E_2_0)
-     (not mount_F_2_0)
-     (=> mount_U_2_0 (not frame-tractor))
-     (=> (not frame-tractor) mount_U_2_0))); Constraint 5 , Source: formula4-ActiveOperations
-(assert scan-barcode_PreCondition_1_0); Constraint 6 , Source: formula5-Precondition
-(assert (=> (and scan-barcode_I_1_0 scan-barcode_PreCondition_1_0) scan-barcode_E_1_1)); Constraint 7 , Source: formula5.1
-(assert (=> (not scan-barcode_I_1_0)
-    (and (=> scan-barcode_I_1_0 scan-barcode_I_1_1)
-         (=> scan-barcode_I_1_1 scan-barcode_I_1_0)))); Constraint 8 , Source: formula5.2
-(assert (or scan-barcode_I_1_0 scan-barcode_E_1_0 scan-barcode_F_1_0 scan-barcode_U_1_0)); Constraint 9 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> scan-barcode_F_1_0
-               (and (and (not scan-barcode_I_1_0) (not scan-barcode_E_1_0))
-                    (not scan-barcode_U_1_0))))
-      (a!2 (=> scan-barcode_U_1_0
-               (and (and (not scan-barcode_I_1_0) (not scan-barcode_E_1_0))
-                    (not scan-barcode_F_1_0)))))
-  (and (=> scan-barcode_I_1_0
-           (and (not scan-barcode_E_1_0)
-                (not scan-barcode_F_1_0)
-                (not scan-barcode_U_1_0)))
-       (=> scan-barcode_E_1_0
-           (and (not scan-barcode_I_1_0)
-                (not scan-barcode_F_1_0)
-                (not scan-barcode_U_1_0)))
+(declare-const axel1 Bool)
+(declare-const axel2 Bool)
+(declare-const inspect-axel Bool)
+(declare-const break-test Bool)
+(declare-const VirtualV1 Bool)
+(declare-const VirtualV2 Bool)
+(declare-const VirtualV3 Bool)
+(declare-const VirtualV4 Bool)
+(declare-const inspect_I_5_0 Bool)
+(declare-const inspect_E_5_0 Bool)
+(declare-const inspect_F_5_0 Bool)
+(declare-const inspect_U_5_0 Bool)
+(declare-const inspect_PreCondition_5_0 Bool)
+(declare-const inspect_PostCondition_5_0 Bool)
+(declare-const inspect_I_5_1 Bool)
+(declare-const inspect_E_5_1 Bool)
+(declare-const inspect_F_5_1 Bool)
+(declare-const inspect_U_5_1 Bool)
+(declare-const inspect_PreCondition_5_1 Bool)
+(declare-const inspect_PostCondition_5_1 Bool)
+(declare-const run-break-test_I_6_0 Bool)
+(declare-const run-break-test_E_6_0 Bool)
+(declare-const run-break-test_F_6_0 Bool)
+(declare-const run-break-test_U_6_0 Bool)
+(declare-const run-break-test_PreCondition_6_0 Bool)
+(declare-const run-break-test_PostCondition_6_0 Bool)
+(declare-const run-break-test_I_6_1 Bool)
+(declare-const run-break-test_E_6_1 Bool)
+(declare-const run-break-test_F_6_1 Bool)
+(declare-const run-break-test_U_6_1 Bool)
+(declare-const run-break-test_PreCondition_6_1 Bool)
+(declare-const run-break-test_PostCondition_6_1 Bool)
+(declare-const inspect_I_7_0 Bool)
+(declare-const inspect_E_7_0 Bool)
+(declare-const inspect_F_7_0 Bool)
+(declare-const inspect_U_7_0 Bool)
+(declare-const inspect_PreCondition_7_0 Bool)
+(declare-const inspect_PostCondition_7_0 Bool)
+(declare-const inspect_I_7_1 Bool)
+(declare-const inspect_E_7_1 Bool)
+(declare-const inspect_F_7_1 Bool)
+(declare-const inspect_U_7_1 Bool)
+(declare-const inspect_PreCondition_7_1 Bool)
+(declare-const inspect_PostCondition_7_1 Bool)
+(declare-const run-break-test_I_8_0 Bool)
+(declare-const run-break-test_E_8_0 Bool)
+(declare-const run-break-test_F_8_0 Bool)
+(declare-const run-break-test_U_8_0 Bool)
+(declare-const run-break-test_PreCondition_8_0 Bool)
+(declare-const run-break-test_PostCondition_8_0 Bool)
+(declare-const run-break-test_I_8_1 Bool)
+(declare-const run-break-test_E_8_1 Bool)
+(declare-const run-break-test_F_8_1 Bool)
+(declare-const run-break-test_U_8_1 Bool)
+(declare-const run-break-test_PreCondition_8_1 Bool)
+(declare-const run-break-test_PostCondition_8_1 Bool)
+(assert (or break-test inspect-axel)); Constraint 1 , Source: GroupCardinality
+(assert (or axel1 axel2)); Constraint 2 , Source: GroupCardinality
+(assert (or VirtualV1 VirtualV2 VirtualV3 VirtualV4)); Constraint 3 , Source: GroupCardinality
+(assert (not break-test)); Constraint 4 , Source: formula3
+(assert (or (and (not VirtualV1) (not (and axel1 inspect-axel)))
+    (and VirtualV1 (and axel1 inspect-axel)))); Constraint 5 , Source: formula3
+(assert (or (and (not VirtualV2) (not (and axel1 break-test)))
+    (and VirtualV2 (and axel1 break-test)))); Constraint 6 , Source: formula3
+(assert (or (and (not VirtualV3) (not (and axel2 inspect-axel)))
+    (and VirtualV3 (and axel2 inspect-axel)))); Constraint 7 , Source: formula3
+(assert (or (and (not VirtualV4) (not (and axel2 break-test)))
+    (and VirtualV4 (and axel2 break-test)))); Constraint 8 , Source: formula3
+(assert (and (=> inspect_I_5_0 VirtualV1)
+     (=> VirtualV1 inspect_I_5_0)
+     (not inspect_E_5_0)
+     (not inspect_F_5_0)
+     (=> inspect_U_5_0 (not VirtualV1))
+     (=> (not VirtualV1) inspect_U_5_0))); Constraint 9 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_6_0 VirtualV2)
+     (=> VirtualV2 run-break-test_I_6_0)
+     (not run-break-test_E_6_0)
+     (not run-break-test_F_6_0)
+     (=> run-break-test_U_6_0 (not VirtualV2))
+     (=> (not VirtualV2) run-break-test_U_6_0))); Constraint 10 , Source: formula4-ActiveOperations
+(assert (and (=> inspect_I_7_0 VirtualV3)
+     (=> VirtualV3 inspect_I_7_0)
+     (not inspect_E_7_0)
+     (not inspect_F_7_0)
+     (=> inspect_U_7_0 (not VirtualV3))
+     (=> (not VirtualV3) inspect_U_7_0))); Constraint 11 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_8_0 VirtualV4)
+     (=> VirtualV4 run-break-test_I_8_0)
+     (not run-break-test_E_8_0)
+     (not run-break-test_F_8_0)
+     (=> run-break-test_U_8_0 (not VirtualV4))
+     (=> (not VirtualV4) run-break-test_U_8_0))); Constraint 12 , Source: formula4-ActiveOperations
+(assert inspect_PreCondition_5_0); Constraint 13 , Source: formula5-Precondition
+(assert (=> (and inspect_I_5_0 inspect_PreCondition_5_0) inspect_E_5_1)); Constraint 14 , Source: formula5.1
+(assert (=> (not inspect_I_5_0)
+    (and (=> inspect_I_5_0 inspect_I_5_1) (=> inspect_I_5_1 inspect_I_5_0)))); Constraint 15 , Source: formula5.2
+(assert (or inspect_I_5_0 inspect_E_5_0 inspect_F_5_0 inspect_U_5_0)); Constraint 16 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_5_0
+               (and (and (not inspect_I_5_0) (not inspect_E_5_0))
+                    (not inspect_U_5_0))))
+      (a!2 (=> inspect_U_5_0
+               (and (and (not inspect_I_5_0) (not inspect_E_5_0))
+                    (not inspect_F_5_0)))))
+  (and (=> inspect_I_5_0
+           (and (not inspect_E_5_0) (not inspect_F_5_0) (not inspect_U_5_0)))
+       (=> inspect_E_5_0
+           (and (not inspect_I_5_0) (not inspect_F_5_0) (not inspect_U_5_0)))
        a!1
-       a!2))); Constraint 10 , Source: formula5.3-Secondpart
-(assert scan-barcode_PostCondition_1_0); Constraint 11 , Source: formula5.4-Postcondition
-(assert (=> (and scan-barcode_E_1_0 scan-barcode_PostCondition_1_0) scan-barcode_F_1_1)); Constraint 12 , Source: formula5.4
-(assert (and (=> scan-barcode_U_1_0 scan-barcode_U_1_1)
-     (=> scan-barcode_U_1_1 scan-barcode_U_1_0))); Constraint 13 , Source: formula5.6
-(assert (=> scan-barcode_F_1_0 scan-barcode_F_1_1)); Constraint 14 , Source: formula5.7
-(assert (not test-frame-rigid_PreCondition_1_0)); Constraint 15 , Source: formula5-Precondition
-(assert (=> (and test-frame-rigid_I_1_0 test-frame-rigid_PreCondition_1_0)
-    test-frame-rigid_E_1_1)); Constraint 16 , Source: formula5.1
-(assert (=> (not (and test-frame-rigid_I_1_0 test-frame-rigid_PreCondition_1_0))
-    (and (=> test-frame-rigid_I_1_0 test-frame-rigid_I_1_1)
-         (=> test-frame-rigid_I_1_1 test-frame-rigid_I_1_0)))); Constraint 17 , Source: formula5.2
-(assert (or test-frame-rigid_I_1_0
-    test-frame-rigid_E_1_0
-    test-frame-rigid_F_1_0
-    test-frame-rigid_U_1_0)); Constraint 18 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> test-frame-rigid_F_1_0
-               (and (and (not test-frame-rigid_I_1_0)
-                         (not test-frame-rigid_E_1_0))
-                    (not test-frame-rigid_U_1_0))))
-      (a!2 (=> test-frame-rigid_U_1_0
-               (and (and (not test-frame-rigid_I_1_0)
-                         (not test-frame-rigid_E_1_0))
-                    (not test-frame-rigid_F_1_0)))))
-  (and (=> test-frame-rigid_I_1_0
-           (and (not test-frame-rigid_E_1_0)
-                (not test-frame-rigid_F_1_0)
-                (not test-frame-rigid_U_1_0)))
-       (=> test-frame-rigid_E_1_0
-           (and (not test-frame-rigid_I_1_0)
-                (not test-frame-rigid_F_1_0)
-                (not test-frame-rigid_U_1_0)))
+       a!2))); Constraint 17 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_5_0); Constraint 18 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_5_0 inspect_PostCondition_5_0) inspect_F_5_1)); Constraint 19 , Source: formula5.4
+(assert (and (=> inspect_U_5_0 inspect_U_5_1) (=> inspect_U_5_1 inspect_U_5_0))); Constraint 20 , Source: formula5.6
+(assert (=> inspect_F_5_0 inspect_F_5_1)); Constraint 21 , Source: formula5.7
+(assert run-break-test_PreCondition_6_0); Constraint 22 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_6_0 run-break-test_PreCondition_6_0)
+    run-break-test_E_6_1)); Constraint 23 , Source: formula5.1
+(assert (=> (not run-break-test_I_6_0)
+    (and (=> run-break-test_I_6_0 run-break-test_I_6_1)
+         (=> run-break-test_I_6_1 run-break-test_I_6_0)))); Constraint 24 , Source: formula5.2
+(assert (or run-break-test_I_6_0
+    run-break-test_E_6_0
+    run-break-test_F_6_0
+    run-break-test_U_6_0)); Constraint 25 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_6_0
+               (and (and (not run-break-test_I_6_0) (not run-break-test_E_6_0))
+                    (not run-break-test_U_6_0))))
+      (a!2 (=> run-break-test_U_6_0
+               (and (and (not run-break-test_I_6_0) (not run-break-test_E_6_0))
+                    (not run-break-test_F_6_0)))))
+  (and (=> run-break-test_I_6_0
+           (and (not run-break-test_E_6_0)
+                (not run-break-test_F_6_0)
+                (not run-break-test_U_6_0)))
+       (=> run-break-test_E_6_0
+           (and (not run-break-test_I_6_0)
+                (not run-break-test_F_6_0)
+                (not run-break-test_U_6_0)))
        a!1
-       a!2))); Constraint 19 , Source: formula5.3-Secondpart
-(assert (not test-frame-rigid_PostCondition_1_0)); Constraint 20 , Source: formula5.4-Postcondition
-(assert (=> (and test-frame-rigid_E_1_0 (not test-frame-rigid_PostCondition_1_0))
-    test-frame-rigid_F_1_1)); Constraint 21 , Source: formula5.4
-(assert (and (=> test-frame-rigid_U_1_0 test-frame-rigid_U_1_1)
-     (=> test-frame-rigid_U_1_1 test-frame-rigid_U_1_0))); Constraint 22 , Source: formula5.6
-(assert (=> test-frame-rigid_F_1_0 test-frame-rigid_F_1_1)); Constraint 23 , Source: formula5.7
-(assert mount_PreCondition_2_0); Constraint 24 , Source: formula5-Precondition
-(assert (=> (and mount_I_2_0 mount_PreCondition_2_0) mount_E_2_1)); Constraint 25 , Source: formula5.1
-(assert (=> (not mount_I_2_0)
-    (and (=> mount_I_2_0 mount_I_2_1) (=> mount_I_2_1 mount_I_2_0)))); Constraint 26 , Source: formula5.2
-(assert (or mount_I_2_0 mount_E_2_0 mount_F_2_0 mount_U_2_0)); Constraint 27 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> mount_F_2_0
-               (and (and (not mount_I_2_0) (not mount_E_2_0)) (not mount_U_2_0))))
-      (a!2 (=> mount_U_2_0
-               (and (and (not mount_I_2_0) (not mount_E_2_0)) (not mount_F_2_0)))))
-  (and (=> mount_I_2_0
-           (and (not mount_E_2_0) (not mount_F_2_0) (not mount_U_2_0)))
-       (=> mount_E_2_0
-           (and (not mount_I_2_0) (not mount_F_2_0) (not mount_U_2_0)))
+       a!2))); Constraint 26 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_6_0); Constraint 27 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_6_0 run-break-test_PostCondition_6_0)
+    run-break-test_F_6_1)); Constraint 28 , Source: formula5.4
+(assert (and (=> run-break-test_U_6_0 run-break-test_U_6_1)
+     (=> run-break-test_U_6_1 run-break-test_U_6_0))); Constraint 29 , Source: formula5.6
+(assert (=> run-break-test_F_6_0 run-break-test_F_6_1)); Constraint 30 , Source: formula5.7
+(assert inspect_PreCondition_7_0); Constraint 31 , Source: formula5-Precondition
+(assert (=> (and inspect_I_7_0 inspect_PreCondition_7_0) inspect_E_7_1)); Constraint 32 , Source: formula5.1
+(assert (=> (not inspect_I_7_0)
+    (and (=> inspect_I_7_0 inspect_I_7_1) (=> inspect_I_7_1 inspect_I_7_0)))); Constraint 33 , Source: formula5.2
+(assert (or inspect_I_7_0 inspect_E_7_0 inspect_F_7_0 inspect_U_7_0)); Constraint 34 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_7_0
+               (and (and (not inspect_I_7_0) (not inspect_E_7_0))
+                    (not inspect_U_7_0))))
+      (a!2 (=> inspect_U_7_0
+               (and (and (not inspect_I_7_0) (not inspect_E_7_0))
+                    (not inspect_F_7_0)))))
+  (and (=> inspect_I_7_0
+           (and (not inspect_E_7_0) (not inspect_F_7_0) (not inspect_U_7_0)))
+       (=> inspect_E_7_0
+           (and (not inspect_I_7_0) (not inspect_F_7_0) (not inspect_U_7_0)))
        a!1
-       a!2))); Constraint 28 , Source: formula5.3-Secondpart
-(assert mount_PostCondition_2_0); Constraint 29 , Source: formula5.4-Postcondition
-(assert (=> (and mount_E_2_0 mount_PostCondition_2_0) mount_F_2_1)); Constraint 30 , Source: formula5.4
-(assert (and (=> mount_U_2_0 mount_U_2_1) (=> mount_U_2_1 mount_U_2_0))); Constraint 31 , Source: formula5.6
-(assert (=> mount_F_2_0 mount_F_2_1)); Constraint 32 , Source: formula5.7
+       a!2))); Constraint 35 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_7_0); Constraint 36 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_7_0 inspect_PostCondition_7_0) inspect_F_7_1)); Constraint 37 , Source: formula5.4
+(assert (and (=> inspect_U_7_0 inspect_U_7_1) (=> inspect_U_7_1 inspect_U_7_0))); Constraint 38 , Source: formula5.6
+(assert (=> inspect_F_7_0 inspect_F_7_1)); Constraint 39 , Source: formula5.7
+(assert run-break-test_PreCondition_8_0); Constraint 40 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_8_0 run-break-test_PreCondition_8_0)
+    run-break-test_E_8_1)); Constraint 41 , Source: formula5.1
+(assert (=> (not run-break-test_I_8_0)
+    (and (=> run-break-test_I_8_0 run-break-test_I_8_1)
+         (=> run-break-test_I_8_1 run-break-test_I_8_0)))); Constraint 42 , Source: formula5.2
+(assert (or run-break-test_I_8_0
+    run-break-test_E_8_0
+    run-break-test_F_8_0
+    run-break-test_U_8_0)); Constraint 43 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_8_0
+               (and (and (not run-break-test_I_8_0) (not run-break-test_E_8_0))
+                    (not run-break-test_U_8_0))))
+      (a!2 (=> run-break-test_U_8_0
+               (and (and (not run-break-test_I_8_0) (not run-break-test_E_8_0))
+                    (not run-break-test_F_8_0)))))
+  (and (=> run-break-test_I_8_0
+           (and (not run-break-test_E_8_0)
+                (not run-break-test_F_8_0)
+                (not run-break-test_U_8_0)))
+       (=> run-break-test_E_8_0
+           (and (not run-break-test_I_8_0)
+                (not run-break-test_F_8_0)
+                (not run-break-test_U_8_0)))
+       a!1
+       a!2))); Constraint 44 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_8_0); Constraint 45 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_8_0 run-break-test_PostCondition_8_0)
+    run-break-test_F_8_1)); Constraint 46 , Source: formula5.4
+(assert (and (=> run-break-test_U_8_0 run-break-test_U_8_1)
+     (=> run-break-test_U_8_1 run-break-test_U_8_0))); Constraint 47 , Source: formula5.6
+(assert (=> run-break-test_F_8_0 run-break-test_F_8_1)); Constraint 48 , Source: formula5.7
 (declare-const P0 Bool)
-(assert scan-barcode_PreCondition_1_0); Constraint 33 , Source: formula7-Precondition
-(assert scan-barcode_PostCondition_1_0); Constraint 34 , Source: formula7-Postcondition
-(assert (not test-frame-rigid_PreCondition_1_0)); Constraint 35 , Source: formula7-Precondition
-(assert (not test-frame-rigid_PostCondition_1_0)); Constraint 36 , Source: formula7-Postcondition
-(assert mount_PreCondition_2_0); Constraint 37 , Source: formula7-Precondition
-(assert mount_PostCondition_2_0); Constraint 38 , Source: formula7-Postcondition
-(assert (let ((a!1 (and (or (and (not scan-barcode_PreCondition_1_0) scan-barcode_I_1_0)
-                    (and (not scan-barcode_PostCondition_1_0)
-                         scan-barcode_E_1_0)
-                    scan-barcode_F_1_0
-                    scan-barcode_U_1_0)
-                (or (and (not test-frame-rigid_PreCondition_1_0)
-                         test-frame-rigid_I_1_0)
-                    (and (not test-frame-rigid_PostCondition_1_0)
-                         test-frame-rigid_E_1_0)
-                    test-frame-rigid_F_1_0
-                    test-frame-rigid_U_1_0)
-                (or (and (not mount_PreCondition_2_0) mount_I_2_0)
-                    (and (not mount_PostCondition_2_0) mount_E_2_0)
-                    mount_F_2_0
-                    mount_U_2_0)
-                (or scan-barcode_I_1_0
-                    scan-barcode_E_1_0
-                    test-frame-rigid_I_1_0
-                    test-frame-rigid_E_1_0
-                    mount_I_2_0
-                    mount_E_2_0))))
-  (=> P0 a!1))); Constraint 39 , Source: overallGoal
-(declare-const scan-barcode_I_1_2 Bool)
-(declare-const scan-barcode_E_1_2 Bool)
-(declare-const scan-barcode_F_1_2 Bool)
-(declare-const scan-barcode_U_1_2 Bool)
-(declare-const scan-barcode_PreCondition_1_2 Bool)
-(declare-const scan-barcode_PostCondition_1_2 Bool)
-(declare-const test-frame-rigid_I_1_2 Bool)
-(declare-const test-frame-rigid_E_1_2 Bool)
-(declare-const test-frame-rigid_F_1_2 Bool)
-(declare-const test-frame-rigid_U_1_2 Bool)
-(declare-const test-frame-rigid_PreCondition_1_2 Bool)
-(declare-const test-frame-rigid_PostCondition_1_2 Bool)
-(declare-const mount_I_2_2 Bool)
-(declare-const mount_E_2_2 Bool)
-(declare-const mount_F_2_2 Bool)
-(declare-const mount_U_2_2 Bool)
-(declare-const mount_PreCondition_2_2 Bool)
-(declare-const mount_PostCondition_2_2 Bool)
-(assert (or (and frame-rigid (not frame-tractor)) (and (not frame-rigid) frame-tractor))); Constraint 40 , Source: GroupCardinality
-(assert frame-rigid); Constraint 41 , Source: formula3
-(assert (and (=> scan-barcode_I_1_0 frame-rigid)
-     (=> frame-rigid scan-barcode_I_1_0)
-     (not scan-barcode_E_1_0)
-     (not scan-barcode_F_1_0)
-     (=> scan-barcode_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) scan-barcode_U_1_0))); Constraint 42 , Source: formula4-ActiveOperations
-(assert (and (=> test-frame-rigid_I_1_0 frame-rigid)
-     (=> frame-rigid test-frame-rigid_I_1_0)
-     (not test-frame-rigid_E_1_0)
-     (not test-frame-rigid_F_1_0)
-     (=> test-frame-rigid_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) test-frame-rigid_U_1_0))); Constraint 43 , Source: formula4-ActiveOperations
-(assert (and (=> mount_I_2_0 frame-tractor)
-     (=> frame-tractor mount_I_2_0)
-     (not mount_E_2_0)
-     (not mount_F_2_0)
-     (=> mount_U_2_0 (not frame-tractor))
-     (=> (not frame-tractor) mount_U_2_0))); Constraint 44 , Source: formula4-ActiveOperations
-(assert scan-barcode_PreCondition_1_1); Constraint 45 , Source: formula5-Precondition
-(assert (=> (and scan-barcode_I_1_1 scan-barcode_PreCondition_1_1) scan-barcode_E_1_2)); Constraint 46 , Source: formula5.1
-(assert (=> (not scan-barcode_I_1_1)
-    (and (=> scan-barcode_I_1_1 scan-barcode_I_1_2)
-         (=> scan-barcode_I_1_2 scan-barcode_I_1_1)))); Constraint 47 , Source: formula5.2
-(assert (or scan-barcode_I_1_1 scan-barcode_E_1_1 scan-barcode_F_1_1 scan-barcode_U_1_1)); Constraint 48 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> scan-barcode_F_1_1
-               (and (and (not scan-barcode_I_1_1) (not scan-barcode_E_1_1))
-                    (not scan-barcode_U_1_1))))
-      (a!2 (=> scan-barcode_U_1_1
-               (and (and (not scan-barcode_I_1_1) (not scan-barcode_E_1_1))
-                    (not scan-barcode_F_1_1)))))
-  (and (=> scan-barcode_I_1_1
-           (and (not scan-barcode_E_1_1)
-                (not scan-barcode_F_1_1)
-                (not scan-barcode_U_1_1)))
-       (=> scan-barcode_E_1_1
-           (and (not scan-barcode_I_1_1)
-                (not scan-barcode_F_1_1)
-                (not scan-barcode_U_1_1)))
+(assert inspect_PreCondition_5_0); Constraint 49 , Source: formula7-Precondition
+(assert inspect_PostCondition_5_0); Constraint 50 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_6_0); Constraint 51 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_6_0); Constraint 52 , Source: formula7-Postcondition
+(assert inspect_PreCondition_7_0); Constraint 53 , Source: formula7-Precondition
+(assert inspect_PostCondition_7_0); Constraint 54 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_8_0); Constraint 55 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_8_0); Constraint 56 , Source: formula7-Postcondition
+(assert (let ((a!1 (and (or (and (not inspect_PreCondition_5_0) inspect_I_5_0)
+                    (and (not inspect_PostCondition_5_0) inspect_E_5_0)
+                    inspect_F_5_0
+                    inspect_U_5_0)
+                (or (and (not run-break-test_PreCondition_6_0)
+                         run-break-test_I_6_0)
+                    (and (not run-break-test_PostCondition_6_0)
+                         run-break-test_E_6_0)
+                    run-break-test_F_6_0
+                    run-break-test_U_6_0)
+                (or (and (not inspect_PreCondition_7_0) inspect_I_7_0)
+                    (and (not inspect_PostCondition_7_0) inspect_E_7_0)
+                    inspect_F_7_0
+                    inspect_U_7_0)
+                (or (and (not run-break-test_PreCondition_8_0)
+                         run-break-test_I_8_0)
+                    (and (not run-break-test_PostCondition_8_0)
+                         run-break-test_E_8_0)
+                    run-break-test_F_8_0
+                    run-break-test_U_8_0)
+                (or inspect_I_5_0
+                    inspect_E_5_0
+                    run-break-test_I_6_0
+                    run-break-test_E_6_0
+                    inspect_I_7_0
+                    inspect_E_7_0
+                    run-break-test_I_8_0
+                    run-break-test_E_8_0))))
+  (=> P0 a!1))); Constraint 57 , Source: overallGoal
+(declare-const inspect_I_5_2 Bool)
+(declare-const inspect_E_5_2 Bool)
+(declare-const inspect_F_5_2 Bool)
+(declare-const inspect_U_5_2 Bool)
+(declare-const inspect_PreCondition_5_2 Bool)
+(declare-const inspect_PostCondition_5_2 Bool)
+(declare-const run-break-test_I_6_2 Bool)
+(declare-const run-break-test_E_6_2 Bool)
+(declare-const run-break-test_F_6_2 Bool)
+(declare-const run-break-test_U_6_2 Bool)
+(declare-const run-break-test_PreCondition_6_2 Bool)
+(declare-const run-break-test_PostCondition_6_2 Bool)
+(declare-const inspect_I_7_2 Bool)
+(declare-const inspect_E_7_2 Bool)
+(declare-const inspect_F_7_2 Bool)
+(declare-const inspect_U_7_2 Bool)
+(declare-const inspect_PreCondition_7_2 Bool)
+(declare-const inspect_PostCondition_7_2 Bool)
+(declare-const run-break-test_I_8_2 Bool)
+(declare-const run-break-test_E_8_2 Bool)
+(declare-const run-break-test_F_8_2 Bool)
+(declare-const run-break-test_U_8_2 Bool)
+(declare-const run-break-test_PreCondition_8_2 Bool)
+(declare-const run-break-test_PostCondition_8_2 Bool)
+(assert (or break-test inspect-axel)); Constraint 58 , Source: GroupCardinality
+(assert (or axel1 axel2)); Constraint 59 , Source: GroupCardinality
+(assert (or VirtualV1 VirtualV2 VirtualV3 VirtualV4)); Constraint 60 , Source: GroupCardinality
+(assert (not break-test)); Constraint 61 , Source: formula3
+(assert (or (and (not VirtualV1) (not (and axel1 inspect-axel)))
+    (and VirtualV1 (and axel1 inspect-axel)))); Constraint 62 , Source: formula3
+(assert (or (and (not VirtualV2) (not (and axel1 break-test)))
+    (and VirtualV2 (and axel1 break-test)))); Constraint 63 , Source: formula3
+(assert (or (and (not VirtualV3) (not (and axel2 inspect-axel)))
+    (and VirtualV3 (and axel2 inspect-axel)))); Constraint 64 , Source: formula3
+(assert (or (and (not VirtualV4) (not (and axel2 break-test)))
+    (and VirtualV4 (and axel2 break-test)))); Constraint 65 , Source: formula3
+(assert (and (=> inspect_I_5_0 VirtualV1)
+     (=> VirtualV1 inspect_I_5_0)
+     (not inspect_E_5_0)
+     (not inspect_F_5_0)
+     (=> inspect_U_5_0 (not VirtualV1))
+     (=> (not VirtualV1) inspect_U_5_0))); Constraint 66 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_6_0 VirtualV2)
+     (=> VirtualV2 run-break-test_I_6_0)
+     (not run-break-test_E_6_0)
+     (not run-break-test_F_6_0)
+     (=> run-break-test_U_6_0 (not VirtualV2))
+     (=> (not VirtualV2) run-break-test_U_6_0))); Constraint 67 , Source: formula4-ActiveOperations
+(assert (and (=> inspect_I_7_0 VirtualV3)
+     (=> VirtualV3 inspect_I_7_0)
+     (not inspect_E_7_0)
+     (not inspect_F_7_0)
+     (=> inspect_U_7_0 (not VirtualV3))
+     (=> (not VirtualV3) inspect_U_7_0))); Constraint 68 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_8_0 VirtualV4)
+     (=> VirtualV4 run-break-test_I_8_0)
+     (not run-break-test_E_8_0)
+     (not run-break-test_F_8_0)
+     (=> run-break-test_U_8_0 (not VirtualV4))
+     (=> (not VirtualV4) run-break-test_U_8_0))); Constraint 69 , Source: formula4-ActiveOperations
+(assert inspect_PreCondition_5_1); Constraint 70 , Source: formula5-Precondition
+(assert (=> (and inspect_I_5_1 inspect_PreCondition_5_1) inspect_E_5_2)); Constraint 71 , Source: formula5.1
+(assert (=> (not inspect_I_5_1)
+    (and (=> inspect_I_5_1 inspect_I_5_2) (=> inspect_I_5_2 inspect_I_5_1)))); Constraint 72 , Source: formula5.2
+(assert (or inspect_I_5_1 inspect_E_5_1 inspect_F_5_1 inspect_U_5_1)); Constraint 73 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_5_1
+               (and (and (not inspect_I_5_1) (not inspect_E_5_1))
+                    (not inspect_U_5_1))))
+      (a!2 (=> inspect_U_5_1
+               (and (and (not inspect_I_5_1) (not inspect_E_5_1))
+                    (not inspect_F_5_1)))))
+  (and (=> inspect_I_5_1
+           (and (not inspect_E_5_1) (not inspect_F_5_1) (not inspect_U_5_1)))
+       (=> inspect_E_5_1
+           (and (not inspect_I_5_1) (not inspect_F_5_1) (not inspect_U_5_1)))
        a!1
-       a!2))); Constraint 49 , Source: formula5.3-Secondpart
-(assert scan-barcode_PostCondition_1_1); Constraint 50 , Source: formula5.4-Postcondition
-(assert (=> (and scan-barcode_E_1_1 scan-barcode_PostCondition_1_1) scan-barcode_F_1_2)); Constraint 51 , Source: formula5.4
-(assert (and (=> scan-barcode_U_1_1 scan-barcode_U_1_2)
-     (=> scan-barcode_U_1_2 scan-barcode_U_1_1))); Constraint 52 , Source: formula5.6
-(assert (=> scan-barcode_F_1_1 scan-barcode_F_1_2)); Constraint 53 , Source: formula5.7
-(assert (not test-frame-rigid_PreCondition_1_1)); Constraint 54 , Source: formula5-Precondition
-(assert (=> (and test-frame-rigid_I_1_1 test-frame-rigid_PreCondition_1_1)
-    test-frame-rigid_E_1_2)); Constraint 55 , Source: formula5.1
-(assert (=> (not (and test-frame-rigid_I_1_1 test-frame-rigid_PreCondition_1_1))
-    (and (=> test-frame-rigid_I_1_1 test-frame-rigid_I_1_2)
-         (=> test-frame-rigid_I_1_2 test-frame-rigid_I_1_1)))); Constraint 56 , Source: formula5.2
-(assert (or test-frame-rigid_I_1_1
-    test-frame-rigid_E_1_1
-    test-frame-rigid_F_1_1
-    test-frame-rigid_U_1_1)); Constraint 57 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> test-frame-rigid_F_1_1
-               (and (and (not test-frame-rigid_I_1_1)
-                         (not test-frame-rigid_E_1_1))
-                    (not test-frame-rigid_U_1_1))))
-      (a!2 (=> test-frame-rigid_U_1_1
-               (and (and (not test-frame-rigid_I_1_1)
-                         (not test-frame-rigid_E_1_1))
-                    (not test-frame-rigid_F_1_1)))))
-  (and (=> test-frame-rigid_I_1_1
-           (and (not test-frame-rigid_E_1_1)
-                (not test-frame-rigid_F_1_1)
-                (not test-frame-rigid_U_1_1)))
-       (=> test-frame-rigid_E_1_1
-           (and (not test-frame-rigid_I_1_1)
-                (not test-frame-rigid_F_1_1)
-                (not test-frame-rigid_U_1_1)))
+       a!2))); Constraint 74 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_5_1); Constraint 75 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_5_1 inspect_PostCondition_5_1) inspect_F_5_2)); Constraint 76 , Source: formula5.4
+(assert (and (=> inspect_U_5_1 inspect_U_5_2) (=> inspect_U_5_2 inspect_U_5_1))); Constraint 77 , Source: formula5.6
+(assert (=> inspect_F_5_1 inspect_F_5_2)); Constraint 78 , Source: formula5.7
+(assert run-break-test_PreCondition_6_1); Constraint 79 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_6_1 run-break-test_PreCondition_6_1)
+    run-break-test_E_6_2)); Constraint 80 , Source: formula5.1
+(assert (=> (not run-break-test_I_6_1)
+    (and (=> run-break-test_I_6_1 run-break-test_I_6_2)
+         (=> run-break-test_I_6_2 run-break-test_I_6_1)))); Constraint 81 , Source: formula5.2
+(assert (or run-break-test_I_6_1
+    run-break-test_E_6_1
+    run-break-test_F_6_1
+    run-break-test_U_6_1)); Constraint 82 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_6_1
+               (and (and (not run-break-test_I_6_1) (not run-break-test_E_6_1))
+                    (not run-break-test_U_6_1))))
+      (a!2 (=> run-break-test_U_6_1
+               (and (and (not run-break-test_I_6_1) (not run-break-test_E_6_1))
+                    (not run-break-test_F_6_1)))))
+  (and (=> run-break-test_I_6_1
+           (and (not run-break-test_E_6_1)
+                (not run-break-test_F_6_1)
+                (not run-break-test_U_6_1)))
+       (=> run-break-test_E_6_1
+           (and (not run-break-test_I_6_1)
+                (not run-break-test_F_6_1)
+                (not run-break-test_U_6_1)))
        a!1
-       a!2))); Constraint 58 , Source: formula5.3-Secondpart
-(assert (not test-frame-rigid_PostCondition_1_1)); Constraint 59 , Source: formula5.4-Postcondition
-(assert (=> (and test-frame-rigid_E_1_1 (not test-frame-rigid_PostCondition_1_1))
-    test-frame-rigid_F_1_2)); Constraint 60 , Source: formula5.4
-(assert (and (=> test-frame-rigid_U_1_1 test-frame-rigid_U_1_2)
-     (=> test-frame-rigid_U_1_2 test-frame-rigid_U_1_1))); Constraint 61 , Source: formula5.6
-(assert (=> test-frame-rigid_F_1_1 test-frame-rigid_F_1_2)); Constraint 62 , Source: formula5.7
-(assert mount_PreCondition_2_1); Constraint 63 , Source: formula5-Precondition
-(assert (=> (and mount_I_2_1 mount_PreCondition_2_1) mount_E_2_2)); Constraint 64 , Source: formula5.1
-(assert (=> (not mount_I_2_1)
-    (and (=> mount_I_2_1 mount_I_2_2) (=> mount_I_2_2 mount_I_2_1)))); Constraint 65 , Source: formula5.2
-(assert (or mount_I_2_1 mount_E_2_1 mount_F_2_1 mount_U_2_1)); Constraint 66 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> mount_F_2_1
-               (and (and (not mount_I_2_1) (not mount_E_2_1)) (not mount_U_2_1))))
-      (a!2 (=> mount_U_2_1
-               (and (and (not mount_I_2_1) (not mount_E_2_1)) (not mount_F_2_1)))))
-  (and (=> mount_I_2_1
-           (and (not mount_E_2_1) (not mount_F_2_1) (not mount_U_2_1)))
-       (=> mount_E_2_1
-           (and (not mount_I_2_1) (not mount_F_2_1) (not mount_U_2_1)))
+       a!2))); Constraint 83 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_6_1); Constraint 84 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_6_1 run-break-test_PostCondition_6_1)
+    run-break-test_F_6_2)); Constraint 85 , Source: formula5.4
+(assert (and (=> run-break-test_U_6_1 run-break-test_U_6_2)
+     (=> run-break-test_U_6_2 run-break-test_U_6_1))); Constraint 86 , Source: formula5.6
+(assert (=> run-break-test_F_6_1 run-break-test_F_6_2)); Constraint 87 , Source: formula5.7
+(assert inspect_PreCondition_7_1); Constraint 88 , Source: formula5-Precondition
+(assert (=> (and inspect_I_7_1 inspect_PreCondition_7_1) inspect_E_7_2)); Constraint 89 , Source: formula5.1
+(assert (=> (not inspect_I_7_1)
+    (and (=> inspect_I_7_1 inspect_I_7_2) (=> inspect_I_7_2 inspect_I_7_1)))); Constraint 90 , Source: formula5.2
+(assert (or inspect_I_7_1 inspect_E_7_1 inspect_F_7_1 inspect_U_7_1)); Constraint 91 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_7_1
+               (and (and (not inspect_I_7_1) (not inspect_E_7_1))
+                    (not inspect_U_7_1))))
+      (a!2 (=> inspect_U_7_1
+               (and (and (not inspect_I_7_1) (not inspect_E_7_1))
+                    (not inspect_F_7_1)))))
+  (and (=> inspect_I_7_1
+           (and (not inspect_E_7_1) (not inspect_F_7_1) (not inspect_U_7_1)))
+       (=> inspect_E_7_1
+           (and (not inspect_I_7_1) (not inspect_F_7_1) (not inspect_U_7_1)))
        a!1
-       a!2))); Constraint 67 , Source: formula5.3-Secondpart
-(assert mount_PostCondition_2_1); Constraint 68 , Source: formula5.4-Postcondition
-(assert (=> (and mount_E_2_1 mount_PostCondition_2_1) mount_F_2_2)); Constraint 69 , Source: formula5.4
-(assert (and (=> mount_U_2_1 mount_U_2_2) (=> mount_U_2_2 mount_U_2_1))); Constraint 70 , Source: formula5.6
-(assert (=> mount_F_2_1 mount_F_2_2)); Constraint 71 , Source: formula5.7
+       a!2))); Constraint 92 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_7_1); Constraint 93 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_7_1 inspect_PostCondition_7_1) inspect_F_7_2)); Constraint 94 , Source: formula5.4
+(assert (and (=> inspect_U_7_1 inspect_U_7_2) (=> inspect_U_7_2 inspect_U_7_1))); Constraint 95 , Source: formula5.6
+(assert (=> inspect_F_7_1 inspect_F_7_2)); Constraint 96 , Source: formula5.7
+(assert run-break-test_PreCondition_8_1); Constraint 97 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_8_1 run-break-test_PreCondition_8_1)
+    run-break-test_E_8_2)); Constraint 98 , Source: formula5.1
+(assert (=> (not run-break-test_I_8_1)
+    (and (=> run-break-test_I_8_1 run-break-test_I_8_2)
+         (=> run-break-test_I_8_2 run-break-test_I_8_1)))); Constraint 99 , Source: formula5.2
+(assert (or run-break-test_I_8_1
+    run-break-test_E_8_1
+    run-break-test_F_8_1
+    run-break-test_U_8_1)); Constraint 100 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_8_1
+               (and (and (not run-break-test_I_8_1) (not run-break-test_E_8_1))
+                    (not run-break-test_U_8_1))))
+      (a!2 (=> run-break-test_U_8_1
+               (and (and (not run-break-test_I_8_1) (not run-break-test_E_8_1))
+                    (not run-break-test_F_8_1)))))
+  (and (=> run-break-test_I_8_1
+           (and (not run-break-test_E_8_1)
+                (not run-break-test_F_8_1)
+                (not run-break-test_U_8_1)))
+       (=> run-break-test_E_8_1
+           (and (not run-break-test_I_8_1)
+                (not run-break-test_F_8_1)
+                (not run-break-test_U_8_1)))
+       a!1
+       a!2))); Constraint 101 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_8_1); Constraint 102 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_8_1 run-break-test_PostCondition_8_1)
+    run-break-test_F_8_2)); Constraint 103 , Source: formula5.4
+(assert (and (=> run-break-test_U_8_1 run-break-test_U_8_2)
+     (=> run-break-test_U_8_2 run-break-test_U_8_1))); Constraint 104 , Source: formula5.6
+(assert (=> run-break-test_F_8_1 run-break-test_F_8_2)); Constraint 105 , Source: formula5.7
 (declare-const P1 Bool)
-(assert scan-barcode_PreCondition_1_1); Constraint 72 , Source: formula7-Precondition
-(assert scan-barcode_PostCondition_1_1); Constraint 73 , Source: formula7-Postcondition
-(assert (not test-frame-rigid_PreCondition_1_1)); Constraint 74 , Source: formula7-Precondition
-(assert (not test-frame-rigid_PostCondition_1_1)); Constraint 75 , Source: formula7-Postcondition
-(assert mount_PreCondition_2_1); Constraint 76 , Source: formula7-Precondition
-(assert mount_PostCondition_2_1); Constraint 77 , Source: formula7-Postcondition
-(assert (let ((a!1 (and (or (and (not scan-barcode_PreCondition_1_1) scan-barcode_I_1_1)
-                    (and (not scan-barcode_PostCondition_1_1)
-                         scan-barcode_E_1_1)
-                    scan-barcode_F_1_1
-                    scan-barcode_U_1_1)
-                (or (and (not test-frame-rigid_PreCondition_1_1)
-                         test-frame-rigid_I_1_1)
-                    (and (not test-frame-rigid_PostCondition_1_1)
-                         test-frame-rigid_E_1_1)
-                    test-frame-rigid_F_1_1
-                    test-frame-rigid_U_1_1)
-                (or (and (not mount_PreCondition_2_1) mount_I_2_1)
-                    (and (not mount_PostCondition_2_1) mount_E_2_1)
-                    mount_F_2_1
-                    mount_U_2_1)
-                (or scan-barcode_I_1_1
-                    scan-barcode_E_1_1
-                    test-frame-rigid_I_1_1
-                    test-frame-rigid_E_1_1
-                    mount_I_2_1
-                    mount_E_2_1))))
-  (=> P1 a!1))); Constraint 78 , Source: overallGoal
-(declare-const scan-barcode_I_1_3 Bool)
-(declare-const scan-barcode_E_1_3 Bool)
-(declare-const scan-barcode_F_1_3 Bool)
-(declare-const scan-barcode_U_1_3 Bool)
-(declare-const scan-barcode_PreCondition_1_3 Bool)
-(declare-const scan-barcode_PostCondition_1_3 Bool)
-(declare-const test-frame-rigid_I_1_3 Bool)
-(declare-const test-frame-rigid_E_1_3 Bool)
-(declare-const test-frame-rigid_F_1_3 Bool)
-(declare-const test-frame-rigid_U_1_3 Bool)
-(declare-const test-frame-rigid_PreCondition_1_3 Bool)
-(declare-const test-frame-rigid_PostCondition_1_3 Bool)
-(declare-const mount_I_2_3 Bool)
-(declare-const mount_E_2_3 Bool)
-(declare-const mount_F_2_3 Bool)
-(declare-const mount_U_2_3 Bool)
-(declare-const mount_PreCondition_2_3 Bool)
-(declare-const mount_PostCondition_2_3 Bool)
-(assert (or (and frame-rigid (not frame-tractor)) (and (not frame-rigid) frame-tractor))); Constraint 79 , Source: GroupCardinality
-(assert frame-rigid); Constraint 80 , Source: formula3
-(assert (and (=> scan-barcode_I_1_0 frame-rigid)
-     (=> frame-rigid scan-barcode_I_1_0)
-     (not scan-barcode_E_1_0)
-     (not scan-barcode_F_1_0)
-     (=> scan-barcode_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) scan-barcode_U_1_0))); Constraint 81 , Source: formula4-ActiveOperations
-(assert (and (=> test-frame-rigid_I_1_0 frame-rigid)
-     (=> frame-rigid test-frame-rigid_I_1_0)
-     (not test-frame-rigid_E_1_0)
-     (not test-frame-rigid_F_1_0)
-     (=> test-frame-rigid_U_1_0 (not frame-rigid))
-     (=> (not frame-rigid) test-frame-rigid_U_1_0))); Constraint 82 , Source: formula4-ActiveOperations
-(assert (and (=> mount_I_2_0 frame-tractor)
-     (=> frame-tractor mount_I_2_0)
-     (not mount_E_2_0)
-     (not mount_F_2_0)
-     (=> mount_U_2_0 (not frame-tractor))
-     (=> (not frame-tractor) mount_U_2_0))); Constraint 83 , Source: formula4-ActiveOperations
-(assert scan-barcode_PreCondition_1_2); Constraint 84 , Source: formula5-Precondition
-(assert (=> (and scan-barcode_I_1_2 scan-barcode_PreCondition_1_2) scan-barcode_E_1_3)); Constraint 85 , Source: formula5.1
-(assert (=> (not scan-barcode_I_1_2)
-    (and (=> scan-barcode_I_1_2 scan-barcode_I_1_3)
-         (=> scan-barcode_I_1_3 scan-barcode_I_1_2)))); Constraint 86 , Source: formula5.2
-(assert (or scan-barcode_I_1_2 scan-barcode_E_1_2 scan-barcode_F_1_2 scan-barcode_U_1_2)); Constraint 87 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> scan-barcode_F_1_2
-               (and (and (not scan-barcode_I_1_2) (not scan-barcode_E_1_2))
-                    (not scan-barcode_U_1_2))))
-      (a!2 (=> scan-barcode_U_1_2
-               (and (and (not scan-barcode_I_1_2) (not scan-barcode_E_1_2))
-                    (not scan-barcode_F_1_2)))))
-  (and (=> scan-barcode_I_1_2
-           (and (not scan-barcode_E_1_2)
-                (not scan-barcode_F_1_2)
-                (not scan-barcode_U_1_2)))
-       (=> scan-barcode_E_1_2
-           (and (not scan-barcode_I_1_2)
-                (not scan-barcode_F_1_2)
-                (not scan-barcode_U_1_2)))
+(assert inspect_PreCondition_5_1); Constraint 106 , Source: formula7-Precondition
+(assert inspect_PostCondition_5_1); Constraint 107 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_6_1); Constraint 108 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_6_1); Constraint 109 , Source: formula7-Postcondition
+(assert inspect_PreCondition_7_1); Constraint 110 , Source: formula7-Precondition
+(assert inspect_PostCondition_7_1); Constraint 111 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_8_1); Constraint 112 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_8_1); Constraint 113 , Source: formula7-Postcondition
+(assert (let ((a!1 (and (or (and (not inspect_PreCondition_5_1) inspect_I_5_1)
+                    (and (not inspect_PostCondition_5_1) inspect_E_5_1)
+                    inspect_F_5_1
+                    inspect_U_5_1)
+                (or (and (not run-break-test_PreCondition_6_1)
+                         run-break-test_I_6_1)
+                    (and (not run-break-test_PostCondition_6_1)
+                         run-break-test_E_6_1)
+                    run-break-test_F_6_1
+                    run-break-test_U_6_1)
+                (or (and (not inspect_PreCondition_7_1) inspect_I_7_1)
+                    (and (not inspect_PostCondition_7_1) inspect_E_7_1)
+                    inspect_F_7_1
+                    inspect_U_7_1)
+                (or (and (not run-break-test_PreCondition_8_1)
+                         run-break-test_I_8_1)
+                    (and (not run-break-test_PostCondition_8_1)
+                         run-break-test_E_8_1)
+                    run-break-test_F_8_1
+                    run-break-test_U_8_1)
+                (or inspect_I_5_1
+                    inspect_E_5_1
+                    run-break-test_I_6_1
+                    run-break-test_E_6_1
+                    inspect_I_7_1
+                    inspect_E_7_1
+                    run-break-test_I_8_1
+                    run-break-test_E_8_1))))
+  (=> P1 a!1))); Constraint 114 , Source: overallGoal
+(declare-const inspect_I_5_3 Bool)
+(declare-const inspect_E_5_3 Bool)
+(declare-const inspect_F_5_3 Bool)
+(declare-const inspect_U_5_3 Bool)
+(declare-const inspect_PreCondition_5_3 Bool)
+(declare-const inspect_PostCondition_5_3 Bool)
+(declare-const run-break-test_I_6_3 Bool)
+(declare-const run-break-test_E_6_3 Bool)
+(declare-const run-break-test_F_6_3 Bool)
+(declare-const run-break-test_U_6_3 Bool)
+(declare-const run-break-test_PreCondition_6_3 Bool)
+(declare-const run-break-test_PostCondition_6_3 Bool)
+(declare-const inspect_I_7_3 Bool)
+(declare-const inspect_E_7_3 Bool)
+(declare-const inspect_F_7_3 Bool)
+(declare-const inspect_U_7_3 Bool)
+(declare-const inspect_PreCondition_7_3 Bool)
+(declare-const inspect_PostCondition_7_3 Bool)
+(declare-const run-break-test_I_8_3 Bool)
+(declare-const run-break-test_E_8_3 Bool)
+(declare-const run-break-test_F_8_3 Bool)
+(declare-const run-break-test_U_8_3 Bool)
+(declare-const run-break-test_PreCondition_8_3 Bool)
+(declare-const run-break-test_PostCondition_8_3 Bool)
+(assert (or break-test inspect-axel)); Constraint 115 , Source: GroupCardinality
+(assert (or axel1 axel2)); Constraint 116 , Source: GroupCardinality
+(assert (or VirtualV1 VirtualV2 VirtualV3 VirtualV4)); Constraint 117 , Source: GroupCardinality
+(assert (not break-test)); Constraint 118 , Source: formula3
+(assert (or (and (not VirtualV1) (not (and axel1 inspect-axel)))
+    (and VirtualV1 (and axel1 inspect-axel)))); Constraint 119 , Source: formula3
+(assert (or (and (not VirtualV2) (not (and axel1 break-test)))
+    (and VirtualV2 (and axel1 break-test)))); Constraint 120 , Source: formula3
+(assert (or (and (not VirtualV3) (not (and axel2 inspect-axel)))
+    (and VirtualV3 (and axel2 inspect-axel)))); Constraint 121 , Source: formula3
+(assert (or (and (not VirtualV4) (not (and axel2 break-test)))
+    (and VirtualV4 (and axel2 break-test)))); Constraint 122 , Source: formula3
+(assert (and (=> inspect_I_5_0 VirtualV1)
+     (=> VirtualV1 inspect_I_5_0)
+     (not inspect_E_5_0)
+     (not inspect_F_5_0)
+     (=> inspect_U_5_0 (not VirtualV1))
+     (=> (not VirtualV1) inspect_U_5_0))); Constraint 123 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_6_0 VirtualV2)
+     (=> VirtualV2 run-break-test_I_6_0)
+     (not run-break-test_E_6_0)
+     (not run-break-test_F_6_0)
+     (=> run-break-test_U_6_0 (not VirtualV2))
+     (=> (not VirtualV2) run-break-test_U_6_0))); Constraint 124 , Source: formula4-ActiveOperations
+(assert (and (=> inspect_I_7_0 VirtualV3)
+     (=> VirtualV3 inspect_I_7_0)
+     (not inspect_E_7_0)
+     (not inspect_F_7_0)
+     (=> inspect_U_7_0 (not VirtualV3))
+     (=> (not VirtualV3) inspect_U_7_0))); Constraint 125 , Source: formula4-ActiveOperations
+(assert (and (=> run-break-test_I_8_0 VirtualV4)
+     (=> VirtualV4 run-break-test_I_8_0)
+     (not run-break-test_E_8_0)
+     (not run-break-test_F_8_0)
+     (=> run-break-test_U_8_0 (not VirtualV4))
+     (=> (not VirtualV4) run-break-test_U_8_0))); Constraint 126 , Source: formula4-ActiveOperations
+(assert inspect_PreCondition_5_2); Constraint 127 , Source: formula5-Precondition
+(assert (=> (and inspect_I_5_2 inspect_PreCondition_5_2) inspect_E_5_3)); Constraint 128 , Source: formula5.1
+(assert (=> (not inspect_I_5_2)
+    (and (=> inspect_I_5_2 inspect_I_5_3) (=> inspect_I_5_3 inspect_I_5_2)))); Constraint 129 , Source: formula5.2
+(assert (or inspect_I_5_2 inspect_E_5_2 inspect_F_5_2 inspect_U_5_2)); Constraint 130 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_5_2
+               (and (and (not inspect_I_5_2) (not inspect_E_5_2))
+                    (not inspect_U_5_2))))
+      (a!2 (=> inspect_U_5_2
+               (and (and (not inspect_I_5_2) (not inspect_E_5_2))
+                    (not inspect_F_5_2)))))
+  (and (=> inspect_I_5_2
+           (and (not inspect_E_5_2) (not inspect_F_5_2) (not inspect_U_5_2)))
+       (=> inspect_E_5_2
+           (and (not inspect_I_5_2) (not inspect_F_5_2) (not inspect_U_5_2)))
        a!1
-       a!2))); Constraint 88 , Source: formula5.3-Secondpart
-(assert scan-barcode_PostCondition_1_2); Constraint 89 , Source: formula5.4-Postcondition
-(assert (=> (and scan-barcode_E_1_2 scan-barcode_PostCondition_1_2) scan-barcode_F_1_3)); Constraint 90 , Source: formula5.4
-(assert (and (=> scan-barcode_U_1_2 scan-barcode_U_1_3)
-     (=> scan-barcode_U_1_3 scan-barcode_U_1_2))); Constraint 91 , Source: formula5.6
-(assert (=> scan-barcode_F_1_2 scan-barcode_F_1_3)); Constraint 92 , Source: formula5.7
-(assert (=> (and test-frame-rigid_I_1_2 mount_F_2_2) test-frame-rigid_E_1_3)); Constraint 93 , Source: formula5.1
-(assert (=> (not (and test-frame-rigid_I_1_2 mount_F_2_2))
-    (and (=> test-frame-rigid_I_1_2 test-frame-rigid_I_1_3)
-         (=> test-frame-rigid_I_1_3 test-frame-rigid_I_1_2)))); Constraint 94 , Source: formula5.2
-(assert (or test-frame-rigid_I_1_2
-    test-frame-rigid_E_1_2
-    test-frame-rigid_F_1_2
-    test-frame-rigid_U_1_2)); Constraint 95 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> test-frame-rigid_F_1_2
-               (and (and (not test-frame-rigid_I_1_2)
-                         (not test-frame-rigid_E_1_2))
-                    (not test-frame-rigid_U_1_2))))
-      (a!2 (=> test-frame-rigid_U_1_2
-               (and (and (not test-frame-rigid_I_1_2)
-                         (not test-frame-rigid_E_1_2))
-                    (not test-frame-rigid_F_1_2)))))
-  (and (=> test-frame-rigid_I_1_2
-           (and (not test-frame-rigid_E_1_2)
-                (not test-frame-rigid_F_1_2)
-                (not test-frame-rigid_U_1_2)))
-       (=> test-frame-rigid_E_1_2
-           (and (not test-frame-rigid_I_1_2)
-                (not test-frame-rigid_F_1_2)
-                (not test-frame-rigid_U_1_2)))
+       a!2))); Constraint 131 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_5_2); Constraint 132 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_5_2 inspect_PostCondition_5_2) inspect_F_5_3)); Constraint 133 , Source: formula5.4
+(assert (and (=> inspect_U_5_2 inspect_U_5_3) (=> inspect_U_5_3 inspect_U_5_2))); Constraint 134 , Source: formula5.6
+(assert (=> inspect_F_5_2 inspect_F_5_3)); Constraint 135 , Source: formula5.7
+(assert run-break-test_PreCondition_6_2); Constraint 136 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_6_2 run-break-test_PreCondition_6_2)
+    run-break-test_E_6_3)); Constraint 137 , Source: formula5.1
+(assert (=> (not run-break-test_I_6_2)
+    (and (=> run-break-test_I_6_2 run-break-test_I_6_3)
+         (=> run-break-test_I_6_3 run-break-test_I_6_2)))); Constraint 138 , Source: formula5.2
+(assert (or run-break-test_I_6_2
+    run-break-test_E_6_2
+    run-break-test_F_6_2
+    run-break-test_U_6_2)); Constraint 139 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_6_2
+               (and (and (not run-break-test_I_6_2) (not run-break-test_E_6_2))
+                    (not run-break-test_U_6_2))))
+      (a!2 (=> run-break-test_U_6_2
+               (and (and (not run-break-test_I_6_2) (not run-break-test_E_6_2))
+                    (not run-break-test_F_6_2)))))
+  (and (=> run-break-test_I_6_2
+           (and (not run-break-test_E_6_2)
+                (not run-break-test_F_6_2)
+                (not run-break-test_U_6_2)))
+       (=> run-break-test_E_6_2
+           (and (not run-break-test_I_6_2)
+                (not run-break-test_F_6_2)
+                (not run-break-test_U_6_2)))
        a!1
-       a!2))); Constraint 96 , Source: formula5.3-Secondpart
-(assert (=> (and test-frame-rigid_E_1_2 mount_F_2_2) test-frame-rigid_F_1_3)); Constraint 97 , Source: formula5.4
-(assert (and (=> test-frame-rigid_U_1_2 test-frame-rigid_U_1_3)
-     (=> test-frame-rigid_U_1_3 test-frame-rigid_U_1_2))); Constraint 98 , Source: formula5.6
-(assert (=> test-frame-rigid_F_1_2 test-frame-rigid_F_1_3)); Constraint 99 , Source: formula5.7
-(assert mount_PreCondition_2_2); Constraint 100 , Source: formula5-Precondition
-(assert (=> (and mount_I_2_2 mount_PreCondition_2_2) mount_E_2_3)); Constraint 101 , Source: formula5.1
-(assert (=> (not mount_I_2_2)
-    (and (=> mount_I_2_2 mount_I_2_3) (=> mount_I_2_3 mount_I_2_2)))); Constraint 102 , Source: formula5.2
-(assert (or mount_I_2_2 mount_E_2_2 mount_F_2_2 mount_U_2_2)); Constraint 103 , Source: formula5.3-Firstpart
-(assert (let ((a!1 (=> mount_F_2_2
-               (and (and (not mount_I_2_2) (not mount_E_2_2)) (not mount_U_2_2))))
-      (a!2 (=> mount_U_2_2
-               (and (and (not mount_I_2_2) (not mount_E_2_2)) (not mount_F_2_2)))))
-  (and (=> mount_I_2_2
-           (and (not mount_E_2_2) (not mount_F_2_2) (not mount_U_2_2)))
-       (=> mount_E_2_2
-           (and (not mount_I_2_2) (not mount_F_2_2) (not mount_U_2_2)))
+       a!2))); Constraint 140 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_6_2); Constraint 141 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_6_2 run-break-test_PostCondition_6_2)
+    run-break-test_F_6_3)); Constraint 142 , Source: formula5.4
+(assert (and (=> run-break-test_U_6_2 run-break-test_U_6_3)
+     (=> run-break-test_U_6_3 run-break-test_U_6_2))); Constraint 143 , Source: formula5.6
+(assert (=> run-break-test_F_6_2 run-break-test_F_6_3)); Constraint 144 , Source: formula5.7
+(assert inspect_PreCondition_7_2); Constraint 145 , Source: formula5-Precondition
+(assert (=> (and inspect_I_7_2 inspect_PreCondition_7_2) inspect_E_7_3)); Constraint 146 , Source: formula5.1
+(assert (=> (not inspect_I_7_2)
+    (and (=> inspect_I_7_2 inspect_I_7_3) (=> inspect_I_7_3 inspect_I_7_2)))); Constraint 147 , Source: formula5.2
+(assert (or inspect_I_7_2 inspect_E_7_2 inspect_F_7_2 inspect_U_7_2)); Constraint 148 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> inspect_F_7_2
+               (and (and (not inspect_I_7_2) (not inspect_E_7_2))
+                    (not inspect_U_7_2))))
+      (a!2 (=> inspect_U_7_2
+               (and (and (not inspect_I_7_2) (not inspect_E_7_2))
+                    (not inspect_F_7_2)))))
+  (and (=> inspect_I_7_2
+           (and (not inspect_E_7_2) (not inspect_F_7_2) (not inspect_U_7_2)))
+       (=> inspect_E_7_2
+           (and (not inspect_I_7_2) (not inspect_F_7_2) (not inspect_U_7_2)))
        a!1
-       a!2))); Constraint 104 , Source: formula5.3-Secondpart
-(assert mount_PostCondition_2_2); Constraint 105 , Source: formula5.4-Postcondition
-(assert (=> (and mount_E_2_2 mount_PostCondition_2_2) mount_F_2_3)); Constraint 106 , Source: formula5.4
-(assert (and (=> mount_U_2_2 mount_U_2_3) (=> mount_U_2_3 mount_U_2_2))); Constraint 107 , Source: formula5.6
-(assert (=> mount_F_2_2 mount_F_2_3)); Constraint 108 , Source: formula5.7
+       a!2))); Constraint 149 , Source: formula5.3-Secondpart
+(assert inspect_PostCondition_7_2); Constraint 150 , Source: formula5.4-Postcondition
+(assert (=> (and inspect_E_7_2 inspect_PostCondition_7_2) inspect_F_7_3)); Constraint 151 , Source: formula5.4
+(assert (and (=> inspect_U_7_2 inspect_U_7_3) (=> inspect_U_7_3 inspect_U_7_2))); Constraint 152 , Source: formula5.6
+(assert (=> inspect_F_7_2 inspect_F_7_3)); Constraint 153 , Source: formula5.7
+(assert run-break-test_PreCondition_8_2); Constraint 154 , Source: formula5-Precondition
+(assert (=> (and run-break-test_I_8_2 run-break-test_PreCondition_8_2)
+    run-break-test_E_8_3)); Constraint 155 , Source: formula5.1
+(assert (=> (not run-break-test_I_8_2)
+    (and (=> run-break-test_I_8_2 run-break-test_I_8_3)
+         (=> run-break-test_I_8_3 run-break-test_I_8_2)))); Constraint 156 , Source: formula5.2
+(assert (or run-break-test_I_8_2
+    run-break-test_E_8_2
+    run-break-test_F_8_2
+    run-break-test_U_8_2)); Constraint 157 , Source: formula5.3-Firstpart
+(assert (let ((a!1 (=> run-break-test_F_8_2
+               (and (and (not run-break-test_I_8_2) (not run-break-test_E_8_2))
+                    (not run-break-test_U_8_2))))
+      (a!2 (=> run-break-test_U_8_2
+               (and (and (not run-break-test_I_8_2) (not run-break-test_E_8_2))
+                    (not run-break-test_F_8_2)))))
+  (and (=> run-break-test_I_8_2
+           (and (not run-break-test_E_8_2)
+                (not run-break-test_F_8_2)
+                (not run-break-test_U_8_2)))
+       (=> run-break-test_E_8_2
+           (and (not run-break-test_I_8_2)
+                (not run-break-test_F_8_2)
+                (not run-break-test_U_8_2)))
+       a!1
+       a!2))); Constraint 158 , Source: formula5.3-Secondpart
+(assert run-break-test_PostCondition_8_2); Constraint 159 , Source: formula5.4-Postcondition
+(assert (=> (and run-break-test_E_8_2 run-break-test_PostCondition_8_2)
+    run-break-test_F_8_3)); Constraint 160 , Source: formula5.4
+(assert (and (=> run-break-test_U_8_2 run-break-test_U_8_3)
+     (=> run-break-test_U_8_3 run-break-test_U_8_2))); Constraint 161 , Source: formula5.6
+(assert (=> run-break-test_F_8_2 run-break-test_F_8_3)); Constraint 162 , Source: formula5.7
 (declare-const P2 Bool)
-(assert scan-barcode_PreCondition_1_2); Constraint 109 , Source: formula7-Precondition
-(assert scan-barcode_PostCondition_1_2); Constraint 110 , Source: formula7-Postcondition
-(assert mount_PreCondition_2_2); Constraint 111 , Source: formula7-Precondition
-(assert mount_PostCondition_2_2); Constraint 112 , Source: formula7-Postcondition
-(assert (let ((a!1 (and (or (and (not scan-barcode_PreCondition_1_2) scan-barcode_I_1_2)
-                    (and (not scan-barcode_PostCondition_1_2)
-                         scan-barcode_E_1_2)
-                    scan-barcode_F_1_2
-                    scan-barcode_U_1_2)
-                (or (and (not mount_F_2_2) test-frame-rigid_I_1_2)
-                    (and (not mount_F_2_2) test-frame-rigid_E_1_2)
-                    test-frame-rigid_F_1_2
-                    test-frame-rigid_U_1_2)
-                (or (and (not mount_PreCondition_2_2) mount_I_2_2)
-                    (and (not mount_PostCondition_2_2) mount_E_2_2)
-                    mount_F_2_2
-                    mount_U_2_2)
-                (or scan-barcode_I_1_2
-                    scan-barcode_E_1_2
-                    test-frame-rigid_I_1_2
-                    test-frame-rigid_E_1_2
-                    mount_I_2_2
-                    mount_E_2_2))))
-  (=> P2 a!1))); Constraint 113 , Source: overallGoal
+(assert inspect_PreCondition_5_2); Constraint 163 , Source: formula7-Precondition
+(assert inspect_PostCondition_5_2); Constraint 164 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_6_2); Constraint 165 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_6_2); Constraint 166 , Source: formula7-Postcondition
+(assert inspect_PreCondition_7_2); Constraint 167 , Source: formula7-Precondition
+(assert inspect_PostCondition_7_2); Constraint 168 , Source: formula7-Postcondition
+(assert run-break-test_PreCondition_8_2); Constraint 169 , Source: formula7-Precondition
+(assert run-break-test_PostCondition_8_2); Constraint 170 , Source: formula7-Postcondition
+(assert (let ((a!1 (and (or (and (not inspect_PreCondition_5_2) inspect_I_5_2)
+                    (and (not inspect_PostCondition_5_2) inspect_E_5_2)
+                    inspect_F_5_2
+                    inspect_U_5_2)
+                (or (and (not run-break-test_PreCondition_6_2)
+                         run-break-test_I_6_2)
+                    (and (not run-break-test_PostCondition_6_2)
+                         run-break-test_E_6_2)
+                    run-break-test_F_6_2
+                    run-break-test_U_6_2)
+                (or (and (not inspect_PreCondition_7_2) inspect_I_7_2)
+                    (and (not inspect_PostCondition_7_2) inspect_E_7_2)
+                    inspect_F_7_2
+                    inspect_U_7_2)
+                (or (and (not run-break-test_PreCondition_8_2)
+                         run-break-test_I_8_2)
+                    (and (not run-break-test_PostCondition_8_2)
+                         run-break-test_E_8_2)
+                    run-break-test_F_8_2
+                    run-break-test_U_8_2)
+                (or inspect_I_5_2
+                    inspect_E_5_2
+                    run-break-test_I_6_2
+                    run-break-test_E_6_2
+                    inspect_I_7_2
+                    inspect_E_7_2
+                    run-break-test_I_8_2
+                    run-break-test_E_8_2))))
+  (=> P2 a!1))); Constraint 171 , Source: overallGoal
