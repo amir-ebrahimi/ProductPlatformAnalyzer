@@ -810,14 +810,13 @@ namespace ProductPlatformAnalyzer
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
                         output.addExp(lCurrentExpr.ToString(), value, pState);
-                        output.SortAfterState();
                     }
                 }
 
                 if (done)
                 {
                     Console.WriteLine("Time: " + stopwatch.Elapsed);
-                    output.printOpTransformations();
+                    output.printFinished();
                 }
                 else
                 {

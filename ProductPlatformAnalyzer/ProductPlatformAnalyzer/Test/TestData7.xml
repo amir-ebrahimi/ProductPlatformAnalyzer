@@ -8,11 +8,6 @@
 
 		 axel1 and test_axel -> run_test_axel 
 		 Conditions: test_axel, axel1
-
-	Mods on output:
-		Choose exactly one with 1 variant
-		not axel-test => put-on sensor, but keep other assertions made from operand belonging to variant
-			(make progress for operand not belonging to variant without forcing start condition) 
 -->
 <testData>
 <operations>

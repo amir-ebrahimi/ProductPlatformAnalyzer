@@ -69,38 +69,71 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private bool goalState(string name, int pState)
+        public void SortAfterState()
         {
-            for (int i = 0; i <= pState; i++)
+
+            outputResult.Sort(delegate(OutputExp exp1, OutputExp exp2)
             {
-                if (String.Equals(name, ("P" + i)))
-                    return true;
-            }
-            return false;
+                return exp1.state.CompareTo(exp2.state);
+            });
+
+        }
+
+        public void SortAfterValue()
+        {
+            outputResult.Sort(delegate(OutputExp exp1, OutputExp exp2)
+            {
+                return exp2.value.CompareTo(exp1.value);
+            });
+
+        }
+
+
+        public void printFinished()
+        {
+            SortAfterValue();
+            Console.WriteLine("\nVariants: ");
+            printVariants();
+
+            SortAfterState();
+            Console.WriteLine("\nOperations in order: ");
+            printOpTransformations();
+
+
+        }
+
+        public void printCounterExample()
+        {
+            int lastState = getLastState();
+
+            SortAfterValue();
+            Console.WriteLine("\nVariants:");
+            printVariants();
+            
+            Console.WriteLine("\nOperation in last state:");
+            printOpState(lastState);
+
+            SortAfterState();
+            Console.WriteLine("\nOperations in order: ");
+            printOpTransformations(lastState);
+
+            Console.WriteLine("\nFalse pre/post-conditions:");
+            printConditionsState(0);
         }
 
         public void Print()
         {
-            foreach(OutputExp exp in outputResult)
+            foreach (OutputExp exp in outputResult)
             {
                 Console.WriteLine(exp.ToString());
             }
-        }
-
-        public void SortAfterState()
-        {
-            outputResult.Sort(delegate(OutputExp exp1, OutputExp exp2)
-                {
-                    return exp1.state.CompareTo(exp2.state);
-                });
-
         }
 
         public void printTrue()
         {
             foreach (OutputExp exp in outputResult)
             {
-                if(exp.value == "true")
+                if (exp.value == "true")
                     Console.WriteLine(exp.ToString());
             }
 
@@ -119,20 +152,40 @@ namespace ProductPlatformAnalyzer
 
         public void printOpTransformations()
         {
-            Console.WriteLine("\nVariants: ");
-            printVariants();
-
-            Console.WriteLine("\nOperations in order: ");
             foreach (OutputExp exp in outputResult)
             {
                 OutputExp nextOp = findNextOp(exp);
                 if (nextOp != null)
                     if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                    Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
+                        Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
             }
 
         }
 
+        public void printOpTransformations(int max)
+        {
+            foreach (OutputExp exp in outputResult)
+            {
+                OutputExp nextOp = findNextOp(exp);
+                if (nextOp != null && nextOp.state <= max)
+                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                        Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
+            }
+
+        }
+
+
+        private bool goalState(string name, int pState)
+        {
+            for (int i = 0; i <= pState; i++)
+            {
+                if (String.Equals(name, ("P" + i)))
+                    return true;
+            }
+            return false;
+        }
+
+        
         private OutputExp findNextOp(OutputExp first)
         {
             OutputExp next = null;
@@ -159,7 +212,7 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        public string nextOpState(string lstate)
+        private string nextOpState(string lstate)
         {
             string next = null;
 
@@ -171,21 +224,6 @@ namespace ProductPlatformAnalyzer
                 case "U": next = "U"; break;
             }
             return next;
-        }
-
-
-        internal void printCounterExample()
-        {
-            int lastState = getLastState();
-
-            Console.WriteLine("\nVariants:");
-            printVariants();
-
-            Console.WriteLine("\nOperation in last state:");
-            printOpState(lastState);
-
-            Console.WriteLine("\nFalse pre/post-conditions:");
-            printConditionsState(0);
         }
 
         private void printConditionsState(int lstate)

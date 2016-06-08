@@ -10,11 +10,6 @@
 		 axel2 and test_break -> run_break_test
 
 		 Condition: 
-
-	Mods on output:
-		Choose exactly one with 1 variant
-		[one-axel and axel-test] => run test
-			Variant operation mapping [V] -> Op
 -->
 <testData>
 <operations>
