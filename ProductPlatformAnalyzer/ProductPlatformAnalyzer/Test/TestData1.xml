@@ -2,7 +2,7 @@
 <!-- Process should finish -->
 <!-- Operations: scan-barcode
 				, mount
-				, test_frame_rigid test -->
+				, test_frame_rigid -->
 
 <!-- Variants: frame-rigid, Operations: scan-barcode -->
 
