@@ -817,6 +817,7 @@ namespace ProductPlatformAnalyzer
                 {
                     Console.WriteLine("Time: " + stopwatch.Elapsed);
                     output.printFinished();
+                    output.writeFinished();
                 }
                 else
                 {
