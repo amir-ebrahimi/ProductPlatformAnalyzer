@@ -4,7 +4,7 @@
 				, mount
 				, test_frame_rigid -->
 
-<!-- Variants: frame-rigid, Operations: scan-barcode new -->
+<!-- Variants: frame-rigid, Operations: scan-barcode -->
 
 <!-- VariantGroups: frame, Variants: frame-rigid -->
 
