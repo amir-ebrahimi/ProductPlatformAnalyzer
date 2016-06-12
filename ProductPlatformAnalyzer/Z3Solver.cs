@@ -824,6 +824,7 @@ namespace ProductPlatformAnalyzer
                     Console.WriteLine("Satisfiable");
                     Console.WriteLine("Time: " + stopwatch.Elapsed);
                     output.printCounterExample();
+                    output.writeCounterExample();
                 }
 
                 //foreach (Expr lExpression in ExpressionList)
