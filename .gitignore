@@ -5,11 +5,15 @@ Properties/*
 obj/*
 bin/*
 
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/Microsoft_Example_Added.v11.suo
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/bin/Debug/Microsoft_Example_Added.exe
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/bin/Debug/Microsoft_Example_Added.pdb
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/bin/Debug/myfile.htm
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.csproj.FileListAbsolute.txt
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.csprojResolveAssemblyReference.cache
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.exe
-ProductPlatformAnalyzer/ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.pdb
+ProductPlatformAnalyzer/Properties/*
+ProductPlatformAnalyzer/obj/*
+ProductPlatformAnalyzer/bin/*
+
+ProductPlatformAnalyzer/Microsoft_Example_Added.v11.suo
+ProductPlatformAnalyzer/bin/Debug/Microsoft_Example_Added.exe
+ProductPlatformAnalyzer/bin/Debug/Microsoft_Example_Added.pdb
+ProductPlatformAnalyzer/bin/Debug/myfile.htm
+ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.csproj.FileListAbsolute.txt
+ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.csprojResolveAssemblyReference.cache
+ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.exe
+ProductPlatformAnalyzer/obj/Debug/Microsoft_Example_Added.pdb
