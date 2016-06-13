@@ -803,6 +803,7 @@ namespace ProductPlatformAnalyzer
 
                 OutputHandler output = new OutputHandler();
 
+                //adding expressions from model to outputhandler
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                 {
                     Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
@@ -813,14 +814,17 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
+
                 if (done)
                 {
+                    //Print and writes an output file showing the result of a finished test
                     Console.WriteLine("Time: " + stopwatch.Elapsed);
                     output.printFinished();
                     output.writeFinished();
                 }
                 else
                 {
+                    //Print and writes an output file showing the result of a deadlocked test
                     Console.WriteLine("Satisfiable");
                     Console.WriteLine("Time: " + stopwatch.Elapsed);
                     output.printCounterExample();
