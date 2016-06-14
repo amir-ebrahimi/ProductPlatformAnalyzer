@@ -220,3 +220,167 @@ public partial class operation
     }
 
 }
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class variantOperations
+{
+    private variant VariantRef;
+    private List<operation> OperationRefs;
+
+    public variant getVariantRef()
+    {
+        return VariantRef;
+    }
+
+    public void setVariantRef(variant pVariantRef)
+    {
+        VariantRef = pVariantRef;
+    }
+
+    public List<operation> getOperationRefs()
+    {
+        return OperationRefs;
+    }
+
+    public void setOperationRefs(List<operation> pOperationRefs)
+    {
+        OperationRefs = pOperationRefs;
+    }
+
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class resource
+{
+
+    private string namesField;
+
+    private string displayNameField;
+
+    private string abilityField;
+
+    /// <remarks/>
+    public string names
+    {
+        get
+        {
+            return this.namesField;
+        }
+        set
+        {
+            this.namesField = value;
+        }
+    }
+
+    /// <remarks/>
+    public string displayName
+    {
+        get
+        {
+            return this.displayNameField;
+        }
+        set
+        {
+            this.displayNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public string ability
+    {
+        get
+        {
+            return this.abilityField;
+        }
+        set
+        {
+            this.abilityField = value;
+        }
+    }
+}
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class operationResources
+{
+    private operation OperationRef;
+    private List<resource> ResourceRefs;
+
+    public operation getOperationRef()
+    {
+        return OperationRef;
+    }
+
+    public void setOperationRef(operation pOperationRef)
+    {
+        OperationRef = pOperationRef;
+    }
+
+    public List<resource> getResourceRefs()
+    {
+        return ResourceRefs;
+    }
+
+    public void setResourceRefs(List<resource> pResourceRefs)
+    {
+        ResourceRefs = pResourceRefs;
+    }
+
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+public partial class station
+{
+
+    private string namesField;
+
+    private List<resource> resourcesField;
+
+    /// <remarks/>
+    public string names
+    {
+        get
+        {
+            return this.namesField;
+        }
+        set
+        {
+            this.namesField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("variant")]
+    public List<resource> resources
+    {
+        get
+        {
+            return this.resourcesField;
+        }
+        set
+        {
+            this.resourcesField = value;
+        }
+    }
+}
+
+
