@@ -339,7 +339,7 @@ namespace ProductPlatformAnalyzer
             {
 
                 String[] parts = pActiveOperationName.Split('_');
-                if (parts[3] != null)
+                if (parts.Length == 4)
                     lOpTransNum = Convert.ToInt32(parts[3]);
 
             }

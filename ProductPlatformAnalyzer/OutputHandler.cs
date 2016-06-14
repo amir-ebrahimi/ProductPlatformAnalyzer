@@ -532,8 +532,7 @@ namespace ProductPlatformAnalyzer
             {
                 OutputExp nextOp = findNextOp(exp);
                 if (nextOp != null)
-                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true")
-                        && nextOp.state <= getLastState())
+                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
                         Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
             }
         }
@@ -549,8 +548,7 @@ namespace ProductPlatformAnalyzer
             {
                 OutputExp nextOp = findNextOp(exp);
                 if (nextOp != null)
-                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true")
-                        && nextOp.state <= lastState)
+                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
                     {
                         item = new String[4];
                         item[0] = exp.operation; //Name of operation

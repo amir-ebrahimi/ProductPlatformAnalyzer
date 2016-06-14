@@ -58,9 +58,9 @@ namespace ProductPlatformAnalyzer
         {
             List<variantGroup> localVariantGroupList = lFrameworkWrapper.getVariantGroupList();
 
-            foreach(variantGroup localVariantGroup in localVariantGroupList)
+            foreach (variantGroup localVariantGroup in localVariantGroupList)
             {
-                lZ3Solver.AddBooleanExpression(localVariantGroup.names);            
+                lZ3Solver.AddBooleanExpression(localVariantGroup.names);
             }
         }
 
@@ -115,29 +115,29 @@ namespace ProductPlatformAnalyzer
 
                 //loadInitialData(pFile);
 
-//                for (int i = 0; i <= pState; i++)
-//                {
+                //                for (int i = 0; i <= pState; i++)
+                //                {
 
-                    convertFVariants2Z3Variants();
-                    convertFOperations2Z3Operations(pState);
+                convertFVariants2Z3Variants();
+                convertFOperations2Z3Operations(pState);
 
-                    //formula 2
-                    produceVariantGroupGCardinalityConstraints();
-                    //formula 3
-                    convertFConstraint2Z3Constraint();
-                    //forula 4
-                    initializeFVariantOperation2Z3Constraints();
+                //formula 2
+                produceVariantGroupGCardinalityConstraints();
+                //formula 3
+                convertFConstraint2Z3Constraint();
+                //forula 4
+                initializeFVariantOperation2Z3Constraints();
 
-                    //formula 5 and New Formula
-                    convertFOperations2Z3ConstraintNewVersion(pState);
+                //formula 5 and New Formula
+                convertFOperations2Z3ConstraintNewVersion(pState);
 
-                    if (lOpSeqAnalysis)
-                    {
-                        if (!done)
-                            //formula 7 and 8
-                            convertFGoals2Z3GoalsVersion2(pState);
-                    }
-//                }
+                if (lOpSeqAnalysis)
+                {
+                    if (!done)
+                        //formula 7 and 8
+                        convertFGoals2Z3GoalsVersion2(pState);
+                }
+                //                }
 
                 if (!done)
                 {
@@ -330,7 +330,7 @@ namespace ProductPlatformAnalyzer
             {
                 throw ex;
             }
-            
+
         }
 
         public void initializeFVariantOperation2Z3Constraints()
@@ -531,28 +531,51 @@ namespace ProductPlatformAnalyzer
 
         public void resetOperationPrecondition(operation pOperation, variant pVariant, int pState, String pPreconditionSource)
         {
-            //BoolExpr lOpPrecondition = lZ3Solver.MakeBoolVariable("lOpPrecondition");
+            BoolExpr opPrecondition;
+            String[] lOperationNameParts;
             lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_PreCondition_" + pVariant.index + "_" + pState.ToString());
 
             if (pOperation.precondition.Count != 0)
             {
                 //If the operation HAS a precondition
-                if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.precondition[0]) > pState)
+                //if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.precondition[0]) > pState)
+                if (pOperation.precondition[0].Contains('_'))
                 {
-                    //This means the precondition is on a transition state which has not been reached yet!
-                    //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
-                    lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), pPreconditionSource);
+                    //This means the precondition includes more than an operation
+                    lOperationNameParts = pOperation.precondition[0].Split('_');
+                    if (lOperationNameParts.Length == 3)
+                    {
+                        //This means the precondition does not include a state
+                        if (lOperationNameParts.Length == 2)
+                            //This means the precondition does not include a variant nor a state
+                            //need to be properly implementet
+                            lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0] + pVariant.index + "_" + pState.ToString());
+                        else
+                        {
+                            //This means the precondition does includes a variant but not a state
+                            opPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0] + "_" + pState.ToString());
+                            lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPrecondition, lOpPrecondition, pPreconditionSource);
+                            
+                        }
+                    }
+                    else
+                        //This means the precondition includes a state and a variant
+                        if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.precondition[0]) > pState)
+                        {
+                            //This means the precondition is on a transition state which has not been reached yet!
+                            lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), pPreconditionSource);
+                        }
+                        else
+                        {
+                            opPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0]);
+                            lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPrecondition, lOpPrecondition, pPreconditionSource);
+
+                        }
                 }
                 else
-                {
-                    if (pOperation.precondition[0].Contains('_'))
-                        //This means the precondition includes an operation status
-                        //lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
-                        lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0]);
-                    else
-                        //This means the precondition only includes an operation
-                        lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0] + "_F_" + pVariant.index + "_" + pState.ToString());
-                }
+                    //This means the precondition only includes an operation
+                    //This need to be implementet
+                   lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0] + "_F_" + pVariant.index + "_" + pState.ToString());
 
             }
             else
@@ -563,26 +586,49 @@ namespace ProductPlatformAnalyzer
 
         public void resetOperationPostcondition(operation pOperation, variant pVariant, int pState, String pPostconditionSource)
         {
+            BoolExpr opPostcondition;
+            String[] lOperationNameParts;
             lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_PostCondition_" + pVariant.index + "_" + pState.ToString());
 
             if (pOperation.postcondition.Count != 0)
             {
-                if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.postcondition[0]) > pState)
+                if (pOperation.postcondition[0].Contains('_'))
                 {
-                    //This means the postcondition is on a transition state which has not been reached yet!
-                    lOpPostcondition = lZ3Solver.NotOperator(lOpPostcondition);
-                    lZ3Solver.AddConstraintToSolver(lOpPostcondition, pPostconditionSource);
+                    //This means the postcondition includes more than an operation
+                    lOperationNameParts = pOperation.postcondition[0].Split('_');
+                    if (lOperationNameParts.Length == 3)
+                    {
+                        //This means the postcondition does not include a state
+                        if (lOperationNameParts.Length == 2)
+                            //This means the postcondition does not include a variant nor a state
+                            //This need to be implementet
+                            lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0] + pVariant.index + "_" + pState.ToString());
+                        else
+                        {
+                            //This means the postcondition does includes a variant but not a state
+                            opPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0] + "_" + pState.ToString());
+                            lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPostcondition, lOpPostcondition, pPostconditionSource);
+
+                        }
+                    }
+                    else
+                        //This means the precondition includes a state and a variant
+                        if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.postcondition[0]) > pState)
+                        {
+                            //This means the precondition is on a transition state which has not been reached yet!
+                            lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPostcondition), pPostconditionSource);
+                        }
+                        else
+                        {
+                            opPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0]);
+                            lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPostcondition, lOpPostcondition, pPostconditionSource);
+
+                        }
                 }
                 else
-                {
-                    if (pOperation.postcondition[0].Contains('_'))
-                        //This means the postcondition includes an operation status
-                        //lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
-                        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0]);
-                    else
-                        //This means the postcondition only includes an operation
-                        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0] + "_F_" + pVariant.index + "_" + pState.ToString());
-                }
+                    //This means the precondition only includes an operation
+                    //This need to be implemented
+                    lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0] + "_F_" + pVariant.index + "_" + pState.ToString());
 
             }
             else
@@ -606,45 +652,45 @@ namespace ProductPlatformAnalyzer
                 {
                     variant lCurrentVariant = lCurrentVariantOperations.getVariant();
                     List<operation> lOperationList = lCurrentVariantOperations.getOperations();
-                        if (lOperationList != null)
+                    if (lOperationList != null)
+                    {
+                        foreach (operation lOperation in lOperationList)
                         {
-                            foreach (operation lOperation in lOperationList)
-                            {
-                                resetCurrentStateOperationVariables(lOperation, lCurrentVariant, pState);
+                            resetCurrentStateOperationVariables(lOperation, lCurrentVariant, pState);
 
-                                resetNextStateOperationVariables(lOperation, lCurrentVariant, lNewState);
+                            resetNextStateOperationVariables(lOperation, lCurrentVariant, lNewState);
 
-                                resetOperationPrecondition(lOperation, lCurrentVariant, pState, "formula5-Precondition");
+                            resetOperationPrecondition(lOperation, lCurrentVariant, pState, "formula5-Precondition");
 
-                                BoolExpr lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PostCondition_" + lCurrentVariant.index + "_" + pState.ToString());
+                            BoolExpr lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PostCondition_" + lCurrentVariant.index + "_" + pState.ToString());
 
-                                //(O_I_k_j and Pre_k_j) => O_E_k_j+1
-                                createFormula51();
+                            //(O_I_k_j and Pre_k_j) => O_E_k_j+1
+                            createFormula51();
 
-                                // not (O_I_k_j and Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
-                                createFormula52(lOperation);
+                            // not (O_I_k_j and Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
+                            createFormula52(lOperation);
 
-                                //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
-                                //We should show
-                                //or O_I_k_j O_E_k_j O_F_k_j O_U_k_j
-                                //and (=> O_I_k_j (and (not O_E_k_j) (not O_F_k_j) (not O_U_k_j)))
-                                //    (=> O_E_k_j (and (not O_I_k_j) (not O_F_k_j) (not O_U_k_j)))
-                                //    (=> O_F_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_U_k_j)))
-                                //    (=> O_U_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_F_k_j)))
-                                createFormula53();
+                            //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                            //We should show
+                            //or O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                            //and (=> O_I_k_j (and (not O_E_k_j) (not O_F_k_j) (not O_U_k_j)))
+                            //    (=> O_E_k_j (and (not O_I_k_j) (not O_F_k_j) (not O_U_k_j)))
+                            //    (=> O_F_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_U_k_j)))
+                            //    (=> O_U_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_F_k_j)))
+                            createFormula53();
 
-                                //(O_E_k_j AND Post_k_j) => O_F_k_j+1
-                                createFormula54(pState, lOperation, lCurrentVariant);
+                            //(O_E_k_j AND Post_k_j) => O_F_k_j+1
+                            createFormula54(pState, lOperation, lCurrentVariant);
 
-                                //O_U_k_j => O_U_k_j+1
-                                createFormula56();
+                            //O_U_k_j => O_U_k_j+1
+                            createFormula56();
 
-                                //O_F_k_j => O_F_k_j+1
-                                createFormula57();
-                            }
+                            //O_F_k_j => O_F_k_j+1
+                            createFormula57();
                         }
+                    }
                 }
-                
+
                 /*
                 //Loop over variant list
                 //For each variant find the variant in variant-operation mapping table
@@ -1014,50 +1060,94 @@ namespace ProductPlatformAnalyzer
 
                             BoolExpr lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PreCondition_" + currentVariant.index + "_" + pState.ToString());
                             BoolExpr lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PostCondition_" + currentVariant.index + "_" + pState.ToString());
+                            //String [] lOperationNameParts = new String[4];
+                            //if (lOperation.precondition.Count != 0)
+                            //{
+                            //    if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperation.precondition[0]) > pState)
+                            //        //This means the precondition is on a transition state which has not been reached yet!
+                            //        //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
+                            //        lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), "formula7-Precondition");
+                            //    else
+                            //    {
+                            //        if (lOperation.precondition[0].Contains('_'))
+                            //        {
+                            //            //This means the precondition includes more than an operation
+                            //            lOperationNameParts = lOperation.precondition[0].Split('_');
+                            //            if (lOperationNameParts.Length == 3)
+                            //            {
+                            //                //This means the precondition does not include a state
+                            //                if (lOperationNameParts.Length == 2)
+                            //                    //This means the precondition does not include a variant nor a state
+                            //                    //Needs to be properly implementet
+                            //                    lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + currentVariant.index + "_" + pState.ToString());
+                            //                else
+                            //                    //This means the precondition does includes a variant but not a state
+                            //                    lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + pState.ToString());
+                            //            }
+                            //            else
+                            //                //This means the precondition includes a state
+                            //                lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0]);
+                            //        }
+                            //        else
+                            //            //This means the precondition only includes an operation
+                            //            lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_F_" + currentVariant.index + "_" + pState.ToString());
+                            //    }
+                            //}
+                            //else
+                            //    //lOpPrecondition = lOpPrecondition;
+                            //    lZ3Solver.AddConstraintToSolver(lOpPrecondition, "formula7-Precondition");
 
-                            if (lOperation.precondition.Count != 0)
-                            {
-                                if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperation.precondition[0]) > pState)
-                                    //This means the precondition is on a transition state which has not been reached yet!
-                                    //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
-                                    lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), "formula7-Precondition");
-                                else
-                                {
-                                    if (lOperation.precondition[0].Contains('_'))
-                                        //This means the precondition includes an operation status
-                                        lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0]);
-                                    else
-                                        //This means the precondition only includes an operation
-                                        lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_F_" + currentVariant.index + "_" + pState.ToString());
-                                    //Before it was this
-                                    //lOperationPrecondition = lZ3Solver.FindBoolExpressionUsingName(lPrecondition + "_I_" + currentVariant.index + "_" + pState.ToString());
-                                }
-                            }
-                            else
-                                //lOpPrecondition = lOpPrecondition;
-                                lZ3Solver.AddConstraintToSolver(lOpPrecondition, "formula7-Precondition");
-
-                            if (lOperation.postcondition.Count != 0)
-                            {
-                                if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperation.postcondition[0]) > pState)
-                                    //This means the precondition is on a transition state which has not been reached yet!
-                                    //lOpPostcondition = lZ3Solver.NotOperator(lOpPostcondition);
-                                    lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPostcondition), "formula7-Postcondition");
-                                else
-                                {
-                                    if (lOperation.postcondition[0].Contains('_'))
-                                        //This means the precondition includes an operation status
-                                        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0]);
-                                    else
-                                        //This means the precondition only includes an operation
-                                        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_F_" + currentVariant.index + "_" + pState.ToString());
-                                    //Before it was this
-                                    //lOperationPrecondition = lZ3Solver.FindBoolExpressionUsingName(lPrecondition + "_I_" + currentVariant.index + "_" + pState.ToString());
-                                }
-                            }
-                            else
-                                //lOpPostcondition = lOpPostcondition;
-                                lZ3Solver.AddConstraintToSolver(lOpPostcondition, "formula7-Postcondition");
+                            //if (lOperation.postcondition.Count != 0)
+                            //{
+                            //    if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperation.postcondition[0]) > pState)
+                            //        //This means the postcondition is on a transition state which has not been reached yet!
+                            //        lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPostcondition), "formula7-Postcondition");
+                            //    else
+                            //    {
+                            //        if (lOperation.postcondition[0].Contains('_'))
+                            //        {
+                            //            //This means the postcondition includes more than an operation
+                            //            lOperationNameParts = lOperation.postcondition[0].Split('_');
+                            //            if (lOperationNameParts.Length == 3)
+                            //            {
+                            //                //This means the postcondition does not include a state
+                            //                if (lOperationNameParts.Length == 2)
+                            //                    //This means the postcondition does not include a variant nor a state
+                            //                    //Needs to be properly implementet
+                            //                    lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + currentVariant.index + "_" + pState.ToString());
+                            //                else
+                            //                    //This means the postcondition does includes a variant but not a state
+                            //                    lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_" + pState.ToString());
+                            //            }
+                            //            else
+                            //                //This means the postcondition includes a state
+                            //                lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0]);
+                            //        }
+                            //        else
+                            //            //This means the postcondition only includes an operation
+                            //            lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_F_" + currentVariant.index + "_" + pState.ToString());
+                            //        //Before it was this
+                            //        //lOperationPrecondition = lZ3Solver.FindBoolExpressionUsingName(lPrecondition + "_I_" + currentVariant.index + "_" + pState.ToString());
+                            //    }
+                            //    //if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperation.postcondition[0]) > pState)
+                            //    //    //This means the precondition is on a transition state which has not been reached yet!
+                            //    //    //lOpPostcondition = lZ3Solver.NotOperator(lOpPostcondition);
+                            //    //    lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPostcondition), "formula7-Postcondition");
+                            //    //else
+                            //    //{
+                            //    //    if (lOperation.postcondition[0].Contains('_'))
+                            //    //        //This means the precondition includes an operation status
+                            //    //        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0]);
+                            //    //    else
+                            //    //        //This means the precondition only includes an operation
+                            //    //        lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_F_" + currentVariant.index + "_" + pState.ToString());
+                            //    //    //Before it was this
+                            //    //    //lOperationPrecondition = lZ3Solver.FindBoolExpressionUsingName(lPrecondition + "_I_" + currentVariant.index + "_" + pState.ToString());
+                            //    //}
+                            //}
+                            //else
+                            //    //lOpPostcondition = lOpPostcondition;
+                            //    lZ3Solver.AddConstraintToSolver(lOpPostcondition, "formula7-Postcondition");
                             BoolExpr lNotPreCondition = lZ3Solver.NotOperator(lOpPrecondition);
                             BoolExpr lNotPostCondition = lZ3Solver.NotOperator(lOpPostcondition);
 
@@ -1166,17 +1256,17 @@ namespace ProductPlatformAnalyzer
                         {
                             resetCurrentStateOperationVariables(lOperation, currentVariant, pState);
 
-                            BoolExpr lOperand = lZ3Solver.OrOperator(new List<BoolExpr>() {lOp_F_CurrentState, lOp_U_CurrentState});
+                            BoolExpr lOperand = lZ3Solver.OrOperator(new List<BoolExpr>() { lOp_F_CurrentState, lOp_U_CurrentState });
                             if (formula7 == null)
                                 formula7 = lOperand;
                             else
-                                formula7 = lZ3Solver.AndOperator(new List<BoolExpr>() {formula7, lOperand});
+                                formula7 = lZ3Solver.AndOperator(new List<BoolExpr>() { formula7, lOperand });
                         }
                     }
                 }
             }
-//            if (formula7 != null)
-//                lZ3Solver.AddConstraintToSolver(formula7);
+            //            if (formula7 != null)
+            //                lZ3Solver.AddConstraintToSolver(formula7);
 
             //formula 8
             BoolExpr formula8 = null;
@@ -1219,21 +1309,21 @@ namespace ProductPlatformAnalyzer
 
                             BoolExpr lFirstOperand = null;
 
-                            lFirstOperand = lZ3Solver.AndOperator(new List<BoolExpr>() {lOp_I_CurrentState, lOpPrecondition});
+                            lFirstOperand = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_I_CurrentState, lOpPrecondition });
 
 
-                            BoolExpr lOperand = lZ3Solver.OrOperator(new List<BoolExpr>() {lFirstOperand, lOp_E_CurrentState});
+                            BoolExpr lOperand = lZ3Solver.OrOperator(new List<BoolExpr>() { lFirstOperand, lOp_E_CurrentState });
 
                             if (formula8 == null)
                                 formula8 = lOperand;
                             else
-                                formula8 = lZ3Solver.OrOperator(new List<BoolExpr>() {formula8, lOperand});
+                                formula8 = lZ3Solver.OrOperator(new List<BoolExpr>() { formula8, lOperand });
                         }
                     }
                 }
             }
-//            if (formula8 != null)
-//                lZ3Solver.AddConstraintToSolver(formula8);
+            //            if (formula8 != null)
+            //                lZ3Solver.AddConstraintToSolver(formula8);
 
 
             lOverallGoal = lZ3Solver.NotOperator(lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lZ3Solver.NotOperator(formula7), formula8 }));
@@ -1275,7 +1365,7 @@ namespace ProductPlatformAnalyzer
                         Console.ReadKey();
                         //ResetAnalyzer();
 
-                        if (i == lNoOfCycles -1)
+                        if (i == lNoOfCycles - 1)
                         {
                             done = true;
                             lTestResult = testConstraintConvertion(i, file, done);
@@ -1302,7 +1392,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);                
+                Console.WriteLine(ex.Message);
             }
         }
     }
