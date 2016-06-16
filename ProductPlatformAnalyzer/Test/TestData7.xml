@@ -19,17 +19,17 @@
 		<operationName>remove-sensor</operationName>
 		<displayName>remove sensor</displayName>
 		<operationPrecondition>
-			<operationName>run-axel-test_E_3_3</operationName>
+			<operationName>run-axel-test_E_3</operationName>
 		</operationPrecondition>
 	</operation>
 	<operation>
 		<operationName>run-axel-test</operationName>
 		<displayName>run axel test</displayName>
 		<operationPrecondition>
-			<operationName>put-on-sensor_F_3_2</operationName>
+			<operationName>put-on-sensor_F_3</operationName>
 		</operationPrecondition>
 		<operationPostcondition>
-			<operationName>remove-sensor_F_3_5</operationName>
+			<operationName>remove-sensor_F_3</operationName>
 		</operationPostcondition>
 	</operation>
 </operations>

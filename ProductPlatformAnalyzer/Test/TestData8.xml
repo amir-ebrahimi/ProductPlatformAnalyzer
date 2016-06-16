@@ -74,10 +74,16 @@
 		</variantRefs>
 	</variantGroup>
 	<variantGroup>
-		<variantGroupName>axel</variantGroupName>
+		<variantGroupName>axel1</variantGroupName>
 		<groupCardinality>choose at least one</groupCardinality>
 		<variantRefs>
 			<variantRef>axel1</variantRef>
+		</variantRefs>
+	</variantGroup>
+	<variantGroup>
+		<variantGroupName>extra axels</variantGroupName>
+		<groupCardinality>choose any number</groupCardinality>
+		<variantRefs>
 			<variantRef>axel2</variantRef>
 		</variantRefs>
 	</variantGroup>
@@ -95,6 +101,9 @@
 <constraints>
   <constraint>
     <logic>not break-test</logic>
+  </constraint>
+  <constraint>
+    <logic>axel2</logic>
   </constraint>
   <constraint>
     <logic>or (and (and inspect-axel axel1) VirtualV1) (and (not (and inspect-axel axel1)) (not VirtualV1))</logic>
