@@ -596,6 +596,9 @@ namespace ProductPlatformAnalyzer
 
                             }
                         }
+                        else
+                            //This means the postcondition only includes an operation
+                            throw new System.ArgumentException("Precondition did not include a status", precon);
                     }
                 if (!unsatisfiable)
                 {
@@ -646,10 +649,6 @@ namespace ProductPlatformAnalyzer
                                 //This means the postcondition does includes a variant but not a state
                                 postconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(postcon + "_" + pState.ToString()));
                             }
-                            else
-                                //This means the precondition only includes an operation
-                                //This need to be implemented
-                                lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.postcondition[0] + "_F_" + pVariant.index + "_" + pState.ToString());
                         }
                         else
                             //This means the precondition includes a state and a variant
@@ -666,6 +665,9 @@ namespace ProductPlatformAnalyzer
 
                             }
                     }
+                    else
+                        //This means the postcondition only includes an operation
+                        throw new System.ArgumentException("Postcondition did not include a status", postcon);  
                 }
                 if (!unsatisfiable)
                 {
