@@ -1,21 +1,17 @@
 <?xml version="1.0"?>
 <!-- Testcase break test counter example
-		Test can not be preformed since sensors can't be removed. Removing of sensors has the precondition that run-test should be finished (works when condition is on executing state). May choose either intenal or external sensors, they ahve the same setup and gice the same result.
+		Test can not be preformed since sensors can't be removed. Removing of sensors has the precondition that run-test should be finished (works when condition is on executing state). May choose either intenal or external sensors, they have the same setup and give the same result.
 
 		 Truck variant: axel1
 		 Test variant:  break-test
 		 Sendors: External, Internal
-		 Operations: run-break_test, put on sensor, remove sensor, turn on sensor, turn off sensors
+		 Operations: run-external-break_test, run-internal-break_test, put on sensor, remove sensor, turn on sensor, turn off sensors
 
-		 axel1 and test_break -> run_break_test
-		 axel2 and test_break -> run_break_test
+		 axel1 and test_break_internal and internal sensors -> run_break_test_internal
+		 axel2 and test_break_external and external sensors -> run_break_test_external
 
 		 Condition: 
 
-	Mods on output:
-		Choose exactly one with 1 variant
-		[one-axel and axel-test] => run test
-			Variant operation mapping [V] -> Op
 -->
 <testData>
 <operations>

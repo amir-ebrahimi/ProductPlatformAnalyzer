@@ -232,7 +232,7 @@ namespace ProductPlatformAnalyzer
             printOpTransformations(lastState);
 
             Console.WriteLine("\nFalse pre/post-conditions:");
-            printConditionsState(0);
+            printConditionsState(lastState);
         }
 
 
@@ -244,7 +244,7 @@ namespace ProductPlatformAnalyzer
             List<String[]> operationState = getOpState(getLastState());
             SortAfterState();
             List<String[]> transformations = getOpTransformations();
-            List<String> conditions = getConditionsState(0);
+            List<String> conditions = getConditionsState(getLastState());
             String[] transPair;
             String[] transF;
             String[] transI;
