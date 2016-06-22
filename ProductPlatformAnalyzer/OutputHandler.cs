@@ -103,114 +103,16 @@ namespace ProductPlatformAnalyzer
             printOpTransformations();
         }
 
+ 
+
         //Writes values for showing a finished analysis to HTML-file
         public void writeFinished()
         {
             StringWriter stringwriter = new StringWriter();
-            List<String> variants = getChosenVariants();
-            SortAfterState();
-            List<String[]> transformations = getOpTransformations();
-            String[] transPair;
-
-
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            writer.WriteBeginTag("p");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Chosen variants:");
-            writer.WriteEndTag("p");
-
-
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            foreach (String var in variants)
-            {
-                writer.WriteBeginTag("li");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(var);
-                writer.WriteEndTag("li");
-            }
-            writer.WriteEndTag("ul");
-
-            writer.WriteBeginTag("p");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operations progressing at state:");
-            writer.WriteEndTag("p");
-
-
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\" style=\"margin-left:40px\" ");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-             
-            
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Operation"); 
-                writer.WriteEndTag("td");
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("I->E");
-                writer.WriteEndTag("td");
-
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("E->F");
-                writer.WriteEndTag("td");
-
-
-            writer.WriteEndTag("tr");
-
-            foreach (String[] trans in transformations)
-            {
-                if (String.Equals("E", trans[2]))
-                {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-
-                    transPair = transformations.Find(x => String.Equals(x[0], trans[0]) &&
-                                                          String.Equals(x[3], trans[3]) &&
-                                                          !String.Equals(x[2], trans[2]));
-
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(trans[0]);
-                    writer.WriteEndTag("td");
-
-
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-
-                    if (String.Equals("E", trans[2]))
-                        writer.Write(trans[1]);
-                    else if (transPair != null)
-                    {
-                        if (String.Equals("E", transPair[2]))
-                            writer.Write(transPair[1]);
-                    }
-
-                    writer.WriteEndTag("td");
-
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    if (String.Equals("F", trans[2]))
-                        writer.Write(trans[1]);
-                    else if (transPair != null)
-                    {
-                        if (String.Equals("F", transPair[2]))
-                            writer.Write(transPair[1]);
-                    }
-                    writer.WriteEndTag("td");
-
-                    writer.WriteEndTag("tr");
-                }
-            }
-            writer.WriteEndTag("table");
-
+            writeInvariants(writer);
+            writeTransitionTableState(writer);
 
             File.WriteAllText("result.htm", stringwriter.ToString());
 
@@ -239,18 +141,74 @@ namespace ProductPlatformAnalyzer
         public void writeCounterExample()
         {
             StringWriter stringwriter = new StringWriter();
-            SortAfterValue();
-            List<String> variants = getChosenVariants();
-            List<String[]> operationState = getOpState(getLastState());
-            SortAfterState();
-            List<String[]> transformations = getOpTransformations();
-            List<String> conditions = getConditionsState(getLastState());
-            String[] transPair;
-            String[] transF;
-            String[] transI;
-
-
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+
+            writeInvariants(writer);
+            //writeOpStateTable(writer);
+            writeTransitionTableState(writer);
+            writeFalsePrePost(writer);
+
+            File.WriteAllText("counterEx.htm", stringwriter.ToString());
+
+        }
+
+        //Prints all output expressions
+        public void Print()
+        {
+            foreach (OutputExp exp in outputResult)
+            {
+                Console.WriteLine(exp.ToString());
+            }
+        }
+
+        //Print all true outputexpressions
+        public void printTrue()
+        {
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.value == "true")
+                    Console.WriteLine(exp.ToString());
+            }
+        }
+
+        //Print all variants
+        public void printVariants()
+        {
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == -1)
+                    Console.WriteLine(exp.ToString());
+            }
+
+        }
+
+        //Returns all chosen variants
+        public List<String> getChosenVariants()
+        {
+            List<String> vars = new List<String>();
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                    vars.Add(exp.name);
+            }
+            return vars;
+        }
+
+        //Print all operation transformations
+        public void printOpTransformations()
+        {
+            foreach (OutputExp exp in outputResult)
+            {
+                OutputExp nextOp = findNextOp(exp);
+                if (nextOp != null)
+                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                        Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
+            }
+        }
+
+        private void writeInvariants(HtmlTextWriter writer)
+        {
+            List<String> variants = getChosenVariants();
 
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -269,13 +227,40 @@ namespace ProductPlatformAnalyzer
                 writer.WriteEndTag("li");
             }
             writer.WriteEndTag("ul");
+        }
+
+        private void writeFalsePrePost(HtmlTextWriter writer)
+        {
+            List<String> conditions = getConditionsState(getLastState());
+            writer.WriteBeginTag("p");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Post/precondition state:");
+            writer.WriteEndTag("p");
+
+            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            foreach (String con in conditions)
+            {
+                writer.WriteBeginTag("li");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(con);
+                writer.WriteEndTag("li");
+            }
+            writer.WriteEndTag("ul");
+        }
+
+        private void writeOpStateTable(HtmlTextWriter writer)
+        {
+            SortAfterValue();
+            List<String[]> operationState = getOpState(getLastState());
+            String[] transF;
+            String[] transI;
 
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation values in last state:");
             writer.WriteEndTag("p");
-
-
 
             writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -324,7 +309,7 @@ namespace ProductPlatformAnalyzer
                     {
                         transI[3] = "-";
                         trans[3] = "-";
-                        transF [3] = "-";
+                        transF[3] = "-";
                     }
 
                     writer.WriteBeginTag("td");
@@ -359,8 +344,13 @@ namespace ProductPlatformAnalyzer
                 }
             }
             writer.WriteEndTag("table");
+        }
 
-
+        private void writeTransitionTableStatus(HtmlTextWriter writer)
+        {
+            SortAfterState();
+            String[] transPair;
+            List<String[]> transformations = getOpTransformations();
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operations progressing at state:");
@@ -372,23 +362,23 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("tr");
             writer.Write(HtmlTextWriter.TagRightChar);
-             
-            
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Operation"); 
-                writer.WriteEndTag("td");
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("I->E");
-                writer.WriteEndTag("td");
 
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("E->F");
-                writer.WriteEndTag("td");
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Operation");
+            writer.WriteEndTag("td");
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("I->E");
+            writer.WriteEndTag("td");
+
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("E->F");
+            writer.WriteEndTag("td");
 
 
             writer.WriteEndTag("tr");
@@ -461,81 +451,69 @@ namespace ProductPlatformAnalyzer
             }
             writer.WriteEndTag("table");
 
+        }
+
+
+        private void writeTransitionTableState(HtmlTextWriter writer)
+        {
+            List<String> activeOps = getActiveOps();
+            List<String[]> opTransitions;
+            int lastState = getLastState();
+
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Post/precondition state:");
+            writer.Write("Operation values in states:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (String con in conditions)
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Operation");
+            writer.WriteEndTag("td");
+
+            for (int i = 0; i <= lastState+1; i++)
             {
-                writer.WriteBeginTag("li");
+                writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(con);
-                writer.WriteEndTag("li");
+                writer.Write(""+i);
+                writer.WriteEndTag("td");
             }
-            writer.WriteEndTag("ul");
 
+            writer.WriteEndTag("tr");
 
-            File.WriteAllText("counterEx.htm", stringwriter.ToString());
-
-        }
-
-        //Prints all output expressions
-        public void Print()
-        {
-            foreach (OutputExp exp in outputResult)
+            foreach (String op in activeOps)
             {
-                Console.WriteLine(exp.ToString());
+                opTransitions = getOpTransformations(op);
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(op);
+                writer.WriteEndTag("td");
+
+                for (int i = 0; i <= lastState+1; i++)
+                {
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.Write(TransitionStateAt(opTransitions, i));
+                    writer.WriteEndTag("td");
+
+                }
+                    
+                writer.WriteEndTag("tr");
+
             }
+            writer.WriteEndTag("table");
         }
 
-        //Print all true outputexpressions
-        public void printTrue()
-        {
-            foreach (OutputExp exp in outputResult)
-            {
-                if (exp.value == "true")
-                    Console.WriteLine(exp.ToString());
-            }
-        }
-
-        //Print all variants
-        public void printVariants()
-        {
-            foreach (OutputExp exp in outputResult)
-            {
-                if (exp.state == -1)
-                    Console.WriteLine(exp.ToString());
-            }
-
-        }
-
-        //Returns all chosen variants
-        public List<String> getChosenVariants()
-        {
-            List<String> vars = new List<String>();
-            foreach (OutputExp exp in outputResult)
-            {
-                if (exp.state == -1 && String.Equals(exp.value, "true"))
-                    vars.Add(exp.name);
-            }
-            return vars;
-        }
-
-        //Print all operation transformations
-        public void printOpTransformations()
-        {
-            foreach (OutputExp exp in outputResult)
-            {
-                OutputExp nextOp = findNextOp(exp);
-                if (nextOp != null)
-                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                        Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
-            }
-        }
 
         //Returns all operation transformations
         private List<String[]> getOpTransformations()
@@ -557,6 +535,52 @@ namespace ProductPlatformAnalyzer
                         item[3] = nextOp.variant.ToString(); //Operation variant
                         transforms.Add(item);
                     }
+            }
+
+            return transforms;
+        }
+
+        private string TransitionStateAt(List<String[]> transformations, int state)
+        {
+            string currentState = "I";
+            foreach(String[] trans in transformations)
+            {
+                int transState = Convert.ToInt32(trans[1]);
+                if (transState <= state)
+                {
+                    if (String.Equals(trans[2], "F"))
+                        return trans[2];
+                    else
+                        currentState = trans[2];
+                }
+            }
+            return currentState;
+        }
+
+
+        //Returns all operation transformations
+        private List<String[]> getOpTransformations(string operation)
+        {
+            List<String[]> transforms = new List<String[]>();
+            String[] item = new String[4];
+            int lastState = getLastState();
+
+            foreach (OutputExp exp in outputResult)
+            {
+                if (String.Equals(exp.operation, operation))
+                {
+                    OutputExp nextOp = findNextOp(exp);
+                    if (nextOp != null)
+                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                        {
+                            item = new String[4];
+                            item[0] = exp.operation; //Name of operation
+                            item[1] = nextOp.state.ToString(); //State after finished transition
+                            item[2] = nextOp.opState; //Operation status (I/E/F) after transition
+                            item[3] = nextOp.variant.ToString(); //Operation variant
+                            transforms.Add(item);
+                        }
+                }
             }
 
             return transforms;
@@ -686,6 +710,24 @@ namespace ProductPlatformAnalyzer
                     item[2] = exp.opState;
                     item[3] = exp.value;
                     ops.Add(item);
+                }
+            }
+            return ops;
+        }
+
+        //Returns operations inlstate
+        private List<String> getActiveOps()
+        {
+            List<String> ops = new List<String>();
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == 0 &&
+                   String.Equals(exp.opState, "I") &&
+                   String.Equals(exp.value, "true") &&
+                   !String.Equals(exp.opState, "PostCondition") &&
+                   !String.Equals(exp.opState, "PreCondition"))
+                {
+                    ops.Add(exp.operation);
                 }
             }
             return ops;
