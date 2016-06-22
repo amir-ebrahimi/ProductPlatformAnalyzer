@@ -259,7 +259,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation values in last state:");
+            writer.Write("Operation status in last state:");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
@@ -462,7 +462,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation values in states:");
+            writer.Write("Operation status in states:");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");

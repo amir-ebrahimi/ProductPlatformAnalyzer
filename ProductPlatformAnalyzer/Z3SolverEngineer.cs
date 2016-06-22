@@ -536,75 +536,29 @@ namespace ProductPlatformAnalyzer
 
         public void resetOperationPrecondition(operation pOperation, variant pVariant, int pState, String pPreconditionSource)
         {
-            BoolExpr opPrecondition = null;
-            List <BoolExpr> preconditionList = new List<BoolExpr>();
-            Boolean unsatisfiable = false;
-            String[] lOperationNameParts;
+            List<BoolExpr> preconditionList = new List<BoolExpr>();
+            BoolExpr lConstraintExpr = null;
             lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_PreCondition_" + pVariant.index + "_" + pState.ToString());
 
              if (pOperation.precondition.Count != 0)
-            {
+             {
                 foreach (string precon in pOperation.precondition)
                 {
-                    //If the operation HAS a precondition
-                    //if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.precondition[0]) > pState)
-                    if (pOperation.precondition[0].Contains('_'))
+                    //For each precondition first we have to build its coresponding tree
+                    Parser lConditionParser = new Parser();
+                    Node<string> lCnstExprTree = new Node<string>("root");
+
+                    lConditionParser.AddChild(lCnstExprTree, precon);
+
+                    foreach (Node<string> item in lCnstExprTree)
                     {
-                        //This means the precondition includes more than an operation
-                        lOperationNameParts = precon.Split('_');
-                        if (lOperationNameParts.Length != 4)
-                        {
-                            //This means the precondition does not include a state
-                            if (lOperationNameParts.Length == 2)
-                            {
-                                //This means the precondition does not include a variant nor a state
-                                List<string> vInstances = lFrameworkWrapper.getvariantInstancesForOperation(lOperationNameParts[0], pState.ToString());
-                                List<BoolExpr> opExpr = new List<BoolExpr>();
-
-                                foreach (string variant in vInstances)
-                                {
-                                    opExpr.Add(lZ3Solver.FindBoolExpressionUsingName(precon + "_" + variant + "_" + pState.ToString()));
-
-                                }
-                                preconditionList.Add(lZ3Solver.OrOperator(opExpr));
-                            }
-                            else if (lOperationNameParts.Length == 3)
-                            {
-                                //This means the precondition does includes a variant but not a state
-                                preconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(precon + "_" + pState.ToString()));
-                                //                                lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPrecondition, lOpPrecondition, pPreconditionSource);
-
-                            }
-                            else
-                                //This means the precondition only includes an operation
-                                //This need to be implementet
-                                preconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(pOperation.precondition[0] + "_F_" + pVariant.index + "_" + pState.ToString()));
-                
-                        }
-                        else
-                            //This means the precondition includes a state and a variant
-                            if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(precon) > pState)
-                            {
-                                //This means the precondition is on a transition state which has not been reached yet!
-                                lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), pPreconditionSource);
-                                unsatisfiable = true;
-                                break;
-                            }
-                            else
-                            {
-                                preconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(precon));
-
-                            }
-                        }
-                        else
-                            //This means the postcondition only includes an operation
-                            throw new System.ArgumentException("Precondition did not include a status", precon);
+                        //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                        lConstraintExpr = ParseCondition(item, pState);
                     }
-                if (!unsatisfiable)
-                {
-                    opPrecondition = lZ3Solver.AndOperator(preconditionList);
-                    lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPrecondition, lOpPrecondition, pPreconditionSource);
+                    preconditionList.Add(lConstraintExpr);
                 }
+
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pPreconditionSource);
             }
             else
                 //If the operation DOES NOT have a precondition hence
@@ -614,66 +568,31 @@ namespace ProductPlatformAnalyzer
 
         public void resetOperationPostcondition(operation pOperation, variant pVariant, int pState, String pPostconditionSource)
         {
-            BoolExpr opPostcondition;
             List<BoolExpr> postconditionList = new List<BoolExpr>();
-            Boolean unsatisfiable = false;
-            String[] lOperationNameParts;
+            BoolExpr lConstraintExpr = null;
             lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_PostCondition_" + pVariant.index + "_" + pState.ToString());
 
             if (pOperation.postcondition.Count != 0)
             {
                 foreach (string postcon in pOperation.postcondition)
                 {
-                    if (postcon.Contains('_'))
+                    //For each precondition first we have to build its coresponding tree
+                    Parser lConditionParser = new Parser();
+                    Node<string> lCnstExprTree = new Node<string>("root");
+
+                    lConditionParser.AddChild(lCnstExprTree, postcon);
+
+                    foreach (Node<string> item in lCnstExprTree)
                     {
-                        //This means the postcondition includes more than an operation
-                        lOperationNameParts = postcon.Split('_');
-                        if (lOperationNameParts.Length != 4)
-                        {
-                            //This means the postcondition does not include a state
-                            if (lOperationNameParts.Length == 2)
-                            {
-                                //This means the postcondition does not include a variant nor a state
-                                List<string> vInstances = lFrameworkWrapper.getvariantInstancesForOperation(lOperationNameParts[0], pState.ToString());
-                                List<BoolExpr> opExpr = new List<BoolExpr>();
-
-                                foreach (string variant in vInstances)
-                                {
-                                    opExpr.Add(lZ3Solver.FindBoolExpressionUsingName(postcon + "_" + variant + "_" + pState.ToString()));
-
-                                }
-                                postconditionList.Add(lZ3Solver.OrOperator(opExpr));
-                            }
-                            else if (lOperationNameParts.Length == 3)
-                            {
-                                //This means the postcondition does includes a variant but not a state
-                                postconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(postcon + "_" + pState.ToString()));
-                            }
-                        }
-                        else
-                            //This means the precondition includes a state and a variant
-                            if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(postcon) > pState)
-                            {
-                                //This means the precondition is on a transition state which has not been reached yet!
-                                lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPostcondition), pPostconditionSource);
-                                unsatisfiable = true;
-                                break;
-                            }
-                            else
-                            {
-                                postconditionList.Add(lZ3Solver.FindBoolExpressionUsingName(postcon));
-
-                            }
+                        //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                        lConstraintExpr = ParseCondition(item, pState);
                     }
-                    else
-                        //This means the postcondition only includes an operation
-                        throw new System.ArgumentException("Postcondition did not include a status", postcon);  
+                    postconditionList.Add(lConstraintExpr);
                 }
-                if (!unsatisfiable)
-                {
-                    opPostcondition = lZ3Solver.AndOperator(postconditionList);
-                    lZ3Solver.AddTwoWayImpliesOperator2Constraints(opPostcondition, lOpPostcondition, pPostconditionSource);
-                }
+
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource);
+            
+               
             }
             else
                 //We want to force the postcondition to be true
@@ -681,6 +600,112 @@ namespace ProductPlatformAnalyzer
                 lZ3Solver.AddConstraintToSolver(lOpPostcondition, pPostconditionSource);
         }
 
+        //Build together pre/postcondition conponentes according to parse tree
+        private BoolExpr ParseCondition(Node<string> pNode, int pState)
+        {
+            try
+            {
+                List<Node<string>> lChildren = new List<Node<string>>();
+                BoolExpr lResult = null;
+                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                {
+                    //We have one operator
+                    ////lResult = pNode.Data;
+                    lResult = mkCondition(pNode.Data, pState);
+                }
+                else
+                {
+                    foreach (Node<string> lChild in pNode.Children)
+                    {
+                        lChildren.Add(lChild);
+                    }
+                    switch (pNode.Data)
+                    {
+                        case "and":
+                            {
+                                lResult = lZ3Solver.AndOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState), ParseCondition(lChildren[1], pState) });
+                                break;
+                            }
+                        case "or":
+                            {
+                                lResult = lZ3Solver.OrOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState), ParseCondition(lChildren[1], pState) });
+                                break;
+                            }
+                        case "not":
+                            {
+                                ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
+                                lResult = lZ3Solver.NotOperator(ParseCondition(lChildren[0], pState));
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+                return lResult;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+                    
+        }
+
+        //construct pre/postcondition conponents
+        private BoolExpr mkCondition(string pCon, int pState)
+        {
+            String[] lOperationNameParts;
+            //If the operation HAS a precondition
+            //if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pOperation.precondition[0]) > pState)
+            if (pCon.Contains('_'))
+            {
+                //This means the precondition includes more than an operation
+                lOperationNameParts = pCon.Split('_');
+                if (lOperationNameParts.Length != 4)
+                {
+                    //This means the precondition does not include a state
+                    if (lOperationNameParts.Length == 2)
+                    {
+                        //This means the precondition does not include a variant nor a state
+                        List<string> vInstances = lFrameworkWrapper.getvariantInstancesForOperation(lOperationNameParts[0]);
+                        List<BoolExpr> opExpr = new List<BoolExpr>();
+                        foreach (string variant in vInstances)
+                        {
+                            opExpr.Add(lZ3Solver.FindBoolExpressionUsingName(pCon + "_" + variant + "_" + pState.ToString()));
+
+                        }
+                        return(lZ3Solver.OrOperator(opExpr));
+                    }
+                    else if (lOperationNameParts.Length == 3)
+                    {
+                        //This means the precondition does includes a variant but not a state
+                        return(lZ3Solver.FindBoolExpressionUsingName(pCon + "_" + pState.ToString()));
+                    }
+                    else
+                        //This means the precondition only includes an operation
+                        throw new System.ArgumentException("Precondition did not include a status", pCon);
+                 }
+                 else
+                    //This means the precondition includes a state and a variant
+                    if (lFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(pCon) > pState)
+                    {
+                        //This means the precondition is on a transition state which has not been reached yet!
+                        //lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), pPreconditionSource);
+                        //unsatisfiable = true;
+                        //break;
+                        return lZ3Solver.getFalseBoolExpr();
+                    }
+                    else
+                    {
+                        return lZ3Solver.FindBoolExpressionUsingName(pCon);
+                    }
+            }
+            else
+                //This means the postcondition only includes an operation
+                throw new System.ArgumentException("Precondition did not include a status", pCon);
+            
+        }
+
+       
         public void convertFOperations2Z3ConstraintNewVersion(int pState)
         {
             try

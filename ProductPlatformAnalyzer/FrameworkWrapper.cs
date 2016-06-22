@@ -203,14 +203,14 @@ namespace ProductPlatformAnalyzer
             InActiveOperationList = pInActiveOperationList;
         }
 
-        public List<string> getvariantInstancesForOperation(string op, string state)
+        public List<string> getvariantInstancesForOperation(string op)
         {
             List<string> instances = new List<string>();
             string[] opParts = new string[4];
             foreach(string iOp in ActiveOperationList)
             {
                 opParts = iOp.Split('_');
-                if (String.Equals(opParts[0], op) && String.Equals(opParts[1], "F") && String.Equals(opParts[3], state))
+                if (String.Equals(opParts[0], op) && String.Equals(opParts[1], "F") && String.Equals(opParts[3], "0"))
                     instances.Add(opParts[2]);
             }
             return instances;

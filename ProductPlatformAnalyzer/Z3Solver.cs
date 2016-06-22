@@ -123,6 +123,11 @@ namespace ProductPlatformAnalyzer
             return iCtx.MkGt((ArithExpr)one, (ArithExpr)zero);
         }
 
+        public BoolExpr getFalseBoolExpr()
+        {
+            return iCtx.MkFalse();
+        }
+
         public string ReturnStringElements(List<String> pList)
         {
             string lResultElements = "";

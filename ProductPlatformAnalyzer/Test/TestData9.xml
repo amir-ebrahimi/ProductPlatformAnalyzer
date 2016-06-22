@@ -5,10 +5,10 @@
 		 Truck variant: axel1
 		 Test variant:  break-test
 		 Sendors: External, Internal
-		 Operations: run-external-break_test, run-internal-break_test, put on sensor, remove sensor, turn on sensor, turn off sensors
+		 Operations: run-break_test, put on sensor, remove sensor, turn on sensor, turn off sensors
 
-		 axel1 and test_break_internal and internal sensors -> run_break_test_internal
-		 axel2 and test_break_external and external sensors -> run_break_test_external
+		 axel1 and test_break_internal and internal sensors -> run_break_test
+		 axel2 and test_break_external and external sensors -> run_break_test
 
 		 Condition: 
 
@@ -16,23 +16,13 @@
 <testData>
 <operations>
 	<operation>
-		<operationName>run-break-test-internal</operationName>
-		<displayName>run break test internal</displayName>
+		<operationName>run-break-test</operationName>
+		<displayName>run break test</displayName>
 		<operationPrecondition>
-			<operationName>turn-on-internal-sensor_F_6_2</operationName>
+			<operationName>or turn-on-internal-sensor_F_6 put-on-external-sensor_F_7</operationName>
 		</operationPrecondition>
 		<operationPostcondition>
-			<operationName>turn-off-internal-sensor_F_6_5</operationName>
-		</operationPostcondition>
-	</operation>
-	<operation>
-		<operationName>run-break-test-external</operationName>
-		<displayName>run break test external</displayName>
-		<operationPrecondition>
-			<operationName>put-on-external-sensor_F_7_2</operationName>
-		</operationPrecondition>
-		<operationPostcondition>
-			<operationName>remove-external-sensor_F_7_5</operationName>
+			<operationName>or turn-off-internal-sensor_F_6 remove-external-sensor_F_7</operationName>
 		</operationPostcondition>
 	</operation>
 	<operation>
@@ -43,7 +33,7 @@
 		<operationName>remove-external-sensor</operationName>
 		<displayName>remove external sensor</displayName>
 		<operationPrecondition>
-			<operationName>run-break-test-external_F_7_3</operationName>
+			<operationName>run-break-test_F</operationName>
 		</operationPrecondition>
 	</operation>
 	<operation>
@@ -54,7 +44,7 @@
 		<operationName>turn-off-internal-sensor</operationName>
 		<displayName>turn off internal sensor</displayName>
 		<operationPrecondition>
-			<operationName>run-break-test-internal_F_6_3</operationName>
+			<operationName>run-break-test_F</operationName>
 		</operationPrecondition>
 		<operationPrecondition>
 		</operationPrecondition>
@@ -143,7 +133,7 @@
 	    	<variantRef>VirtualV1</variantRef>
 	    </variantRefs>
 		<operationRefs>
-		   <operationRef>run-break-test-internal</operationRef>
+		   <operationRef>run-break-test</operationRef>
 		   <operationRef>turn-on-internal-sensor</operationRef>
 		   <operationRef>turn-off-internal-sensor</operationRef>
 		</operationRefs>
@@ -153,7 +143,7 @@
 	    	<variantRef>VirtualV2</variantRef>
 	    </variantRefs>
 		<operationRefs>
-		   <operationRef>run-break-test-external</operationRef>
+		   <operationRef>run-break-test</operationRef>
 		   <operationRef>put-on-external-sensor</operationRef>
 		   <operationRef>remove-external-sensor</operationRef>
 		</operationRefs>
