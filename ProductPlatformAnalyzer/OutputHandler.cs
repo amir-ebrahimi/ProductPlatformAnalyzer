@@ -57,10 +57,13 @@ namespace ProductPlatformAnalyzer
     public class OutputHandler
     {
         private List<OutputExp> outputResult;
+        private string path = "../../Output/";
+        private FrameworkWrapper fwrapper;
 
-        public OutputHandler()
+        public OutputHandler(FrameworkWrapper wrapper)
         {
             outputResult = new List<OutputExp>();
+            fwrapper = wrapper;
         }
 
         public void addExp(string name, string value, int pState)
@@ -111,10 +114,17 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
+            writer.WriteBeginTag("p");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
+            writer.WriteEndTag("p");
+
             writeInvariants(writer);
             writeTransitionTableState(writer);
+            writeOpOrder(writer);
+            writeTransitionDiagram(writer);
 
-            File.WriteAllText("result.htm", stringwriter.ToString());
+            File.WriteAllText(path + "result.htm", stringwriter.ToString());
 
         }
 
@@ -143,12 +153,37 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
+            writer.WriteBeginTag("p");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Counterexample found, all operations needed could not be performed.");
+            writer.WriteEndTag("p");
+
             writeInvariants(writer);
             //writeOpStateTable(writer);
             writeTransitionTableState(writer);
+            writeOpOrder(writer);
+            writeTransitionDiagram(writer);
             writeFalsePrePost(writer);
 
-            File.WriteAllText("counterEx.htm", stringwriter.ToString());
+            File.WriteAllText(path + "counterEx.htm", stringwriter.ToString());
+
+        }
+
+        public void writeDebugFile()
+        {
+            StringWriter stringwriter = new StringWriter();
+            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            SortAfterState();
+
+            foreach (OutputExp exp in outputResult)
+            {
+                writer.WriteBeginTag("p");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(exp);
+                writer.WriteEndTag("p");
+            }
+
+            File.WriteAllText(path + "debug.htm", stringwriter.ToString());
 
         }
 
@@ -174,12 +209,49 @@ namespace ProductPlatformAnalyzer
         //Print all variants
         public void printVariants()
         {
+            string var, vg;
             foreach (OutputExp exp in outputResult)
             {
                 if (exp.state == -1)
-                    Console.WriteLine(exp.ToString());
+                {
+                    var = exp.ToString();
+                    vg = fwrapper.getVariantGroup(var.Split(' ')[0]);
+                    Console.WriteLine(vg + "." + var);
+                }
             }
 
+        }
+
+        private void writeTransitionDiagram(HtmlTextWriter writer)
+        {
+            List<string[]> transforms = getOpTransformations();
+            writer.WriteBeginTag("p");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Order of operation transitions:");
+            writer.WriteEndTag("p");
+
+            //writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("ol style=\"margin-left:1em;\" ");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            foreach (String[] trans in transforms)
+            {
+                writer.WriteBeginTag("li");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                //Pil ner
+                //writer.Write("&darr; ");
+                writer.Write(trans[0]);
+                if (String.Equals(trans[2], "E"))
+                    //pil upp
+                    writer.Write(" &uarr;");
+                else
+                    //pil ner
+                    writer.Write(" &darr;");
+
+              writer.WriteEndTag("li");
+            }
+            writer.WriteEndTag("ol");
         }
 
         //Returns all chosen variants
@@ -190,6 +262,24 @@ namespace ProductPlatformAnalyzer
             {
                 if (exp.state == -1 && String.Equals(exp.value, "true"))
                     vars.Add(exp.name);
+            }
+            return vars;
+        }
+
+        //Returns all chosen variants
+        public List<String> getChosenVariantsWithGroup()
+        {
+            string var, vg;
+            List<String> vars = new List<String>();
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                {
+
+                    var = exp.name;
+                    vg = fwrapper.getVariantGroup(var);
+                    vars.Add(vg + "." + var);
+                }
             }
             return vars;
         }
@@ -208,7 +298,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeInvariants(HtmlTextWriter writer)
         {
-            List<String> variants = getChosenVariants();
+            List<String> variants = getChosenVariantsWithGroup();
 
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -231,7 +321,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeFalsePrePost(HtmlTextWriter writer)
         {
-            List<String> conditions = getConditionsState(getLastState());
+            List<String> conditions = getConditionsStateWithValues(getLastState());
             writer.WriteBeginTag("p");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Post/precondition state:");
@@ -248,6 +338,36 @@ namespace ProductPlatformAnalyzer
                 writer.WriteEndTag("li");
             }
             writer.WriteEndTag("ul");
+        }
+
+        private void writeOpOrder(HtmlTextWriter writer)
+        {
+            Boolean first = true;
+            writer.WriteBeginTag("p");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Order of operations:");
+            writer.WriteEndTag("p");
+
+            writer.WriteBeginTag("p style=\"margin-left:2.5em;\" ");
+            writer.Write(HtmlTextWriter.TagRightChar);
+ 
+            foreach (OutputExp exp in outputResult)
+            {
+                OutputExp nextOp = findNextOp(exp);
+                if (nextOp != null)
+                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true") && String.Equals(exp.opState, "E"))
+                    {
+                        if (!first)
+                        {
+                            writer.Write(" -> ");
+                        }
+                        else
+                            first = false;
+                        writer.Write(exp.operation);
+                    }
+            }
+
+            writer.WriteEndTag("p");
         }
 
         private void writeOpStateTable(HtmlTextWriter writer)
@@ -677,6 +797,28 @@ namespace ProductPlatformAnalyzer
             return con;
         }
 
+        //Returns false pre and post conditions for lstate with the pre/post condition
+        private List<String> getConditionsStateWithValues(int lstate)
+        {
+            List<String> conditions = new List<String>();
+            List<String> conValue = new List<String>();
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == lstate &&
+                    (String.Equals(exp.opState, "PostCondition") ||
+                    (String.Equals(exp.opState, "PreCondition"))) &&
+                    String.Equals(exp.value, "false"))
+                {
+                    if (String.Equals(exp.opState, "PostCondition"))
+                       conValue = fwrapper.getPostconditionForOperation(exp.operation);
+                    else
+                       conValue = fwrapper.getPreconditionForOperation(exp.operation);
+                     conditions.Add(exp.name + " = " + consToString(conValue)  + " = " + exp.value);
+                }
+            }
+            return conditions;
+        }
+
         //Prints operations in lstate
         private void printOpState(int lstate)
         {
@@ -713,6 +855,18 @@ namespace ProductPlatformAnalyzer
                 }
             }
             return ops;
+        }
+
+        private string consToString(List<string> pcons)
+        {
+            string exp = pcons[0];
+            pcons.RemoveAt(0);
+            foreach (string con in pcons)
+            {
+                exp = exp + "and" + con;
+            }
+
+            return exp;
         }
 
         //Returns operations inlstate

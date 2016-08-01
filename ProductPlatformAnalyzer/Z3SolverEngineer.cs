@@ -142,14 +142,14 @@ namespace ProductPlatformAnalyzer
                 if (!done)
                 {
                     Console.WriteLine("Analysis No: " + pState);
-                    lTestResult = analyseZ3Model(pState, done);
+                    lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
 
                     lZ3Solver.WriteDebugFile(pState);
                 }
                 else
                 {
                     Console.WriteLine("Finished: ");
-                    lTestResult = analyseZ3Model(pState, done);
+                    lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
                 }
 
             }
@@ -161,10 +161,10 @@ namespace ProductPlatformAnalyzer
             return lTestResult;
         }
 
-        private bool analyseZ3Model(int pState, bool done)
+        private bool analyseZ3Model(int pState, bool done, FrameworkWrapper wrapper)
         {
             //returns the result of checking the satisfiability;
-            return lZ3Solver.CheckSatisfiability(pState, done);
+            return lZ3Solver.CheckSatisfiability(pState, done, wrapper);
         }
 
         public void convertFVariants2Z3Variants()

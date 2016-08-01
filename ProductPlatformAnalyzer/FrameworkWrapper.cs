@@ -36,7 +36,7 @@ namespace ProductPlatformAnalyzer
 
     }
 
-    class FrameworkWrapper
+    public class FrameworkWrapper
     {
         private List<variantGroup> VariantGroupList;
         private List<variant> VariantList;
@@ -429,6 +429,29 @@ namespace ProductPlatformAnalyzer
             return lVariantIndex;
         }
 
+        public string getVariantGroup(string varName)
+        {
+            variant var = findVariantWithName(varName);
+            variantGroup varGroup = getVariantGroup(var);
+            if(varGroup != null)
+                return varGroup.names;
+            return null;
+        }
+
+        public variantGroup getVariantGroup(variant var)
+        {
+            foreach (variantGroup vg in VariantGroupList)
+            {
+
+                foreach (variant v in vg.variant)
+                {
+                    if (v.Equals(var))
+                        return vg;
+                }
+            }
+            return null;
+        }
+
         public int getOperationTransitionNumberFromActiveOperation(String pActiveOperationName)
         {
             int lOpTransNum = -1;
@@ -467,6 +490,21 @@ namespace ProductPlatformAnalyzer
             return tempResultOperation;
         }
 
+        public List<string> getPreconditionForOperation(string opName)
+        {
+            List<string> con ;
+            operation op = findOperationWithName(opName);
+            con =  new List<string>(op.precondition);
+            return con;
+        }
+
+        public List<string> getPostconditionForOperation(string opName)
+        {
+            List<string> con;
+            operation op = findOperationWithName(opName);
+            con = new List<string>(op.postcondition);
+            return con;
+        }
         public void addVariantsOperations(variantOperations pVariantOperations)
         {
             VariantsOperations.Add(pVariantOperations);

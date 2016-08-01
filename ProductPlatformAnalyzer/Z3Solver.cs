@@ -695,12 +695,17 @@ namespace ProductPlatformAnalyzer
                 string exePath = Directory.GetCurrentDirectory();
                 string endPath = null;
 
-                endPath = "Debug";
+                endPath = "Output";
 
+                System.IO.Directory.CreateDirectory(exePath + "../../../" + endPath);
                 System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(exePath + "../../../" + endPath);
                 //System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(@"C:\Users\amir\Desktop\Output\Debug");
 
                 foreach (System.IO.FileInfo file in directory.GetFiles()) file.Delete();
+
+                endPath = "Output/Debug";
+                System.IO.Directory.CreateDirectory(exePath + "../../../" + endPath);
+
             }
             catch (Exception ex)
             {
@@ -715,7 +720,7 @@ namespace ProductPlatformAnalyzer
                 string exePath = Directory.GetCurrentDirectory();
                 string endPath = null;
 
-                endPath = "Debug/Debug" + pState + ".txt";
+                endPath = "Output/Debug/Debug" + pState + ".txt";
 
                 System.IO.File.WriteAllText(exePath + "../../../" + endPath, iDebugText);
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/Debug" + pState + ".txt",iDebugText);
@@ -778,7 +783,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool CheckSatisfiability(int pState, bool done)
+        public bool CheckSatisfiability(int pState, bool done, FrameworkWrapper wrapper)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -806,7 +811,7 @@ namespace ProductPlatformAnalyzer
                 lSatisfiabilityResult = true;
                 Model resultModel = iSolver.Model;
 
-                OutputHandler output = new OutputHandler();
+                OutputHandler output = new OutputHandler(wrapper);
 
                 //adding expressions from model to outputhandler
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
@@ -835,6 +840,7 @@ namespace ProductPlatformAnalyzer
                     output.printCounterExample();
                     output.writeCounterExample();
                 }
+                output.writeDebugFile();
 
                 //foreach (Expr lExpression in ExpressionList)
                 //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
