@@ -2,6 +2,7 @@
 using System.IO;
 using System.Web.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace ProductPlatformAnalyzer
 {
@@ -114,17 +115,44 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            writer.WriteBeginTag("p");
+            writeInput(writer);
+
+            writer.WriteBeginTag("p style=\"font-size:21px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
             writer.WriteEndTag("p");
 
-            writeInvariants(writer);
+            writeChosenVariants(writer);
             writeTransitionTableState(writer);
             writeOpOrder(writer);
             writeTransitionDiagram(writer);
 
             File.WriteAllText(path + "result.htm", stringwriter.ToString());
+
+        }
+
+        public void writeInputFile()
+        {
+            StringWriter stringwriter = new StringWriter();
+            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+
+            writeInput(writer);
+
+            File.WriteAllText(path + "input.htm", stringwriter.ToString());
+
+        }
+
+        private void writeInput(HtmlTextWriter writer)
+        {
+            writer.WriteBeginTag("p style=\"font-size:21px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Input data");
+            writer.WriteEndTag("p");
+
+            writeVariants(writer);
+            writeOperationsWithPrePostCon(writer);
+            writeConstraints(writer);
+            writeVariantOperationMappings(writer);
 
         }
 
@@ -153,12 +181,14 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            writer.WriteBeginTag("p");
+            writeInput(writer);
+
+            writer.WriteBeginTag("p style=\"font-size:21px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Counterexample found, all operations needed could not be performed.");
             writer.WriteEndTag("p");
 
-            writeInvariants(writer);
+            writeChosenVariants(writer);
             //writeOpStateTable(writer);
             writeTransitionTableState(writer);
             writeOpOrder(writer);
@@ -225,7 +255,7 @@ namespace ProductPlatformAnalyzer
         private void writeTransitionDiagram(HtmlTextWriter writer)
         {
             List<string[]> transforms = getOpTransformations();
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Order of operation transitions:");
             writer.WriteEndTag("p");
@@ -296,11 +326,11 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void writeInvariants(HtmlTextWriter writer)
+        private void writeChosenVariants(HtmlTextWriter writer)
         {
             List<String> variants = getChosenVariantsWithGroup();
 
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Chosen variants:");
             writer.WriteEndTag("p");
@@ -319,12 +349,237 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("ul");
         }
 
+        private void writeVariants(HtmlTextWriter writer)
+        {
+            List<variantGroup> variants = fwrapper.getVariantGroupList();
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Variantgroups:");
+            writer.WriteEndTag("p");
+
+
+            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            foreach (variantGroup group in variants)
+            {
+                writer.WriteBeginTag("li");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+
+                writer.WriteBeginTag("b");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(group.names);
+                writer.WriteEndTag("b");
+                writer.Write( " - " + group.gCardinality);
+
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                foreach (variant var in group.variant)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(var.displayName);
+                    writer.WriteEndTag("li");
+                }
+
+                writer.WriteEndTag("ul");
+                writer.WriteEndTag("li");
+            }
+            writer.WriteEndTag("ul");
+        }
+
+        private void writeConstraints(HtmlTextWriter writer)
+        {
+            ArrayList constraints = new ArrayList(fwrapper.getConstraintList());
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Constraints:");
+            writer.WriteEndTag("p");
+
+
+            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            foreach (String var in constraints)
+            {
+                writer.WriteBeginTag("li");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(var);
+                writer.WriteEndTag("li");
+            }
+            writer.WriteEndTag("ul");
+        }
+
+        private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
+        {
+            List<operation> operations = new List<operation>(fwrapper.getOperationList());
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Operations:");
+            writer.WriteEndTag("p");
+
+
+            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Operation");
+
+            writer.WriteEndTag("td");
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Precondition");
+
+            writer.WriteEndTag("td");
+
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Postcondition");
+
+            writer.WriteEndTag("td");
+            foreach (operation op in operations)
+            {
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(op.displayName);
+
+                writer.WriteEndTag("td");
+
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (string pre in op.precondition)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(pre);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (string post in op.postcondition)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(post);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
+            }
+
+            writer.WriteEndTag("table");
+                
+        }
+        private void writeVariantOperationMappings(HtmlTextWriter writer)
+        {
+            List<variantOperations> operations = new List<variantOperations>(fwrapper.getVariantsOperations());
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Variant operation mappings:");
+            writer.WriteEndTag("p");
+
+
+            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Variant");
+
+            writer.WriteEndTag("td");
+
+            writer.WriteBeginTag("td");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Operations");
+
+            writer.WriteEndTag("td");
+
+            foreach (variantOperations vop in operations)
+            {
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(vop.getVariant().displayName);
+
+                writer.WriteEndTag("td");
+
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (operation op in vop.getOperations())
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(op.displayName);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
+            }
+
+            writer.WriteEndTag("table");
+
+        }
+
+
         private void writeFalsePrePost(HtmlTextWriter writer)
         {
             List<String> conditions = getConditionsStateWithValues(getLastState());
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Post/precondition state:");
+            writer.Write("False post/preconditions in last state:");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("ul style=\"list-style-type:none\"");
@@ -343,7 +598,7 @@ namespace ProductPlatformAnalyzer
         private void writeOpOrder(HtmlTextWriter writer)
         {
             Boolean first = true;
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Order of operations:");
             writer.WriteEndTag("p");
@@ -377,7 +632,7 @@ namespace ProductPlatformAnalyzer
             String[] transF;
             String[] transI;
 
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation status in last state:");
             writer.WriteEndTag("p");
@@ -471,7 +726,7 @@ namespace ProductPlatformAnalyzer
             SortAfterState();
             String[] transPair;
             List<String[]> transformations = getOpTransformations();
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operations progressing at state:");
             writer.WriteEndTag("p");
@@ -580,7 +835,7 @@ namespace ProductPlatformAnalyzer
             List<String[]> opTransitions;
             int lastState = getLastState();
 
-            writer.WriteBeginTag("p");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation status in states:");
             writer.WriteEndTag("p");
