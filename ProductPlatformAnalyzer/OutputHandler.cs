@@ -115,9 +115,9 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            writeInput(writer);
+            //writeInput(writer);
 
-            writer.WriteBeginTag("p style=\"font-size:21px\"");
+            writer.WriteBeginTag("p style=\"font-size:20px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
             writer.WriteEndTag("p");
@@ -181,9 +181,9 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            writeInput(writer);
+            //writeInput(writer);
 
-            writer.WriteBeginTag("p style=\"font-size:21px\"");
+            writer.WriteBeginTag("p style=\"font-size:20px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Counterexample found, all operations needed could not be performed.");
             writer.WriteEndTag("p");
@@ -404,11 +404,11 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("ul style=\"list-style-type:none\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (String var in constraints)
+            foreach (String con in constraints)
             {
                 writer.WriteBeginTag("li");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(var);
+                writer.Write(modCondition(con));
                 writer.WriteEndTag("li");
             }
             writer.WriteEndTag("ul");
@@ -430,27 +430,27 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("tr");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.Write("Operation");
 
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.Write("Precondition");
 
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.Write("Postcondition");
 
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
             foreach (operation op in operations)
             {
 
@@ -460,7 +460,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(op.displayName);
+                writer.Write(op.names);
 
                 writer.WriteEndTag("td");
 
@@ -475,7 +475,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(pre);
+                    writer.Write(modCondition(pre));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -492,7 +492,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(post);
+                    writer.Write(modCondition(post));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -521,19 +521,20 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("tr");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.Write("Variant");
 
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.Write("Operations");
 
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
 
             foreach (variantOperations vop in operations)
             {
@@ -544,7 +545,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(vop.getVariant().displayName);
+                writer.Write(vop.getVariant().names);
 
                 writer.WriteEndTag("td");
 
@@ -643,25 +644,25 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("tr");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("I");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("E");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("F");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
 
             writer.WriteEndTag("tr");
@@ -739,21 +740,21 @@ namespace ProductPlatformAnalyzer
             writer.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("I->E");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("E->F");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
 
             writer.WriteEndTag("tr");
@@ -846,17 +847,17 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("tr");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("td");
+            writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Operation");
-            writer.WriteEndTag("td");
+            writer.WriteEndTag("th");
 
             for (int i = 0; i <= lastState+1; i++)
             {
-                writer.WriteBeginTag("td");
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write(""+i);
-                writer.WriteEndTag("td");
+                writer.WriteEndTag("th");
             }
 
             writer.WriteEndTag("tr");
@@ -1068,7 +1069,7 @@ namespace ProductPlatformAnalyzer
                        conValue = fwrapper.getPostconditionForOperation(exp.operation);
                     else
                        conValue = fwrapper.getPreconditionForOperation(exp.operation);
-                     conditions.Add(exp.name + " = " + consToString(conValue)  + " = " + exp.value);
+                     conditions.Add(exp.operation +"_"+ exp.opState + " = " + consToString(conValue)  + " = " + exp.value);
                 }
             }
             return conditions;
@@ -1114,11 +1115,11 @@ namespace ProductPlatformAnalyzer
 
         private string consToString(List<string> pcons)
         {
-            string exp = pcons[0];
+            string exp = modCondition(pcons[0]);
             pcons.RemoveAt(0);
             foreach (string con in pcons)
             {
-                exp = exp + "and" + con;
+                exp = exp + "and" + modCondition(con);
             }
 
             return exp;
@@ -1154,6 +1155,95 @@ namespace ProductPlatformAnalyzer
                 }
             }
             return lastState-1;
+        }
+
+        private string modCondition(string con)
+        {
+            string newCon = null;
+
+            //For each precondition first we have to build its coresponding tree
+            Parser lConditionParser = new Parser();
+            Node<string> lCnstExprTree = new Node<string>("root");
+
+            lConditionParser.AddChild(lCnstExprTree, con);
+
+            foreach (Node<string> item in lCnstExprTree)
+            {
+                //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                newCon = ParseCondition(item);
+            }
+
+            return newCon;
+        }
+
+        private string ParseCondition(Node<string> pNode)
+        {
+            try
+            {
+                List<Node<string>> lChildren = new List<Node<string>>();
+                string newCon = null;
+                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                {
+                    //We have one operator
+                    newCon = printStatus(pNode.Data);
+                }
+                else
+                {
+                    foreach (Node<string> lChild in pNode.Children)
+                    {
+                        lChildren.Add(lChild);
+                    }
+                    switch (pNode.Data)
+                    {
+                        case "and":
+                            {
+                                newCon = "(" + ParseCondition(lChildren[0]) + " and " + ParseCondition(lChildren[1]) + ")";
+                                break;
+                            }
+                        case "or":
+                            {
+                                newCon = "(" + ParseCondition(lChildren[0]) + " or " + ParseCondition(lChildren[1]) + ")";
+                                break;
+                            }
+                        case "not":
+                            {
+                                ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
+                                newCon = "(not " + ParseCondition(lChildren[0]) + ")";
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+                return newCon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        private string printStatus(string p)
+        {
+            string[] condition = new string[3];
+
+            condition = p.Split('_');
+
+            if (condition.Length == 1)
+                return p;
+            else
+                switch (condition[1])
+                {
+                    case "F":
+                        return condition[0] + "_Finished";
+                    case "I":
+                        return condition[0] + "_Initial";
+                    default:
+                        return condition[0] + "Executing";
+                }
+
+
         }
     }
 }
