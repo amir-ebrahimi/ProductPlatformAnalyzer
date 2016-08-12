@@ -49,28 +49,4 @@
 		</operationRefs>
 	</variantOperationMapping>
 </variantOperationMappings>
-  <stations>
-    <station>
-      <stationName>Assembly_station_1</stationName>
-      <resourceRefs>
-        <resourceRef>Barcode_reader</resourceRef>
-      </resourceRefs>
-    </station>
-  </stations>
-  <resources>
-    <resource>
-      <resourceName>Barcode_reader</resourceName>
-      <resourceAbility>scan-barcode</resourceAbility>
-    </resource>
-  </resources>
-  <operationResourceMappings>
-    <operationResourceMapping>
-      <operationRefs>
-        <operationRef>scan-barcode</operationRef>
-      </operationRefs>
-      <resourceRefs>
-        <resourceRef>Barcode_reader</resourceRef>
-      </resourceRefs>
-    </operationResourceMapping>
-  </operationResourceMappings>
 </testData>

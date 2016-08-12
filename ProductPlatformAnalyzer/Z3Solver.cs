@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using Microsoft.Z3;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ProductPlatformAnalyzer
 {
     class Z3Solver
     {
         private ArrayExpr Expressions;
-        private ArrayList ExpressionList;
+        private List<Expr> ExpressionList;
         private BoolExpr Constraints;
         private ArrayList ConstraintList;
         private Solver iSolver; 
@@ -27,7 +28,7 @@ namespace ProductPlatformAnalyzer
             using (iCtx)
             {
                 this.iSolver = iCtx.MkSolver();
-                this.ExpressionList = new ArrayList();
+                this.ExpressionList = new List<Expr>();
                 this.ConstraintList = new ArrayList();
             }
         }
@@ -47,7 +48,7 @@ namespace ProductPlatformAnalyzer
             Expressions = pExpressions;
         }
 
-        public void setExpressionList(ArrayList pExpressionList)
+        public void setExpressionList(List<Expr> pExpressionList)
         {
             ExpressionList = pExpressionList;
         }
@@ -57,7 +58,7 @@ namespace ProductPlatformAnalyzer
             return Expressions;
         }
 
-        public ArrayList getExpressionList()
+        public List<Expr> getExpressionList()
         {
             return ExpressionList;
         }
@@ -483,6 +484,57 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public void AddXorOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
+        {
+            try
+            {
+                //We should show
+                //or pOperand1 pOperand2 pOperand3 ...
+                //and (=> pOperand1 (and (not pOperand2) (not pOperand3) ...))
+                //    (=> pOperand2 (and (not pOperand1) (not pOperand3) ...))
+                //    (=> pOperand3 (and (not pOperand1) (not pOperand2) ...))
+
+                BoolExpr Constraint = pOperandList[0];
+
+                for (int i = 1; i < pOperandList.Count; i++)
+                {
+                    BoolExpr lOperand = pOperandList[i];
+
+                    Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot(lOperand))
+                                            , iCtx.MkAnd(iCtx.MkNot(Constraint), lOperand));
+                }
+
+                AddConstraintToSolver(Constraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddXorOperator2Constraints, " + ReturnBoolExprElementNames(pOperandList));
+                throw ex;
+            }
+        }
+
+        public BoolExpr XorOperator(List<BoolExpr> pOperandList)
+        {
+            try
+            {
+                BoolExpr lResultExpression = pOperandList[0];
+
+                for (int i = 1; i < pOperandList.Count; i++)
+                {
+                    Expr lOperand = pOperandList[i];
+
+                    lResultExpression = iCtx.MkOr(iCtx.MkAnd(lResultExpression, iCtx.MkNot((BoolExpr)lOperand))
+                                            , iCtx.MkAnd(iCtx.MkNot(lResultExpression), (BoolExpr)lOperand));
+                }
+                return lResultExpression;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in XorOperator, " + ReturnBoolExprElementNames(pOperandList));
+                throw ex;
+            }
+        }
+
         public void AddNotOperator2Constraints(String pOperand, String pConstraintSource)
         {
             try
@@ -604,14 +656,13 @@ namespace ProductPlatformAnalyzer
             try
             {
                 Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
-                foreach (Expr currentExpr in ExpressionList)
-                {
-                    if (currentExpr == tempExpr)
-                    {
-                        resultExpr = currentExpr;
-                        break;
-                    }
-                }
+
+                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                                 where Expr == tempExpr
+                                 select Expr).ToList();
+                if (lFoundExpr != null)
+                    resultExpr = lFoundExpr[0];
+
                 if (resultExpr == null)
                     Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
             }
@@ -851,12 +902,24 @@ namespace ProductPlatformAnalyzer
 
         public Expr FindExprInExprList(String pExprName)
         {
-            Expr resultExpr = null;
-            foreach (Expr lExpression in ExpressionList)
-                if (lExpression.ToString().Equals(pExprName))
-                    resultExpr = lExpression;
+            Expr lResultExpr = null;
+            try
+            {
+                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                                         where Expr.ToString().Equals(pExprName)
+                                         select Expr).ToList();
+                if (lFoundExpr.Count != 0)
+                    lResultExpr = lFoundExpr[0];
+                else
+                    Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
 
-            return resultExpr;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in FindExprInExprList!");                
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
         }
 
         public void AddModelItem2SolverAssertion(Model pResultModel)

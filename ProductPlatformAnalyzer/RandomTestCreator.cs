@@ -8,106 +8,16 @@ namespace ProductPlatformAnalyzer
 {
     class RandomTestCreator
     {
-        private int maxVariantGroupNumber;
-        private List<int> variantGroupList;
-        private int maxVariantNumber;
-        private List<int> variantList;
-        private int maxOperationNumber;
-        private List<int> operationList;
-        private int trueProbability;
-        private int falseProbability;
-        private int expressionProbability;
-        private List<int> lOverallChosenVariantCodes;
-
-        public int getMaxVariantGroupNumber()
-        {
-            return maxVariantGroupNumber;
-        }
-
-        public void setMaxVariantGroupNumber(int value)
-        {
-            maxVariantGroupNumber = value;
-        }
-
-        public List<int> getVariantGroupList()
-        {
-            return variantGroupList;
-        }
-
-        public void setVariantGroupList(List<int> value)
-        {
-            variantGroupList = value;
-        }
-
-        public int getMaxVariantNumber()
-        {
-            return maxVariantNumber;
-        }
-
-        public void setMaxVariantNumber(int value)
-        {
-            maxVariantNumber = value;
-        }
-
-        public List<int> getVariantList()
-        {
-            return variantList;
-        }
-
-        public void setVariantList(List<int> value)
-        {
-            variantList = value;
-        }
-
-        public int getMaxOperationNumber()
-        {
-            return maxOperationNumber;
-        }
-
-        public void setMaxOperationNumber(int value)
-        {
-            maxOperationNumber = value;
-        }
-
-        public List<int> getOperationList()
-        {
-            return operationList;
-        }
-
-        public void setOperationNumber(List<int> value)
-        {
-            operationList = value;
-        }
-
-        public int getTrueProbability()
-        {
-            return trueProbability;
-        }
-
-        public void setTrueProbability(int value)
-        {
-            trueProbability = value;
-        }
-
-        public int getFalseProbability()
-        {
-            return falseProbability;
-        }
-
-        public void setFalseProbability(int value)
-        {
-            falseProbability = value;
-        }
-
-        public int getExpressionProbability()
-        {
-            return expressionProbability;
-        }
-
-        public void setExpressionProbability(int value)
-        {
-            expressionProbability = value;
-        }
+        public int maxVariantGroupNumber { get; set; }
+        public List<int> variantGroupList { get; set; }
+        public int maxVariantNumber { get; set; }
+        public List<int> variantList { get; set; }
+        public int maxOperationNumber { get; set; }
+        public List<int> operationList { get; set; }
+        public int trueProbability { get; set; }
+        public int falseProbability { get; set; }
+        public int expressionProbability { get; set; }
+        public List<int> lOverallChosenVariantCodes { get; set; }        
 
         private Random myRandom;
         private FrameworkWrapper lFrameworkWrapper;
@@ -127,20 +37,25 @@ namespace ProductPlatformAnalyzer
             lOverallChosenVariantCodes = new List<int>();
         }
 
-        public void createRandomData(int pMaxVariantGroupNumber, int pMaxVariantNumber, int pMaxOperationNumber, int pTrueProbability, int pFalseProbability, int pExpressionProbability)
+        public void createRandomData(int pMaxVariantGroupNumber
+                                    , int pMaxVariantNumber
+                                    , int pMaxOperationNumber
+                                    , int pTrueProbability
+                                    , int pFalseProbability
+                                    , int pExpressionProbability)
         {
             if (pMaxVariantGroupNumber != null)
-                setMaxVariantGroupNumber(pMaxVariantGroupNumber);
+                maxVariantGroupNumber = pMaxVariantGroupNumber;
             if (pMaxVariantNumber != null)
-                setMaxVariantNumber(pMaxVariantNumber);
+                maxVariantNumber = pMaxVariantNumber;
             if (pMaxOperationNumber != null)
-                setMaxOperationNumber(pMaxOperationNumber);
+                maxOperationNumber = pMaxOperationNumber;
             if (pTrueProbability != null)
-                setTrueProbability(pTrueProbability);
+                trueProbability = pTrueProbability;
             if (pFalseProbability != null)
-                setFalseProbability(pFalseProbability);
+                falseProbability = pFalseProbability;
             if (pExpressionProbability != null)
-                setExpressionProbability(pExpressionProbability);
+                expressionProbability = pExpressionProbability;
 
             createOperations();
             createVariants();
@@ -228,12 +143,14 @@ namespace ProductPlatformAnalyzer
         {
             List<string> lOperationPrecondition = new List<string>();
             List<string> lOperationPostcondition = new List<string>();
+            List<string> lOperationRequiremnt = new List<string>();
 
             for (int i = 0; i < maxOperationNumber; i++)
             {
 
                 lFrameworkWrapper.CreateOperationInstance("O-" + i
                                                         , "O-" + i
+                                                        , lOperationRequiremnt
                                                         , lOperationPrecondition
                                                         , lOperationPostcondition);
                 
