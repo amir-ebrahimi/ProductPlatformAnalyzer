@@ -149,9 +149,15 @@ namespace ProductPlatformAnalyzer
             writer.Write("Input data");
             writer.WriteEndTag("p");
 
+            writer.WriteBeginTag("p style=\"font-size:19px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Feature Model");
+            writer.WriteEndTag("p");
+
             writeVariants(writer);
-            writeOperationsWithPrePostCon(writer);
             writeConstraints(writer);
+
+            writeOperationsWithPrePostCon(writer);
             writeVariantOperationMappings(writer);
 
         }
@@ -181,8 +187,14 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            //writeInput(writer);
+            writeDocStart(writer);
+            writeTabList(writer);
 
+            writer.WriteFullBeginTag("div id=\"tabs-1\"");
+            writeInput(writer);
+            writer.WriteEndTag("div");
+
+            writer.WriteFullBeginTag("div id=\"tabs-2\"");
             writer.WriteBeginTag("p style=\"font-size:20px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Counterexample found, all operations needed could not be performed.");
@@ -194,6 +206,9 @@ namespace ProductPlatformAnalyzer
             writeOpOrder(writer);
             writeTransitionDiagram(writer);
             writeFalsePrePost(writer);
+
+            writer.WriteEndTag("div");
+            writeDocEnd(writer);
 
             File.WriteAllText(path + "counterEx.htm", stringwriter.ToString());
 
@@ -250,6 +265,33 @@ namespace ProductPlatformAnalyzer
                 }
             }
 
+        }
+
+        private void writeDocStart(HtmlTextWriter writer)
+        {
+            writer.WriteLine("<!doctype html> <html lang=\"en\"> <head><meta charset=\"utf-8\">"
+                                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+                                + "<title>Product Platform Analyser</title>"
+                                + "<link rel=\"stylesheet\" href=\"../css/jquery-ui.css\">"
+                                + "<link rel=\"stylesheet\" href=\"/resources/demos/style.css\">"
+                                + "<link rel=\"stylesheet\" href=\"../css/style.css\">"
+                                + "<script src=\"../js/jquery-1.12.4.js\"></script> "
+                                + "<script src=\"../js/jquery-ui.js\"></script><script>"
+                                + "$( function() {$( \"#tabs\" ).tabs();} );</script></head><body>");
+        }
+
+        private void writeDocEnd(HtmlTextWriter writer)
+        {
+            writer.WriteLine("</body> </html>");
+        }
+
+        private void writeTabList(HtmlTextWriter writer)
+        {
+            writer.WriteLine("<div id=\"tabs\">" +
+                             "<ul>" +
+                             "<li><a href=\"#tabs-1\">Input</a></li>" +
+                             "<li><a href=\"#tabs-2\">Result</a></li>" +
+                             "</ul>");
         }
 
         private void writeTransitionDiagram(HtmlTextWriter writer)
@@ -355,7 +397,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Variantgroups:");
+            writer.Write("Variant groups:");
             writer.WriteEndTag("p");
 
 
@@ -424,7 +466,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.WriteBeginTag("table");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -515,7 +557,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.WriteBeginTag("table");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -560,7 +602,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(op.displayName);
+                    writer.Write(op.names);
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -638,7 +680,7 @@ namespace ProductPlatformAnalyzer
             writer.Write("Operation status in last state:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.WriteBeginTag("table");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -733,7 +775,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.WriteBeginTag("table");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -841,7 +883,7 @@ namespace ProductPlatformAnalyzer
             writer.Write("Operation status in states:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("table border=\"1\" cellpadding='5' cellspacing='0' Gridlines=\"both\"  style=\"margin-left:40px\"");
+            writer.WriteBeginTag("table");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -1236,11 +1278,11 @@ namespace ProductPlatformAnalyzer
                 switch (condition[1])
                 {
                     case "F":
-                        return condition[0] + "_Finished";
+                        return condition[0] + ".Finished";
                     case "I":
-                        return condition[0] + "_Initial";
+                        return condition[0] + ".Initial";
                     default:
-                        return condition[0] + "Executing";
+                        return condition[0] + ".Executing";
                 }
 
 
