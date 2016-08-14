@@ -115,9 +115,16 @@ namespace ProductPlatformAnalyzer
             StringWriter stringwriter = new StringWriter();
             HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
 
-            //writeInput(writer);
+            writeDocStart(writer);
+            writeTabList(writer);
 
-            writer.WriteBeginTag("p style=\"font-size:20px\"");
+            writer.WriteFullBeginTag("div id=\"tabs-1\"");
+            writeInput(writer);
+            writer.WriteEndTag("div");
+
+
+            writer.WriteFullBeginTag("div id=\"tabs-2\"");
+            writer.WriteBeginTag("p style=\"font-size:22px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
             writer.WriteEndTag("p");
@@ -126,6 +133,9 @@ namespace ProductPlatformAnalyzer
             writeTransitionTableState(writer);
             writeOpOrder(writer);
             writeTransitionDiagram(writer);
+
+            writer.WriteEndTag("div");
+            writeDocEnd(writer);
 
             File.WriteAllText(path + "result.htm", stringwriter.ToString());
 
@@ -144,10 +154,6 @@ namespace ProductPlatformAnalyzer
 
         private void writeInput(HtmlTextWriter writer)
         {
-            writer.WriteBeginTag("p style=\"font-size:21px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Input data");
-            writer.WriteEndTag("p");
 
             writer.WriteBeginTag("p style=\"font-size:19px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -195,7 +201,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("div");
 
             writer.WriteFullBeginTag("div id=\"tabs-2\"");
-            writer.WriteBeginTag("p style=\"font-size:20px\"");
+            writer.WriteBeginTag("p style=\"font-size:22px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Counterexample found, all operations needed could not be performed.");
             writer.WriteEndTag("p");
@@ -302,18 +308,37 @@ namespace ProductPlatformAnalyzer
             writer.Write("Order of operation transitions:");
             writer.WriteEndTag("p");
 
-            //writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-            writer.WriteBeginTag("ol style=\"margin-left:1em;\" ");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
+            //writer.WriteBeginTag("ol style=\"margin-left:1em;\" ");
             writer.Write(HtmlTextWriter.TagRightChar);
+
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Operation");
+            writer.WriteEndTag("th");
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Transition");
+            writer.WriteEndTag("th");
+
 
             foreach (String[] trans in transforms)
             {
-                writer.WriteBeginTag("li");
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
                 //Pil ner
                 //writer.Write("&darr; ");
                 writer.Write(trans[0]);
+
+                writer.WriteEndTag("td");
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
                 if (String.Equals(trans[2], "E"))
                     //pil upp
                     writer.Write(" &uarr;");
@@ -321,9 +346,10 @@ namespace ProductPlatformAnalyzer
                     //pil ner
                     writer.Write(" &darr;");
 
-              writer.WriteEndTag("li");
+                writer.WriteEndTag("td");
+                writer.WriteEndTag("tr");
             }
-            writer.WriteEndTag("ol");
+            writer.WriteEndTag("table");
         }
 
         //Returns all chosen variants
@@ -339,10 +365,11 @@ namespace ProductPlatformAnalyzer
         }
 
         //Returns all chosen variants
-        public List<String> getChosenVariantsWithGroup()
+        public List<string[]> getChosenVariantsWithGroup()
         {
             string var, vg;
-            List<String> vars = new List<String>();
+            string[] list; 
+            List<string[]> vars = new List<string[]>();
             foreach (OutputExp exp in outputResult)
             {
                 if (exp.state == -1 && String.Equals(exp.value, "true"))
@@ -350,7 +377,33 @@ namespace ProductPlatformAnalyzer
 
                     var = exp.name;
                     vg = fwrapper.getVariantGroup(var);
-                    vars.Add(vg + "." + var);
+                    if (!String.Equals(vg, "Virtual-VG"))
+                    {
+                        list = new string[2] { vg, var };
+                        vars.Add(list);
+                    }
+                }
+            }
+            return vars;
+        }
+
+
+        //Returns all chosen variant groups
+        public List<string> getChosenVariantGroups()
+        {
+            string var, vg;
+            List<string> vars = new List<string>();
+            foreach (OutputExp exp in outputResult)
+            {
+                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                {
+
+                    var = exp.name;
+                    vg = fwrapper.getVariantGroup(var);
+                    if (!String.Equals(vg, "Virtual-VG") && !vars.Contains(vg))
+                    {
+                        vars.Add(vg);
+                    }
                 }
             }
             return vars;
@@ -370,7 +423,8 @@ namespace ProductPlatformAnalyzer
 
         private void writeChosenVariants(HtmlTextWriter writer)
         {
-            List<String> variants = getChosenVariantsWithGroup();
+            List <String[]> variants = getChosenVariantsWithGroup();
+            List<String> groups = getChosenVariantGroups();
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -378,82 +432,130 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (String var in variants)
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Variants");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
+
+            foreach (String vg in groups)
             {
-                writer.WriteBeginTag("li");
+                writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(var);
-                writer.WriteEndTag("li");
+                writer.WriteBeginTag("th class=\"vg\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(vg);
+                writer.WriteEndTag("th");
+                writer.WriteEndTag("tr");
+                foreach (string[] var in variants)
+                    if (String.Equals(var[0], vg))
+                    {
+                        writer.WriteBeginTag("tr");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(var[1]);
+                        writer.WriteEndTag("td");
+                        writer.WriteEndTag("tr");
+                    }
             }
-            writer.WriteEndTag("ul");
+            writer.WriteEndTag("table");
         }
 
         private void writeVariants(HtmlTextWriter writer)
         {
             List<variantGroup> variants = fwrapper.getVariantGroupList();
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Variant groups:");
-            writer.WriteEndTag("p");
 
-
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Variant groups");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
+
 
             foreach (variantGroup group in variants)
             {
-                writer.WriteBeginTag("li");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-
-                writer.WriteBeginTag("b");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(group.names);
-                writer.WriteEndTag("b");
-                writer.Write( " - " + group.gCardinality);
-
-
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                foreach (variant var in group.variant)
+                if (!String.Equals(group.names, "Virtual-VG"))
                 {
-                    writer.WriteBeginTag("li");
+                    writer.WriteBeginTag("tr");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(var.displayName);
-                    writer.WriteEndTag("li");
-                }
 
-                writer.WriteEndTag("ul");
-                writer.WriteEndTag("li");
+
+                    writer.WriteBeginTag("th class =\"vg\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("b");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(group.names);
+                    writer.WriteEndTag("b");
+                    writer.Write(" - " + group.gCardinality);
+
+                    writer.WriteEndTag("th");
+
+                    writer.WriteEndTag("tr");
+
+                    foreach (variant var in group.variant)
+                    {
+                        writer.WriteFullBeginTag("tr");
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(var.displayName);
+                        writer.WriteEndTag("td");
+
+                        writer.WriteEndTag("tr");
+                    }
+
+                }
             }
-            writer.WriteEndTag("ul");
+            writer.WriteEndTag("table");
         }
 
         private void writeConstraints(HtmlTextWriter writer)
         {
             ArrayList constraints = new ArrayList(fwrapper.getConstraintList());
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.WriteBeginTag("p style=\"font-size:16px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Constraints:");
+            writer.Write(" ");
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Constraints");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
 
             foreach (String con in constraints)
             {
-                writer.WriteBeginTag("li");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(modCondition(con));
-                writer.WriteEndTag("li");
+                if (checkCondition(con))
+                {
+                    writer.WriteBeginTag("tr");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(modCondition(con));
+                    writer.WriteEndTag("td");
+                    writer.WriteEndTag("tr");
+                }
             }
-            writer.WriteEndTag("ul");
+            writer.WriteEndTag("table");
         }
 
         private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
@@ -466,7 +568,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table");
+            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -557,7 +659,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table");
+            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -566,7 +668,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("th");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Variant");
+            writer.Write("Variants");
 
             writer.WriteEndTag("th");
 
@@ -587,7 +689,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(vop.getVariant().names);
+                writer.Write(replaceVirtual(vop.getVariant().names));
 
                 writer.WriteEndTag("td");
 
@@ -616,26 +718,53 @@ namespace ProductPlatformAnalyzer
 
         }
 
-
         private void writeFalsePrePost(HtmlTextWriter writer)
         {
-            List<String> conditions = getConditionsStateWithValues(getLastState());
+            List<String []> conditions = getConditionsStateWithValues(getLastState());
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("False post/preconditions in last state:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (String con in conditions)
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Name");
+            writer.WriteEndTag("th");
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Condition");
+            writer.WriteEndTag("th");
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Value");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
+
+            foreach (String [] con in conditions)
             {
-                writer.WriteBeginTag("li");
+                writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(con);
-                writer.WriteEndTag("li");
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(con[0]);
+                writer.WriteEndTag("td");
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(con[1]);
+                writer.WriteEndTag("td");
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(con[2]);
+                writer.WriteEndTag("td");
+                writer.WriteEndTag("tr");
             }
-            writer.WriteEndTag("ul");
+            writer.WriteEndTag("table");
         }
 
         private void writeOpOrder(HtmlTextWriter writer)
@@ -657,7 +786,7 @@ namespace ProductPlatformAnalyzer
                     {
                         if (!first)
                         {
-                            writer.Write(" -> ");
+                            writer.Write(" &rarr; ");
                         }
                         else
                             first = false;
@@ -677,10 +806,10 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation status in last state:");
+            writer.Write("Operation statuses in last state:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("table");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -775,7 +904,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("p");
 
 
-            writer.WriteBeginTag("table");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -880,10 +1009,10 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation status in states:");
+            writer.Write("Operation statuses in different states:");
             writer.WriteEndTag("p");
 
-            writer.WriteBeginTag("table");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("tr");
@@ -1096,10 +1225,11 @@ namespace ProductPlatformAnalyzer
         }
 
         //Returns false pre and post conditions for lstate with the pre/post condition
-        private List<String> getConditionsStateWithValues(int lstate)
+        private List<String[]> getConditionsStateWithValues(int lstate)
         {
-            List<String> conditions = new List<String>();
+            List<String[]> conditions = new List<String[]>();
             List<String> conValue = new List<String>();
+            string[] list;
             foreach (OutputExp exp in outputResult)
             {
                 if (exp.state == lstate &&
@@ -1111,7 +1241,8 @@ namespace ProductPlatformAnalyzer
                        conValue = fwrapper.getPostconditionForOperation(exp.operation);
                     else
                        conValue = fwrapper.getPreconditionForOperation(exp.operation);
-                     conditions.Add(exp.operation +"_"+ exp.opState + " = " + consToString(conValue)  + " = " + exp.value);
+                    list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
+                    conditions.Add(list);
                 }
             }
             return conditions;
@@ -1199,11 +1330,29 @@ namespace ProductPlatformAnalyzer
             return lastState-1;
         }
 
+        private string replaceVirtual(string p)
+        {
+            string newP = "";
+            if (p.StartsWith("Virtual"))
+            {
+                virtualConnection con = fwrapper.findVirtualConnectionWithName(p);
+                foreach (variant var in con.getVariants())
+                {
+                    newP = newP + var.names + "<br>";
+                }
+                return newP;
+            }
+            else
+                return p;
+
+        }
+
+
         private string modCondition(string con)
         {
             string newCon = null;
 
-            //For each precondition first we have to build its coresponding tree
+            //For each condition first we have to build its coresponding tree
             Parser lConditionParser = new Parser();
             Node<string> lCnstExprTree = new Node<string>("root");
 
@@ -1211,12 +1360,30 @@ namespace ProductPlatformAnalyzer
 
             foreach (Node<string> item in lCnstExprTree)
             {
-                //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                //Then we have to traverse the tree
                 newCon = ParseCondition(item);
             }
 
             return newCon;
         }
+
+        private bool checkCondition(string con)
+        {
+            //For each condition first we have to build its coresponding tree
+            Parser lConditionParser = new Parser();
+            Node<string> lCnstExprTree = new Node<string>("root");
+
+            lConditionParser.AddChild(lCnstExprTree, con);
+
+            foreach (Node<string> item in lCnstExprTree)
+            {
+                //Then we have to traverse the tree
+                return ParseConditionVirtual(item);
+            }
+
+            return true;
+        }
+
 
         private string ParseCondition(Node<string> pNode)
         {
@@ -1258,6 +1425,57 @@ namespace ProductPlatformAnalyzer
                     }
                 }
                 return newCon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+
+        private bool ParseConditionVirtual(Node<string> pNode)
+        {
+            try
+            {
+                List<Node<string>> lChildren = new List<Node<string>>();
+                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                {
+                    //We have one operator
+                    if (pNode.Data.StartsWith("Virtual"))
+                    {
+                        return false;
+                    }
+                    else 
+                        return true;
+                }
+                else
+                {
+                    foreach (Node<string> lChild in pNode.Children)
+                    {
+                        lChildren.Add(lChild);
+                    }
+                    switch (pNode.Data)
+                    {
+                        case "and":
+                            {
+                                return ParseConditionVirtual(lChildren[0]) && ParseConditionVirtual(lChildren[1]);
+                            
+                            }
+                        case "or":
+                            {
+                               return ParseConditionVirtual(lChildren[0]) && ParseConditionVirtual(lChildren[1]);
+                            }
+                        case "not":
+                            {
+                                ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
+                               return ParseConditionVirtual(lChildren[0]);
+                            }
+                        default:
+                            break;
+                    }
+                }
+                return true;
             }
             catch (Exception ex)
             {

@@ -43,26 +43,6 @@
 		<variantIndex>4</variantIndex>
 		<variantDisplayName>break test</variantDisplayName>
 	</variant>
-  <variant>
-    <variantName>VirtualV1</variantName>
-    <variantIndex>5</variantIndex>
-    <variantDisplayName>Virtual V1</variantDisplayName>
-  </variant>
-  <variant>
-    <variantName>VirtualV2</variantName>
-    <variantIndex>6</variantIndex>
-    <variantDisplayName>Virtual V2</variantDisplayName>
-  </variant>
-  <variant>
-    <variantName>VirtualV3</variantName>
-    <variantIndex>7</variantIndex>
-    <variantDisplayName>Virtual V3</variantDisplayName>
-  </variant>
-  <variant>
-    <variantName>VirtualV4</variantName>
-    <variantIndex>8</variantIndex>
-    <variantDisplayName>Virtual V4</variantDisplayName>
-  </variant>
 </variants>
 <variantGroups>
 	<variantGroup>
@@ -87,16 +67,6 @@
 			<variantRef>axel2</variantRef>
 		</variantRefs>
 	</variantGroup>
-  <variantGroup>
-    <variantGroupName>Virtual-VG</variantGroupName>
-    <groupCardinality>choose at least one</groupCardinality>
-    <variantRefs>
-      <variantRef>VirtualV1</variantRef>
-      <variantRef>VirtualV2</variantRef>
-      <variantRef>VirtualV3</variantRef>
-      <variantRef>VirtualV4</variantRef>
-    </variantRefs>
-  </variantGroup>
 </variantGroups>
 <constraints>
   <constraint>
@@ -105,23 +75,12 @@
   <constraint>
     <logic>axel2</logic>
   </constraint>
-  <constraint>
-    <logic>or (and (and inspect-axel axel1) VirtualV1) (and (not (and inspect-axel axel1)) (not VirtualV1))</logic>
-  </constraint>
-  <constraint>
-    <logic>or (and (and break-test axel1) VirtualV2) (and (not (and break-test axel1)) (not VirtualV2))</logic>
-  </constraint>
-  <constraint>
-    <logic>or (and (and inspect-axel axel2) VirtualV3) (and (not (and inspect-axel axel2)) (not VirtualV3))</logic>
-  </constraint>
-  <constraint>
-    <logic>or (and (and break-test axel2) VirtualV4) (and (not (and break-test axel2)) (not VirtualV4))</logic>
-  </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV1</variantRef>
+	    	<variantRef>axel1</variantRef>
+	    	<variantRef>inspect-axel</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>inspect</operationRef>
@@ -129,7 +88,8 @@
 	</variantOperationMapping>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV2</variantRef>
+	    	<variantRef>axel1</variantRef>
+	    	<variantRef>break-test</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>
@@ -137,7 +97,8 @@
 	</variantOperationMapping>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV3</variantRef>
+	    	<variantRef>axel2</variantRef>
+	    	<variantRef>inspect-axel</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>inspect</operationRef>
@@ -145,7 +106,8 @@
 	</variantOperationMapping>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV4</variantRef>
+	    	<variantRef>axel2</variantRef>
+	    	<variantRef>break-test</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>

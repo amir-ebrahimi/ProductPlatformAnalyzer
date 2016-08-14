@@ -36,6 +36,45 @@ namespace ProductPlatformAnalyzer
 
     }
 
+
+    //helping class not part of the xsd
+    public partial class virtualConnection
+    {
+        private variant virtualVariant;
+        private List<variant> variants;
+
+        public variant getVirtualVariant()
+        {
+            return virtualVariant;
+        }
+
+        public void setVariant(variant pVariant)
+        {
+            virtualVariant = pVariant;
+        }
+
+        public List<variant> getVariants()
+        {
+            return variants;
+        }
+
+        public void setVariants(List<variant> pVariants)
+        {
+            variants = pVariants;
+        }
+
+        public bool containsAll(List<variant> lVariants)
+        {
+            foreach (variant var in lVariants)
+            {
+                if (!variants.Contains(var))
+                    return false;
+            }
+            return true;
+        }
+
+    }
+
     public class FrameworkWrapper
     {
         private List<variantGroup> VariantGroupList;
@@ -43,11 +82,13 @@ namespace ProductPlatformAnalyzer
         private ArrayList ConstraintList;
         private List<operation> OperationList;
         private List<variantOperations> VariantsOperations;
+        private List<virtualConnection> VirtualConnections;
         private List<String> ActiveOperationList;
         private List<String> InActiveOperationList;
         private List<station> StationList;
         private List<resource> ResourceList;
         private List<operationResources> OperationResources;
+        private int VirtualCounter;
 
         public FrameworkWrapper()
         {
@@ -58,9 +99,11 @@ namespace ProductPlatformAnalyzer
             ActiveOperationList = new List<String>();
             InActiveOperationList = new List<string>();
             VariantsOperations = new List<variantOperations>();
+            VirtualConnections = new List<virtualConnection>();
             StationList = new List<station>();
             ResourceList = new List<resource>();
             OperationResources = new List<operationResources>();
+            VirtualCounter = 0;
         }
 
         public int getNumberOfOperations()
@@ -127,6 +170,12 @@ namespace ProductPlatformAnalyzer
         {
             StationList = pArrayList;
         }
+
+        private int getNextVirtualIndex()
+        {
+            return VirtualCounter++;
+        }
+
 
         public List<resource> getResourceList()
         {
@@ -843,9 +892,20 @@ namespace ProductPlatformAnalyzer
                         lVariantOperations.Add(lVariantOperation.InnerText);
                     }
 
+                    List<string> lVariants = new List<string>();
 
-                    CreateVariantOperationMappingInstance(getXMLNodeAttributeInnerText(lNode,"variantRefs")
+                    XmlNodeList variantsNodeList = lNode["variantRefs"].ChildNodes;
+                    foreach (XmlNode lVariant in variantsNodeList)
+                    {
+                        lVariants.Add(lVariant.InnerText);
+                    }
+
+                    if (lVariants.Count == 1)
+                        CreateVariantOperationMappingInstance(lVariants.ElementAt(0)
                                                             , lVariantOperations);
+                    else
+                        CreateVariantOperationMappingInstance(createVirtualVariant(lVariants)
+                                                          , lVariantOperations);
                 }
             }
             catch (Exception ex)
@@ -853,6 +913,108 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createVariantOperationInstances");                
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private string createVirtualVariant(List<string> lVariantNames)
+        {
+            List<variant> lVariants = new List<variant>();
+
+            foreach (string var in lVariantNames)
+            {
+                lVariants.Add(findVariantWithName(var));
+            }
+
+            virtualConnection connection = findVirtualConnection(lVariants);
+            if (connection != null)
+                return connection.getVirtualVariant().names;
+
+            connection = new virtualConnection();
+            variant virtualVariant = createVirtualVariant();
+
+            connection.setVariants(lVariants);
+            connection.setVariant(virtualVariant);
+
+            VirtualConnections.Add(connection);
+            addVirtualConstraint(connection);
+
+            return virtualVariant.names;
+
+        }
+
+
+        private void addVirtualConstraint(virtualConnection connection)
+        {
+            string constraint = "or";
+            List<variant> variants = new List<variant>(connection.getVariants());
+            string andVariants = variants.ElementAt(0).names;
+            variants.RemoveAt(0);
+
+            foreach (variant var in variants)
+            {
+                andVariants = "(and " + andVariants + " " + var.names + ")";
+            }
+
+            constraint = constraint + " (and " + andVariants + " " + connection.getVirtualVariant().names + ") (and (not " +
+                            andVariants + ") (not " + connection.getVirtualVariant().names + "))";
+
+            ConstraintList.Add(constraint);
+        }
+
+        private variant createVirtualVariant()
+        {
+            string name = "VirtualV" + getNextVirtualIndex();
+            int variantIndex = getNextVariantIndex();
+            CreateVariantInstance(name, variantIndex, name);
+            variant virtualV = findVariantWithName(name);
+
+            addVirtualVariantToGroup(virtualV);
+
+            return virtualV;
+        }
+
+        private void addVirtualVariantToGroup(variant var)
+        {
+            foreach (variantGroup vg in VariantGroupList)
+            {
+                if (string.Equals(vg.names, "Virtual-VG"))
+                {
+                    vg.variant.Add(var);
+                    return;
+                }
+            }
+
+            List<string> varName = new List<string>();
+            varName.Add(var.names);
+
+            CreateVariantGroupInstance("Virtual-VG", "choose any number", varName);
+        }
+
+        private int getNextVariantIndex()
+        {
+            int index = 0;
+            foreach (variant var in VariantList)
+            {
+                if (var.index > index)
+                    index = var.index;
+            }
+
+            return index + 1;
+        }
+
+
+        private virtualConnection findVirtualConnection(List<variant> lVariants)
+        {
+
+            foreach (virtualConnection con in VirtualConnections)
+            {
+                if (lVariants.Count == con.getVariants().Count)
+                {
+                    if (con.containsAll(lVariants))
+                       return con;
+                }
+            }
+
+            return null;
         }
 
         public void createOperationResourceInstances(XmlDocument pXDoc)
@@ -1018,6 +1180,15 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        internal virtualConnection findVirtualConnectionWithName(string p)
+        {
+            foreach (virtualConnection con in VirtualConnections)
+            {
+                if (String.Equals(con.getVirtualVariant().names, p))
+                    return con;
+            }
 
+            return null;
+        }
     }
 }

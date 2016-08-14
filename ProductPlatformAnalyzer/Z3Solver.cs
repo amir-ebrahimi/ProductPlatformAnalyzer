@@ -841,7 +841,6 @@ namespace ProductPlatformAnalyzer
                     output.writeCounterExample();
                 }
                 output.writeDebugFile();
-                output.writeInputFile();
 
                 //foreach (Expr lExpression in ExpressionList)
                 //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));

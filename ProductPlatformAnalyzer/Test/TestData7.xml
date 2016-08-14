@@ -44,11 +44,6 @@
 		<variantIndex>2</variantIndex>
 		<variantDisplayName>axel test</variantDisplayName>
 	</variant>
-  <variant>
-    <variantName>Virtual-V</variantName>
-    <variantIndex>3</variantIndex>
-    <variantDisplayName>Virtual V</variantDisplayName>
-  </variant>
 </variants>
 <variantGroups>
 	<variantGroup>
@@ -65,13 +60,6 @@
 			<variantRef>axel1</variantRef>
 		</variantRefs>
 	</variantGroup>
-  <variantGroup>
-    <variantGroupName>Virtual-VG</variantGroupName>
-    <groupCardinality>choose exactly one</groupCardinality>
-    <variantRefs>
-      <variantRef>Virtual-V</variantRef>
-    </variantRefs>
-  </variantGroup>
 </variantGroups>
 <constraints>
   <constraint>
@@ -80,14 +68,12 @@
   <constraint>
     <logic>axel-test</logic>
   </constraint>
-  <constraint>
-    <logic>or (and (and axel1 axel-test) Virtual-V) (not (and axel1 axel-test))</logic>
-  </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>Virtual-V</variantRef>
+	    	<variantRef>axel1</variantRef>
+	    	<variantRef>axel-test</variantRef>
 		</variantRefs>
 		<operationRefs>
 		   <operationRef>run-axel-test</operationRef>

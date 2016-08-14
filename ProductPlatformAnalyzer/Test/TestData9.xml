@@ -76,16 +76,6 @@
 		<variantIndex>5</variantIndex>
 		<variantDisplayName>break test</variantDisplayName>
 	</variant>
-  <variant>
-    <variantName>VirtualV1</variantName>
-    <variantIndex>6</variantIndex>
-    <variantDisplayName>Virtual V1</variantDisplayName>
-  </variant>
-  <variant>
-    <variantName>VirtualV2</variantName>
-    <variantIndex>7</variantIndex>
-    <variantDisplayName>Virtual V2</variantDisplayName>
-  </variant>
 </variants>
 <variantGroups>
 	<variantGroup>
@@ -110,27 +100,18 @@
 			<variantRef>axel1</variantRef>
 		</variantRefs>
 	</variantGroup>
-  <variantGroup>
-    <variantGroupName>Virtual-VG</variantGroupName>
-    <groupCardinality>choose at least one</groupCardinality>
-    <variantRefs>
-      <variantRef>VirtualV1</variantRef>
-      <variantRef>VirtualV2</variantRef>
-    </variantRefs>
-  </variantGroup>
 </variantGroups>
 <constraints>
   <constraint>
-    <logic>or (and (and (and break-test axel1) internal-sensor) VirtualV1) (and (not (and (and break-test axel1) internal-sensor)) (not VirtualV1))</logic>
-  </constraint>
-  <constraint>
-    <logic>or (and (and (and break-test axel1) external-sensor) VirtualV2) (and (not (and (and break-test axel1) external-sensor)) (not VirtualV2))</logic>
+    <logic>axel1</logic>
   </constraint>
 </constraints>
 <variantOperationMappings>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV1</variantRef>
+	    	<variantRef>internal-sensor</variantRef>
+	    	<variantRef>axel1</variantRef>
+	    	<variantRef>break-test</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>
@@ -140,7 +121,9 @@
 	</variantOperationMapping>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>VirtualV2</variantRef>
+	    	<variantRef>external-sensor</variantRef>
+	    	<variantRef>axel1</variantRef>
+	    	<variantRef>break-test</variantRef>
 	    </variantRefs>
 		<operationRefs>
 		   <operationRef>run-break-test</operationRef>
