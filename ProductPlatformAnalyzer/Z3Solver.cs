@@ -867,7 +867,7 @@ namespace ProductPlatformAnalyzer
                 //adding expressions from model to outputhandler
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                 {
-                    Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
+                    Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
                     if (lCurrentExpr != null)
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
@@ -936,6 +936,28 @@ namespace ProductPlatformAnalyzer
             }
             return lResultExpr;
         }
+
+
+        public Expr FindExprInExprListWithNull(String pExprName)
+        {
+            Expr lResultExpr = null;
+            try
+            {
+                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                                         where Expr.ToString().Equals(pExprName)
+                                         select Expr).ToList();
+                if (lFoundExpr.Count != 0)
+                    lResultExpr = lFoundExpr[0];
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in FindExprInExprList!");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
+        }
+
 
         public void AddModelItem2SolverAssertion(Model pResultModel)
         {

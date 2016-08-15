@@ -92,8 +92,8 @@ namespace ProductPlatformAnalyzer
                 else
                     endPath = "";
 
-   //             lFrameworkWrapper.LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
-                lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
+                lFrameworkWrapper.LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
+   //             lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
 
 
                 //lFrameworkWrapper.LoadInitialDataFromXMLFile("C:/Users/Amir/Desktop/Output/InitialData/TestData1.xml");
@@ -622,7 +622,7 @@ namespace ProductPlatformAnalyzer
                     preconditionList.Add(lConstraintExpr);
                 }
 
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pPreconditionSource);
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pConstraintSource);
             }
             else
                 //If the operation DOES NOT have a precondition hence
