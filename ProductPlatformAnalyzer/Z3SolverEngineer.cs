@@ -622,7 +622,7 @@ namespace ProductPlatformAnalyzer
                     preconditionList.Add(lConstraintExpr);
                 }
 
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pPreconditionSource);
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pConstraintSource + "-Precondition");
             }
             else
                 //If the operation DOES NOT have a precondition hence
@@ -654,7 +654,7 @@ namespace ProductPlatformAnalyzer
                     postconditionList.Add(lConstraintExpr);
                 }
 
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource);
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource + "-Postcondition");
             
                
             }
