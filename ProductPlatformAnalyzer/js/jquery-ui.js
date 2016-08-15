@@ -814,6 +814,27 @@ function getDimensions( elem ) {
 	};
 }
 
+var toggle = function(box, arrow){
+        if ($(box).css('display') == 'none') {
+        	$(arrow).html("&#x25B2;");
+        } else {
+            $(arrow).html("&#x25BC;");
+        }
+        $(box).toggle();
+    };
+
+$(document).ready(function(){
+    $("#inF").click(function (){toggle("#inFContent", "#titleFArr");});
+});
+
+$(document).ready(function(){
+    $("#inM").click(function(){toggle("#inMContent", "#titleMArr");});
+});
+
+$(document).ready(function(){
+    $("#inO").click(function(){toggle("#inOContent", "#titleOArr");});
+});
+
 $.position = {
 	scrollbarWidth: function() {
 		if ( cachedScrollbarWidth !== undefined ) {

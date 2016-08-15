@@ -155,13 +155,22 @@ namespace ProductPlatformAnalyzer
         private void writeInput(HtmlTextWriter writer)
         {
 
-            writer.WriteBeginTag("p style=\"font-size:19px\"");
+            writer.WriteBeginTag("p id=\"inF\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write("Feature Model");
+
+            writer.WriteBeginTag("span id=\"titleFArr\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("&#x25BC");
+            //upp &#x25B2
+            writer.WriteEndTag("span");
             writer.WriteEndTag("p");
 
+            writer.WriteBeginTag("div id=\"inFContent\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
             writeVariants(writer);
             writeConstraints(writer);
+            writer.WriteEndTag("div");
 
             writeOperationsWithPrePostCon(writer);
             writeVariantOperationMappings(writer);
@@ -283,7 +292,10 @@ namespace ProductPlatformAnalyzer
                                 + "<link rel=\"stylesheet\" href=\"../css/style.css\">"
                                 + "<script src=\"../js/jquery-1.12.4.js\"></script> "
                                 + "<script src=\"../js/jquery-ui.js\"></script><script>"
-                                + "$( function() {$( \"#tabs\" ).tabs();} );</script></head><body>");
+                                + "$( function() {$( \"#tabs\" ).tabs();} );</script>"
+                                + "<script>$(document).ready(function(){$(\"#inFContent\").hide();"
+                                + " $(\"#inOContent\").hide(); $(\"#inMContent\").hide();"
+                                +"});</script></head><body>");
         }
 
         private void writeDocEnd(HtmlTextWriter writer)
@@ -305,7 +317,7 @@ namespace ProductPlatformAnalyzer
             List<string[]> transforms = getOpTransformations();
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Order of operation transitions:");
+            writer.Write("Order of operation transitions");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("table style=\"margin-left:40px\"");
@@ -428,7 +440,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Chosen variants:");
+            writer.Write("Chosen variants");
             writer.WriteEndTag("p");
 
 
@@ -525,7 +537,7 @@ namespace ProductPlatformAnalyzer
         {
             ArrayList constraints = new ArrayList(fwrapper.getConstraintList());
 
-            writer.WriteBeginTag("p style=\"font-size:16px\"");
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writer.Write(" ");
             writer.WriteEndTag("p");
@@ -562,12 +574,19 @@ namespace ProductPlatformAnalyzer
         {
             List<operation> operations = new List<operation>(fwrapper.getOperationList());
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operations:");
+            writer.Write("Operations");
+
+            writer.WriteBeginTag("span id=\"titleOArr\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("&#x25BC");
+            //upp &#x25B2
+            writer.WriteEndTag("span");
             writer.WriteEndTag("p");
 
-
+            writer.WriteBeginTag("div id=\"inOContent\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
             writer.WriteBeginTag("table  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
@@ -647,17 +666,25 @@ namespace ProductPlatformAnalyzer
             }
 
             writer.WriteEndTag("table");
+            writer.WriteEndTag("div");
                 
         }
         private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
             List<variantOperations> operations = new List<variantOperations>(fwrapper.getVariantsOperations());
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Variant operation mappings:");
+            writer.Write("Variant operation mappings");
+
+            writer.WriteBeginTag("span id=\"titleMArr\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("&#x25BC");
+            writer.WriteEndTag("span");
             writer.WriteEndTag("p");
 
+            writer.WriteBeginTag("div id=\"inMContent\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
 
             writer.WriteBeginTag("table  style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -715,6 +742,7 @@ namespace ProductPlatformAnalyzer
             }
 
             writer.WriteEndTag("table");
+            writer.WriteEndTag("div");
 
         }
 
@@ -723,7 +751,7 @@ namespace ProductPlatformAnalyzer
             List<String []> conditions = getConditionsStateWithValues(getLastState());
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("False post/preconditions in last state:");
+            writer.Write("False post/preconditions in last state");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("table style=\"margin-left:40px\"");
@@ -770,9 +798,9 @@ namespace ProductPlatformAnalyzer
         private void writeOpOrder(HtmlTextWriter writer)
         {
             Boolean first = true;
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.WriteBeginTag("p style=\"font-size:18px;\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Order of operations:");
+            writer.Write("Order of operations");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("p style=\"margin-left:2.5em;\" ");
@@ -1009,7 +1037,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteBeginTag("p style=\"font-size:18px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation statuses in different states:");
+            writer.Write("Operation statuses in different states");
             writer.WriteEndTag("p");
 
             writer.WriteBeginTag("table style=\"margin-left:40px\"");
