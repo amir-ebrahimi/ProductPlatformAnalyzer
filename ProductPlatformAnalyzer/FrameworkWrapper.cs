@@ -1290,6 +1290,5 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-
     }
 }

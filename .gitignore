@@ -8,6 +8,8 @@ bin/*
 ProductPlatformAnalyzer/Properties/*
 ProductPlatformAnalyzer/obj/*
 ProductPlatformAnalyzer/bin/*
+ProductPlatformAnalyzer/Debug/*
+ProductPlatformAnalyzer/Output/*
 
 ProductPlatformAnalyzer/Microsoft_Example_Added.v11.suo
 ProductPlatformAnalyzer/bin/Debug/Microsoft_Example_Added.exe
