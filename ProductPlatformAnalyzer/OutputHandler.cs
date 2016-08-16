@@ -239,6 +239,7 @@ namespace ProductPlatformAnalyzer
             writeTransitionTableState(writer);
             writeOpOrder(writer);
             writeTransitionDiagram(writer);
+            writeAvailableResources(writer);
             writeFalsePrePost(writer);
 
             writer.WriteEndTag("div");
@@ -389,7 +390,7 @@ namespace ProductPlatformAnalyzer
             List<String> vars = new List<String>();
             foreach (OutputExp exp in outputResult)
             {
-                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
                     vars.Add(exp.name);
             }
             return vars;
@@ -403,7 +404,7 @@ namespace ProductPlatformAnalyzer
             List<string[]> vars = new List<string[]>();
             foreach (OutputExp exp in outputResult)
             {
-                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
                 {
 
                     var = exp.name;
@@ -426,7 +427,7 @@ namespace ProductPlatformAnalyzer
             List<string> vars = new List<string>();
             foreach (OutputExp exp in outputResult)
             {
-                if (exp.state == -1 && String.Equals(exp.value, "true"))
+                if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
                 {
 
                     var = exp.name;
@@ -494,6 +495,64 @@ namespace ProductPlatformAnalyzer
                         writer.WriteEndTag("td");
                         writer.WriteEndTag("tr");
                     }
+            }
+            writer.WriteEndTag("table");
+        }
+
+        private List<OutputExp> getPossibleResources()
+        {
+            List<OutputExp> poss = new List<OutputExp>();
+
+            foreach (OutputExp exp in outputResult)
+            {
+                if (String.Equals(exp.opState, "possible"))
+                    poss.Add(exp);
+            }
+
+            return poss;
+        }
+
+        private void writeAvailableResources(HtmlTextWriter writer)
+        {
+            List<OutputExp> possibleRes = getPossibleResources();
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Available resources");
+            writer.WriteEndTag("p");
+
+
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Resource");
+            writer.WriteEndTag("th");
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Available");
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
+
+            foreach (OutputExp res in possibleRes)
+            {
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(res.operation);
+                writer.WriteEndTag("td");
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(res.value);
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
             }
             writer.WriteEndTag("table");
         }
