@@ -956,8 +956,8 @@ namespace ProductPlatformAnalyzer
                                          select Expr).ToList();
                 if (lFoundExpr.Count != 0)
                     lResultExpr = lFoundExpr[0];
-                else
-                    Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
+                //else
+                  //  Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
 
             }
             catch (Exception ex)

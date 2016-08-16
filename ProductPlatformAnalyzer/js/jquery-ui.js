@@ -835,6 +835,11 @@ $(document).ready(function(){
     $("#inO").click(function(){toggle("#inOContent", "#titleOArr");});
 });
 
+$(document).ready(function(){
+    $("#inR").click(function(){toggle("#inRContent", "#titleRArr");});
+});
+
+
 $.position = {
 	scrollbarWidth: function() {
 		if ( cachedScrollbarWidth !== undefined ) {
