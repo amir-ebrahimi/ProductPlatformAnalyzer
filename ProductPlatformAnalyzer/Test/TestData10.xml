@@ -1,4 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Process should finish -->
+<!-- First example of including resources -->
+<!-- Operation:
+      Lift1
+      Requirement: RobotT1, SpotWeldingAbility : maxload >= 5
+      
+      Lift2
+      Requirement: RobotT1 : maxload >= 8
+      
+      Traits:
+        NamedResource
+        Attribute: String,Name
+        
+        SpotWeldingAbility
+        Attribute: int, maxCurrent
+        
+        RobotT1 : NamedResource
+        Attribute: int, maxLoad
+        
+        RobotT2 : NamedResource
+        Attribute: int, nbrOfAxles
+        
+        NC : NamedResource
+        
+      Resource: 
+        RobotA
+        Trait: RobotT1 
+        Attribute: name, string, ABB1
+                   maxload, int, 8
+
+        RobotB
+        Trait: RobotT1, SpotWeldingAbility
+        Attribute: name, string, ABB2
+                   maxload, int, 5
+                   maxcurrent, int, 1
+
+        RobotC
+        Trait: RobotT2
+        Attribute: name, string, ABB1
+                   nbrOfAxles, int, 5
+                   
+        MachineA
+        Trait: NC
+        Attribute: name, string, Machine1
+        
+      Variant:
+        frame-rigid
+        
+      VariantGroup
+        frame
+        Choose exactly one
+        Variants:
+          frame-rigid
+          
+      Variant Operation Mapping
+        frame-rigid -> Lift1
+-->
 <testData>
   <operations>
     <operation>

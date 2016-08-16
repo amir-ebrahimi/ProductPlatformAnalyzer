@@ -395,7 +395,7 @@ namespace ProductPlatformAnalyzer
                 lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.requirements);
 
                 //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
-
+                AddRelevantResourceNameToOperationRequirementAttributes(pOperation.requirements);
             }
             catch (Exception ex)
             {
@@ -403,6 +403,48 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lCheckResult;
+        }
+
+        private void AddRelevantResourceNameToOperationRequirementAttributes(List<string> pRequirementField)
+        {
+            try
+            {
+                foreach (string lRequirement in pRequirementField)
+                {
+                    //Here for each requirement we look at its traits and see which resource can match them
+                    resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
+
+                    //We replace that resource name to add it to the field name of that requirement
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in AddRelevantResourceNameToOperationRequirementAttributes");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private resource ReturnRequirementMatchingResource(string pRequirement)
+        {
+            resource lResultingResource = new resource();
+            try
+            {
+                List<trait> lRequirementTraits = ExtractRequirementFieldTraits(pRequirement);
+
+                List<resource> resources = (from resource in resourceList
+                                            where resource.traits == lRequirementTraits
+                                            select resource).ToList();
+
+                if (resources.Count != 0)
+                    lResultingResource = resources[0];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnRequirementMatchingResource");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultingResource;
         }
 
         private bool CheckExistanceOfRequirementTraits(List<string> pRequirementField)
@@ -443,13 +485,9 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (var lRequirment in pRequirementField)
                 {
-                    List<trait> lRequirementTraits = ExtractRequirementFieldTraits(lRequirment);
+                    resource lResultingResource = ReturnRequirementMatchingResource(lRequirment);
 
-                    var resources = from resource in resourceList
-                                    where resource.traits == lRequirementTraits
-                                    select resource;
-
-                    if (resources != null)
+                    if (lResultingResource != null)
                         lSemanticCheck = lSemanticCheck && true;
                 }
             }
