@@ -38,7 +38,7 @@ namespace ProductPlatformAnalyzer
             lZ3Solver = new Z3Solver();
             lDebugMode = false;
             lOpSeqAnalysis = true;
-            lNeedPreAnalysis = false;
+            lNeedPreAnalysis = true;
         }
 
         public void ResetAnalyzer()

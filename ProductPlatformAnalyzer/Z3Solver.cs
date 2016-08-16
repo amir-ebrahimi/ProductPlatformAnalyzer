@@ -105,23 +105,34 @@ namespace ProductPlatformAnalyzer
 
         public int getNextBooleanExpressionCounter()
         {
-            int newCounter = getBooleanExpressionCounter() + 1;
-            setBooleanExpressionCounter(newCounter);
+            int newCounter = 0;
+            try
+            {
+                newCounter = getBooleanExpressionCounter() + 1;
+                setBooleanExpressionCounter(newCounter);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in getNextBooleanExpressionCounter");
+                Console.WriteLine(ex.Message);
+            }
             return newCounter;
         }
 
         public int getNextConstraintCounter()
         {
-            int newCounter = getConstraintCounter() + 1;
-            setConstraintCounter(newCounter);
+            int newCounter = 0;
+            try
+            {
+                newCounter = getConstraintCounter() + 1;
+                setConstraintCounter(newCounter);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in getNextConstraintCounter");
+                Console.WriteLine(ex.Message);
+            }
             return newCounter;
-        }
-
-        public BoolExpr getTrueBoolExpr()
-        {
-            Expr one = iCtx.MkConst("1", iCtx.MkIntSort());
-            Expr zero = iCtx.MkConst("0", iCtx.MkIntSort());
-            return iCtx.MkGt((ArithExpr)one, (ArithExpr)zero);
         }
 
         public BoolExpr getFalseBoolExpr()
@@ -132,10 +143,16 @@ namespace ProductPlatformAnalyzer
         public string ReturnStringElements(List<String> pList)
         {
             string lResultElements = "";
-
-            foreach (string lElement in pList)
+            try
             {
-                lResultElements += lElement;
+                foreach (string lElement in pList)
+                    lResultElements += lElement;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in ReturnStringElements");
+                Console.WriteLine(ex.Message);
             }
             return lResultElements;
         }
@@ -143,10 +160,15 @@ namespace ProductPlatformAnalyzer
         public string ReturnBoolExprElementNames(List<BoolExpr> pList)
         {
             string lResultElementNames = "";
-
-            foreach (BoolExpr lElement in pList)
+            try
             {
-                lResultElementNames += lElement.ToString();
+                foreach (BoolExpr lElement in pList)
+                    lResultElementNames += lElement.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in ReturnBoolExprElementNames");
+                Console.WriteLine(ex.Message);
             }
 
             return lResultElementNames;
@@ -836,81 +858,90 @@ namespace ProductPlatformAnalyzer
 
         public bool CheckSatisfiability(int pState, bool done, FrameworkWrapper wrapper)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            Status sat;
-
-            if (done)
-            {
-                sat = iSolver.Check();
-            }
-            else
-            {
-                Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
-                sat = iSolver.Check(lExprToCheck);
-            }
-
-            
-
-            stopwatch.Stop();
-
             bool lSatisfiabilityResult = false;
 
-            if (sat == Status.SATISFIABLE)
+            try
             {
-                lSatisfiabilityResult = true;
-                Model resultModel = iSolver.Model;
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
 
-                OutputHandler output = new OutputHandler(wrapper);
-
-                //adding expressions from model to outputhandler
-                foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
-                {
-                    Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
-                    if (lCurrentExpr != null)
-                    {
-                        string value = "" + resultModel.Evaluate(lCurrentExpr);
-                        output.addExp(lCurrentExpr.ToString(), value, pState);
-                    }
-                }
-
+                Status sat;
 
                 if (done)
                 {
-                    //Print and writes an output file showing the result of a finished test
-                    Console.WriteLine("Time: " + stopwatch.Elapsed);
-                    output.printFinished();
-                    output.writeFinished();
+                    sat = iSolver.Check();
                 }
                 else
                 {
-                    //Print and writes an output file showing the result of a deadlocked test
-                    Console.WriteLine("Satisfiable");
-                    Console.WriteLine("Time: " + stopwatch.Elapsed);
-                    output.printCounterExample();
-                    output.writeCounterExample();
+                    Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
+                    sat = iSolver.Check(lExprToCheck);
                 }
-                output.writeDebugFile();
 
-                //foreach (Expr lExpression in ExpressionList)
-                //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
 
-                //Adding this model value to the assertions
-                AddModelItem2SolverAssertion(resultModel);
-                //CheckSatisfiability();
-            }
-            else
-            {
-                lSatisfiabilityResult = false;
-                Console.WriteLine("Unsatisfiable");
-                Console.WriteLine("Time: " + stopwatch.Elapsed);
-                //Console.WriteLine("proof: {0}", iSolver.Proof);
-                //Console.WriteLine("core: ");
-                foreach (Expr c in iSolver.UnsatCore)
+
+                stopwatch.Stop();
+
+
+                if (sat == Status.SATISFIABLE)
                 {
-                    Console.WriteLine("{0}", c);
+                    lSatisfiabilityResult = true;
+                    Model resultModel = iSolver.Model;
+
+                    OutputHandler output = new OutputHandler(wrapper);
+
+                    //adding expressions from model to outputhandler
+                    foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
+                    {
+                        Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                        if (lCurrentExpr != null)
+                        {
+                            string value = "" + resultModel.Evaluate(lCurrentExpr);
+                            output.addExp(lCurrentExpr.ToString(), value, pState);
+                        }
+                    }
+
+
+                    if (done)
+                    {
+                        //Print and writes an output file showing the result of a finished test
+                        Console.WriteLine("Time: " + stopwatch.Elapsed);
+                        output.printFinished();
+                        output.writeFinished();
+                    }
+                    else
+                    {
+                        //Print and writes an output file showing the result of a deadlocked test
+                        Console.WriteLine("Satisfiable");
+                        Console.WriteLine("Time: " + stopwatch.Elapsed);
+                        output.printCounterExample();
+                        output.writeCounterExample();
+                    }
+                    output.writeDebugFile();
+
+                    //foreach (Expr lExpression in ExpressionList)
+                    //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
+
+                    //Adding this model value to the assertions
+                    AddModelItem2SolverAssertion(resultModel);
+                    //CheckSatisfiability();
                 }
+                else
+                {
+                    lSatisfiabilityResult = false;
+                    Console.WriteLine("Unsatisfiable");
+                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+                    //Console.WriteLine("proof: {0}", iSolver.Proof);
+                    //Console.WriteLine("core: ");
+                    foreach (Expr c in iSolver.UnsatCore)
+                    {
+                        Console.WriteLine("{0}", c);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CheckSatisfiability");               
+                Console.WriteLine(ex.Message);
             }
             return lSatisfiabilityResult;
         }
@@ -961,52 +992,60 @@ namespace ProductPlatformAnalyzer
 
         public void AddModelItem2SolverAssertion(Model pResultModel)
         {
-            //Adding this model value to the assertions
-            BoolExpr addedConstraint = iCtx.MkBoolConst("AddedConstraint");
-
-            //should we concentrate on the expressions JUST used in the given model?
-            //We should negate the model itself and add it again to the constraint list
-            //should we not care about the other expressions which are not used in the model?
-
-            /////////////////////SHOULD BE REMOVED//////////////////////////////
-            //Expr one = iCtx.MkNumeral(1, iCtx.MkRealSort());
-            //BoolExpr tempExpression = iCtx.MkEq((ArithExpr)one, (ArithExpr)one);
-            //foreach (Expr lExpression in ExpressionList)
-            //{
-                
-            //    tempExpression = iCtx.MkAnd(iCtx.MkEq(lExpression, pResultModel.Evaluate(lExpression))
-            //                                , tempExpression);
-            //}
-            /////////////////////SHOULD BE REMOVED//////////////////////////////
-
-            BoolExpr tempExpression = null;
-            foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
+            try
             {
-                Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
-                if (lCurrentExpr != null)
+                //Adding this model value to the assertions
+                BoolExpr addedConstraint = iCtx.MkBoolConst("AddedConstraint");
+
+                //should we concentrate on the expressions JUST used in the given model?
+                //We should negate the model itself and add it again to the constraint list
+                //should we not care about the other expressions which are not used in the model?
+
+                /////////////////////SHOULD BE REMOVED//////////////////////////////
+                //Expr one = iCtx.MkNumeral(1, iCtx.MkRealSort());
+                //BoolExpr tempExpression = iCtx.MkEq((ArithExpr)one, (ArithExpr)one);
+                //foreach (Expr lExpression in ExpressionList)
+                //{
+
+                //    tempExpression = iCtx.MkAnd(iCtx.MkEq(lExpression, pResultModel.Evaluate(lExpression))
+                //                                , tempExpression);
+                //}
+                /////////////////////SHOULD BE REMOVED//////////////////////////////
+
+                BoolExpr tempExpression = null;
+                foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
                 {
-                    if (tempExpression == null)
+                    Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
+                    if (lCurrentExpr != null)
                     {
-                        if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                            tempExpression = (BoolExpr)lCurrentExpr;
-                        else
-                            tempExpression = iCtx.MkNot((BoolExpr)lCurrentExpr);
+                        if (tempExpression == null)
+                        {
+                            if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
+                                tempExpression = (BoolExpr)lCurrentExpr;
+                            else
+                                tempExpression = iCtx.MkNot((BoolExpr)lCurrentExpr);
 
-                    }
-                    else
-                    {
-                        if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                            tempExpression = iCtx.MkAnd(tempExpression, (BoolExpr)lCurrentExpr);
+                        }
                         else
-                            tempExpression = iCtx.MkAnd(tempExpression, iCtx.MkNot((BoolExpr)lCurrentExpr));
+                        {
+                            if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
+                                tempExpression = iCtx.MkAnd(tempExpression, (BoolExpr)lCurrentExpr);
+                            else
+                                tempExpression = iCtx.MkAnd(tempExpression, iCtx.MkNot((BoolExpr)lCurrentExpr));
+                        }
                     }
+                    //Console.WriteLine(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
                 }
-                //Console.WriteLine(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
+
+                //tempExpression = iCtx.MkNot(tempExpression);
+                iSolver.AssertAndTrack(tempExpression, addedConstraint);
+
             }
-
-            //tempExpression = iCtx.MkNot(tempExpression);
-            iSolver.AssertAndTrack(tempExpression, addedConstraint);
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in AddModelItem2SolverAssertion!");
+                Console.WriteLine(ex.Message);
+            }
 
         }
         
