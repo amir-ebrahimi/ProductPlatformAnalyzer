@@ -38,10 +38,20 @@ namespace ProductPlatformAnalyzer
             if (name.Contains("_"))
             {
                 String[] lOperationNameParts = name.Split('_');
-                operation = lOperationNameParts[0];
-                opState = lOperationNameParts[1];
-                variant = Convert.ToInt32(lOperationNameParts[2]);
-                state = Convert.ToInt32(lOperationNameParts[3]);
+                if (string.Equals(lOperationNameParts[0],"Possible"))
+                {
+                    operation = name;
+                    opState = "possible";
+                    variant = -1;
+                    state = -1;
+                }
+                else
+                {
+                    operation = lOperationNameParts[0];
+                    opState = lOperationNameParts[1];
+                    variant = Convert.ToInt32(lOperationNameParts[2]);
+                    state = Convert.ToInt32(lOperationNameParts[3]);
+                }
             }
             else
             {
@@ -169,8 +179,17 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("div id=\"inFContent\"");
             writer.Write(HtmlTextWriter.TagRightChar);
             writeVariants(writer);
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write(" ");
+            writer.WriteEndTag("p");
+
+
             writeConstraints(writer);
             writer.WriteEndTag("div");
+
+            writeResourcesAndTraits(writer);
 
             writeOperationsWithPrePostCon(writer);
             writeVariantOperationMappings(writer);
@@ -294,7 +313,7 @@ namespace ProductPlatformAnalyzer
                                 + "<script src=\"../js/jquery-ui.js\"></script><script>"
                                 + "$( function() {$( \"#tabs\" ).tabs();} );</script>"
                                 + "<script>$(document).ready(function(){$(\"#inFContent\").hide();"
-                                + " $(\"#inOContent\").hide(); $(\"#inMContent\").hide();"
+                                + " $(\"#inOContent\").hide(); $(\"#inMContent\").hide(); $(\"#inRContent\").hide();"
                                 + "});</script></head><body>");
         }
 
@@ -614,8 +633,17 @@ namespace ProductPlatformAnalyzer
             writer.Write("Postcondition");
 
             writer.WriteEndTag("th");
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Requirements");
+
+            writer.WriteEndTag("th");
+
             foreach (operation op in operations)
             {
+                
 
                 writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
@@ -662,6 +690,23 @@ namespace ProductPlatformAnalyzer
 
                 writer.WriteEndTag("td");
 
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (string req in op.requirements)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(modCondition(req));
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
                 writer.WriteEndTag("tr");
             }
 
@@ -669,6 +714,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("div");
 
         }
+
         private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
             List<variantOperations> operations = new List<variantOperations>(fwrapper.getVariantsOperations());
@@ -745,6 +791,211 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("div");
 
         }
+
+        private void writeResourcesAndTraits(HtmlTextWriter writer)
+        {
+
+            writer.WriteBeginTag("p id=\"inR\" class=\"title\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("Traits and resources");
+
+            writer.WriteBeginTag("span id=\"titleRArr\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("&#x25BC");
+            writer.WriteEndTag("span");
+            writer.WriteEndTag("p");
+
+            writer.WriteBeginTag("div id=\"inRContent\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writeTraits(writer);
+
+            writer.WriteBeginTag("p style=\"font-size:18px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write(" ");
+            writer.WriteEndTag("p");
+
+
+            writeResources(writer);
+
+            writer.WriteEndTag("div");
+
+        }
+
+        private void writeTraits(HtmlTextWriter writer)
+        {
+
+            List<trait> traits = new List<trait>(fwrapper.TraitList);
+
+            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Trait");
+
+            writer.WriteEndTag("th");
+
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Inherit");
+
+            writer.WriteEndTag("th");
+
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Attributes");
+
+            writer.WriteEndTag("th");
+
+
+            foreach (trait tra in traits)
+            {
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(tra.names);
+
+                writer.WriteEndTag("td");
+
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(tra.inherit);
+
+                writer.WriteEndTag("td");
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (Tuple<string, string> att in tra.attributes)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(att.Item1 + " <=> " + att.Item2);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
+            }
+
+            writer.WriteEndTag("table");
+        }
+
+        private void writeResources(HtmlTextWriter writer)
+        {
+
+            List<resource> resources = new List<resource>(fwrapper.ResourceList);
+
+            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Resource");
+
+            writer.WriteEndTag("th");
+
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Traits");
+
+            writer.WriteEndTag("th");
+
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Attributes");
+
+            writer.WriteEndTag("th");
+
+
+            foreach (resource res in resources)
+            {
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(res.names);
+
+                writer.WriteEndTag("td");
+
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (trait tra in res.traits)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(tra.names);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (Tuple<string, string, string> att in res.attributes)
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(att.Item1 + " <=> " + att.Item2 + " <=> " + att.Item3);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
+            }
+
+            writer.WriteEndTag("table");
+        }
+
 
         private void writeFalsePrePost(HtmlTextWriter writer)
         {
