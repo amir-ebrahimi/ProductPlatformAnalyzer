@@ -38,7 +38,7 @@ namespace ProductPlatformAnalyzer
             lZ3Solver = new Z3Solver();
             lDebugMode = false;
             lOpSeqAnalysis = true;
-            lNeedPreAnalysis = false;
+            lNeedPreAnalysis = true;
         }
 
         public void ResetAnalyzer()
@@ -92,8 +92,8 @@ namespace ProductPlatformAnalyzer
                 else
                     endPath = "";
 
-   //             lFrameworkWrapper.LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
-                lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
+                lFrameworkWrapper.LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
+   //             lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
 
 
                 //lFrameworkWrapper.LoadInitialDataFromXMLFile("C:/Users/Amir/Desktop/Output/InitialData/TestData1.xml");
@@ -622,7 +622,7 @@ namespace ProductPlatformAnalyzer
                     preconditionList.Add(lConstraintExpr);
                 }
 
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pConstraintSource + "-Precondition");
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(preconditionList), lOpPrecondition, pConstraintSource);
             }
             else
                 //If the operation DOES NOT have a precondition hence
@@ -654,7 +654,7 @@ namespace ProductPlatformAnalyzer
                     postconditionList.Add(lConstraintExpr);
                 }
 
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource + "-Postcondition");
+                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource);
             
                
             }
