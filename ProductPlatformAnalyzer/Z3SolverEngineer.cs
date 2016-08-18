@@ -128,15 +128,15 @@ namespace ProductPlatformAnalyzer
                 if (lPreAnalysisResult)
                 {
 
-                //formula 2
-                produceVariantGroupGCardinalityConstraints();
-                //formula 3
-                convertFConstraint2Z3Constraint();
-                //forula 4
-                initializeFVariantOperation2Z3Constraints();
+                    //formula 2
+                    produceVariantGroupGCardinalityConstraints();
+                    //formula 3
+                    convertFConstraint2Z3Constraint();
+                    //forula 4
+                    initializeFVariantOperation2Z3Constraints();
 
-                //formula 5 and New Formula
-                convertFOperations2Z3ConstraintNewVersion(pState);
+                    //formula 5 and New Formula
+                    convertFOperations2Z3ConstraintNewVersion(pState);
 
                     //New formulas for implementing resources
                     if (lFrameworkWrapper.ResourceList.Count != 0)
@@ -150,17 +150,17 @@ namespace ProductPlatformAnalyzer
                             convertFGoals2Z3GoalsVersion2(pState);
                     }
 
-                if (!done)
-                {
-                    Console.WriteLine("Analysis No: " + pState);
-                    lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
+                    if (!done)
+                    {
+                        Console.WriteLine("Analysis No: " + pState);
+                        lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
 
-                    lZ3Solver.WriteDebugFile(pState);
-                }
-                else
-                {
-                    Console.WriteLine("Finished: ");
-                    lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
+                        lZ3Solver.WriteDebugFile(pState);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Finished: ");
+                        lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
                     }
                 }
             }
@@ -791,14 +791,16 @@ namespace ProductPlatformAnalyzer
                         {
                             resetCurrentStateAndNewStateOperationVariables(lOperation, lCurrentVariant, pState, "formula5");
 
+                            resetOperationPrecondition(lOperation, lCurrentVariant, pState, "formula5-Precondition");
+
                             ////TODO: check this line, it might be that it is not needed considering that post conditions are set as part of the previous method.
                             BoolExpr lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_PostCondition_" + lCurrentVariant.index + "_" + pState.ToString());
 
-                            //(O_I_k_j and Pre_k_j) => or O_E_k_j+1 O_I_k_j+1 
+                            //(O_I_k_j and Pre_k_j) => O_E_k_j+1
                             createFormula51();
 
                             // not (O_I_k_j and Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
-                            createFormula52();
+                            createFormula52(lOperation);
 
                             //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
                             //We should show
@@ -817,8 +819,14 @@ namespace ProductPlatformAnalyzer
 
                             //O_F_k_j => O_F_k_j+1
                             createFormula57();
-                            //for all variants k, (O_I_k_j and Pre_k_j) => O_E_k_j+1
-                            createFormula58();
+
+//                            //for all variants k, (O_I_k_j and Pre_k_j) => O_E_k_j+1
+//                            createFormula58();
+
+                            //formula 6
+                            //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
+                            //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
+                            createFormula6(pState);
                         }
                     }
                 }
@@ -832,7 +840,61 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private void createFormula58()
+        private void createFormula6(int pState)
+        {
+            try
+            {
+                //formula 6
+                //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
+                //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
+
+                BoolExpr formulaSix = null;
+
+                //List<String> lActiveOperationList = lFrameworkWrapper.getActiveOperationList();
+                List<String> lActiveOperationList = lFrameworkWrapper.getActiveOperationNamesList(pState);
+                if (lActiveOperationList != null)
+                {
+                    foreach (String lFirstActiveOperation in lActiveOperationList)
+                    {
+                        int lFirstVariantIndex = lFrameworkWrapper.getVariantIndexFromActiveOperation(lFirstActiveOperation);
+
+                        foreach (String lSecondActiveOperation in lActiveOperationList)
+                        {
+                            int lSecondVariantIndex = lFrameworkWrapper.getVariantIndexFromActiveOperation(lSecondActiveOperation);
+
+                            if (lFirstVariantIndex < lSecondVariantIndex)
+                            {
+                                BoolExpr lFirstOperand = lZ3Solver.FindBoolExpressionUsingName(lFirstActiveOperation);
+                                BoolExpr lSecondOperand = lZ3Solver.NotOperator(lFrameworkWrapper.giveNextStateActiveOperationName(lFirstActiveOperation));
+                                BoolExpr lFirstParantesis = lZ3Solver.AndOperator(new List<BoolExpr>() { lFirstOperand, lSecondOperand });
+
+                                BoolExpr lThirdOperand = lZ3Solver.FindBoolExpressionUsingName(lSecondActiveOperation);
+                                String lNextStateActiveOperationName = lFrameworkWrapper.giveNextStateActiveOperationName(lSecondActiveOperation);
+                                if (lZ3Solver.FindBoolExpressionUsingName(lNextStateActiveOperationName) != null)
+                                {
+                                    BoolExpr lFourthOperand = lZ3Solver.NotOperator(lNextStateActiveOperationName);
+                                    BoolExpr lSecondParantesis = lZ3Solver.AndOperator(new List<BoolExpr>() { lThirdOperand, lFourthOperand });
+
+                                    if (formulaSix == null)
+                                        formulaSix = lZ3Solver.NotOperator(lZ3Solver.AndOperator(new List<BoolExpr>() { lFirstParantesis, lSecondParantesis }));
+                                    else
+                                        formulaSix = lZ3Solver.AndOperator(new List<BoolExpr>() { formulaSix, lZ3Solver.NotOperator(lZ3Solver.AndOperator(new List<BoolExpr>() { lFirstParantesis, lSecondParantesis })) });
+                                }
+                            }
+                        }
+                    }
+                }
+                if (formulaSix != null)
+                    lZ3Solver.AddConstraintToSolver(formulaSix, "formula6");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CreateFormula6");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /*private void createFormula58()
         {
             try
             {
@@ -877,7 +939,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in CreateFormula58");
                 Console.WriteLine(ex.Message);
             }
-        }
+        }*/
 
         private void createFormula57()
         {
@@ -935,6 +997,48 @@ namespace ProductPlatformAnalyzer
             {
                 //Fromula 5.3
                 //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                //We should show
+                //or O_I_k_j O_E_k_j O_F_k_j O_U_k_j
+                //and (=> O_I_k_j (and (not O_E_k_j) (not O_F_k_j) (not O_U_k_j)))
+                //    (=> O_E_k_j (and (not O_I_k_j) (not O_F_k_j) (not O_U_k_j)))
+                //    (=> O_F_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_U_k_j)))
+                //    (=> O_U_k_j (and (not O_I_k_j) (not O_E_k_j) (not O_F_k_j)))
+
+                lZ3Solver.AddOrOperator2Constraints(new List<BoolExpr>() { lOp_I_CurrentState, lOp_E_CurrentState, lOp_F_CurrentState, lOp_U_CurrentState }, "formula5.3-Firstpart");
+
+                BoolExpr lFirstPart = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lOp_I_CurrentState
+                                                                , lZ3Solver.AndOperator(new List<BoolExpr>() {lZ3Solver.NotOperator(lOp_E_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_F_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_U_CurrentState)})});
+                BoolExpr lSecondPart = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lOp_E_CurrentState
+                                                                , lZ3Solver.AndOperator(new List<BoolExpr>() {lZ3Solver.NotOperator(lOp_I_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_F_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_U_CurrentState)})});
+                BoolExpr lThirdPart = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lOp_F_CurrentState
+                                                                , lZ3Solver.AndOperator(new List<BoolExpr>() {lZ3Solver.NotOperator(lOp_I_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_E_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_U_CurrentState)})});
+                BoolExpr lFourthPart = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lOp_U_CurrentState
+                                                                , lZ3Solver.AndOperator(new List<BoolExpr>() {lZ3Solver.NotOperator(lOp_I_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_E_CurrentState)
+                                                                                                    , lZ3Solver.NotOperator(lOp_F_CurrentState)})});
+
+                lZ3Solver.AddAndOperator2Constraints(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart }, "formula5.3-Secondpart");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CreateFormula53");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+        private void createFormula53GeneralVersion()
+        {
+            try
+            {
+                //Fromula 5.3
+                //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
 
                 lZ3Solver.AddXorOperator2Constraints(new List<BoolExpr>() { lOp_I_CurrentState, lOp_E_CurrentState, lOp_F_CurrentState, lOp_U_CurrentState }, "formula5.3");
 
@@ -946,7 +1050,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void createFormula52()
+        private void createFormula52(operation pOperation)
         {
             try
             {
@@ -954,7 +1058,7 @@ namespace ProductPlatformAnalyzer
                 // not (O_I_k_j and Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
                 BoolExpr tempLeftHandSideTwo;
 
-                tempLeftHandSideTwo = ReturnOperationInitialStateNItsPrecondition();
+                tempLeftHandSideTwo = ReturnOperationInitialStateNItsPrecondition(pOperation);
 
                 tempLeftHandSideTwo = lZ3Solver.NotOperator(tempLeftHandSideTwo);
 
@@ -976,14 +1080,14 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Formula 5.1
-                //(O_I_k_j and Pre_k_j) => or O_E_k_j+1 O_I_k_j+1
-                BoolExpr tempLeftHandSide;
-                tempLeftHandSide = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_I_CurrentState, lOpPrecondition });
+                //(O_I_k_j and Pre_k_j) => O_E_k_j+1
+                BoolExpr tempLeftHandSideOne;
+                //if (lOperation.precondition != null)
+                tempLeftHandSideOne = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_I_CurrentState, lOpPrecondition });
+                //else
+                //    tempLeftHandSideOne = lOp_I_CurrentState;
 
-                BoolExpr tempRightHandSide;
-                tempRightHandSide = lZ3Solver.OrOperator(new List<BoolExpr>() { lOp_I_NextState, lOp_E_NextState });
-
-                lZ3Solver.AddImpliesOperator2Constraints(tempLeftHandSide, tempRightHandSide, "formula5.1");
+                lZ3Solver.AddImpliesOperator2Constraints(tempLeftHandSideOne, lOp_E_NextState, "formula5.1");
             }
             catch (Exception ex)
             {
@@ -992,13 +1096,16 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr ReturnOperationInitialStateNItsPrecondition()
+        public BoolExpr ReturnOperationInitialStateNItsPrecondition(operation pOperation)
         {
             BoolExpr result;
             try
             {
                 //If the operation has no precondition then the relevant variable is forced to be true, other wise it will be the precondition
-                result = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_I_CurrentState, lOpPrecondition });
+                if (pOperation.precondition.Count != 0)
+                    result = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_I_CurrentState, lOpPrecondition });
+                else
+                    result = lOp_I_CurrentState;
             }
             catch (Exception ex)
             {

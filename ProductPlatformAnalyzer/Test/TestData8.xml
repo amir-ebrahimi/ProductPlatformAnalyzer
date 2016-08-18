@@ -1,15 +1,39 @@
 <?xml version="1.0"?>
 <!-- Testcase axel_test
-		 Truck variant: axel1, axel2
-		 Test variant: axel_inspection, test_break
-		 Operations: inspect_axel, run-break_test
+		 Variant: 
+        axel1
+        axel2
+		    inspec-axel
+        break-test
+        
+     Variant Groups:
+        test
+          choose at least one
+          Variants:
+            break-test
+            inspect-axel
+            
+        axel1
+          choose at least one
+          Variants:
+            axel1
+            
+        extra axels
+          choose any number
+          Variants:
+            axel2
+     
+     Constraint: axel2 and not break-test
+     
+		 Operations: 
+        inspect
+        run-break_test
 
-		 axel1 and axel_inspection -> inspect_axel1
-		 axel2 and axel_inspection -> inspect_axel2
-		 axel1 and test_break -> run_break_test
-		 axel2 and test_break -> run_break_test
+		 axel1 and inspect-axel -> inspect
+		 axel2 and inspect-axel -> inspect
+		 axel1 and break-test -> run_break_test
+		 axel2 and break-test -> run_break_test
 
-		 Condition: 
 -->
 <testData>
 <operations>

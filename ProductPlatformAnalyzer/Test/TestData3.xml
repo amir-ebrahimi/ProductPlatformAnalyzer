@@ -1,16 +1,29 @@
 <?xml version="1.0"?>
 <!-- Process should finish -->
 
-<!-- Operations: scan-barcode
-				, mount, Precondition: scan-barcode_F_2_2, Postcondition: scan-barcode_F_2_2 -->
+<!-- Operations: 
+        scan-barcode
+				mount
+          Pre: scan-barcode_F_2_2
+          Post: scan-barcode_F_2_2
 
-<!-- Variants: frame-rigid, Operations: mount
-				frame-tractor, Operations: scan-barcode
-				-->
+     Variants: 
+        frame-rigid
+				frame-tractor
 
-<!-- VariantGroups: frame, Variants: frame-rigid, frame-tractor -->
+    VariantGroups: 
+        frame
+          choose exactly one
+          Variants: 
+            frame-rigid
+            frame-tractor
 
-<!-- Constraints: and (or frame-rigid frame-tractor) (or frame-rigid frame-tractor) -->
+    Constraints: frame-tractor 
+    
+    Variant Operation Mapping:
+      frame-rigid -> mount
+      frame-tractor -> scan-barcode
+    -->
 <testData>
 <operations>
 	<operation>
