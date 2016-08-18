@@ -779,6 +779,11 @@ namespace ProductPlatformAnalyzer
                 endPath = "Output/Debug";
                 System.IO.Directory.CreateDirectory(exePath + "../../../" + endPath);
 
+
+                System.IO.DirectoryInfo directoryDebug = new System.IO.DirectoryInfo(exePath + "../../../" + endPath);
+                
+                foreach (System.IO.FileInfo file in directoryDebug.GetFiles()) file.Delete();
+
             }
             catch (Exception ex)
             {
