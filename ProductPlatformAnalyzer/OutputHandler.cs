@@ -191,6 +191,7 @@ namespace ProductPlatformAnalyzer
                 writeTransitionTableState(writer);
                 writeOpOrder(writer);
                 //writeTransitionDiagram(writer);
+                writeAvailableResources(writer);
 
                 writer.WriteEndTag("div");
                 writeDocEnd(writer);
@@ -232,6 +233,7 @@ namespace ProductPlatformAnalyzer
                 writeTransitionTableState(writer);
                 writeOpOrder(writer);
                 //writeTransitionDiagram(writer);
+                writeAvailableResources(writer);
 
                 writer.WriteEndTag("div");
                 writeDocEnd(writer);
