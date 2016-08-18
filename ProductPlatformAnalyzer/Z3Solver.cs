@@ -521,23 +521,51 @@ namespace ProductPlatformAnalyzer
                 //    (=> pOperand2 (and (not pOperand1) (not pOperand3) ...))
                 //    (=> pOperand3 (and (not pOperand1) (not pOperand2) ...))
 
-                BoolExpr Constraint = pOperandList[0];
+                BoolExpr lOrPartConstraint = pOperandList[0];
+                BoolExpr lAndPartConstraint = null;
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
                     BoolExpr lOperand = pOperandList[i];
 
-                    Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot(lOperand))
-                                            , iCtx.MkAnd(iCtx.MkNot(Constraint), lOperand));
+                    lOrPartConstraint = iCtx.MkOr(lOrPartConstraint, lOperand);
+
+                    //Temporarilly remove the active operand to make the rest of the list 
+                    List<BoolExpr> lTempRestOfOperandList = pOperandList;
+                    lTempRestOfOperandList.Remove(lOperand);
+                    lAndPartConstraint = iCtx.MkAnd(iCtx.MkImplies(lOperand, XorHelper(lTempRestOfOperandList)));
+
+                    //This line was the previous implementation which now should be removed
+                    //Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot(lOperand))
+                    //                        , iCtx.MkAnd(iCtx.MkNot(Constraint), lOperand));
                 }
 
-                AddConstraintToSolver(Constraint, pConstraintSource);
+                AddConstraintToSolver(lOrPartConstraint, pConstraintSource);
+                AddConstraintToSolver(lAndPartConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("error in AddXorOperator2Constraints, " + ReturnBoolExprElementNames(pOperandList));
                 throw ex;
             }
+        }
+
+        private BoolExpr XorHelper(List<BoolExpr> pOperandList)
+        {
+            BoolExpr lResultExpr = iCtx.MkNot(pOperandList[0]);
+            try
+            {
+                foreach (BoolExpr lOperand in pOperandList)
+                {
+                    lResultExpr = iCtx.MkAnd(lResultExpr, iCtx.MkNot(lOperand));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in XorHelper");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
         }
 
         public BoolExpr XorOperator(List<BoolExpr> pOperandList)

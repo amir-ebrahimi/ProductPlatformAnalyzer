@@ -414,8 +414,13 @@ namespace ProductPlatformAnalyzer
                     //Here for each requirement we look at its traits and see which resource can match them
                     resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
 
-                    //We replace that resource name to add it to the field name of that requirement
-                    
+                    //We find the attibute part of the requirement
+                    string[] lRequirementFieldParts = lRequirement.Split(':');
+                    string lAttributePart = lRequirementFieldParts[1].Trim();
+
+                    //We add that resource name to add it to the field name of that requirement
+                    lAttributePart = lResultingResource.names + "." + lAttributePart;
+                    lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
                 }
             }
             catch (Exception ex)
@@ -433,7 +438,7 @@ namespace ProductPlatformAnalyzer
                 List<trait> lRequirementTraits = ExtractRequirementFieldTraits(pRequirement);
 
                 List<resource> resources = (from resource in resourceList
-                                            where resource.traits == lRequirementTraits
+                                            where resource.traits.SequenceEqual(lRequirementTraits)
                                             select resource).ToList();
 
                 if (resources.Count != 0)
