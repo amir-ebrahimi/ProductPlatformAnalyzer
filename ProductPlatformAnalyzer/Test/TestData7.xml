@@ -1,13 +1,39 @@
 <?xml version="1.0"?>
 <!-- Testcase axel_test
-		 Truck variant: axel1
-		 Test variant: test_axel
-		 Operations: run_test_axel, put on sensor
-
-		 	O_test_axel pre -> put on sensor
+		 Variant: 
+      axel1
+      
+		  test_axel
+      
+     VariantGroup:
+      test
+      choose exactly one
+      Variants:
+        axel-test
+        
+      axel
+      choose exactly one
+      Variants:
+        axel1
+        
+     Constriant: axel1
+                 axel-test
+		 Operations: 
+      run_test_axel
+        pre -> put-on-sensor
+        post -> remove-sensor
+        
+      put-on-sensor
+      
+      remove-sensor
+        pre -> run-axel-test
 
 		 axel1 and test_axel -> run_test_axel 
-		 Conditions: test_axel, axel1
+		 
+     Variant-Operation Mapping:
+      axel1 AND axel-test -> run-axel-test
+                             put-on-sensor
+                             remove-sensor
 -->
 <testData>
 <operations>
