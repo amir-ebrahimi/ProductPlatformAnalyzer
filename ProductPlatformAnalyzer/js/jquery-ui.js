@@ -839,6 +839,35 @@ $(document).ready(function(){
     $("#inR").click(function(){toggle("#inRContent", "#titleRArr");});
 });
 
+$(document).ready(function(){
+    $("#outCon").click(function(){toggle("#outConContent", "#titleConArr");});
+});
+
+$(document).ready(function(){
+    $("#outTT").click(function(){toggle("#outTTContent", "#titleTTArr");});
+});
+
+$(document).ready(function(){
+    $("#outOSS").click(function(){toggle("#outOSSContent", "#titleOSSArr");});
+});
+
+$(document).ready(function(){
+    $("#outOOT").click(function(){toggle("#outOOTContent", "#titleOOTArr");});
+});
+
+$(document).ready(function(){
+    $("#outCV").click(function(){toggle("#outCVContent", "#titleCVArr");});
+});
+
+$(document).ready(function(){
+    $("#outAR").click(function(){toggle("#outARContent", "#titleARArr");});
+});
+
+$(document).ready(function(){
+    $("#outOpO").click(function(){toggle("#outOpOContent", "#titleOpOArr");});
+});
+
+
 
 $.position = {
 	scrollbarWidth: function() {
