@@ -588,7 +588,7 @@ namespace ProductPlatformAnalyzer
             lOp_U_CurrentState = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_U_" + pVariant.index + "_" + pState.ToString());
 
             int lNewState = pState + 1;
-            
+
             lOp_I_NextState = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_I_" + pVariant.index + "_" + lNewState.ToString());
             lOp_E_NextState = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_E_" + pVariant.index + "_" + lNewState.ToString());
             lOp_F_NextState = lZ3Solver.FindBoolExpressionUsingName(pOperation.names + "_F_" + pVariant.index + "_" + lNewState.ToString());
@@ -655,8 +655,8 @@ namespace ProductPlatformAnalyzer
                 }
 
                 lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.AndOperator(postconditionList), lOpPostcondition, pPostconditionSource);
-            
-               
+
+
             }
             else
                 //We want to force the postcondition to be true
@@ -711,7 +711,7 @@ namespace ProductPlatformAnalyzer
             {
                 throw ex;
             }
-                    
+
         }
 
         //construct pre/postcondition conponents
@@ -766,10 +766,10 @@ namespace ProductPlatformAnalyzer
             else
                 //This means the postcondition only includes an operation
                 throw new System.ArgumentException("Precondition did not include a status", pCon);
-            
+
         }
 
-       
+
         public void convertFOperations2Z3ConstraintNewVersion(int pState)
         {
             try

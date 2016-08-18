@@ -935,6 +935,7 @@ namespace ProductPlatformAnalyzer
                         Console.WriteLine("Time: " + stopwatch.Elapsed);
                         output.printFinished();
                         output.writeFinished();
+                        output.writeFinishedNoPost();
                     }
                     else
                     {
@@ -943,6 +944,7 @@ namespace ProductPlatformAnalyzer
                         Console.WriteLine("Time: " + stopwatch.Elapsed);
                         output.printCounterExample();
                         output.writeCounterExample();
+                        output.writeCounterExampleNoPost();
                     }
                     output.writeDebugFile();
 
