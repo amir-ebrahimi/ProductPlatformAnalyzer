@@ -50,7 +50,7 @@
 	<variant>
 		<variantName>axel1</variantName>
 		<variantIndex>1</variantIndex>
-		<variantDisplayName>axel 1</variantDisplayName>
+		<variantDisplayName>axel1</variantDisplayName>
 	</variant>
 	<variant>
 		<variantName>axel2</variantName>
@@ -94,10 +94,10 @@
 </variantGroups>
 <constraints>
   <constraint>
-    <logic>not break-test</logic>
+    <logic>not inspect-axel</logic>
   </constraint>
   <constraint>
-    <logic>axel2</logic>
+    <logic>axel1</logic>
   </constraint>
 </constraints>
 <variantOperationMappings>
