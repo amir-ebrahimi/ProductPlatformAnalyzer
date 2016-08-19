@@ -183,16 +183,29 @@ namespace ProductPlatformAnalyzer
                 foreach (string lActiveOperationName in lActiveOperationNames)
                 {
                     List<string> lPossibleResourceVariablesForActiveOperation = new List<string>();
+                    List<string> lUseResourceVariablesForActiveOperation = new List<string>();
                     foreach (resource lActiveResource in lResourceList)
                     {
-                        //This variable shows if the current operation can be run with the current resource
-                        //Possible_to_use_ActiveResource_for_ActiveOperation <-> Operation.Requirement
+                        //This variable shows if the current operation CAN be run with the current resource
                         string lBooleanExpressionName = "Possible_to_use_" + lActiveResource.names + "_for_" + lActiveOperationName;
                         lZ3Solver.AddBooleanExpression(lBooleanExpressionName);
                         lPossibleResourceVariablesForActiveOperation.Add(lBooleanExpressionName);
 
+                        //This variable shows if the current operation WILL be run with the current resource
+                        string lBooleanExpressionName2 = "Use_" + lActiveResource.names + "_for_" + lActiveOperationName;
+                        lZ3Solver.AddBooleanExpression(lBooleanExpressionName2);
+                        lUseResourceVariablesForActiveOperation.Add(lBooleanExpressionName2);
+
+                        //formula 6.1
+                        //Possible_to_use_ActiveResource_for_ActiveOperation <-> Operation.Requirement
+                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lBooleanExpressionName, lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName), "formula 6.1");
                         operation lActiveOperation = lFrameworkWrapper.getOperationFromOperationName(lActiveOperationName);
 
+                        //formula 6.5
+                        // Use_ActiveResource_ActiveOperation -> Possible_to_use_ActiveResource_for_ActiveOperation
+                        lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName2)
+                                                                , lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName)
+                                                                , "formula 6.5");
                     }
 
                     //////////////////////////////////////////////////////////
@@ -203,15 +216,22 @@ namespace ProductPlatformAnalyzer
                     lZ3Solver.AddBooleanExpression(lBooleanExpressionName1);
                     BoolExpr lLeftHandSide = lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName1);
 
-                    //formula 6.1
+                    //formula 6.2
                     //This formula makes sure this operation can be executed by one resource
                     BoolExpr lRightHandSide = lZ3Solver.OrOperator(lPossibleResourceVariablesForActiveOperation);
-                    lZ3Solver.AddImpliesOperator2Constraints(lLeftHandSide, lRightHandSide, "formula6.1");
+                    lZ3Solver.AddImpliesOperator2Constraints(lLeftHandSide, lRightHandSide, "formula6.2");
 
                     /////////////////////////////////////////////////////////
-                    //formula 6.2
+                    //formula 6.3
                     //This formula makes sure this operation can be run by ONLY one resource
-                    lZ3Solver.AddXorOperator2Constraints(lPossibleResourceVariablesForActiveOperation, "formula6.2");
+                    BoolExpr lTempVariable = lZ3Solver.XorOperator(lUseResourceVariablesForActiveOperation);
+                    List<BoolExpr> lTempList = new List<BoolExpr>();
+                    lTempList.Add(lTempVariable);
+                    lZ3Solver.AddXorOperator2Constraints(lTempList, "formula6.3");
+
+                    //formula 6.4
+
+
                 }
             }
             catch (Exception ex)

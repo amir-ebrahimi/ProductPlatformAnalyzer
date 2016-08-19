@@ -337,6 +337,20 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public void AddTwoWayImpliesOperator2Constraints(string pOperand1, string pOperand2,string pConstraintSource)
+        {
+            try
+            {
+                BoolExpr lConstraint = TwoWayImpliesOperator(pOperand1, pOperand2);
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddTwoWayImpliesOperator2Constraints");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public void AddTwoWayImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, String pConstraintSource)
         {
             try

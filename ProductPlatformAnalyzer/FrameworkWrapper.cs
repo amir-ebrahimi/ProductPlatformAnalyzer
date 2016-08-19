@@ -405,6 +405,30 @@ namespace ProductPlatformAnalyzer
             return lCheckResult;
         }
 
+        public string ReturnOperationRequirements(string pOperationName)
+        {
+            string lResultOperationRequirement = "";
+            try
+            {
+                operation lResultingOperation = getOperationFromOperationName(pOperationName);
+
+                foreach (string lRequirement in lResultingOperation.requirements)
+                {
+                    if (lResultOperationRequirement != "")
+                        lResultOperationRequirement += " && " + lRequirement;
+                    else
+                        lResultOperationRequirement += lRequirement;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOperationRequirements");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperationRequirement;
+        }
+
         private void AddRelevantResourceNameToOperationRequirementAttributes(List<string> pRequirementField)
         {
             try
