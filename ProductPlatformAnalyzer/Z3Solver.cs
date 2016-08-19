@@ -917,6 +917,10 @@ namespace ProductPlatformAnalyzer
                 if (done)
                 {
                     sat = iSolver.Check();
+                    if (sat == Status.UNSATISFIABLE)
+                    {
+                        Console.WriteLine("Neither a counterexample nor a satisfiable finished-result could be produced.");
+                    }
                 }
                 else
                 {

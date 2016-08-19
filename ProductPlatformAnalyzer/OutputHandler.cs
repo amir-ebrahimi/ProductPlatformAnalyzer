@@ -180,9 +180,13 @@ namespace ProductPlatformAnalyzer
                 writeInput(writer);
                 writer.WriteEndTag("div");
 
-
                 writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p style=\"font-size:22px\"");
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
                 writer.WriteEndTag("p");
@@ -225,6 +229,12 @@ namespace ProductPlatformAnalyzer
 
                 writer.WriteFullBeginTag("div id=\"tabs-2\"");
                 writer.WriteBeginTag("p style=\"font-size:22px\"");
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
                 writer.WriteEndTag("p");
@@ -273,6 +283,12 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Input");
+                writer.WriteEndTag("p");
+
+
                 writer.WriteBeginTag("p id=\"inF\" class=\"title\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write(" Feature Model");
@@ -315,6 +331,12 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+
                 writer.WriteBeginTag("p id=\"inF\" class=\"title\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write(" Feature Model");
@@ -395,8 +417,14 @@ namespace ProductPlatformAnalyzer
                 writeInput(writer);
                 writer.WriteEndTag("div");
 
+
                 writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p style=\"font-size:22px\"");
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write("Counterexample found, all operations needed could not be performed.");
                 writer.WriteEndTag("p");
@@ -437,7 +465,13 @@ namespace ProductPlatformAnalyzer
                 writer.WriteEndTag("div");
 
                 writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p style=\"font-size:22px\"");
+                
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
                 writer.Write("Counterexample found, all operations needed could not be performed.");
                 writer.WriteEndTag("p");
@@ -844,42 +878,52 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("div id=\"outARContent\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Resource");
-            writer.WriteEndTag("th");
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Available");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
-
-            foreach (OutputExp res in possibleRes)
+            if (possibleRes.Count != 0)
             {
+                writer.WriteBeginTag("table style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
                 writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("td");
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(res.operation);
-                writer.WriteEndTag("td");
+                writer.Write("Resource");
+                writer.WriteEndTag("th");
 
-                writer.WriteBeginTag("td");
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(res.value);
-                writer.WriteEndTag("td");
-
+                writer.Write("Available");
+                writer.WriteEndTag("th");
                 writer.WriteEndTag("tr");
+
+                foreach (OutputExp res in possibleRes)
+                {
+                    writer.WriteBeginTag("tr");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(res.operation);
+                    writer.WriteEndTag("td");
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(res.value);
+                    writer.WriteEndTag("td");
+
+                    writer.WriteEndTag("tr");
+                }
+                writer.WriteEndTag("table");
             }
-            writer.WriteEndTag("table");
+            else
+            {
+
+                writer.WriteBeginTag("p class=\"empty\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("No available resources.");
+                writer.WriteEndTag("p");
+
+            }
+
             writer.WriteEndTag("div");
         }
 
@@ -941,37 +985,49 @@ namespace ProductPlatformAnalyzer
         {
             ArrayList constraints = new ArrayList(fwrapper.getConstraintList());
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write(" ");
-            writer.WriteEndTag("p");
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Constraints");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
-
-            foreach (String con in constraints)
+            if (constraints.Count != 0)
             {
-                if (checkCondition(con))
+                writer.WriteBeginTag("p style=\"font-size:18px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write(" ");
+                writer.WriteEndTag("p");
+
+
+                writer.WriteBeginTag("table style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Constraints");
+                writer.WriteEndTag("th");
+                writer.WriteEndTag("tr");
+
+                foreach (String con in constraints)
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(modCondition(con));
-                    writer.WriteEndTag("td");
-                    writer.WriteEndTag("tr");
+                    if (checkCondition(con))
+                    {
+                        writer.WriteBeginTag("tr");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(modCondition(con));
+                        writer.WriteEndTag("td");
+                        writer.WriteEndTag("tr");
+                    }
                 }
+                writer.WriteEndTag("table");
             }
-            writer.WriteEndTag("table");
+            else
+            {
+
+                writer.WriteBeginTag("p class=\"empty\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("No constraints were specified.");
+                writer.WriteEndTag("p");
+
+            }
         }
 
         private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
@@ -1314,91 +1370,103 @@ namespace ProductPlatformAnalyzer
 
             List<trait> traits = new List<trait>(fwrapper.TraitList);
 
-            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Trait");
-
-            writer.WriteEndTag("th");
-
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Inherit");
-
-            writer.WriteEndTag("th");
-
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Attributes");
-
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
-
-
-            foreach (trait tra in traits)
+            if (traits.Count != 0)
             {
+                writer.WriteBeginTag("table  style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
 
                 writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("td");
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(tra.names);
+                writer.Write("Trait");
 
-                writer.WriteEndTag("td");
+                writer.WriteEndTag("th");
 
-                writer.WriteBeginTag("td");
+
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write("Inherit");
+
+                writer.WriteEndTag("th");
+
+
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (trait inh in tra.inherit)
-                {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Attributes");
 
-                    writer.Write(inh.names);
-
-                    writer.WriteEndTag("li");
-
-                }
-
-                writer.WriteEndTag("ul");
-                writer.WriteEndTag("td");
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                foreach (Tuple<string, string> att in tra.attributes)
-                {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(att.Item1 + ": " + att.Item2);
-                    writer.WriteEndTag("li");
-                }
-                writer.WriteEndTag("ul");
-
-                writer.WriteEndTag("td");
-
+                writer.WriteEndTag("th");
                 writer.WriteEndTag("tr");
-            }
 
-            writer.WriteEndTag("table");
+
+                foreach (trait tra in traits)
+                {
+
+                    writer.WriteBeginTag("tr");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.Write(tra.names);
+
+                    writer.WriteEndTag("td");
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    foreach (trait inh in tra.inherit)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+
+                        writer.Write(inh.names);
+
+                        writer.WriteEndTag("li");
+
+                    }
+
+                    writer.WriteEndTag("ul");
+                    writer.WriteEndTag("td");
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    foreach (Tuple<string, string> att in tra.attributes)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(att.Item1 + ": " + att.Item2);
+                        writer.WriteEndTag("li");
+                    }
+                    writer.WriteEndTag("ul");
+
+                    writer.WriteEndTag("td");
+
+                    writer.WriteEndTag("tr");
+                }
+
+                writer.WriteEndTag("table");
+            }
+            else
+            {
+
+                writer.WriteBeginTag("p class=\"empty\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("No Traits were specified.");
+                writer.WriteEndTag("p");
+
+            }
         }
 
         private void writeResources(HtmlTextWriter writer)
@@ -1406,89 +1474,101 @@ namespace ProductPlatformAnalyzer
 
             List<resource> resources = new List<resource>(fwrapper.ResourceList);
 
-            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Resource");
-
-            writer.WriteEndTag("th");
-
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Of traits");
-
-            writer.WriteEndTag("th");
-
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.Write("Attributes");
-
-            writer.WriteEndTag("th");
-
-            writer.WriteEndTag("tr");
-
-
-            foreach (resource res in resources)
+            if (resources.Count != 0)
             {
+                writer.WriteBeginTag("table  style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
 
                 writer.WriteBeginTag("tr");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("td");
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(res.names);
+                writer.Write("Resource");
 
-                writer.WriteEndTag("td");
+                writer.WriteEndTag("th");
 
-                writer.WriteBeginTag("td");
+
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write("Of traits");
+
+                writer.WriteEndTag("th");
+
+
+                writer.WriteBeginTag("th");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (trait tra in res.traits)
-                {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(tra.names);
-                    writer.WriteEndTag("li");
-                }
-                writer.WriteEndTag("ul");
+                writer.Write("Attributes");
 
-                writer.WriteEndTag("td");
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                foreach (Tuple<string, string, string> att in res.attributes)
-                {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(att.Item1 + " = " + att.Item3);
-                    writer.WriteEndTag("li");
-                }
-                writer.WriteEndTag("ul");
-
-                writer.WriteEndTag("td");
+                writer.WriteEndTag("th");
 
                 writer.WriteEndTag("tr");
-            }
 
-            writer.WriteEndTag("table");
+
+                foreach (resource res in resources)
+                {
+
+                    writer.WriteBeginTag("tr");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.Write(res.names);
+
+                    writer.WriteEndTag("td");
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    foreach (trait tra in res.traits)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(tra.names);
+                        writer.WriteEndTag("li");
+                    }
+                    writer.WriteEndTag("ul");
+
+                    writer.WriteEndTag("td");
+
+                    writer.WriteBeginTag("td");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+
+                    foreach (Tuple<string, string, string> att in res.attributes)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(att.Item1 + " = " + att.Item3);
+                        writer.WriteEndTag("li");
+                    }
+                    writer.WriteEndTag("ul");
+
+                    writer.WriteEndTag("td");
+
+                    writer.WriteEndTag("tr");
+                }
+
+                writer.WriteEndTag("table");
+            }
+            else
+            {
+
+                writer.WriteBeginTag("p class=\"empty\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("No Resources were specified.");
+                writer.WriteEndTag("p");
+
+            }
         }
 
 
@@ -1496,43 +1576,119 @@ namespace ProductPlatformAnalyzer
         {
             List<String[]> conditions = getConditionsStateWithValues(getLastState());
 
-            writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("False preconditions in last state");
-
-            writer.WriteBeginTag("span id=\"titleConArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
-
-            writer.WriteBeginTag("div id=\"outConContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Name");
-            writer.WriteEndTag("th");
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Condition");
-            writer.WriteEndTag("th");
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Value");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
-
-            foreach (String[] con in conditions)
+            if (conditions.Count != 0)
             {
-                if (!con[0].Contains("Post"))
+                writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("False preconditions in last state");
+
+                writer.WriteBeginTag("span id=\"titleConArr\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("&#x25BC");
+                writer.WriteEndTag("span");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("div id=\"outConContent\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+
+                writer.WriteBeginTag("table style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Name");
+                writer.WriteEndTag("th");
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Condition");
+                writer.WriteEndTag("th");
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Value");
+                writer.WriteEndTag("th");
+                writer.WriteEndTag("tr");
+
+                foreach (String[] con in conditions)
+                {
+                    if (!con[0].Contains("Post"))
+                    {
+                        writer.WriteBeginTag("tr");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(con[0]);
+                        writer.WriteEndTag("td");
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(con[1]);
+                        writer.WriteEndTag("td");
+                        writer.WriteBeginTag("td");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(con[2]);
+                        writer.WriteEndTag("td");
+                        writer.WriteEndTag("tr");
+                    }
+                }
+                writer.WriteEndTag("table");
+                writer.WriteEndTag("div");
+            }
+            else
+            {
+
+                writer.WriteBeginTag("p class=\"empty\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("No false condition in last state.");
+                writer.WriteEndTag("p");
+
+            }
+        }
+
+
+        private void writeFalsePrePost(HtmlTextWriter writer)
+        {
+            List<String[]> conditions = getConditionsStateWithValues(getLastState());
+
+            if (conditions.Count != 0)
+            {
+                writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("False post/preconditions in last state");
+
+                writer.WriteBeginTag("span id=\"titleConArr\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("&#x25BC");
+                writer.WriteEndTag("span");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("div id=\"outConContent\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+
+                writer.WriteBeginTag("table style=\"margin-left:40px\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Name");
+                writer.WriteEndTag("th");
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Condition");
+                writer.WriteEndTag("th");
+                writer.WriteBeginTag("th");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Value");
+                writer.WriteEndTag("th");
+                writer.WriteEndTag("tr");
+
+                foreach (String[] con in conditions)
                 {
                     writer.WriteBeginTag("tr");
                     writer.Write(HtmlTextWriter.TagRightChar);
@@ -1550,70 +1706,18 @@ namespace ProductPlatformAnalyzer
                     writer.WriteEndTag("td");
                     writer.WriteEndTag("tr");
                 }
+                writer.WriteEndTag("table");
+                writer.WriteEndTag("div");
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
-        }
-
-
-        private void writeFalsePrePost(HtmlTextWriter writer)
-        {
-            List<String[]> conditions = getConditionsStateWithValues(getLastState());
-            
-            writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("False post/preconditions in last state");
-
-            writer.WriteBeginTag("span id=\"titleConArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
-
-            writer.WriteBeginTag("div id=\"outConContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Name");
-            writer.WriteEndTag("th");
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Condition");
-            writer.WriteEndTag("th");
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Value");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
-
-            foreach (String[] con in conditions)
+            else
             {
-                writer.WriteBeginTag("tr");
+
+                writer.WriteBeginTag("p class=\"empty\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(con[0]);
-                writer.WriteEndTag("td");
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(con[1]);
-                writer.WriteEndTag("td");
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(con[2]);
-                writer.WriteEndTag("td");
-                writer.WriteEndTag("tr");
+                writer.Write("No false conditions in last state.");
+                writer.WriteEndTag("p");
+
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
         }
 
         private void writeOpOrderWithArrow(HtmlTextWriter writer)
@@ -1674,7 +1778,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteBeginTag("div id=\"outOpOContent\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("table ");
+            writer.WriteBeginTag("table style=\"margin-left:40px\"");
             writer.Write(HtmlTextWriter.TagRightChar);
 
 
@@ -1936,7 +2040,8 @@ namespace ProductPlatformAnalyzer
 
         private void writeTransitionTableState(HtmlTextWriter writer)
         {
-            List<String> activeOps = getActiveOps();
+            //List<String> activeOps = getActiveOps();
+            List<OutputExp> allOps = getAllOps();
             List<String[]> opTransitions;
             int lastState = getLastState();
 
@@ -1975,7 +2080,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteEndTag("tr");
 
-            foreach (String op in activeOps)
+            foreach (OutputExp op in allOps)
             {
                 opTransitions = getOpTransformations(op);
 
@@ -1984,13 +2089,13 @@ namespace ProductPlatformAnalyzer
 
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(op);
+                writer.Write(op.operation);
                 writer.WriteEndTag("td");
 
                 for (int i = 0; i <= lastState + 1; i++)
                 {
-                    string transString = TransitionStateAt(opTransitions, i);
-                    if (!transString.Contains("F") && i == lastState +1)
+                    string transString = TransitionStateAt(opTransitions, i, op);
+                    if (!transString.Contains("F") && i == lastState + 1 && !transString.Contains("U"))
                         writer.WriteBeginTag("td class=\"false\"");
                     else
                         writer.WriteBeginTag("td");
@@ -2042,9 +2147,10 @@ namespace ProductPlatformAnalyzer
             return transforms;
         }
 
-        private string TransitionStateAt(List<String[]> transformations, int state)
+
+        private string TransitionStateAt(List<String[]> transformations, int state, OutputExp exp)
         {
-            string currentState = "I";
+            string currentState = exp.opState;
 
             try
             {
@@ -2083,7 +2189,7 @@ namespace ProductPlatformAnalyzer
 
 
         //Returns all operation transformations
-        private List<String[]> getOpTransformations(string operation)
+        private List<String[]> getOpTransformations(OutputExp operation)
         {
             List<String[]> transforms = new List<String[]>();
             String[] item = new String[4];
@@ -2093,7 +2199,8 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (String.Equals(exp.operation, operation))
+                    if (String.Equals(exp.operation, operation.operation) &&
+                        String.Equals(exp.variant, operation.variant))
                     {
                         OutputExp nextOp = findNextOp(exp);
                         if (nextOp != null)
@@ -2377,6 +2484,34 @@ namespace ProductPlatformAnalyzer
                        !String.Equals(exp.opState, "PreCondition"))
                     {
                         ops.Add(exp.operation);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getActiveOps in outputHandler");
+                Console.WriteLine(ex.Message);
+            }
+            return ops;
+        }
+
+        //Returns all operations
+        private List<OutputExp> getAllOps()
+        {
+            List<OutputExp> ops = new List<OutputExp>();
+
+            try
+            {
+                foreach (OutputExp exp in outputResult)
+                {
+                    if (exp.state == 0 &&
+                       String.Equals(exp.value, "true") &&
+                       !String.Equals(exp.opState, "E") &&
+                       !String.Equals(exp.opState, "F") &&
+                       !String.Equals(exp.opState, "PostCondition") &&
+                       !String.Equals(exp.opState, "PreCondition"))
+                    {
+                        ops.Add(exp);
                     }
                 }
             }

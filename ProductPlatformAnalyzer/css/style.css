@@ -132,5 +132,23 @@ tr:last-of-type td:last-child {
 
 .false {
 	
-	color: #B00000;	
+	color: #e60000;	
+    font-weight: bold;
+    !important;
+}
+
+
+.empty {
+	
+	font-size: 17.5px;
+	margin-left: 40px;
+}
+.resultHeading {
+	
+	font-size: 22px;
+    font-weight: bold;
+}
+.discription {
+	
+	font-size: 20px;
 }
