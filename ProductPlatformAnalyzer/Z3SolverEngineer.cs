@@ -178,60 +178,61 @@ namespace ProductPlatformAnalyzer
             {
                 List<string> lActiveOperationNames = lFrameworkWrapper.ActiveOperationNamesList;
                 List<resource> lResourceList = lFrameworkWrapper.ResourceList;
-                List<string> lPossibleToRunOperationVariableNames = new List<string>();
+//                List<string> lPossibleToRunOperationVariableNames = new List<string>();
 
                 foreach (string lActiveOperationName in lActiveOperationNames)
                 {
-                    List<string> lPossibleResourceVariablesForActiveOperation = new List<string>();
+//                    List<string> lPossibleResourceVariablesForActiveOperation = new List<string>();
                     List<string> lUseResourceVariablesForActiveOperation = new List<string>();
+                    
+                    operation lActiveOperation = lFrameworkWrapper.getOperationFromOperationName(lActiveOperationName);
+
                     foreach (resource lActiveResource in lResourceList)
                     {
                         //This variable shows if the current operation CAN be run with the current resource
-                        string lBooleanExpressionName = "Possible_to_use_" + lActiveResource.names + "_for_" + lActiveOperationName;
-                        lZ3Solver.AddBooleanExpression(lBooleanExpressionName);
-                        lPossibleResourceVariablesForActiveOperation.Add(lBooleanExpressionName);
+                        string lPossibleToUseResource4OperationName = "Possible_to_use_" + lActiveResource.names + "_for_" + lActiveOperationName;
+                        lZ3Solver.AddBooleanExpression(lPossibleToUseResource4OperationName);
+//                        lPossibleResourceVariablesForActiveOperation.Add(lPossibleToUseResource4OperationName);
 
                         //This variable shows if the current operation WILL be run with the current resource
-                        string lBooleanExpressionName2 = "Use_" + lActiveResource.names + "_for_" + lActiveOperationName;
-                        lZ3Solver.AddBooleanExpression(lBooleanExpressionName2);
-                        lUseResourceVariablesForActiveOperation.Add(lBooleanExpressionName2);
+                        string lUseResource4OperationName = "Use_" + lActiveResource.names + "_for_" + lActiveOperationName;
+                        lZ3Solver.AddBooleanExpression(lUseResource4OperationName);
+                        lUseResourceVariablesForActiveOperation.Add(lUseResource4OperationName);
 
                         //formula 6.1
                         //Possible_to_use_ActiveResource_for_ActiveOperation <-> Operation.Requirement
-                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lBooleanExpressionName, lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName), "formula 6.1");
-                        operation lActiveOperation = lFrameworkWrapper.getOperationFromOperationName(lActiveOperationName);
+                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lPossibleToUseResource4OperationName
+                                                                    , lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName)
+                                                                    , "formula 6.1");
 
-                        //formula 6.5
+                        //formula 6.2
                         // Use_ActiveResource_ActiveOperation -> Possible_to_use_ActiveResource_for_ActiveOperation
-                        lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName2)
-                                                                , lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName)
-                                                                , "formula 6.5");
+                        lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lUseResource4OperationName)
+                                                                , lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
+                                                                , "formula 6.2");
                     }
-
-                    //////////////////////////////////////////////////////////
-                    //This variable shows if the current operation can be run with at least one resource
-                    //Possible_to_run_ActiveOperation -> Possible_to_use_Resource1_for_ActiveOperation or Possible_to_use_Resource2_for_ActiveOperation or ...
-                    string lBooleanExpressionName1 = "Possible_to_run_" + lActiveOperationName;
-                    lPossibleToRunOperationVariableNames.Add(lBooleanExpressionName1);
-                    lZ3Solver.AddBooleanExpression(lBooleanExpressionName1);
-                    BoolExpr lLeftHandSide = lZ3Solver.FindBoolExpressionUsingName(lBooleanExpressionName1);
-
-                    //formula 6.2
-                    //This formula makes sure this operation can be executed by one resource
-                    BoolExpr lRightHandSide = lZ3Solver.OrOperator(lPossibleResourceVariablesForActiveOperation);
-                    lZ3Solver.AddImpliesOperator2Constraints(lLeftHandSide, lRightHandSide, "formula6.2");
 
                     /////////////////////////////////////////////////////////
                     //formula 6.3
                     //This formula makes sure this operation can be run by ONLY one resource
-                    BoolExpr lTempVariable = lZ3Solver.XorOperator(lUseResourceVariablesForActiveOperation);
-                    List<BoolExpr> lTempList = new List<BoolExpr>();
-                    lTempList.Add(lTempVariable);
-                    lZ3Solver.AddXorOperator2Constraints(lTempList, "formula6.3");
+                    //This variable shows if the current operation can be run with at least one resource
+                    //Possible_to_run_ActiveOperation -> Possible_to_use_Resource1_for_ActiveOperation or Possible_to_use_Resource2_for_ActiveOperation or ...
+                    string lPossibleToRunActiveOperationName = "Possible_to_run_" + lActiveOperationName;
+//                    lPossibleToRunOperationVariableNames.Add(lPossibleToRunActiveOperationName);
+                    lZ3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
+                    BoolExpr lPossibleToRunActiveOperation = lZ3Solver.FindBoolExpressionUsingName(lPossibleToRunActiveOperationName);
+                    lZ3Solver.AddImpliesOperator2Constraints(lPossibleToRunActiveOperation
+                                                                , lZ3Solver.XorOperator(lUseResourceVariablesForActiveOperation)
+                                                                , "formula6.3");
+                    //formula 6.2
+                    //This formula makes sure this operation can be executed by one resource
+                    //Before
+                    //BoolExpr lRightHandSide = lZ3Solver.OrOperator(lPossibleResourceVariablesForActiveOperation);
+                    //Now
+                    //lZ3Solver.AddImpliesOperator2Constraints(lPossibleToRunActiveOperation, lUseActiveResource4ActiveOperation, "formula6.2");
 
                     //formula 6.4
-
-
+                    lActiveOperation.precondition.Add(lPossibleToRunActiveOperationName);
                 }
             }
             catch (Exception ex)
