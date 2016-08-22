@@ -192,6 +192,38 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public void AddGreaterOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource)
+        {
+            try
+            {
+                Expr lOperand2 = iCtx.MkConst("pOperand2", iCtx.MkIntSort());
+                BoolExpr lConstraint = iCtx.MkGt((ArithExpr)pOperand1, (ArithExpr)lOperand2);
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddGreaterOperator2Constraints");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void AddEqualOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource)
+        {
+            try
+            {
+                //Expr lOperand2 = iCtx.MkConst(pOperand2, iCtx.MkIntSort());
+                BoolExpr lConstraint = iCtx.MkEq((ArithExpr)pOperand1, iCtx.MkInt(pOperand2));
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddEqualOperator2Constraints");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public void AddAndOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
         {
             try
@@ -244,6 +276,70 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in AndOperator, params: " + ReturnBoolExprElementNames(pOperandList));
                 throw ex;
             }
+        }
+
+        public BoolExpr GreaterThanOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = iCtx.MkGt((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in GreaterThanOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr LessThanOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = iCtx.MkLt((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in LessThanOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr GreaterOrEqualOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = iCtx.MkGe((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in GreaterOrEqualOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr LessOrEqualOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = iCtx.MkLe((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in LessOrEqualOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
         }
 
         public BoolExpr IffOperator(String pOperand1, String pOperand2)
@@ -303,10 +399,12 @@ namespace ProductPlatformAnalyzer
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 Expr lFirstOperand = FindExpressionUsingName(pOperand1);
+                
                 Expr lSecondOperand = FindExpressionUsingName(pOperand2);
 
-                BoolExpr Expression1 = iCtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
                 BoolExpr Expression2 = iCtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
+
+                BoolExpr Expression1 = iCtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
                 BoolExpr Expression = iCtx.MkAnd(Expression1, Expression2);
                 return Expression;
@@ -701,11 +799,17 @@ namespace ProductPlatformAnalyzer
             Expr resultExpr = null;
             try
             {
-                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
-                foreach (Expr currentExpr in ExpressionList)
+                //TODO: this is just for one requirement not including the &&
+                if (pExprName.Contains('<') || pExprName.Contains('>') || pExprName.Contains(">=") || pExprName.Contains("<=") || pExprName.Contains("=="))
+                    resultExpr = iCtx.MkBoolConst(pExprName);
+                else
                 {
-                    if (currentExpr == tempExpr)
-                        resultExpr = currentExpr;
+                    Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
+                    foreach (Expr currentExpr in ExpressionList)
+                    {
+                        if (currentExpr == tempExpr)
+                            resultExpr = currentExpr;
+                    }
                 }
                 if (resultExpr == null)
                     Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
@@ -717,6 +821,21 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);                
             }
             return resultExpr;
+        }
+
+        public BoolExpr MakeBoolExprFromString(string pExpression)
+        {
+            BoolExpr lResultExpr = null;
+            try
+            {
+                lResultExpr = iCtx.MkBoolConst(pExpression);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in MakeBoolExprFromString");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
         }
 
         public BoolExpr FindBoolExpressionUsingName(String pExprName)
@@ -741,6 +860,30 @@ namespace ProductPlatformAnalyzer
                 throw ex;
             }
             return (BoolExpr)resultExpr;
+        }
+
+        public IntExpr FindIntExpressionUsingName(String pExprName)
+        {
+            Expr resultExpr = null;
+            try
+            {
+                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkIntSort());
+
+                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                                         where Expr == tempExpr
+                                         select Expr).ToList();
+                if (lFoundExpr != null)
+                    resultExpr = lFoundExpr[0];
+
+                if (resultExpr == null)
+                    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in FindIntExpressionUsingName, " + pExprName);
+                throw ex;
+            }
+            return (IntExpr)resultExpr;
         }
 
         public void AddBooleanExpressionWithIndex(String pExprName)
@@ -783,6 +926,19 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public void AddStringExpression(string pExprName)
+        {
+            try
+            {
+                //TODO: this has to be implemented
+                //Expr tempExpr = iCtx.MkConst(pExprName, iCtx.mkC
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddStringExpression");
+                Console.WriteLine(ex.Message);
+            }
+        }
         public void AddIntegerExpression(String pExprName)
         {
             try

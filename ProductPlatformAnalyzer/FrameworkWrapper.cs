@@ -395,7 +395,7 @@ namespace ProductPlatformAnalyzer
                 lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.requirements);
 
                 //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
-                AddRelevantResourceNameToOperationRequirementAttributes(pOperation.requirements);
+                AddRelevantResourceNameToOperationRequirementAttributes(pOperation);
             }
             catch (Exception ex)
             {
@@ -429,11 +429,15 @@ namespace ProductPlatformAnalyzer
             return lResultOperationRequirement;
         }
 
-        private void AddRelevantResourceNameToOperationRequirementAttributes(List<string> pRequirementField)
+        private void AddRelevantResourceNameToOperationRequirementAttributes(operation pOperation)
         {
             try
             {
-                foreach (string lRequirement in pRequirementField)
+                List<string> lRequirementField = pOperation.requirements;
+
+                List<Tuple<string, string>> lChangeRequirementList = new List<Tuple<string, string>>();
+
+                foreach (string lRequirement in lRequirementField)
                 {
                     //Here for each requirement we look at its traits and see which resource can match them
                     resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
@@ -443,13 +447,39 @@ namespace ProductPlatformAnalyzer
                     string lAttributePart = lRequirementFieldParts[1].Trim();
 
                     //We add that resource name to add it to the field name of that requirement
-                    lAttributePart = lResultingResource.names + "." + lAttributePart;
+                    lAttributePart = lResultingResource.names + "_" + lAttributePart;
                     lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
+
+                    lChangeRequirementList.Add(new Tuple<string, string>(lRequirement, lAttributePart));
+                }
+
+                foreach (Tuple<string,string> lChangeRequirement in lChangeRequirementList)
+                {
+                    ChangeOperationRequirementField(pOperation, lChangeRequirement.Item1, lChangeRequirement.Item2);
+                    
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error in AddRelevantResourceNameToOperationRequirementAttributes");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void ChangeOperationRequirementField(operation pOperation, string pOldRequirement, string pNewRequirement)
+        {
+            try
+            {
+                operation lOperation = findOperationWithName(pOperation.names);
+                
+                lOperation.requirements.Remove(pOldRequirement);
+
+                lOperation.requirements.Add(pNewRequirement);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ChangeOperationRequirementField");
                 Console.WriteLine(ex.Message);
             }
         }

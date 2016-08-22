@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Process should finish -->
 <!-- First example of including resources -->
 <!-- Operation:
@@ -26,17 +27,24 @@
       Resource: 
         RobotA
         Trait: RobotT1 
-        Attribute: maxload, int, 8
+        Attribute: name, string, ABB1
+                   maxload, int, 8
 
         RobotB
         Trait: RobotT1, SpotWeldingAbility
-        Attribute: maxload, int, 5
+        Attribute: name, string, ABB2
+                   maxload, int, 5
                    maxcurrent, int, 1
 
         RobotC
         Trait: RobotT2
-        Attribute: nbrOfAxles, int, 5
+        Attribute: name, string, ABB1
+                   nbrOfAxles, int, 5
                    
+        MachineA
+        Trait: NC
+        Attribute: name, string, Machine1
+        
       Variant:
         frame-rigid
         
@@ -132,6 +140,11 @@
       </traits>
       <attributes>
         <attribute>
+          <attributeName>name</attributeName>
+          <attributeType>string</attributeType>
+          <attributeValue>ABB1</attributeValue>
+        </attribute>
+        <attribute>
           <attributeName>maxload</attributeName>
           <attributeType>int</attributeType>
           <attributeValue>8</attributeValue>
@@ -146,6 +159,11 @@
       </traits>
       <attributes>
         <attribute>
+          <attributeName>name</attributeName>
+          <attributeType>string</attributeType>
+          <attributeValue>ABB2</attributeValue>
+        </attribute>
+        <attribute>
           <attributeName>maxload</attributeName>
           <attributeType>int</attributeType>
           <attributeValue>5</attributeValue>
@@ -154,6 +172,37 @@
           <attributeName>maxCurrent</attributeName>
           <attributeType>int</attributeType>
           <attributeValue>1</attributeValue>
+        </attribute>
+      </attributes>
+    </resource>
+    <resource>
+      <resourceName>RobotC</resourceName>
+      <traits>
+        <traitRef>RobotT2</traitRef>
+      </traits>
+      <attributes>
+        <attribute>
+          <attributeName>name</attributeName>
+          <attributeType>string</attributeType>
+          <attributeValue>ABB1</attributeValue>
+        </attribute>
+        <attribute>
+          <attributeName>nbrOfAxles</attributeName>
+          <attributeType>int</attributeType>
+          <attributeValue>5</attributeValue>
+        </attribute>
+      </attributes>
+    </resource>
+    <resource>
+      <resourceName>MachineA</resourceName>
+      <traits>
+        <traitRef>NC</traitRef>
+      </traits>
+      <attributes>
+        <attribute>
+          <attributeName>name</attributeName>
+          <attributeType>string</attributeType>
+          <attributeValue>Machine1</attributeValue>
         </attribute>
       </attributes>
     </resource>

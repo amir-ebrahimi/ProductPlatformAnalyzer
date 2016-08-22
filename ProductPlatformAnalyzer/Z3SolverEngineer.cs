@@ -122,7 +122,7 @@ namespace ProductPlatformAnalyzer
                 convertFVariants2Z3Variants();
                 convertFOperations2Z3Operations(pState);
 
-                if (lNeedPreAnalysis)
+                if (lNeedPreAnalysis && pState == 0)
                     lPreAnalysisResult = lFrameworkWrapper.checkPreAnalysis();
 
                 if (lPreAnalysisResult)
@@ -140,8 +140,10 @@ namespace ProductPlatformAnalyzer
 
                     //New formulas for implementing resources
                     if (lFrameworkWrapper.ResourceList.Count != 0)
+                    {
+                        convertFResource2Z3Constraints();
                         checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints();
-
+                    }
 
                     if (lOpSeqAnalysis)
                     {
@@ -170,6 +172,61 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lTestResult;
+        }
+
+        private void convertFResource2Z3Constraints()
+        {
+            try
+            {
+                List<resource> lResourceList = lFrameworkWrapper.ResourceList;
+                foreach (resource lResource in lResourceList)
+                {
+                    string lResourceName = lResource.names;
+                    foreach (Tuple<string,string,string> lAttribute in lResource.attributes)
+                    {
+                        convertFResourceAttribute2Z3Constraint(lResourceName, lAttribute);
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertFResource2Z3Constraints");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void convertFResourceAttribute2Z3Constraint(string pResourceName, Tuple<string,string,string> pAttribute)
+        {
+            try
+            {
+                string lAttributeName = pResourceName + '_' + pAttribute.Item1;
+                string lAttributeType = pAttribute.Item2;
+                string lAttributeValue = pAttribute.Item3;
+
+                switch (lAttributeType)
+                {
+                    case "string":
+                        break;
+                    case "int":
+                        lZ3Solver.AddIntegerExpression(lAttributeName);
+                        IntExpr lExprVariable = lZ3Solver.FindIntExpressionUsingName(lAttributeName);
+                        lZ3Solver.AddEqualOperator2Constraints(lExprVariable
+                                                                , int.Parse(lAttributeValue)
+                                                                , "Attribute_Value");
+                        break;
+                    default:
+                        //The default case is boolean variables
+                        lZ3Solver.AddBooleanExpression(lAttributeName);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertFResourceAttribute2Z3Constraint");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints()
@@ -201,8 +258,10 @@ namespace ProductPlatformAnalyzer
 
                         //formula 6.1
                         //Possible_to_use_ActiveResource_for_ActiveOperation <-> Operation.Requirement
-                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lPossibleToUseResource4OperationName
-                                                                    , lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName)
+                        string lActiveOperationRequirements = lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName);
+                        BoolExpr lActiveOperationRequirementExpr = returnFExpression2Z3Constraint(lActiveOperationRequirements);
+                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
+                                                                    , lActiveOperationRequirementExpr
                                                                     , "formula 6.1");
 
                         //formula 6.2
@@ -692,7 +751,11 @@ namespace ProductPlatformAnalyzer
             {
                 List<Node<string>> lChildren = new List<Node<string>>();
                 BoolExpr lResult = null;
-                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                if (pNode.Data.Contains("Possible"))
+                {
+                    lResult = lZ3Solver.MakeBoolExprFromString(pNode.Data);
+                }
+                else if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
                 {
                     //We have one operator
                     ////lResult = pNode.Data;
@@ -1137,12 +1200,20 @@ namespace ProductPlatformAnalyzer
             return result;
         }
 
-        public BoolExpr ParseConstraint(Node<string> pNode)
+        public BoolExpr ParseExpression(Node<string> pNode)
         {
+            BoolExpr lResult = null;
             try
             {
-                BoolExpr lResult = null;
-                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                if ((pNode.Data != "and") 
+                    && (pNode.Data != "or") 
+                    && (pNode.Data != "not")
+                    && (pNode.Data != "<")
+                    && (pNode.Data != ">")
+                    && (pNode.Data != "<=")
+                    && (pNode.Data != ">=")
+                    && (pNode.Data != "==")
+                    )
                 {
                     //We have one operator
                     ////lResult = pNode.Data;
@@ -1160,32 +1231,37 @@ namespace ProductPlatformAnalyzer
                         case "and":
                             {
                                 ////lResult = lZ3Solver.AndOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1])).ToString();
-                                lResult = lZ3Solver.AndOperator(new List<BoolExpr>() { ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1]) });
+                                lResult = lZ3Solver.AndOperator(new List<BoolExpr>() { ParseExpression(lChildren[0]), ParseExpression(lChildren[1]) });
                                 break;
                             }
                         case "or":
                             {
                                 ////lResult = lZ3Solver.OrOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1])).ToString();
                                 //lResult = lZ3Solver.OrOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1]));
-                                lResult = lZ3Solver.OrOperator(new List<BoolExpr>() { ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1]) });
+                                lResult = lZ3Solver.OrOperator(new List<BoolExpr>() { ParseExpression(lChildren[0]), ParseExpression(lChildren[1]) });
                                 break;
                             }
                         case "not":
                             {
                                 ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
-                                lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0]));
+                                lResult = lZ3Solver.NotOperator(ParseExpression(lChildren[0]));
                                 break;
+                            }
+                        case ">=":
+                            {
+                                lResult = lZ3Solver.GreaterOrEqualOperator(lChildren[0], lChildren[1]);
                             }
                         default:
                             break;
                     }
                 }
-                return lResult;
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine("error in ParseExpression");
+                Console.WriteLine(ex.Message);
             }
+            return lResult;
         }
 
         public void convertFConstraint2Z3Constraint()
@@ -1197,25 +1273,8 @@ namespace ProductPlatformAnalyzer
                 ArrayList localConstraintList = lFrameworkWrapper.ConstraintList;
 
                 foreach (String lConstraint in localConstraintList)
-                {
-                    //For each constraint first we have to build its coresponding tree
-                    Parser lConstraintParser = new Parser();
-                    Node<string> lCnstExprTree = new Node<string>("root");
-
-                    ////string lConstraintStr = "";
-                    BoolExpr lConstraintExpr = null;
-
-                    lConstraintParser.AddChild(lCnstExprTree, lConstraint);
-
-                    foreach (Node<string> item in lCnstExprTree)
-                    {
-                        //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
-                        lConstraintExpr = ParseConstraint(item);
-                    }
-
-                    lZ3Solver.AddConstraintToSolver(lConstraintExpr, "formula3");
-
-                }
+                    lZ3Solver.AddConstraintToSolver(returnFExpression2Z3Constraint(lConstraint)
+                                                    , "formula3");
 
             }
             catch (Exception ex)
@@ -1223,6 +1282,31 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in convertFConstraint2Z3Constraint");
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private BoolExpr returnFExpression2Z3Constraint(string pExpression)
+        {
+            BoolExpr lResultExpr = null;
+            try
+            {
+                //For each expression first we have to build its coresponding tree
+                Parser lExpressionParser = new Parser();
+                Node<string> lExprTree = new Node<string>("root");
+
+                lExpressionParser.AddChild(lExprTree, pExpression);
+
+                foreach (Node<string> item in lExprTree)
+                {
+                    //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                    lResultExpr = ParseExpression(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addFExpression2Z3Constraint");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
         }
 
         public BoolExpr createFormula7(List<variant> pVariantList, int pState)
