@@ -1249,7 +1249,8 @@ namespace ProductPlatformAnalyzer
                             }
                         case ">=":
                             {
-                                lResult = lZ3Solver.GreaterOrEqualOperator(lChildren[0], lChildren[1]);
+                                lResult = lZ3Solver.GreaterOrEqualOperator((Expr)lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
                             }
                         default:
                             break;
