@@ -1117,10 +1117,13 @@ namespace ProductPlatformAnalyzer
 
                 foreach (string pre in op.precondition)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(modCondition(pre));
-                    writer.WriteEndTag("li");
+                    if (!pre.Contains("Possible"))
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(modCondition(pre));
+                        writer.WriteEndTag("li");
+                    }
                 }
                 writer.WriteEndTag("ul");
 
