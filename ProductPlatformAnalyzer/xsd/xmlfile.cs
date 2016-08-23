@@ -244,27 +244,27 @@ public partial class operation
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
 public partial class variantOperations
 {
-    private variant VariantRef;
-    private List<operation> OperationRefs;
+    private variant Variant;
+    private List<operation> Operations;
 
-    public variant getVariantRef()
+    public variant getVariant()
     {
-        return VariantRef;
+        return Variant;
     }
 
-    public void setVariantRef(variant pVariantRef)
+    public void setVariant(variant pVariant)
     {
-        VariantRef = pVariantRef;
+        Variant = pVariant;
     }
 
-    public List<operation> getOperationRefs()
+    public List<operation> getOperations()
     {
-        return OperationRefs;
+        return Operations;
     }
 
-    public void setOperationRefs(List<operation> pOperationRefs)
+    public void setOperations(List<operation> pOperations)
     {
-        OperationRefs = pOperationRefs;
+        Operations = pOperations;
     }
 
 }

@@ -9,7 +9,7 @@ using System.Xml;
 namespace ProductPlatformAnalyzer
 {
     //helping class not part of the xsd
-    public partial class variantOperations
+/*    public partial class variantOperations
     {
         private variant Variant;
         private List<operation> Operations;
@@ -34,7 +34,7 @@ namespace ProductPlatformAnalyzer
             Operations = pOperations;
         }
 
-    }
+    }*/
 
     //helping class not part of the xsd
     public partial class virtualConnection
@@ -184,23 +184,31 @@ namespace ProductPlatformAnalyzer
             return OperationList.Count();
         }
 
-        public variantOperations getVariantOperations(String pVariantName)
+        public variantOperations getVariantOperations(string pVariantName)
         {
-            variantOperations tempVariantOperations = new variantOperations();
+            variantOperations lResultVariantOperations = new variantOperations();
             try
             {
-                foreach (variantOperations lVariantOperations in VariantsOperations)
+                /*foreach (variantOperations lVariantOperations in VariantsOperations)
                 {
                     if (lVariantOperations.getVariant().names.Equals(pVariantName))
                         tempVariantOperations = lVariantOperations;
-                }
+                }*/
+
+                List<variantOperations> lVariantOperations = (from variantsOperations in VariantsOperations
+                                         where variantsOperations.getVariant().names == pVariantName.Trim()
+                                         select variantsOperations).ToList();
+
+                if (lVariantOperations.Count == 1)
+                    lResultVariantOperations = lVariantOperations[0];
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine("error in getVariantOperations, pVariantName: " + pVariantName);
                 Console.WriteLine(ex.Message);
             }
-            return tempVariantOperations;
+            return lResultVariantOperations;
         }
 
         public operation findOperationWithName(String pOperationName)
@@ -933,15 +941,17 @@ namespace ProductPlatformAnalyzer
             return lVariantIndex;
         }
 
-        public int getOperationTransitionNumberFromActiveOperation(String pActiveOperationName)
+        public int getOperationTransitionNumberFromActiveOperation(string pActiveOperationName)
         {
-            int lOpTransNum = -1;
+            int lOpTransNum = 0;
             try
             {
-
-                String[] parts = pActiveOperationName.Split('_');
-                if (parts[3] != null)
-                    lOpTransNum = Convert.ToInt32(parts[3]);
+                if (!pActiveOperationName.Contains("Possible") && !pActiveOperationName.Contains("Use"))
+                {
+                    String[] parts = pActiveOperationName.Split('_');
+                    if (parts[3] != null)
+                        lOpTransNum = Convert.ToInt32(parts[3]);
+                }
 
             }
             catch (Exception ex)
@@ -1348,6 +1358,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                //RUNA changes
+                /*
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
 
                 foreach (XmlNode lNode in nodeList)
@@ -1374,6 +1386,22 @@ namespace ProductPlatformAnalyzer
                     else
                         CreateVariantOperationMappingInstance(createVirtualVariant(lVariants)
                                                           , lVariantOperations);
+                }*/
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
+
+                foreach (XmlNode lNode in nodeList)
+                {
+                    List<string> lVariantOperations = new List<string>();
+
+                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
+                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
+                    {
+                        lVariantOperations.Add(lVariantOperation.InnerText);
+                    }
+
+
+                    CreateVariantOperationMappingInstance(getXMLNodeAttributeInnerText(lNode, "variantRefs")
+                                                            , lVariantOperations);
                 }
             }
             catch (Exception ex)

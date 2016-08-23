@@ -51,14 +51,29 @@
       <variantDisplayName>frame rigid</variantDisplayName>
     </variant>
     <variant>
-      <variantName>internal-brake-sensor</variantName>
+      <variantName>frame-V2</variantName>
       <variantIndex>2</variantIndex>
+      <variantDisplayName>frame V2</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>internal-brake-sensor</variantName>
+      <variantIndex>3</variantIndex>
       <variantDisplayName>internal brake sensor</variantDisplayName>
     </variant>
     <variant>
+      <variantName>light-sensor</variantName>
+      <variantIndex>4</variantIndex>
+      <variantDisplayName>light sensor</variantDisplayName>
+    </variant>
+    <variant>
       <variantName>brake-test</variantName>
-      <variantIndex>3</variantIndex>
+      <variantIndex>5</variantIndex>
       <variantDisplayName>brake test</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>light-test</variantName>
+      <variantIndex>6</variantIndex>
+      <variantDisplayName>light test</variantDisplayName>
     </variant>
   </variants>
   <variantGroups>
@@ -67,6 +82,7 @@
       <groupCardinality>choose exactly one</groupCardinality>
       <variantRefs>
         <variantRef>frame-rigid</variantRef>
+        <variantRef>frame-V2</variantRef>
       </variantRefs>
     </variantGroup>
     <variantGroup>
@@ -74,6 +90,7 @@
       <groupCardinality>choose at least one</groupCardinality>
       <variantRefs>
         <variantRef>internal-brake-sensor</variantRef>
+        <variantRef>light-sensor</variantRef>
       </variantRefs>
     </variantGroup>
     <variantGroup>
@@ -81,6 +98,7 @@
       <groupCardinality>choose at least one</groupCardinality>
       <variantRefs>
         <variantRef>brake-test</variantRef>
+        <variantRef>light-test</variantRef>
       </variantRefs>
     </variantGroup>
   </variantGroups>
@@ -91,9 +109,20 @@
   </constraints>
   <operations>
     <operation>
+      <operationName>truck-enter-brake-test-rig</operationName>
+      <displayName>truck enter brake test rig</displayName>
+      <operationPrecondition></operationPrecondition>
+      <operationPostcondition></operationPostcondition>
+    </operation>
+    <operation>
       <operationName>brake-test-internal</operationName>
       <displayName>brake test internal</displayName>
-      <operationPrecondition></operationPrecondition>
+      <requirements>
+        <requirement>sensor : >= 1 No</requirement>
+      </requirements>
+      <operationPrecondition>
+        <operationName>truck-enter-brake-test-rig_F_3_2</operationName>
+      </operationPrecondition>
       <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
@@ -105,6 +134,14 @@
       <operationPrecondition></operationPrecondition>
       <operationPostcondition></operationPostcondition>
     </operation>
+    <operation>
+      <operationName>truck-leaves-brake-rig</operationName>
+      <displayName>truck leaves brake rig</displayName>
+      <operationPrecondition>
+        <operationName>brake-test-internal_F_3_4</operationName>
+      </operationPrecondition>
+      <operationPostcondition></operationPostcondition>
+    </operation>    
   </operations>
   <traits>
     <trait>
@@ -128,7 +165,7 @@
         <attribute>
           <attributeName>No</attributeName>
           <attributeType>int</attributeType>
-          <attributeValue>1</attributeValue>
+          <attributeValue>2</attributeValue>
         </attribute>
       </attributes>
     </resource>
@@ -139,7 +176,9 @@
         <variantRef>internal-brake-sensor</variantRef>
       </variantRefs>
       <operationRefs>
+        <operationRef>truck-enter-brake-test-rig</operationRef>
         <operationRef>brake-test-internal</operationRef>
+        <operationRef>truck-leaves-brake-rig</operationRef>
       </operationRefs>
     </variantOperationMapping>
   </variantOperationMappings>
