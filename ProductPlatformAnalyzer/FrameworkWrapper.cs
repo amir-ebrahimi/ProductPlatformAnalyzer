@@ -429,10 +429,38 @@ namespace ProductPlatformAnalyzer
             return lResultOperationRequirement;
         }
 
+        public List<resource> ReturnOperationChosenResource(string pOperationName)
+        {
+            List<resource> lResultResources = new List<resource>();
+            try
+            {
+                //IMPORTANT: Here we have assumed that the operation requirement part is in the Prefix format
+                //Also remember that the traits have been replaced
+                //The operation has the format "operand operator1 resource_name.attribute"
+                operation lOperation = findOperationWithName(pOperationName);
+
+                foreach (string lRequirement in lOperation.requirements)
+	            {
+                    int lLastSpaceIndex = lRequirement.LastIndexOf(' ');
+                    string lLastOperand = lRequirement.Substring(lLastSpaceIndex + 1);
+                    string[] lLastOperandParts = lLastOperand.Split('_');
+                    string lResourceName = lLastOperandParts[0];
+                    lResultResources.Add(findResourceWithName(lResourceName));
+	            }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOperationChosenResource");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultResources;
+        }
+
         private void AddRelevantResourceNameToOperationRequirementAttributes(operation pOperation)
         {
             try
             {
+                //IMPORTANT: We have the premise that the input is in the prefix format!!!
                 List<string> lRequirementField = pOperation.requirements;
 
                 List<Tuple<string, string>> lChangeRequirementList = new List<Tuple<string, string>>();
@@ -447,8 +475,10 @@ namespace ProductPlatformAnalyzer
                     string lAttributePart = lRequirementFieldParts[1].Trim();
 
                     //We add that resource name to add it to the field name of that requirement
-                    lAttributePart = lResultingResource.names + "_" + lAttributePart;
-                    lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
+                    int lIndexOfFirstOperand = lAttributePart.LastIndexOf(' ') + 1;
+                    lAttributePart = lAttributePart.Insert(lIndexOfFirstOperand, lResultingResource.names + "_");
+//                    lAttributePart = lResultingResource.names + "_" + lAttributePart;
+//                    lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
 
                     lChangeRequirementList.Add(new Tuple<string, string>(lRequirement, lAttributePart));
                 }

@@ -178,10 +178,10 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr Constraint = (BoolExpr)FindExpressionUsingName(pOperandList[0]);
+                BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = iCtx.MkAnd(Constraint, (BoolExpr)FindExpressionUsingName(pOperandList[i]));
+                    Constraint = iCtx.MkAnd(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -246,10 +246,10 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr lResultExpression = (BoolExpr)FindExpressionUsingName(pOperandList[0]);
+                BoolExpr lResultExpression = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = iCtx.MkAnd(lResultExpression, (BoolExpr)FindExpressionUsingName(pOperandList[i]));
+                    lResultExpression = iCtx.MkAnd(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
 
                 return lResultExpression;
             }
@@ -294,12 +294,46 @@ namespace ProductPlatformAnalyzer
             return lResultExpression;
         }
 
+        public BoolExpr GreaterThanOperator(string pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                lResultExpression = iCtx.MkGt((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in GreaterThanOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
         public BoolExpr LessThanOperator(Expr pOperand0, int pOperand1)
         {
             BoolExpr lResultExpression = null;
             try
             {
                 lResultExpression = iCtx.MkLt((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in LessThanOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr LessThanOperator(string pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                lResultExpression = iCtx.MkLt((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -326,6 +360,23 @@ namespace ProductPlatformAnalyzer
             return lResultExpression;
         }
 
+        public BoolExpr GreaterOrEqualOperator(string pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                lResultExpression = iCtx.MkGe((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in GreaterOrEqualOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
         public BoolExpr LessOrEqualOperator(Expr pOperand0, int pOperand1)
         {
             BoolExpr lResultExpression = null;
@@ -342,14 +393,31 @@ namespace ProductPlatformAnalyzer
             return lResultExpression;
         }
 
+        public BoolExpr LessOrEqualOperator(string pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                lResultExpression = iCtx.MkLe((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in LessOrEqualOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpression;
+        }
+
         public BoolExpr IffOperator(String pOperand1, String pOperand2)
         {
             try
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lFirstOperand = FindExpressionUsingName(pOperand1);
-                Expr lSecondOperand = FindExpressionUsingName(pOperand2);
+                Expr lFirstOperand = FindBoolExpressionUsingName(pOperand1);
+                Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
 
                 BoolExpr Expression = iCtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
@@ -398,9 +466,9 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lFirstOperand = FindExpressionUsingName(pOperand1);
+                Expr lFirstOperand = FindBoolExpressionUsingName(pOperand1);
                 
-                Expr lSecondOperand = FindExpressionUsingName(pOperand2);
+                Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
 
                 BoolExpr Expression2 = iCtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
 
@@ -549,7 +617,7 @@ namespace ProductPlatformAnalyzer
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    lResultExpression = iCtx.MkOr(lResultExpression, (BoolExpr)FindExpressionUsingName(pOperandList[i]));
+                    lResultExpression = iCtx.MkOr(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
                 }
                 return lResultExpression;
             }
@@ -582,11 +650,11 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr Constraint = (BoolExpr)FindExpressionUsingName(pOperandList[0]);
+                BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    Expr lOperand = FindExpressionUsingName(pOperandList[i]);
+                    Expr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
                     
                     Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
                                             , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
@@ -609,7 +677,7 @@ namespace ProductPlatformAnalyzer
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    Expr lOperand = FindExpressionUsingName(pOperandList[i]);
+                    Expr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
 
                     lResultExpression = iCtx.MkOr(iCtx.MkAnd(lResultExpression, iCtx.MkNot((BoolExpr)lOperand))
                                             , iCtx.MkAnd(iCtx.MkNot(lResultExpression), (BoolExpr)lOperand));
@@ -708,7 +776,7 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lOperand = FindExpressionUsingName(pOperand);
+                Expr lOperand = FindBoolExpressionUsingName(pOperand);
 
                 BoolExpr Constraint = iCtx.MkNot((BoolExpr)lOperand);
 
@@ -727,7 +795,7 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lOperand = FindExpressionUsingName(pOperand);
+                Expr lOperand = FindBoolExpressionUsingName(pOperand);
 
                 BoolExpr Expression = iCtx.MkNot((BoolExpr)lOperand);
 
@@ -794,7 +862,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public Expr FindExpressionUsingName(String pExprName)
+        /*public Expr FindBooleanExpressionUsingName(String pExprName)
         {
             Expr resultExpr = null;
             try
@@ -807,8 +875,43 @@ namespace ProductPlatformAnalyzer
                     Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
                     foreach (Expr currentExpr in ExpressionList)
                     {
-                        if (currentExpr == tempExpr)
+                        if (currentExpr.Equals(tempExpr))
+                        {
                             resultExpr = currentExpr;
+                            break;
+                        }
+                    }
+                }
+                if (resultExpr == null)
+                    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in FindExpressionUsingName, " + pExprName);
+                Console.WriteLine(ex.Message);                
+            }
+            return resultExpr;
+        }*/
+
+        public Expr FindExpressionUsingName(String pExprName)
+        {
+            Expr resultExpr = null;
+            try
+            {
+                //TODO: this is just for one requirement not including the &&
+                if (pExprName.Contains('<') || pExprName.Contains('>') || pExprName.Contains(">=") || pExprName.Contains("<=") || pExprName.Contains("=="))
+                    resultExpr = iCtx.MkBoolConst(pExprName);
+                else
+                {
+                    Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkIntSort());
+                    foreach (Expr currentExpr in ExpressionList)
+                    {
+                        if (currentExpr.Equals(tempExpr))
+                        {
+                            resultExpr = currentExpr;
+                            break;
+                        }
                     }
                 }
                 if (resultExpr == null)
@@ -818,7 +921,7 @@ namespace ProductPlatformAnalyzer
             catch (Exception ex)
             {
                 Console.WriteLine("error in FindExpressionUsingName, " + pExprName);
-                Console.WriteLine(ex.Message);                
+                Console.WriteLine(ex.Message);
             }
             return resultExpr;
         }
@@ -852,7 +955,7 @@ namespace ProductPlatformAnalyzer
                     resultExpr = lFoundExpr[0];
 
                 if (resultExpr == null)
-                    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
+                    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
@@ -1100,7 +1203,7 @@ namespace ProductPlatformAnalyzer
                     foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                     {
                         Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
-                        if (lCurrentExpr != null)
+                        if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
                         {
                             string value = "" + resultModel.Evaluate(lCurrentExpr);
                             output.addExp(lCurrentExpr.ToString(), value, pState);
@@ -1225,7 +1328,7 @@ namespace ProductPlatformAnalyzer
                 foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
                 {
                     Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
-                    if (lCurrentExpr != null)
+                    if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))  
                     {
                         if (tempExpression == null)
                         {

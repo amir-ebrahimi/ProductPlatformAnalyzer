@@ -259,10 +259,23 @@ namespace ProductPlatformAnalyzer
                         //formula 6.1
                         //Possible_to_use_ActiveResource_for_ActiveOperation <-> Operation.Requirement
                         string lActiveOperationRequirements = lFrameworkWrapper.ReturnOperationRequirements(lActiveOperationName);
-                        BoolExpr lActiveOperationRequirementExpr = returnFExpression2Z3Constraint(lActiveOperationRequirements);
-                        lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
-                                                                    , lActiveOperationRequirementExpr
+
+                        List<resource> lOperationChosenResources = lFrameworkWrapper.ReturnOperationChosenResource(lActiveOperationName);
+
+                        if (lOperationChosenResources.Contains(lActiveResource))
+                        {
+                            //This active resource is one of the resources that can run this operation
+                            BoolExpr lActiveOperationRequirementExpr = returnFExpression2Z3Constraint(lActiveOperationRequirements);
+                            lZ3Solver.AddTwoWayImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
+                                                                        , lActiveOperationRequirementExpr
+                                                                        , "formula 6.1");
+                        }
+                        else
+                        {
+                            //This active resource is not one of the resources that can run this operation
+                            lZ3Solver.AddNotOperator2Constraints(lPossibleToUseResource4OperationName
                                                                     , "formula 6.1");
+                        }
 
                         //formula 6.2
                         // Use_ActiveResource_ActiveOperation -> Possible_to_use_ActiveResource_for_ActiveOperation
@@ -1200,13 +1213,93 @@ namespace ProductPlatformAnalyzer
             return result;
         }
 
-        public BoolExpr ParseExpression(Node<string> pNode)
+        public BoolExpr ParseConstraintExpression(Node<string> pNode)
         {
             BoolExpr lResult = null;
             try
             {
                 if ((pNode.Data != "and") 
                     && (pNode.Data != "or") 
+                    && (pNode.Data != "not")
+/*                    && (pNode.Data != "<")
+                    && (pNode.Data != ">")
+                    && (pNode.Data != "<=")
+                    && (pNode.Data != ">=")
+                    && (pNode.Data != "==")*/
+                    )
+                {
+                    //We have one operator
+                    ////lResult = pNode.Data;
+                    lResult = (BoolExpr)lZ3Solver.FindBoolExpressionUsingName(pNode.Data);
+                }
+                else
+                {
+                    List<Node<string>> lChildren = new List<Node<string>>();
+                    foreach (Node<string> lChild in pNode.Children)
+                    {
+                        lChildren.Add(lChild);
+                    }
+                    switch (pNode.Data)
+                    {
+                        case "and":
+                            {
+                                ////lResult = lZ3Solver.AndOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1])).ToString();
+                                lResult = lZ3Solver.AndOperator(new List<BoolExpr>() { ParseConstraintExpression(lChildren[0]), ParseConstraintExpression(lChildren[1]) });
+                                break;
+                            }
+                        case "or":
+                            {
+                                ////lResult = lZ3Solver.OrOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1])).ToString();
+                                //lResult = lZ3Solver.OrOperator(ParseConstraint(lChildren[0]), ParseConstraint(lChildren[1]));
+                                lResult = lZ3Solver.OrOperator(new List<BoolExpr>() { ParseConstraintExpression(lChildren[0]), ParseConstraintExpression(lChildren[1]) });
+                                break;
+                            }
+                        case "not":
+                            {
+                                ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
+                                lResult = lZ3Solver.NotOperator(ParseConstraintExpression(lChildren[0]));
+                                break;
+                            }
+/*                        case ">=":
+                            {
+                                lResult = lZ3Solver.GreaterOrEqualOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case "<=":
+                            {
+                                lResult = lZ3Solver.LessOrEqualOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case "<":
+                            {
+                                lResult = lZ3Solver.LessThanOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case ">":
+                            {
+                                lResult = lZ3Solver.GreaterThanOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }*/
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ParseExpression");
+                Console.WriteLine(ex.Message);
+            }
+            return lResult;
+        }
+
+        public BoolExpr ParseExpression(Node<string> pNode)
+        {
+            BoolExpr lResult = null;
+            try
+            {
+                if ((pNode.Data != "and")
+                    && (pNode.Data != "or")
                     && (pNode.Data != "not")
                     && (pNode.Data != "<")
                     && (pNode.Data != ">")
@@ -1249,7 +1342,22 @@ namespace ProductPlatformAnalyzer
                             }
                         case ">=":
                             {
-                                lResult = lZ3Solver.GreaterOrEqualOperator((Expr)lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                lResult = lZ3Solver.GreaterOrEqualOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case "<=":
+                            {
+                                lResult = lZ3Solver.LessOrEqualOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case "<":
+                            {
+                                lResult = lZ3Solver.LessThanOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
+                                break;
+                            }
+                        case ">":
+                            {
+                                lResult = lZ3Solver.GreaterThanOperator(lChildren[0].Data, int.Parse(lChildren[1].Data));
                                 break;
                             }
                         default:
@@ -1274,7 +1382,7 @@ namespace ProductPlatformAnalyzer
                 ArrayList localConstraintList = lFrameworkWrapper.ConstraintList;
 
                 foreach (String lConstraint in localConstraintList)
-                    lZ3Solver.AddConstraintToSolver(returnFExpression2Z3Constraint(lConstraint)
+                    lZ3Solver.AddConstraintToSolver(returnFBooleanExpression2Z3Constraint(lConstraint)
                                                     , "formula3");
 
             }
@@ -1300,6 +1408,31 @@ namespace ProductPlatformAnalyzer
                 {
                     //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
                     lResultExpr = ParseExpression(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addFExpression2Z3Constraint");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
+        }
+
+        private BoolExpr returnFBooleanExpression2Z3Constraint(string pExpression)
+        {
+            BoolExpr lResultExpr = null;
+            try
+            {
+                //For each expression first we have to build its coresponding tree
+                Parser lExpressionParser = new Parser();
+                Node<string> lExprTree = new Node<string>("root");
+
+                lExpressionParser.AddChild(lExprTree, pExpression);
+
+                foreach (Node<string> item in lExprTree)
+                {
+                    //Then we have to traverse the tree and call the appropriate Z3Solver functionalities
+                    lResultExpr = ParseConstraintExpression(item);
                 }
             }
             catch (Exception ex)

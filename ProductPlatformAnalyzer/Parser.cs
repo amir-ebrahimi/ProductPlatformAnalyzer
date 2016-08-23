@@ -101,6 +101,11 @@ namespace ProductPlatformAnalyzer
                 {
                     case "or":
                     case "and":
+                    case "<=":
+                    case ">=":
+                    case "<":
+                    case ">":
+                    case "==":
                         {
                             lResult = FindFirstInstance(lRemainderString, ' ');
                             lOperand1 = lResult[0];

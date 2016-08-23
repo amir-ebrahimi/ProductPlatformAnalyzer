@@ -52,6 +52,18 @@ namespace ProductPlatformAnalyzer
                         variant = -1;
                         state = -1;
                     }
+                    else if(string.Equals(lOperationNameParts[0],"Use"))
+                    {
+
+                        operation = "";
+                        foreach (string str in lOperationNameParts)
+                        {
+                            operation = operation + str + " ";
+                        }
+                        opState = "use";
+                        variant = -1;
+                        state = -1;
+                    }
                     else
                     {
                         operation = lOperationNameParts[0];
@@ -685,7 +697,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
+                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
                         vars.Add(exp.name);
                 }
             }
@@ -709,7 +721,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
+                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
                     {
 
                         var = exp.name;
@@ -741,7 +753,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible"))
+                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
                     {
 
                         var = exp.name;

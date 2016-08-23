@@ -55,7 +55,7 @@
       <operationName>Lift1</operationName>
       <displayName>Lift1</displayName>
       <requirements>
-        <requirement>RobotT1, SpotWeldingAbility : maxload >= 5</requirement>
+        <requirement>RobotT1, SpotWeldingAbility : >= 5 maxload</requirement>
       </requirements>
       <operationPrecondition></operationPrecondition>
       <operationPostcondition></operationPostcondition>
@@ -64,7 +64,7 @@
       <operationName>Lift2</operationName>
       <displayName>Lift2</displayName>
       <requirements>
-        <requirement>RobotT1 : maxload >= 8</requirement>
+        <requirement>RobotT1 : >= 8 maxload</requirement>
       </requirements>
       <operationPrecondition></operationPrecondition>
       <operationPostcondition></operationPostcondition>
