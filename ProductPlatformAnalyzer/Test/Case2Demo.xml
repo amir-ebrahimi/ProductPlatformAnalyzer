@@ -22,12 +22,12 @@
         Variants:
           internal-brake-sensor
           no-internal-brake-sensor
-          
+
         Light Sensors
         Choose at least one
-        Variants:
+        Variants
           light-sensor
-
+          
         Tests
         Choose at least one
         Variants:
@@ -35,7 +35,7 @@
           light-test
 
       Constraints:
-      (frame-rigid and brake-test) and internal-brake-test
+        frame-rigid and brake-test
       
       Operation:
       truck-enter-brake-test-rig
@@ -45,6 +45,7 @@
       
       brake-test-external
         Req: sensor : >= 1 Nbr
+        Pre: truck-enter-brake-test-rig_F_3_2
       
       truck-leaves-brake-rig
         Pre: brake-test-internal_F_3_4
@@ -60,6 +61,7 @@
 
       Variant Operation Mapping
         internal-brake-sensor -> truck-enter-brake-test-rig, brake-test-internal, truck-leaves-brake-rig
+        no-internal-brake-sensor -> truck-enter-brake-test-rig, brake-test-external, truck-leaves-brake-rig
 -->
 <testData>
   <variants>
@@ -134,7 +136,7 @@
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and (and frame-rigid brake-test) internal-brake-sensor</logic>
+      <logic>and frame-rigid brake-test</logic>
     </constraint>
   </constraints>
   <operations>
@@ -158,7 +160,9 @@
       <requirements>
         <requirement>sensor : >= 1 Nbr</requirement>
       </requirements>
-      <operationPrecondition></operationPrecondition>
+      <operationPrecondition>
+        <operationName>truck-enter-brake-test-rig_F_3_2</operationName>
+      </operationPrecondition>
       <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
@@ -168,7 +172,7 @@
         <operationName>brake-test-internal_F_3_4</operationName>
       </operationPrecondition>
       <operationPostcondition></operationPostcondition>
-    </operation>    
+    </operation>
   </operations>
   <traits>
     <trait>
@@ -192,7 +196,7 @@
         <attribute>
           <attributeName>Nbr</attributeName>
           <attributeType>int</attributeType>
-          <attributeValue>1</attributeValue>
+          <attributeValue>0</attributeValue>
         </attribute>
       </attributes>
     </resource>
@@ -205,6 +209,16 @@
       <operationRefs>
         <operationRef>truck-enter-brake-test-rig</operationRef>
         <operationRef>brake-test-internal</operationRef>
+        <operationRef>truck-leaves-brake-rig</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>no-internal-brake-sensor</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>truck-enter-brake-test-rig</operationRef>
+        <operationRef>brake-test-external</operationRef>
         <operationRef>truck-leaves-brake-rig</operationRef>
       </operationRefs>
     </variantOperationMapping>
