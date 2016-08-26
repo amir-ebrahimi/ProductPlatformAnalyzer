@@ -312,7 +312,8 @@ namespace ProductPlatformAnalyzer
                     //lZ3Solver.AddImpliesOperator2Constraints(lPossibleToRunActiveOperation, lUseActiveResource4ActiveOperation, "formula6.2");
 
                     //formula 6.4
-                    lActiveOperation.precondition.Add(lPossibleToRunActiveOperationName);
+                    if (!lActiveOperation.precondition.Contains(lPossibleToRunActiveOperationName))
+                        lActiveOperation.precondition.Add(lPossibleToRunActiveOperationName);
                 }
             }
             catch (Exception ex)
@@ -1451,7 +1452,7 @@ namespace ProductPlatformAnalyzer
                 //First we have to loop the constraint list
                 ArrayList localConstraintList = lFrameworkWrapper.ConstraintList;
 
-                foreach (String lConstraint in localConstraintList)
+                foreach (string lConstraint in localConstraintList)
                     lZ3Solver.AddConstraintToSolver(returnFBooleanExpression2Z3Constraint(lConstraint)
                                                     , "formula3");
 

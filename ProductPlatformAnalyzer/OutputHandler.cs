@@ -1024,7 +1024,7 @@ namespace ProductPlatformAnalyzer
                         writer.Write(HtmlTextWriter.TagRightChar);
                         writer.WriteBeginTag("td");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(modCondition(con));
+                        writer.Write(parseInfix(con));
                         writer.WriteEndTag("td");
                         writer.WriteEndTag("tr");
                     }
@@ -1121,7 +1121,7 @@ namespace ProductPlatformAnalyzer
                     {
                         writer.WriteBeginTag("li");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(modCondition(pre));
+                        writer.Write(parseInfix(pre));
                         writer.WriteEndTag("li");
                     }
                 }
@@ -1139,7 +1139,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(modCondition(post));
+                    writer.Write(parseInfix(post));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -1156,7 +1156,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(req);
+                    writer.Write(parseInfix(req));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -1240,7 +1240,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(modCondition(pre));
+                    writer.Write(parseInfix(pre));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -2464,14 +2464,14 @@ namespace ProductPlatformAnalyzer
 
         private string consToString(List<string> pcons)
         {
-            string exp = modCondition(pcons[0]);
+            string exp = parseInfix(pcons[0]);
 
             try
             {
                 pcons.RemoveAt(0);
                 foreach (string con in pcons)
                 {
-                    exp = exp + "and" + modCondition(con);
+                    exp = exp + "and" + parseInfix(con);
                 }
             }
             catch (Exception ex)
@@ -2589,22 +2589,22 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private string modCondition(string con)
+        private string parseInfix(string pPrefixExpr)
         {
-            string newCon = null;
+            string newInfixExpr = null;
 
             try
             {
                 //For each condition first we have to build its coresponding tree
                 Parser lConditionParser = new Parser();
-                Node<string> lCnstExprTree = new Node<string>("root");
+                Node<string> lExprTree = new Node<string>("root");
 
-                lConditionParser.AddChild(lCnstExprTree, con);
+                lConditionParser.AddChild(lExprTree, pPrefixExpr);
 
-                foreach (Node<string> item in lCnstExprTree)
+                foreach (Node<string> item in lExprTree)
                 {
                     //Then we have to traverse the tree
-                    newCon = ParseCondition(item);
+                    newInfixExpr = ParseExpression(item);
                 }
             }
             catch (Exception ex)
@@ -2613,7 +2613,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
 
-            return newCon;
+            return newInfixExpr;
         }
 
         private bool checkCondition(string con)
@@ -2642,13 +2642,20 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private string ParseCondition(Node<string> pNode)
+        private string ParseExpression(Node<string> pNode)
         {
             try
             {
                 List<Node<string>> lChildren = new List<Node<string>>();
                 string newCon = null;
-                if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
+                if ((pNode.Data != "and") 
+                    && (pNode.Data != "or") 
+                    && (pNode.Data != "not")
+                    && (pNode.Data != "<=")
+                    && (pNode.Data != ">=")
+                    && (pNode.Data != "<")
+                    && (pNode.Data != ">")
+                    )
                 {
                     //We have one operator
                     newCon = printStatus(pNode.Data);
@@ -2663,18 +2670,38 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                newCon = "(" + ParseCondition(lChildren[0]) + " and " + ParseCondition(lChildren[1]) + ")";
+                                newCon = "(" + ParseExpression(lChildren[0]) + " and " + ParseExpression(lChildren[1]) + ")";
                                 break;
                             }
                         case "or":
                             {
-                                newCon = "(" + ParseCondition(lChildren[0]) + " or " + ParseCondition(lChildren[1]) + ")";
+                                newCon = "(" + ParseExpression(lChildren[0]) + " or " + ParseExpression(lChildren[1]) + ")";
+                                break;
+                            }
+                        case "<=":
+                            {
+                                newCon = "(" + ParseExpression(lChildren[0]) + " <= " + ParseExpression(lChildren[1]) + ")";
+                                break;
+                            }
+                        case ">=":
+                            {
+                                newCon = "(" + ParseExpression(lChildren[0]) + " >= " + ParseExpression(lChildren[1]) + ")";
+                                break;
+                            }
+                        case ">":
+                            {
+                                newCon = "(" + ParseExpression(lChildren[0]) + " > " + ParseExpression(lChildren[1]) + ")";
+                                break;
+                            }
+                        case "<":
+                            {
+                                newCon = "(" + ParseExpression(lChildren[0]) + " < " + ParseExpression(lChildren[1]) + ")";
                                 break;
                             }
                         case "not":
                             {
                                 ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
-                                newCon = "(not " + ParseCondition(lChildren[0]) + ")";
+                                newCon = "(not " + ParseExpression(lChildren[0]) + ")";
                                 break;
                             }
                         default:
@@ -2685,7 +2712,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParseCondition in outputHandler");
+                Console.WriteLine("error in ParseExpression in outputHandler");
                 Console.WriteLine(ex.Message);
                 throw ex;
             }

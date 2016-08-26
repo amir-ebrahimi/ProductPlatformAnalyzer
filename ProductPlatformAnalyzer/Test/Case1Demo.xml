@@ -134,7 +134,10 @@
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and (and frame-rigid brake-test) internal-brake-sensor</logic>
+      <logic>and frame-rigid brake-test</logic>
+    </constraint>
+    <constraint>
+      <logic>internal-brake-sensor</logic>
     </constraint>
   </constraints>
   <operations>
