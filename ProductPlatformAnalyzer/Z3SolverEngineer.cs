@@ -244,6 +244,10 @@ namespace ProductPlatformAnalyzer
                     
                     operation lActiveOperation = lFrameworkWrapper.getOperationFromOperationName(lActiveOperationName);
 
+                    //This variable shows if the current operation can be run with at least one resource
+                    string lPossibleToRunActiveOperationName = "Possible_to_run_" + lActiveOperationName;
+                    lZ3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
+
                     foreach (resource lActiveResource in lResourceList)
                     {
                         //This variable shows if the current operation CAN be run with the current resource
@@ -282,24 +286,23 @@ namespace ProductPlatformAnalyzer
                         }
                         else
                             //Active operation has no requirements defined, hence it is always possible to run
-                            lZ3Solver.AddConstraintToSolver(lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName), "formula 6.1");
+                            lZ3Solver.AddConstraintToSolver(lZ3Solver.FindBoolExpressionUsingName(lPossibleToRunActiveOperationName), "formula 6.1");
 
 
                         //formula 6.2
                         // Use_ActiveResource_ActiveOperation -> Possible_to_use_ActiveResource_for_ActiveOperation
-                        lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
-                                                                , lZ3Solver.FindBoolExpressionUsingName(lUseResource4OperationName)
+                        lZ3Solver.AddImpliesOperator2Constraints(lZ3Solver.FindBoolExpressionUsingName(lUseResource4OperationName)
+                                                                , lZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
                                                                 , "formula 6.2");
                     }
 
                     /////////////////////////////////////////////////////////
                     //formula 6.3
                     //This formula makes sure this operation can be run by ONLY one resource
-                    //This variable shows if the current operation can be run with at least one resource
+
                     //Possible_to_run_ActiveOperation -> Possible_to_use_Resource1_for_ActiveOperation or Possible_to_use_Resource2_for_ActiveOperation or ...
-                    string lPossibleToRunActiveOperationName = "Possible_to_run_" + lActiveOperationName;
-//                    lPossibleToRunOperationVariableNames.Add(lPossibleToRunActiveOperationName);
-                    lZ3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
+
+                    //                    lPossibleToRunOperationVariableNames.Add(lPossibleToRunActiveOperationName);
                     BoolExpr lPossibleToRunActiveOperation = lZ3Solver.FindBoolExpressionUsingName(lPossibleToRunActiveOperationName);
                     lZ3Solver.AddTwoWayImpliesOperator2Constraints(lPossibleToRunActiveOperation
                                                                 , lZ3Solver.XorOperator(lUseResourceVariablesForActiveOperation)
@@ -1657,7 +1660,8 @@ namespace ProductPlatformAnalyzer
         public BoolExpr createFormula7(List<variant> pVariantList, int pState)
         {
             //NEW formula 7
-            //(Big And) ((! Pre_k_j AND O_I_k_j) OR (O_E_k_j => Post_k_j))
+            //No operation can proceed
+            //(Big And) ((! Pre_k_j AND O_I_k_j) OR (! Post_k_j AND O_E_k_j) OR O_F_k_j OR O_U_k_j)
 
             BoolExpr lResultFormula7 = null;
 
@@ -1744,6 +1748,7 @@ namespace ProductPlatformAnalyzer
         public BoolExpr createFormula8(List<variant> pVariantList, int pState)
         {
             //formula 8
+            //At least one operation is in initial or executing state
             //(Big OR) (O_I_k_j OR O_E_k_j)
             BoolExpr lResultFormula8 = null;
 
@@ -1787,7 +1792,9 @@ namespace ProductPlatformAnalyzer
 
                 List<variant> localVariantList = lFrameworkWrapper.VariantList;
 
+                //(Big And) ((! Pre_k_j AND O_I_k_j) OR (! Post_k_j AND O_E_k_j) OR O_F_k_j OR O_U_k_j)
                 BoolExpr lFormula7 = createFormula7(localVariantList, pState);
+                //(Big OR) (O_I_k_j OR O_E_k_j)
                 BoolExpr lFormula8 = createFormula8(localVariantList, pState);
 
 
