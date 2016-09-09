@@ -1,0 +1,134 @@
+﻿<?xml version="1.0"?>
+<!-- Testcase axel_test
+		 Variant: 
+        axel1
+        axel2
+		    inspec-axel
+        break-test
+        
+     Variant Groups:
+        test
+          choose at least one
+          Variants:
+            break-test
+            inspect-axel
+            
+        axel1
+          choose at least one
+          Variants:
+            axel1
+            
+        extra axels
+          choose any number
+          Variants:
+            axel2
+     
+     Constraint: axel2 and not break-test
+     
+		 Operations: 
+        inspect
+        run-break_test
+
+		 axel1 and inspect-axel -> inspect
+		 axel2 and inspect-axel -> inspect
+		 axel1 and break-test -> run_break_test
+		 axel2 and break-test -> run_break_test
+
+-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>run-break-test</operationName>
+      <displayName>run break test</displayName>
+    </operation>
+    <operation>
+      <operationName>inspect</operationName>
+      <displayName>inspect</displayName>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>axel1</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>axel1</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>axel2</variantName>
+      <variantIndex>2</variantIndex>
+      <variantDisplayName>axel2</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>inspect-axel</variantName>
+      <variantIndex>3</variantIndex>
+      <variantDisplayName>inspect axel</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>break-test</variantName>
+      <variantIndex>4</variantIndex>
+      <variantDisplayName>break test</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>test</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>break-test</variantRef>
+        <variantRef>inspect-axel</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>axel1</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>axel1</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>extra axels</variantGroupName>
+      <groupCardinality>choose any number</groupCardinality>
+      <variantRefs>
+        <variantRef>axel2</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>and axel2 (not inspect-axel)</logic>
+    </constraint>
+  </constraints>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>and axel1 inspect-axel</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>inspect</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>and axel1 break-test</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>run-break-test</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>and axel2 inspect-axel</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>inspect</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>and axel2 break-test</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>run-break-test</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>

@@ -1024,7 +1024,7 @@ namespace ProductPlatformAnalyzer
                         writer.Write(HtmlTextWriter.TagRightChar);
                         writer.WriteBeginTag("td");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(parseInfix(con));
+                        writer.Write(GeneralUtilities.parseExpression(con, "infix"));
                         writer.WriteEndTag("td");
                         writer.WriteEndTag("tr");
                     }
@@ -1121,7 +1121,7 @@ namespace ProductPlatformAnalyzer
                     {
                         writer.WriteBeginTag("li");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(parseInfix(pre));
+                        writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
                         writer.WriteEndTag("li");
                     }
                 }
@@ -1139,7 +1139,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(parseInfix(post));
+                    writer.Write(GeneralUtilities.parseExpression(post, "infix"));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -1156,7 +1156,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(parseInfix(req));
+                    writer.Write(GeneralUtilities.parseExpression(req, "infix"));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -1240,7 +1240,7 @@ namespace ProductPlatformAnalyzer
                 {
                     writer.WriteBeginTag("li");
                     writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(parseInfix(pre));
+                    writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
                     writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
@@ -1320,7 +1320,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(replaceVirtual(vop.getVariant().names));
+                writer.Write(replaceVirtual(vop.getVariantExpr()));
 
                 writer.WriteEndTag("td");
 
@@ -2464,14 +2464,14 @@ namespace ProductPlatformAnalyzer
 
         private string consToString(List<string> pcons)
         {
-            string exp = parseInfix(pcons[0]);
+            string exp = GeneralUtilities.parseExpression(pcons[0], "infix");
 
             try
             {
                 pcons.RemoveAt(0);
                 foreach (string con in pcons)
                 {
-                    exp = exp + "and" + parseInfix(con);
+                    exp = exp + "and" + GeneralUtilities.parseExpression(con, "infix");
                 }
             }
             catch (Exception ex)
@@ -2569,11 +2569,15 @@ namespace ProductPlatformAnalyzer
             {
                 if (p.StartsWith("Virtual"))
                 {
+                    /* RUNA code
                     virtualConnection con = fwrapper.findVirtualConnectionWithName(p);
                     foreach (variant var in con.getVariants())
                     {
                         newP = newP + var.names + "<br>";
                     }
+                     */
+                    variant virtualVariant = fwrapper.findVirtualVariant(p);
+                    newP = virtualVariant.names + "<br>";
                     return newP;
                 }
                     
@@ -2589,7 +2593,7 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private string parseInfix(string pPrefixExpr)
+        /*private string parseInfix(string pPrefixExpr)
         {
             string newInfixExpr = null;
 
@@ -2614,7 +2618,7 @@ namespace ProductPlatformAnalyzer
             }
 
             return newInfixExpr;
-        }
+        }*/
 
         private bool checkCondition(string con)
         {
@@ -2642,7 +2646,7 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private string ParseExpression(Node<string> pNode)
+        /*private string ParseExpression(Node<string> pNode)
         {
             try
             {
@@ -2717,7 +2721,7 @@ namespace ProductPlatformAnalyzer
                 throw ex;
             }
 
-        }
+        }*/
 
 
         private bool ParseConditionVirtual(Node<string> pNode)
@@ -2773,7 +2777,7 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        private string printStatus(string p)
+        /*private string printStatus(string p)
         {
             string[] condition = new string[3];
 
@@ -2801,6 +2805,6 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return null;
-        }
+        }*/
     }
 }

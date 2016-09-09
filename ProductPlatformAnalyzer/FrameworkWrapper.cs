@@ -8,82 +8,15 @@ using System.Xml;
 
 namespace ProductPlatformAnalyzer
 {
-    //helping class not part of the xsd
-/*    public partial class variantOperations
-    {
-        private variant Variant;
-        private List<operation> Operations;
-
-        public variant getVariant()
-        {
-            return Variant;
-        }
-
-        public void setVariant(variant pVariant)
-        {
-            Variant = pVariant;
-        }
-
-        public List<operation> getOperations()
-        {
-            return Operations;
-        }
-
-        public void setOperations(List<operation> pOperations)
-        {
-            Operations = pOperations;
-        }
-
-    }*/
-
-    //helping class not part of the xsd
-    public partial class virtualConnection
-    {
-        private variant virtualVariant;
-        private List<variant> variants;
-
-        public variant getVirtualVariant()
-        {
-            return virtualVariant;
-        }
-
-        public void setVariant(variant pVariant)
-        {
-            virtualVariant = pVariant;
-        }
-
-        public List<variant> getVariants()
-        {
-            return variants;
-        }
-
-        public void setVariants(List<variant> pVariants)
-        {
-            variants = pVariants;
-        }
-
-        public bool containsAll(List<variant> lVariants)
-        {
-            foreach (variant var in lVariants)
-            {
-                if (!variants.Contains(var))
-                    return false;
-            }
-            return true;
-        }
-
-    }
-
-
     public class FrameworkWrapper
     {
         private List<variantGroup> variantGroupList;
         private List<variant> variantList;
-        private ArrayList constraintList;
+        private List<string> constraintList;
         private List<operation> operationList;
         private List<variantOperations> variantsOperations;
         private List<string> activeOperationInstanceNamesList;
-        private List<virtualConnection> VirtualConnections;
+        private List<virtualVariant2VariantExpr> virtualVariant2VariantExprList;
         private List<string> activeOperationNamesList;
         private List<string> inActiveOperationNamesList;
         private List<station> stationList;
@@ -108,7 +41,7 @@ namespace ProductPlatformAnalyzer
             return VirtualCounter++;
         }
 
-        public ArrayList ConstraintList
+        public List<string> ConstraintList
         {
             get { return this.constraintList; }
             set { this.constraintList = value; }
@@ -166,7 +99,7 @@ namespace ProductPlatformAnalyzer
         {
             variantList = new List<variant>();
             variantGroupList = new List<variantGroup>();
-            constraintList = new ArrayList();
+            constraintList = new List<string>();
             operationList = new List<operation>();
             activeOperationInstanceNamesList = new List<String>();
             activeOperationNamesList = new List<String>();
@@ -175,7 +108,7 @@ namespace ProductPlatformAnalyzer
             stationList = new List<station>();
             resourceList = new List<resource>();
             traitList = new List<trait>();
-            VirtualConnections = new List<virtualConnection>();
+            virtualVariant2VariantExprList = new List<virtualVariant2VariantExpr>();
             VirtualCounter = 0;
         }
 
@@ -184,9 +117,9 @@ namespace ProductPlatformAnalyzer
             return OperationList.Count();
         }
 
-        public variantOperations getVariantOperations(string pVariantName)
+        public variantOperations getVariantExprOperations(string pVariantExpr)
         {
-            variantOperations lResultVariantOperations = new variantOperations();
+            variantOperations lResultVariantOperations = null;
             try
             {
                 /*foreach (variantOperations lVariantOperations in VariantsOperations)
@@ -196,7 +129,7 @@ namespace ProductPlatformAnalyzer
                 }*/
 
                 List<variantOperations> lVariantOperations = (from variantsOperations in VariantsOperations
-                                         where variantsOperations.getVariant().names == pVariantName.Trim()
+                                         where variantsOperations.getVariantExpr() == pVariantExpr.Trim()
                                          select variantsOperations).ToList();
 
                 if (lVariantOperations.Count == 1)
@@ -205,7 +138,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVariantOperations, pVariantName: " + pVariantName);
+                Console.WriteLine("error in getVariantExprOperations, pVariantExpr: " + pVariantExpr);
                 Console.WriteLine(ex.Message);
             }
             return lResultVariantOperations;
@@ -296,7 +229,7 @@ namespace ProductPlatformAnalyzer
             return VariantGroupList;
         }
 
-        public ArrayList getConstraintList()
+        public List<string> getConstraintList()
         {
             return ConstraintList;
         }
@@ -741,6 +674,7 @@ namespace ProductPlatformAnalyzer
         {
             string lResultElements = "";
 
+            //TODO: write with LINQ
             foreach (string lElement in pList)
             {
                 lResultElements += lElement;
@@ -754,6 +688,7 @@ namespace ProductPlatformAnalyzer
             variant tempResultVariant = null;
             try
             {
+                //TODO: write with LINQ
                 foreach (variant lVariant in VariantList)
                 {
                     if (lVariant.names.Equals(pVariantName))
@@ -773,6 +708,7 @@ namespace ProductPlatformAnalyzer
             int lVariantIndex = 0;
             try
             {
+                //TODO: Write with LINQ
                 foreach (variant lVariant in VariantList)
                 {
                     if (lVariant.index > lVariantIndex)
@@ -994,8 +930,8 @@ namespace ProductPlatformAnalyzer
                     lDataSummary += "Variant Name: " + lVariant.names + System.Environment.NewLine;
                     lDataSummary += "Variant Index: " + lVariant.index + System.Environment.NewLine;
                     lDataSummary += "Variant Display Name: " + lVariant.displayName + System.Environment.NewLine;
-                    foreach (operation lManOperation in lVariant.manOperations)
-                        lDataSummary += "Variant Manufacturing Operation: " + lManOperation.names + System.Environment.NewLine;
+/*                    foreach (operation lManOperation in lVariant.manOperations)
+                        lDataSummary += "Variant Manufacturing Operation: " + lManOperation.names + System.Environment.NewLine;*/
                 }
 
                 //Variantgroups
@@ -1124,7 +1060,10 @@ namespace ProductPlatformAnalyzer
             try
             {
                 variantOperations lVariantOperations = new variantOperations();
-                lVariantOperations.setVariant(findVariantWithName(pVariantName));
+
+                //lVariantOperations.setVariantExpr(findVariantWithName(pVariantName));
+                lVariantOperations.setVariantExpr(pVariantName);
+
                 if (pOperationList != null)
                 {
                     List<operation> tempOperations = new List<operation>();
@@ -1411,61 +1350,58 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private string createVirtualVariant(List<string> lVariantNames)
+        public variant createVirtualVariant(string lVariantExpr)
         {
-            List<variant> lVariants = new List<variant>();
-
-            foreach (string var in lVariantNames)
+            variant lResultVariant = new variant();
+            try
             {
-                lVariants.Add(findVariantWithName(var));
+                //A new Virtual variant need to be build
+                //AND
+                //The virtual variant needs to be added to virtual variant group
+                variant lVirtualVariant = createVirtualVariantNAdd2VariantGroup();
+
+                //A new constraint needs to be added relating the virtual variant to the variant expression
+                addConstraint("-> " + lVirtualVariant.names + " (" + lVariantExpr + ")");
+
+                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                virtualVariant2VariantExpr lTempVirtualVariant = new virtualVariant2VariantExpr();
+
+                lTempVirtualVariant.setVirtualVariant(lVirtualVariant);
+                lTempVirtualVariant.setVariantExpr(lVariantExpr);
+
+                virtualVariant2VariantExprList.Add(lTempVirtualVariant);
+
+                lResultVariant = lVirtualVariant;
             }
-
-            virtualConnection connection = findVirtualConnection(lVariants);
-            if (connection != null)
-                return connection.getVirtualVariant().names;
-
-            connection = new virtualConnection();
-            variant virtualVariant = createVirtualVariant();
-
-            connection.setVariants(lVariants);
-            connection.setVariant(virtualVariant);
-
-            VirtualConnections.Add(connection);
-            addVirtualConstraint(connection);
-
-            return virtualVariant.names;
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVirtualVariant");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
         }
 
-
-        private void addVirtualConstraint(virtualConnection connection)
+        private variant createVirtualVariantNAdd2VariantGroup()
         {
-            string constraint = "or";
-            List<variant> variants = new List<variant>(connection.getVariants());
-            string andVariants = variants.ElementAt(0).names;
-            variants.RemoveAt(0);
-
-            foreach (variant var in variants)
+            variant lVirtualVariant = new variant();
+            try
             {
-                andVariants = "(and " + andVariants + " " + var.names + ")";
+                string name = "VirtualV" + getNextVirtualIndex();
+                int variantIndex = getNextVariantIndex();
+                CreateVariantInstance(name, variantIndex, name);
+
+                lVirtualVariant = findVariantWithName(name);
+
+                addVirtualVariantToGroup(lVirtualVariant);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVirtualVariant");
+                Console.WriteLine(ex.Message);
             }
 
-            constraint = constraint + " (and " + andVariants + " " + connection.getVirtualVariant().names + ") (and (not " +
-                            andVariants + ") (not " + connection.getVirtualVariant().names + "))";
 
-            ConstraintList.Add(constraint);
-        }
-
-        private variant createVirtualVariant()
-        {
-            string name = "VirtualV" + getNextVirtualIndex();
-            int variantIndex = getNextVariantIndex();
-            CreateVariantInstance(name, variantIndex, name);
-            variant virtualV = findVariantWithName(name);
-
-            addVirtualVariantToGroup(virtualV);
-
-            return virtualV;
+            return lVirtualVariant;
         }
 
         private void addVirtualVariantToGroup(variant var)
@@ -1485,7 +1421,26 @@ namespace ProductPlatformAnalyzer
             CreateVariantGroupInstance("Virtual-VG", "choose any number", varName);
         }
 
-        internal virtualConnection findVirtualConnectionWithName(string p)
+
+        /*private void addVirtualConstraint(virtualConnection connection)
+        {
+            string constraint = "or";
+            List<variant> variants = new List<variant>(connection.getVariants());
+            string andVariants = variants.ElementAt(0).names;
+            variants.RemoveAt(0);
+
+            foreach (variant var in variants)
+            {
+                andVariants = "(and " + andVariants + " " + var.names + ")";
+            }
+
+            constraint = constraint + " (and " + andVariants + " " + connection.getVirtualVariant().names + ") (and (not " +
+                            andVariants + ") (not " + connection.getVirtualVariant().names + "))";
+
+            ConstraintList.Add(constraint);
+        }*/
+
+        /*internal virtualConnection findVirtualConnectionWithName(string p)
         {
             foreach (virtualConnection con in VirtualConnections)
             {
@@ -1494,7 +1449,7 @@ namespace ProductPlatformAnalyzer
             }
 
             return null;
-        }
+        }*/
 
         private int getNextVariantIndex()
         {
@@ -1508,50 +1463,77 @@ namespace ProductPlatformAnalyzer
             return index + 1;
         }
 
-
-        private virtualConnection findVirtualConnection(List<variant> lVariants)
+        private int getVirtualVariantIndex(variant pVirtualVariant)
         {
-
-            foreach (virtualConnection con in VirtualConnections)
-            {
-                if (lVariants.Count == con.getVariants().Count)
-                {
-                    if (con.containsAll(lVariants))
-                        return con;
-                }
-            }
-
-            return null;
-        }
-
-
-        /*public void createOperationResourceInstances(XmlDocument pXDoc)
-        {
+            int lVirtualVariantIndex = 0;
             try
             {
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//operationResourceMapping");
+                string lVirtualVariantName = pVirtualVariant.names;
+                int lStrartingIndex = lVirtualVariantName.IndexOf("VirtualVariant");
+                lVirtualVariantIndex = int.Parse(lVirtualVariantName.Remove(lStrartingIndex + 14 + 1));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getVirtualVariantIndex");
+                Console.WriteLine(ex.Message);
+            }
+            return lVirtualVariantIndex;
+        }
 
-                foreach (XmlNode lNode in nodeList)
+        private int getMaxVirtualVariantNumber()
+        {
+            int lResultIndex = 0; 
+            try
+            {
+                foreach (virtualVariant2VariantExpr virtualVariant2VariantExpr in virtualVariant2VariantExprList)
                 {
-                    List<string> lOperationResources = new List<string>();
+                    variant virtualVariant = virtualVariant2VariantExpr.getVirtualVariant();
 
-                    XmlNodeList operationResourcesNodeList = lNode["resourceRefs"].ChildNodes;
-                    foreach (XmlNode lOperationResource in operationResourcesNodeList)
-                    {
-                        lOperationResources.Add(lOperationResource.InnerText);
-                    }
+                    lResultIndex = getVirtualVariantIndex(virtualVariant) + 1;
 
-
-                    CreateOperationResourceMappingInstance(getXMLNodeAttributeInnerText(lNode, "operationRefs")
-                                                            , lOperationResources);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createOperationResourceInstances");
+                Console.WriteLine("error in getMaxVirtualVariantNumber");
                 Console.WriteLine(ex.Message);
             }
-        }*/
+            return lResultIndex;
+        }
+
+        private string getNextVirtualVariantName()
+        {
+            string lResultName = "";
+            try
+            {
+                //Each virtual variant is named as "VirtualVariantX" which X is a number
+                int lMaxVirtualVariantNumber = getMaxVirtualVariantNumber();
+
+                lResultName = "VirtualVariant" + lMaxVirtualVariantNumber;
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getNextVirtualVariantName");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultName;
+        }
+
+        public variant findVirtualVariant(string lVariantExpr)
+        {
+            variant lResultVariant = null;
+
+            //TODO: if possible rewrite with LINQ
+            foreach (virtualVariant2VariantExpr virtualVariant in virtualVariant2VariantExprList)
+            {
+                if (virtualVariant.getVariantExpr() == lVariantExpr)
+                    lResultVariant = virtualVariant.getVirtualVariant();
+            }
+
+            return lResultVariant;
+        }
+
 
         public String getXMLNodeAttributeInnerText(XmlNode lNode, String lAttributeName)
         {
@@ -1576,7 +1558,12 @@ namespace ProductPlatformAnalyzer
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//constraint");
 
                 foreach (XmlNode lNode in nodeList)
-                    addConstraint(getXMLNodeAttributeInnerText(lNode,"logic"));
+                {
+                    string lPrefixFormat = getXMLNodeAttributeInnerText(lNode, "logic");
+                    //TODO: if the constraint are converted into infix format this line has to be used
+                    //string lPrefixFormat = GeneralUtilities.parseExpression(lPrefixFormat, "prefix");
+                    addConstraint(lPrefixFormat);
+                }
             }
             catch (Exception ex)
             {

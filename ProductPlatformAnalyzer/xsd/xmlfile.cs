@@ -91,8 +91,6 @@ public partial class variant {
     
     private byte cardinalityField;
 
-    private List<operation> manOperationsField;
-
     /// <remarks/>
     public int index
     {
@@ -133,19 +131,6 @@ public partial class variant {
         }
         set {
             this.cardinalityField = value;
-        }
-    }
-
-    /// <remarks/>
-    public List<operation> manOperations
-    {
-        get
-        {
-            return this.manOperationsField;
-        }
-        set
-        {
-            this.manOperationsField = value;
         }
     }
 
@@ -244,17 +229,17 @@ public partial class operation
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
 public partial class variantOperations
 {
-    private variant Variant;
+    private string VariantExpr;
     private List<operation> Operations;
 
-    public variant getVariant()
+    public string getVariantExpr()
     {
-        return Variant;
+        return VariantExpr;
     }
 
-    public void setVariant(variant pVariant)
+    public void setVariantExpr(string pVariantExpr)
     {
-        Variant = pVariant;
+        VariantExpr = pVariantExpr;
     }
 
     public List<operation> getOperations()
@@ -429,5 +414,41 @@ public partial class station
         }
     }
 }
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+public partial class virtualVariant2VariantExpr
+{
+    private variant virtualVariant;
+    private string variantExpr;
+
+    public variant getVirtualVariant()
+    {
+        return virtualVariant;
+    }
+
+    public void setVirtualVariant(variant pVirtualVariant)
+    {
+        virtualVariant = pVirtualVariant;
+    }
+
+    public string getVariantExpr()
+    {
+        return variantExpr;
+    }
+
+    public void setVariantExpr(string pVariantExpr)
+    {
+        variantExpr = pVariantExpr;
+    }
+
+}
+
+
 
 

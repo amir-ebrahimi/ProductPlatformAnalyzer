@@ -44,17 +44,17 @@ namespace ProductPlatformAnalyzer
                                     , int pFalseProbability
                                     , int pExpressionProbability)
         {
-            if (pMaxVariantGroupNumber != null)
+            if (pMaxVariantGroupNumber != 0)
                 maxVariantGroupNumber = pMaxVariantGroupNumber;
-            if (pMaxVariantNumber != null)
+            if (pMaxVariantNumber != 0)
                 maxVariantNumber = pMaxVariantNumber;
-            if (pMaxOperationNumber != null)
+            if (pMaxOperationNumber != 0)
                 maxOperationNumber = pMaxOperationNumber;
-            if (pTrueProbability != null)
+            if (pTrueProbability != 0)
                 trueProbability = pTrueProbability;
-            if (pFalseProbability != null)
+            if (pFalseProbability != 0)
                 falseProbability = pFalseProbability;
-            if (pExpressionProbability != null)
+            if (pExpressionProbability != 0)
                 expressionProbability = pExpressionProbability;
 
             createOperations();
