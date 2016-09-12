@@ -1010,26 +1010,46 @@ namespace ProductPlatformAnalyzer
             variant lResultVariant = new variant();
             try
             {
-                string lVariantExpr = pVariantOperations.getVariantExpr();
+                variant lCurrentVariant = lFrameworkWrapper.ReturnCurrentVariant(pVariantOperations);
 
-                if (lVariantExpr.Contains(' '))
+                //TODO: this should be done here for ALL types of variants
+                if (lCurrentVariant.names.Contains("Virtual"))
                 {
-                    //Then this should be an expression on variants
-                    lResultVariant = lFrameworkWrapper.createVirtualVariant(lVariantExpr);
-
                     //The result variant is going to be a virtual variant hence for this variant we have to add the needed operations
                     addVirtualVariantOperationInstances(lResultVariant, pVariantOperations);
                 }
-                else
-                {
-                    //Then this should be a single variant
-                    lResultVariant = lFrameworkWrapper.findVariantWithName(lVariantExpr);
-                }
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine("error in returnCurrentVariant");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
+        public variant createVirtualVariant(string lVariantExpr)
+        {
+            variant lResultVariant = new variant();
+            try
+            {
+                //A new Virtual variant need to be build
+                //AND
+                //The virtual variant needs to be added to virtual variant group
+                variant lVirtualVariant = lFrameworkWrapper.createVirtualVariantInstance();
+
+                lFrameworkWrapper.addVirtualVariantToGroup(lVirtualVariant);
+
+                //A new constraint needs to be added relating the virtual variant to the variant expression
+                lFrameworkWrapper.addVirtualVariantConstaint(lVirtualVariant, lVariantExpr);
+
+                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                lFrameworkWrapper.createVirtualVariant2VariantExprInstance(lVirtualVariant, lVariantExpr);
+
+                lResultVariant = lVirtualVariant;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVirtualVariant");
                 Console.WriteLine(ex.Message);
             }
             return lResultVariant;

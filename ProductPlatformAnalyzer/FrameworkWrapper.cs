@@ -1055,10 +1055,41 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public variant ReturnCurrentVariant(variantOperations pVariantOperations)
+        {
+            variant lResultVariant = null;
+            try
+            {
+                
+                string lVariantExpr = pVariantOperations.getVariantExpr();
+
+                if (lVariantExpr.Contains(' '))
+                {
+                    //Then this should be an expression on variants
+                    lResultVariant = createVirtualVariant(lVariantExpr);
+                }
+                else
+                {
+                    //Then this should be a single variant
+                    lResultVariant = findVariantWithName(lVariantExpr);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnCurrentVariant");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
         private void CreateVariantOperationMappingInstance(String pVariantName, List<string> pOperationList)
         {
             try
             {
+                //Here we have to check if the variant name is a single variant or a variant expression
+
                 variantOperations lVariantOperations = new variantOperations();
 
                 //lVariantOperations.setVariantExpr(findVariantWithName(pVariantName));
@@ -1350,38 +1381,41 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public variant createVirtualVariant(string lVariantExpr)
+        public void addVirtualVariantConstaint(variant pVirtualVariant, string pVariantExpr)
         {
-            variant lResultVariant = new variant();
             try
             {
-                //A new Virtual variant need to be build
-                //AND
-                //The virtual variant needs to be added to virtual variant group
-                variant lVirtualVariant = createVirtualVariantNAdd2VariantGroup();
-
                 //A new constraint needs to be added relating the virtual variant to the variant expression
-                addConstraint("-> " + lVirtualVariant.names + " (" + lVariantExpr + ")");
-
-                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
-                virtualVariant2VariantExpr lTempVirtualVariant = new virtualVariant2VariantExpr();
-
-                lTempVirtualVariant.setVirtualVariant(lVirtualVariant);
-                lTempVirtualVariant.setVariantExpr(lVariantExpr);
-
-                virtualVariant2VariantExprList.Add(lTempVirtualVariant);
-
-                lResultVariant = lVirtualVariant;
+                addConstraint("-> " + pVirtualVariant.names + " (" + pVariantExpr + ")");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualVariant");
+                Console.WriteLine("error in addVirtualVariantConstaint");
                 Console.WriteLine(ex.Message);
             }
-            return lResultVariant;
         }
 
-        private variant createVirtualVariantNAdd2VariantGroup()
+        public void createVirtualVariant2VariantExprInstance(variant pVirtualVariant, string pVariantExpr)
+        {
+            try
+            {
+                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                virtualVariant2VariantExpr lTempVirtualVariant = new virtualVariant2VariantExpr();
+
+                lTempVirtualVariant.setVirtualVariant(pVirtualVariant);
+                lTempVirtualVariant.setVariantExpr(pVariantExpr);
+
+                virtualVariant2VariantExprList.Add(lTempVirtualVariant);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVirtualVariant2VariantExprInstance");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public variant createVirtualVariantInstance()
         {
             variant lVirtualVariant = new variant();
             try
@@ -1392,11 +1426,10 @@ namespace ProductPlatformAnalyzer
 
                 lVirtualVariant = findVariantWithName(name);
 
-                addVirtualVariantToGroup(lVirtualVariant);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualVariant");
+                Console.WriteLine("error in createVirtualVariantInstance");
                 Console.WriteLine(ex.Message);
             }
 
@@ -1404,7 +1437,7 @@ namespace ProductPlatformAnalyzer
             return lVirtualVariant;
         }
 
-        private void addVirtualVariantToGroup(variant var)
+        public void addVirtualVariantToGroup(variant var)
         {
             foreach (variantGroup vg in VariantGroupList)
             {
