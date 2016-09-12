@@ -1055,36 +1055,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public variant ReturnCurrentVariant(variantOperations pVariantOperations)
-        {
-            variant lResultVariant = null;
-            try
-            {
-                
-                string lVariantExpr = pVariantOperations.getVariantExpr();
-
-                if (lVariantExpr.Contains(' '))
-                {
-                    //Then this should be an expression on variants
-                    lResultVariant = createVirtualVariant(lVariantExpr);
-                }
-                else
-                {
-                    //Then this should be a single variant
-                    lResultVariant = findVariantWithName(lVariantExpr);
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in ReturnCurrentVariant");
-                Console.WriteLine(ex.Message);
-            }
-            return lResultVariant;
-        }
-
-        private void CreateVariantOperationMappingInstance(String pVariantName, List<string> pOperationList)
+        public void CreateVariantOperationMappingInstance(string pVariantName, List<string> pOperationList)
         {
             try
             {
@@ -1114,33 +1085,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void LoadInitialDataFromXMLFile(string pFilePath)
-        {
-            try
-            {
-                //new instance of xdoc
-                XmlDocument xDoc = new XmlDocument();
-
-                //First load the XML file from the file path
-                xDoc.Load(pFilePath);
-
-                createOperationInstances(xDoc);
-                createVariantInstances(xDoc);
-                createVariantGroupInstances(xDoc);
-                createConstraintInstances(xDoc);
-                createVariantOperationInstances(xDoc);
-                //createStationInstances(xDoc);
-                createTraitInstances(xDoc);
-                createResourceInstances(xDoc);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);                
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        private void createTraitInstances(XmlDocument pXDoc)
+        public void createTraitInstances(XmlDocument pXDoc)
         {
             try
             {
@@ -1177,7 +1122,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void createResourceInstances(XmlDocument pXDoc)
+        public void createResourceInstances(XmlDocument pXDoc)
         {
             try
             {
@@ -1324,62 +1269,64 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void createVariantOperationInstances(XmlDocument pXDoc)
+        public variant createVirtualVariant(string lVariantExpr)
         {
+            variant lResultVariant = new variant();
             try
             {
-                //RUNA changes
-                /*
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
+                //A new Virtual variant need to be build
+                //AND
+                //The virtual variant needs to be added to virtual variant group
+                variant lVirtualVariant = createVirtualVariantInstance();
 
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<string> lVariantOperations = new List<string>();
+                addVirtualVariantToGroup(lVirtualVariant);
 
-                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
-                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
-                    {
-                        lVariantOperations.Add(lVariantOperation.InnerText);
-                    }
+                //A new constraint needs to be added relating the virtual variant to the variant expression
+                addVirtualVariantConstaint(lVirtualVariant, lVariantExpr);
 
-                    List<string> lVariants = new List<string>();
+                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                createVirtualVariant2VariantExprInstance(lVirtualVariant, lVariantExpr);
 
-                    XmlNodeList variantsNodeList = lNode["variantRefs"].ChildNodes;
-                    foreach (XmlNode lVariant in variantsNodeList)
-                    {
-                        lVariants.Add(lVariant.InnerText);
-                    }
-
-                    if (lVariants.Count == 1)
-                        CreateVariantOperationMappingInstance(lVariants.ElementAt(0)
-                                                            , lVariantOperations);
-                    else
-                        CreateVariantOperationMappingInstance(createVirtualVariant(lVariants)
-                                                          , lVariantOperations);
-                }*/
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
-
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<string> lVariantOperations = new List<string>();
-
-                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
-                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
-                    {
-                        lVariantOperations.Add(lVariantOperation.InnerText);
-                    }
-
-
-                    CreateVariantOperationMappingInstance(getXMLNodeAttributeInnerText(lNode, "variantRefs")
-                                                            , lVariantOperations);
-                }
+                lResultVariant = lVirtualVariant;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantOperationInstances");
+                Console.WriteLine("error in createVirtualVariant");
                 Console.WriteLine(ex.Message);
             }
+            return lResultVariant;
         }
+
+        //TODO: Do we need this anymore?
+        public variant ReturnCurrentVariant(variantOperations pVariantOperations)
+        {
+            variant lResultVariant = null;
+            try
+            {
+
+                string lVariantExpr = pVariantOperations.getVariantExpr();
+
+                if (lVariantExpr.Contains(' '))
+                {
+                    //Then this should be an expression on variants
+                    lResultVariant = createVirtualVariant(lVariantExpr);
+                }
+                else
+                {
+                    //Then this should be a single variant
+                    lResultVariant = findVariantWithName(lVariantExpr);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnCurrentVariant");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
 
         public void addVirtualVariantConstaint(variant pVirtualVariant, string pVariantExpr)
         {
