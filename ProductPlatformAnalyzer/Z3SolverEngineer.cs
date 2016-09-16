@@ -136,58 +136,20 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        //Starting point Saturday
         public void createVariantOperationInstances(XmlDocument pXDoc)
         {
             try
             {
-                //RUNA changes
-                /*
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
-
-                foreach (XmlNode lNode in nodeList)
+                List<variantOperations> lTemporaryVariantOperationsList = new List<variantOperations>();
+                lTemporaryVariantOperationsList = lFrameworkWrapper.createVariantOperationTemporaryInstances(pXDoc);
+                foreach (variantOperations lVariantOperation in lTemporaryVariantOperationsList)
                 {
-                    List<string> lVariantOperations = new List<string>();
-
-                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
-                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
-                    {
-                        lVariantOperations.Add(lVariantOperation.InnerText);
-                    }
-
-                    List<string> lVariants = new List<string>();
-
-                    XmlNodeList variantsNodeList = lNode["variantRefs"].ChildNodes;
-                    foreach (XmlNode lVariant in variantsNodeList)
-                    {
-                        lVariants.Add(lVariant.InnerText);
-                    }
-
-                    if (lVariants.Count == 1)
-                        CreateVariantOperationMappingInstance(lVariants.ElementAt(0)
-                                                            , lVariantOperations);
-                    else
-                        CreateVariantOperationMappingInstance(createVirtualVariant(lVariants)
-                                                          , lVariantOperations);
-                }*/
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
-
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<string> lVariantOperations = new List<string>();
-
-                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
-                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
-                    {
-                        lVariantOperations.Add(lVariantOperation.InnerText);
-                    }
-
-
-                    lFrameworkWrapper.CreateVariantOperationMappingInstance(getXMLNodeAttributeInnerText(lNode, "variantRefs")
-                                                            , lVariantOperations);
-
-                    ParsingVariantExpr2OperationsMapping(string pVariantExpr, List<string> pOperationNames);
-
+                    string lCurrentVariantExpr = lVariantOperation.getVariantExpr();
+                    List<string> lCurrentOperationNames = lVariantOperation.getOperations();
                 }
+                    //ParsingVariantExpr2OperationsMapping(string pVariantExpr, List<string> pOperationNames);
+
             }
             catch (Exception ex)
             {

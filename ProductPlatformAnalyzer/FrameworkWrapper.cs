@@ -1055,6 +1055,37 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public variantOperations CreateVariantOperationMappingTemporaryInstance(string pVariantName, List<string> pOperationList)
+        {
+            variantOperations lVariantOperations = new variantOperations();
+            try
+            {
+                //Here we have to check if the variant name is a single variant or a variant expression
+
+
+                //lVariantOperations.setVariantExpr(findVariantWithName(pVariantName));
+                lVariantOperations.setVariantExpr(pVariantName);
+
+                if (pOperationList != null)
+                {
+                    List<operation> tempOperations = new List<operation>();
+                    foreach (String lOperationName in pOperationList)
+                    {
+                        tempOperations.Add(getOperationFromOperationName(lOperationName));
+                    }
+                    lVariantOperations.setOperations(tempOperations);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CreateVariantOperationMappingInstance, pVariantName: " + pVariantName
+                                                                + " ,pOperationList: " + ReturnStringElements(pOperationList));
+                Console.WriteLine(ex.Message);
+            }
+            return lVariantOperations;
+        }
+
         public void CreateVariantOperationMappingInstance(string pVariantName, List<string> pOperationList)
         {
             try
@@ -1085,82 +1116,6 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void createTraitInstances(XmlDocument pXDoc)
-        {
-            try
-            {
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//trait");
-
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<Tuple<string, string>> lAttributes = new List<Tuple<string, string>>();
-
-                    List<trait> lInheritTraits = new List<trait>();
-
-                    XmlNodeList inheritList = lNode["inherit"].ChildNodes;
-                    foreach (XmlNode lTraitName in inheritList)
-                    {
-                        lInheritTraits.Add(findTraitWithName(lTraitName.InnerText));
-                    }
-
-                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
-                    foreach (XmlNode lAttribute in attributeList)
-                    {
-                        lAttributes.Add(new Tuple<string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeType")
-                                        , getXMLNodeAttributeInnerText(lAttribute, "attributeName")));
-                    }
-
-                    createTraitInstance(getXMLNodeAttributeInnerText(lNode, "traitName")
-                                                            , lInheritTraits
-                                                            , lAttributes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in createTraitInstances");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        public void createResourceInstances(XmlDocument pXDoc)
-        {
-            try
-            {
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//resource");
-
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<Tuple<string, string, string>> lAttributes = new List<Tuple<string,string,string>>();
-                    List<trait> lTraits = new List<trait>();
-                    XmlNodeList traitNamesList = lNode["traits"].ChildNodes;
-                    foreach (XmlNode lTraitRef in traitNamesList)
-                    {
-                        string lTraitName = lTraitRef.InnerText;
-                        if (lTraitName != "")
-                            lTraits.Add(findTraitWithName(lTraitName));
-                    }
-
-                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
-                    foreach (XmlNode lAttribute in attributeList)
-                    {
-                        lAttributes.Add(new Tuple<string,string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeName")
-                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeType")
-                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeValue")));
-                    }
-
-
-                    CreateResourceInstance(getXMLNodeAttributeInnerText(lNode, "resourceName")
-                                                            , lTraits
-                                                            , lAttributes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in createResourceInstances");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
         private trait findTraitWithName(string pTraitName)
         {
             trait lResultTrait = new trait();
@@ -1178,34 +1133,6 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lResultTrait;
-        }
-
-        private void createStationInstances(XmlDocument pXDoc)
-        {
-            try
-            {
-                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//station");
-
-                foreach (XmlNode lNode in nodeList)
-                {
-                    List<string> lStationResources = new List<string>();
-
-                    XmlNodeList stationResourcesNodeList = lNode["resourceRefs"].ChildNodes;
-                    foreach (XmlNode lStationResource in stationResourcesNodeList)
-                    {
-                        lStationResources.Add(lStationResource.InnerText);
-                    }
-
-
-                    CreateStationInstance(getXMLNodeAttributeInnerText(lNode, "stationName")
-                                                            , lStationResources);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in createStationInstances");
-                Console.WriteLine(ex.Message);
-            }
         }
 
         private void CreateStationInstance(String pName, List<string> pStationResources)
@@ -1531,6 +1458,148 @@ namespace ProductPlatformAnalyzer
             return lResultAttributeText;
         }
 
+        //TODO: rename this function to show that you are loading from input
+        public List<variantOperations> createVariantOperationTemporaryInstances(XmlDocument pXDoc)
+        {
+            List<variantOperations> lVariantOperationsList = new List<variantOperations>();
+            try
+            {
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantOperationMapping");
+
+
+                foreach (XmlNode lNode in nodeList)
+                {
+                    List<string> lVariantOperations = new List<string>();
+
+                    XmlNodeList variantOperationsNodeList = lNode["operationRefs"].ChildNodes;
+                    foreach (XmlNode lVariantOperation in variantOperationsNodeList)
+                    {
+                        lVariantOperations.Add(lVariantOperation.InnerText);
+                    }
+
+
+                    lVariantOperationsList.Add(CreateVariantOperationMappingTemporaryInstance(getXMLNodeAttributeInnerText(lNode, "variantRefs")
+                                                                    , lVariantOperations));
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVariantOperationInstances");
+                Console.WriteLine(ex.Message);
+            }
+            return lVariantOperationsList;
+        }
+
+        //TODO: rename this function to show that you are loading from input
+        public void createTraitInstances(XmlDocument pXDoc)
+        {
+            try
+            {
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//trait");
+
+                foreach (XmlNode lNode in nodeList)
+                {
+                    List<Tuple<string, string>> lAttributes = new List<Tuple<string, string>>();
+
+                    List<trait> lInheritTraits = new List<trait>();
+
+                    XmlNodeList inheritList = lNode["inherit"].ChildNodes;
+                    foreach (XmlNode lTraitName in inheritList)
+                    {
+                        lInheritTraits.Add(findTraitWithName(lTraitName.InnerText));
+                    }
+
+                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
+                    foreach (XmlNode lAttribute in attributeList)
+                    {
+                        lAttributes.Add(new Tuple<string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeType")
+                                        , getXMLNodeAttributeInnerText(lAttribute, "attributeName")));
+                    }
+
+                    createTraitInstance(getXMLNodeAttributeInnerText(lNode, "traitName")
+                                                            , lInheritTraits
+                                                            , lAttributes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createTraitInstances");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //TODO: rename this function to show that you are loading from input
+        public void createResourceInstances(XmlDocument pXDoc)
+        {
+            try
+            {
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//resource");
+
+                foreach (XmlNode lNode in nodeList)
+                {
+                    List<Tuple<string, string, string>> lAttributes = new List<Tuple<string,string,string>>();
+                    List<trait> lTraits = new List<trait>();
+                    XmlNodeList traitNamesList = lNode["traits"].ChildNodes;
+                    foreach (XmlNode lTraitRef in traitNamesList)
+                    {
+                        string lTraitName = lTraitRef.InnerText;
+                        if (lTraitName != "")
+                            lTraits.Add(findTraitWithName(lTraitName));
+                    }
+
+                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
+                    foreach (XmlNode lAttribute in attributeList)
+                    {
+                        lAttributes.Add(new Tuple<string,string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeName")
+                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeType")
+                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeValue")));
+                    }
+
+
+                    CreateResourceInstance(getXMLNodeAttributeInnerText(lNode, "resourceName")
+                                                            , lTraits
+                                                            , lAttributes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createResourceInstances");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //TODO: rename this function to show that you are loading from input
+        private void createStationInstances(XmlDocument pXDoc)
+        {
+            try
+            {
+                XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//station");
+
+                foreach (XmlNode lNode in nodeList)
+                {
+                    List<string> lStationResources = new List<string>();
+
+                    XmlNodeList stationResourcesNodeList = lNode["resourceRefs"].ChildNodes;
+                    foreach (XmlNode lStationResource in stationResourcesNodeList)
+                    {
+                        lStationResources.Add(lStationResource.InnerText);
+                    }
+
+
+                    CreateStationInstance(getXMLNodeAttributeInnerText(lNode, "stationName")
+                                                            , lStationResources);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createStationInstances");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //TODO: rename this function to show that you are loading from input
         public void createConstraintInstances(XmlDocument pXDoc)
         {
             try
@@ -1552,6 +1621,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        //TODO: rename this function to show that you are loading from input
         public void createVariantGroupInstances(XmlDocument pXDoc)
         {
             try
@@ -1580,6 +1650,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        //TODO: rename this function to show that you are loading from input
         public void createVariantInstances(XmlDocument pXDoc)
         {
             try
@@ -1612,6 +1683,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        //TODO: rename this function to show that you are loading from input
         public void createOperationInstances(XmlDocument pXDoc)
         {
             try
