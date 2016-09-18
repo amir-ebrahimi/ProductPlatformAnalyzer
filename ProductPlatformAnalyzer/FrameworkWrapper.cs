@@ -1116,6 +1116,28 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public void CreateVariantOperationMappingInstance(string pVariantName, List<operation> pOperationList)
+        {
+            try
+            {
+                //Here we have to check if the variant name is a single variant or a variant expression
+
+                variantOperations lVariantOperations = new variantOperations();
+
+                //lVariantOperations.setVariantExpr(findVariantWithName(pVariantName));
+                lVariantOperations.setVariantExpr(pVariantName);
+
+                lVariantOperations.setOperations(pOperationList);
+
+                addVariantsOperations(lVariantOperations);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CreateVariantOperationMappingInstance");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         private trait findTraitWithName(string pTraitName)
         {
             trait lResultTrait = new trait();

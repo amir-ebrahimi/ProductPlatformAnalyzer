@@ -110,54 +110,6 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void LoadInitialDataFromXMLFile(string pFilePath)
-        {
-            try
-            {
-                //new instance of xdoc
-                XmlDocument xDoc = new XmlDocument();
-
-                //First load the XML file from the file path
-                xDoc.Load(pFilePath);
-
-                lFrameworkWrapper.createOperationInstances(xDoc);
-                lFrameworkWrapper.createVariantInstances(xDoc);
-                lFrameworkWrapper.createVariantGroupInstances(xDoc);
-                lFrameworkWrapper.createConstraintInstances(xDoc);
-                createVariantOperationInstances(xDoc);
-                //createStationInstances(xDoc);
-                lFrameworkWrapper.createTraitInstances(xDoc);
-                lFrameworkWrapper.createResourceInstances(xDoc);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        //Starting point Saturday
-        public void createVariantOperationInstances(XmlDocument pXDoc)
-        {
-            try
-            {
-                List<variantOperations> lTemporaryVariantOperationsList = new List<variantOperations>();
-                lTemporaryVariantOperationsList = lFrameworkWrapper.createVariantOperationTemporaryInstances(pXDoc);
-                foreach (variantOperations lVariantOperation in lTemporaryVariantOperationsList)
-                {
-                    string lCurrentVariantExpr = lVariantOperation.getVariantExpr();
-                    List<string> lCurrentOperationNames = lVariantOperation.getOperations();
-                }
-                    //ParsingVariantExpr2OperationsMapping(string pVariantExpr, List<string> pOperationNames);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in createVariantOperationInstances");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
         public bool testConstraintConvertion(int pState, String pFile, bool done)
         {
             bool lTestResult = false;
@@ -444,7 +396,7 @@ namespace ProductPlatformAnalyzer
                     variantOperations lVariantOperations = lFrameworkWrapper.getVariantExprOperations(lVariant.names);
                     if (lVariantOperations != null)
                     {
-                        variant currentVariant = returnCurrentVariant(lVariantOperations);
+                        variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperations);
                         List<operation> lOperationList = lVariantOperations.getOperations();
                         if (lOperationList != null)
                         {
@@ -612,7 +564,7 @@ namespace ProductPlatformAnalyzer
 
                 foreach (variantOperations lVariantOperation in lVariantsOperations)
                 {
-                    variant currentVariant = returnCurrentVariant(lVariantOperation);
+                    variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperation);
 
                     List<operation> lOperationList = lVariantOperation.getOperations();
                     if (lOperationList != null)
@@ -1053,75 +1005,7 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        public void ParsingVariantExpr2OperationsMapping(string pVariantExpr, List<string> pOperationNames)
-        {
-            try
-            {
-                //First we have to see if our pVariantExpr is a single variant or an Expression of variants
-                //incase the variantExpr is an expression on a couple of variants we do the following
-                //1. Enter a new VirtualVariant to the variants list
-                //2. Add the entered VirtualVariant to the VirtualVariantGroup
-                //3. Add a constraint relating the newly created VirtualVariant to the VariantExpr
-                //4. Add the VirtualVariant and the VariantExpr to the local virtualVariant2VariantExprList
-                variant lCurrentVariant = ParseVariantExpr(pVariantExpr);
-
-                //5. For all the operations create their respective variables
-                addVirtualVariantOperationInstances(lCurrentVariant, pOperationNames);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in ParsingVariantExpr2OperationsMapping");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        public variant ParseVariantExpr(string pVariantExpr)
-        {
-            variant lResultVariant = null;
-            try
-            {
-
-                if (pVariantExpr.Contains(' '))
-                {
-                    //Then this should be an expression on variants
-                    lResultVariant = lFrameworkWrapper.createVirtualVariant(pVariantExpr);
-                }
-                else
-                {
-                    //Then this should be a single variant
-                    lResultVariant = lFrameworkWrapper.findVariantWithName(pVariantExpr);
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in ParseVariantExpr");
-                Console.WriteLine(ex.Message);
-            }
-            return lResultVariant;
-        }
-
-        private void addVirtualVariantOperationInstances(variant pVirtualVariant, variantOperations pVariantOperations)
-        {
-            try
-            {
-                List<operation> lOperations = pVariantOperations.getOperations();
-
-                foreach (operation lCurrentOperation in lOperations)
-                {
-                    addCurrentVariantOperationInstanceVariables(lCurrentOperation, pVirtualVariant, 0);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in addVirtualVariantOperationInstances");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-
+        //TODO: I think this can be removed!!!
         private variant returnCurrentVariant(variantOperations pVariantOperations)
         {
             variant lResultVariant = new variant();
@@ -1133,7 +1017,7 @@ namespace ProductPlatformAnalyzer
                 if (lCurrentVariant.names.Contains("Virtual"))
                 {
                     //The result variant is going to be a virtual variant hence for this variant we have to add the needed operations
-                    addVirtualVariantOperationInstances(lResultVariant, pVariantOperations);
+                    addVirtualVariantOperationInstances(lResultVariant, pVariantOperations.getOperations());
                 }
             }
             catch (Exception ex)
@@ -1157,7 +1041,7 @@ namespace ProductPlatformAnalyzer
 
                 foreach (variantOperations lCurrentVariantOperations in lVariantOperations)
                 {
-                    variant lCurrentVariant = returnCurrentVariant(lCurrentVariantOperations);
+                    variant lCurrentVariant = lFrameworkWrapper.ReturnCurrentVariant(lCurrentVariantOperations);
 
                     List<operation> lOperationList = lCurrentVariantOperations.getOperations();
                     if (lOperationList != null)
@@ -1880,7 +1764,7 @@ namespace ProductPlatformAnalyzer
                 variantOperations lVariantOperations = lFrameworkWrapper.getVariantExprOperations(lVariant.names);
                 if (lVariantOperations != null)
                 {
-                    variant currentVariant = returnCurrentVariant(lVariantOperations);
+                    variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperations);
                     List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
@@ -1967,7 +1851,7 @@ namespace ProductPlatformAnalyzer
                 variantOperations lVariantOperations = lFrameworkWrapper.getVariantExprOperations(lVariant.names);
                 if (lVariantOperations != null)
                 {
-                    variant currentVariant = returnCurrentVariant(lVariantOperations);
+                    variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperations);
                     List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
@@ -2120,6 +2004,127 @@ namespace ProductPlatformAnalyzer
                 lZ3Solver.AddConstraintToSolver(lOverallGoal, "overallGoal");
         }
 
+        private void addVirtualVariantOperationInstances(variant pVirtualVariant, List<operation> pVariantOperations)
+        {
+            try
+            {
+
+                foreach (operation lCurrentOperation in pVariantOperations)
+                {
+                    //5. Add the VirtualVariant and its operations or variantOperationsList
+                    lFrameworkWrapper.CreateVariantOperationMappingInstance(pVirtualVariant.names, pVariantOperations);
+                    //6. For all the operations create their respective variables
+                    addCurrentVariantOperationInstanceVariables(lCurrentOperation, pVirtualVariant, 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addVirtualVariantOperationInstances");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public variant ParseVariantExpr(string pVariantExpr)
+        {
+            variant lResultVariant = null;
+            try
+            {
+
+                if (pVariantExpr.Contains(' '))
+                {
+                    //Then this should be an expression on variants
+                    lResultVariant = lFrameworkWrapper.createVirtualVariant(pVariantExpr);
+                }
+                else
+                {
+                    //Then this should be a single variant
+                    lResultVariant = lFrameworkWrapper.findVariantWithName(pVariantExpr);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ParseVariantExpr");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
+        public void ParsingVariantExpr2OperationsMapping(string pVariantExpr, List<operation> pOperations)
+        {
+            try
+            {
+                //First we have to see if our pVariantExpr is a single variant or an Expression of variants
+                //incase the variantExpr is an expression on a couple of variants we do the following
+                //1. Enter a new VirtualVariant to the variants list
+                //2. Add the entered VirtualVariant to the VirtualVariantGroup
+                //3. Add a constraint relating the newly created VirtualVariant to the VariantExpr
+                //4. Add the VirtualVariant and the VariantExpr to the local virtualVariant2VariantExprList
+                variant lCurrentVariant = ParseVariantExpr(pVariantExpr);
+
+                //5. Add the VirtualVariant and its operations or variantOperationsList
+                //6. For all the operations create their respective variables
+                addVirtualVariantOperationInstances(lCurrentVariant, pOperations);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ParsingVariantExpr2OperationsMapping");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void createVariantOperationInstances(XmlDocument pXDoc)
+        {
+            try
+            {
+                //First we extract the current set of variant operations from the input file
+                List<variantOperations> lTemporaryVariantOperationsList = new List<variantOperations>();
+                lTemporaryVariantOperationsList = lFrameworkWrapper.createVariantOperationTemporaryInstances(pXDoc);
+                foreach (variantOperations lVariantOperation in lTemporaryVariantOperationsList)
+                {
+                    string lCurrentVariantExpr = lVariantOperation.getVariantExpr();
+                    List<operation> lCurrentOperation = lVariantOperation.getOperations();
+
+                    //Now we parse each instace of variant operation so for those who have a variant expression instead of variant we can create Virtual variants
+                    ParsingVariantExpr2OperationsMapping(lCurrentVariantExpr, lCurrentOperation);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVariantOperationInstances");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void LoadInitialDataFromXMLFile(string pFilePath)
+        {
+            try
+            {
+                //new instance of xdoc
+                XmlDocument xDoc = new XmlDocument();
+
+                //First load the XML file from the file path
+                xDoc.Load(pFilePath);
+
+                lFrameworkWrapper.createOperationInstances(xDoc);
+                lFrameworkWrapper.createVariantInstances(xDoc);
+                lFrameworkWrapper.createVariantGroupInstances(xDoc);
+                lFrameworkWrapper.createConstraintInstances(xDoc);
+                createVariantOperationInstances(xDoc);
+                //createStationInstances(xDoc);
+                lFrameworkWrapper.createTraitInstances(xDoc);
+                lFrameworkWrapper.createResourceInstances(xDoc);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         public void ProductPlatformAnalysis(string[] args)
         {
