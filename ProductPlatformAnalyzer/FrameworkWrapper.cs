@@ -1449,18 +1449,18 @@ namespace ProductPlatformAnalyzer
             return lResultName;
         }
 
-        public variant findVirtualVariant(string lVariantExpr)
+        public string findVirtualVariantExpression(string lVirtualVariant)
         {
-            variant lResultVariant = null;
+            string lVirtualVariantExpr = "";
 
             //TODO: if possible rewrite with LINQ
             foreach (virtualVariant2VariantExpr virtualVariant in virtualVariant2VariantExprList)
             {
-                if (virtualVariant.getVariantExpr() == lVariantExpr)
-                    lResultVariant = virtualVariant.getVirtualVariant();
+                if (virtualVariant.getVirtualVariant().names == lVirtualVariant)
+                    lVirtualVariantExpr = virtualVariant.getVariantExpr();
             }
 
-            return lResultVariant;
+            return lVirtualVariantExpr;
         }
 
 

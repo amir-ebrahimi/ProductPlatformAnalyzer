@@ -4,13 +4,11 @@
         axel1
         axel2
 		    inspec-axel
-        break-test
         
      Variant Groups:
         test
           choose at least one
           Variants:
-            break-test
             inspect-axel
             
         axel1
@@ -23,24 +21,17 @@
           Variants:
             axel2
      
-     Constraint: axel2 and not break-test
+     Constraint: axel2 and inspect-axel
      
 		 Operations: 
         inspect
-        run-break_test
 
 		 axel1 and inspect-axel -> inspect
 		 axel2 and inspect-axel -> inspect
-		 axel1 and break-test -> run_break_test
-		 axel2 and break-test -> run_break_test
 
 -->
 <testData>
   <operations>
-    <operation>
-      <operationName>run-break-test</operationName>
-      <displayName>run break test</displayName>
-    </operation>
     <operation>
       <operationName>inspect</operationName>
       <displayName>inspect</displayName>
@@ -62,18 +53,12 @@
       <variantIndex>3</variantIndex>
       <variantDisplayName>inspect axel</variantDisplayName>
     </variant>
-    <variant>
-      <variantName>break-test</variantName>
-      <variantIndex>4</variantIndex>
-      <variantDisplayName>break test</variantDisplayName>
-    </variant>
   </variants>
   <variantGroups>
     <variantGroup>
       <variantGroupName>test</variantGroupName>
       <groupCardinality>choose at least one</groupCardinality>
       <variantRefs>
-        <variantRef>break-test</variantRef>
         <variantRef>inspect-axel</variantRef>
       </variantRefs>
     </variantGroup>
@@ -94,7 +79,7 @@
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and axel2 break-test</logic>
+      <logic>and axel2 inspect-axel</logic>
     </constraint>
   </constraints>
   <variantOperationMappings>
@@ -108,26 +93,10 @@
     </variantOperationMapping>
     <variantOperationMapping>
       <variantRefs>
-        <variantRef>and axel1 break-test</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>run-break-test</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
         <variantRef>and axel2 inspect-axel</variantRef>
       </variantRefs>
       <operationRefs>
         <operationRef>inspect</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>and axel2 break-test</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>run-break-test</operationRef>
       </operationRefs>
     </variantOperationMapping>
   </variantOperationMappings>

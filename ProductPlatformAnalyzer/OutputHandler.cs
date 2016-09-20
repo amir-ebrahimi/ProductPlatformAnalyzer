@@ -582,7 +582,8 @@ namespace ProductPlatformAnalyzer
                     {
                         var = exp.ToString();
                         vg = fwrapper.getVariantGroup(var.Split(' ')[0]);
-                        Console.WriteLine(vg + "." + var);
+                        if (! vg.Contains("Virtual-VG"))
+                            Console.WriteLine(vg + "." + var);
                     }
                 }
             }
@@ -827,24 +828,28 @@ namespace ProductPlatformAnalyzer
 
             foreach (String vg in groups)
             {
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("th class=\"vg\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(vg);
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
-                foreach (string[] var in variants)
-                    if (String.Equals(var[0], vg))
-                    {
-                        writer.WriteBeginTag("tr");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(var[1]);
-                        writer.WriteEndTag("td");
-                        writer.WriteEndTag("tr");
-                    }
+                if (!String.Equals(vg, "Virtual-VG"))
+                {
+
+                    writer.WriteBeginTag("tr");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.WriteBeginTag("th class=\"vg\"");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(vg);
+                    writer.WriteEndTag("th");
+                    writer.WriteEndTag("tr");
+                    foreach (string[] var in variants)
+                        if (String.Equals(var[0], vg))
+                        {
+                            writer.WriteBeginTag("tr");
+                            writer.Write(HtmlTextWriter.TagRightChar);
+                            writer.WriteBeginTag("td");
+                            writer.Write(HtmlTextWriter.TagRightChar);
+                            writer.Write(var[1]);
+                            writer.WriteEndTag("td");
+                            writer.WriteEndTag("tr");
+                        }
+                }
             }
             writer.WriteEndTag("table");
             writer.WriteEndTag("div");
@@ -2576,8 +2581,8 @@ namespace ProductPlatformAnalyzer
                         newP = newP + var.names + "<br>";
                     }
                      */
-                    variant virtualVariant = fwrapper.findVirtualVariant(p);
-                    newP = virtualVariant.names + "<br>";
+                    string virtualVariantExpression = fwrapper.findVirtualVariantExpression(p);
+                    newP = virtualVariantExpression + "<br>";
                     return newP;
                 }
                     

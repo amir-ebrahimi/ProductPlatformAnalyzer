@@ -1,0 +1,75 @@
+﻿<?xml version="1.0"?>
+<!-- Testcase axel_test: Test should be runnable!
+		 Variant: 
+        axel1
+        
+     Variant Groups:
+        test
+          choose at least one
+          Variants:
+            inspect-axel
+            
+        axel1
+          choose at least one
+          Variants:
+            axel1
+            
+     Constraint: axel1 and inspect-axel
+     
+		 Operations: 
+        inspect
+
+		 axel1 and inspect-axel -> inspect
+
+-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>inspect</operationName>
+      <displayName>inspect</displayName>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>axel1</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>axel1</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>inspect-axel</variantName>
+      <variantIndex>2</variantIndex>
+      <variantDisplayName>inspect axel</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>test</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>inspect-axel</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>axel1</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>axel1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>and axel1 inspect-axel</logic>
+    </constraint>
+  </constraints>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>and axel1 inspect-axel</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>inspect</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>
