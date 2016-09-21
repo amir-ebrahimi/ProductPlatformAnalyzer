@@ -117,7 +117,6 @@ namespace ProductPlatformAnalyzer
             {
                 bool lPreAnalysisResult = true;
 
-                lZ3Solver.setDebugMode(true);
                 lOpSeqAnalysis = true;
 
                 convertFVariants2Z3Variants();
@@ -508,6 +507,15 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        enum VariantGroupCardinality
+        {
+            Choose_Exactly_One,
+            Choose_At_Least_One,
+            Choose_Zero_Or_More,
+            Choose_All
+        }
+
+        //TODO: We need an enum for the Variant Group Cardinality to be used here and also used where the Variant Groups are created from the input files
         public void makeGCardinalityConstraint(variantGroup pVariantGroup)
         {
             try
@@ -539,7 +547,7 @@ namespace ProductPlatformAnalyzer
 
                             break;
                         }
-                    case "choose any number":
+                    case "choose zero or more":
                         {
 
                             break;
@@ -1375,6 +1383,7 @@ namespace ProductPlatformAnalyzer
             return result;
         }
 
+        //TODO: We need enum for operators to be used here
         public BoolExpr ParseConstraintExpression(Node<string> pNode)
         {
             BoolExpr lResult = null;
@@ -1461,6 +1470,7 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
+        //TODO: We need an enum for operators which should be used here
         public BoolExpr ParseExpression(Node<string> pNode)
         {
             BoolExpr lResult = null;
@@ -2137,6 +2147,8 @@ namespace ProductPlatformAnalyzer
                 // These examples need proof generation turned on.
                 using (Context ctx = new Context(new Dictionary<string, string>() { { "proof", "true" } }))
                 {
+                    lZ3Solver.setDebugMode(true);
+
                     loadInitialData(file);
 
                     //NoOfCycles = NumOfOperations * NumOfTransitions

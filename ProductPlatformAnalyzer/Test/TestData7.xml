@@ -99,8 +99,7 @@
 <variantOperationMappings>
 	<variantOperationMapping>
 		<variantRefs>
-	    	<variantRef>axel1</variantRef>
-	    	<variantRef>axel-test</variantRef>
+	    	<variantRef>and axel1 axel-test</variantRef>
 		</variantRefs>
 		<operationRefs>
 		   <operationRef>run-axel-test</operationRef>

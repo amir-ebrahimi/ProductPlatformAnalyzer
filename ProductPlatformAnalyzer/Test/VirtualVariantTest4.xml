@@ -2,8 +2,6 @@
 <!-- Testcase axel_test: Test should be runnable!
 		 Variant: 
         axel1
-        axel2
-		    inspec-axel
         
      Variant Groups:
         test
@@ -15,22 +13,31 @@
           choose at least one
           Variants:
             axel1
-            axel2
             
-     Constraint: axel2 and inspect-axel
+     Constraint: axel1 and inspect-axel
      
 		 Operations: 
-        inspect
+        inspect-axel1
+        
+        test-axel1
+          Pre: inspect-axel1_F_2
 
-		 axel1 and inspect-axel -> inspect
-		 axel2 and inspect-axel -> inspect
+		 axel1 and inspect-axel -> inspect-axel1
+                                test-axel1
 
 -->
 <testData>
   <operations>
     <operation>
-      <operationName>inspect</operationName>
-      <displayName>inspect</displayName>
+      <operationName>inspect-axel1</operationName>
+      <displayName>inspect-axel1</displayName>
+    </operation>
+    <operation>
+      <operationName>test-axel1</operationName>
+      <displayName>test-axel1</displayName>
+      <operationPrecondition>
+        <operationName>inspect-axel1_F_2</operationName>
+      </operationPrecondition>
     </operation>
   </operations>
   <variants>
@@ -40,13 +47,8 @@
       <variantDisplayName>axel1</variantDisplayName>
     </variant>
     <variant>
-      <variantName>axel2</variantName>
-      <variantIndex>2</variantIndex>
-      <variantDisplayName>axel2</variantDisplayName>
-    </variant>
-    <variant>
       <variantName>inspect-axel</variantName>
-      <variantIndex>3</variantIndex>
+      <variantIndex>2</variantIndex>
       <variantDisplayName>inspect axel</variantDisplayName>
     </variant>
   </variants>
@@ -60,16 +62,15 @@
     </variantGroup>
     <variantGroup>
       <variantGroupName>axel1</variantGroupName>
-      <groupCardinality>choose exactly one</groupCardinality>
+      <groupCardinality>choose at least one</groupCardinality>
       <variantRefs>
         <variantRef>axel1</variantRef>
-        <variantRef>axel2</variantRef>
       </variantRefs>
     </variantGroup>
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and axel2 inspect-axel</logic>
+      <logic>and axel1 inspect-axel</logic>
     </constraint>
   </constraints>
   <variantOperationMappings>
@@ -78,15 +79,8 @@
         <variantRef>and axel1 inspect-axel</variantRef>
       </variantRefs>
       <operationRefs>
-        <operationRef>inspect</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>and axel2 inspect-axel</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>inspect</operationRef>
+        <operationRef>inspect-axel1</operationRef>
+        <operationRef>test-axel1</operationRef>
       </operationRefs>
     </variantOperationMapping>
   </variantOperationMappings>
