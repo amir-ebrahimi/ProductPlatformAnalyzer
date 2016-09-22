@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0"?>
-<!-- Testcase axel_test: Test should be runnable!
+<!-- Testcase axel_test: 
+In this test we have the Virtual Variant example and we want to add the Virtual Variant to multiple operations mapping
+Test should be runnable!
 		 Variant: 
         axel1
+        inspect-axel
         
      Variant Groups:
         test
