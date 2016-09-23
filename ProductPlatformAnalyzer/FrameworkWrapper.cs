@@ -117,23 +117,24 @@ namespace ProductPlatformAnalyzer
             return OperationList.Count();
         }
 
-        public variantOperations getVariantExprOperations(string pVariantExpr)
+        public List<operation> getVariantExprOperations(string pVariantExpr)
         {
-            variantOperations lResultVariantOperations = null;
+            List<operation> lResultOperations = null;
             try
             {
-                /*foreach (variantOperations lVariantOperations in VariantsOperations)
+                foreach (variantOperations lVariantOperations in VariantsOperations)
                 {
-                    if (lVariantOperations.getVariant().names.Equals(pVariantName))
-                        tempVariantOperations = lVariantOperations;
-                }*/
+                    if (lVariantOperations.getVariantExpr().Equals(pVariantExpr))
+                        lResultOperations = lVariantOperations.getOperations();
+                }
 
-                List<variantOperations> lVariantOperations = (from variantsOperations in VariantsOperations
+                //TODO: fix the LINQ query for this
+                /*List<operation> lOperations = (from variantsOperations in VariantsOperations
                                          where variantsOperations.getVariantExpr() == pVariantExpr.Trim()
-                                         select variantsOperations).ToList();
+                                         select variantsOperations.getOperations()).ToList();
 
-                if (lVariantOperations.Count == 1)
-                    lResultVariantOperations = lVariantOperations[0];
+                if (lOperations.Count >= 1)
+                    lResultOperations = lOperations;*/
 
             }
             catch (Exception ex)
@@ -141,7 +142,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in getVariantExprOperations, pVariantExpr: " + pVariantExpr);
                 Console.WriteLine(ex.Message);
             }
-            return lResultVariantOperations;
+            return lResultOperations;
         }
 
         public operation findOperationWithName(String pOperationName)

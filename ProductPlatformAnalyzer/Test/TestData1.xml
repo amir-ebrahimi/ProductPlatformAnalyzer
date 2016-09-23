@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<!-- Process should finish -->
+<!-- Simple One variant one operation case
+      Process should finish -->
 <!-- Operations: scan-barcode
 				, mount
 				, test_frame_rigid -->

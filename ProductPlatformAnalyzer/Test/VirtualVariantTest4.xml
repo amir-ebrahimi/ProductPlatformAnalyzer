@@ -23,7 +23,7 @@ Test should be runnable!
         inspect-axel1
         
         test-axel1
-          Pre: inspect-axel1_F_2
+          Pre: inspect-axel1_F_3_2
 
 		 axel1 and inspect-axel -> inspect-axel1
                                 test-axel1
@@ -39,7 +39,7 @@ Test should be runnable!
       <operationName>test-axel1</operationName>
       <displayName>test-axel1</displayName>
       <operationPrecondition>
-        <operationName>inspect-axel1_F_2</operationName>
+        <operationName>inspect-axel1_F_3_2</operationName>
       </operationPrecondition>
     </operation>
   </operations>
