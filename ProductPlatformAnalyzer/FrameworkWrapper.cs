@@ -946,7 +946,20 @@ namespace ProductPlatformAnalyzer
 
                 }
 
-                System.IO.File.WriteAllText("C:/Users/amirho/Desktop/Output/Debug/DataSummary.txt", lDataSummary);
+                //VariantOperationMappings
+                lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
+                foreach (variantOperations lVariantOperations in variantsOperations)
+                {
+                    lDataSummary += "Variant Name: " + lVariantOperations.getVariantExpr() + System.Environment.NewLine;
+                    lDataSummary += "Operations: " + System.Environment.NewLine;
+                    foreach (operation lOperation in lVariantOperations.getOperations())
+                    {
+                        lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
+                    }
+                }
+
+                System.Console.WriteLine(lDataSummary);
+                System.IO.File.WriteAllText("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Output/Debug/DataSummary.txt", lDataSummary);
 
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/DataSummary.txt", lDataSummary);
 
@@ -1000,8 +1013,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-//        public void CreateVariantInstance(String pName, int pIndex, String pDisplayName, List<String> pManufacturingOperation)
-        public void CreateVariantInstance(String pName, int pIndex, String pDisplayName)
+        public void CreateVariantInstance(string pName, int pIndex, string pDisplayName)
         {
             try
             {
@@ -1009,15 +1021,6 @@ namespace ProductPlatformAnalyzer
                 tempVariant.names = pName;
                 tempVariant.index = pIndex;
                 tempVariant.displayName = pDisplayName;
-                /*if (pManufacturingOperation != null)
-                {
-                    List<operation> lManOperations = new List<operation>();
-                    foreach (String lManufacturingOperationName in pManufacturingOperation)
-                    {
-                        lManOperations.Add(findOperationWithName(lManufacturingOperationName));
-                    }
-                    tempVariant.manOperations = lManOperations;
-                }*/
                 addVariant(tempVariant);
             }
             catch (Exception ex)
@@ -1029,7 +1032,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void CreateVariantGroupInstance(String pName, String pGroupCardinality, List<String> pVariantList)
+        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, List<string> pVariantList)
         {
             try
             {
@@ -1039,7 +1042,7 @@ namespace ProductPlatformAnalyzer
                 if (pVariantList != null)
                 {
                     List<variant> tempVariantList = new List<variant>();
-                    foreach (String lVariantName in pVariantList)
+                    foreach (string lVariantName in pVariantList)
                     {
                         tempVariantList.Add(findVariantWithName(lVariantName));
                     }
@@ -1070,7 +1073,7 @@ namespace ProductPlatformAnalyzer
                 if (pOperationList != null)
                 {
                     List<operation> tempOperations = new List<operation>();
-                    foreach (String lOperationName in pOperationList)
+                    foreach (string lOperationName in pOperationList)
                     {
                         tempOperations.Add(getOperationFromOperationName(lOperationName));
                     }
@@ -1158,7 +1161,7 @@ namespace ProductPlatformAnalyzer
             return lResultTrait;
         }
 
-        private void CreateStationInstance(String pName, List<string> pStationResources)
+        private void CreateStationInstance(string pName, List<string> pStationResources)
         {
             try
             {
