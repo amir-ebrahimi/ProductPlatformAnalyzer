@@ -1,12 +1,18 @@
 <?xml version="1.0"?>
-<!-- Process should finish -->
+<!-- Simple 1 Variant 2 Operations one with pre and post condition
+Process should finish -->
 
-<!-- Operations: scan-barcode
-				, mount, Precondition: scan-barcode_F_1_2, Postcondition: scan-barcode_F_1_2 -->
+<!-- Operations: 
+        scan-barcode
+				mount
+            Precondition: scan-barcode_F_1_2
+            Postcondition: scan-barcode_F_1_2 -->
 
-<!-- Variants: frame-rigid, Operations: scan-barcode, mount	-->
+<!-- Variants: frame-rigid	-->
 
-<!-- VariantGroups: frame, Variants: frame-rigid -->
+<!-- VariantGroups: 
+      frame
+        Variants: frame-rigid -->
 
 <!-- Constraints: frame-rigid -->
 <testData>

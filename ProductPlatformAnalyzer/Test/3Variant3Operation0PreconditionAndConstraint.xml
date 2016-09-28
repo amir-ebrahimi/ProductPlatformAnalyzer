@@ -1,18 +1,29 @@
 ﻿<?xml version="1.0"?>
-<!-- Process should finish -->
+<!-- 3 Variants 3 Operations No Preconditions And constraint 
+Process should finish -->
 
-<!-- Operations: scan-barcode
-				, mount -->
+<!-- Operations: 
+        scan-barcode
+				mount
+        mount-cab-->
 
-<!-- Variants: frame-rigid, Operations: mount
-				frame-tractor, Operations: scan-barcode
-				cab-V1, Operations: scan-barcode
+<!-- Variants: 
+        frame-rigid
+				frame-tractor
+				cab-V1
 				-->
 
-<!-- VariantGroups: frame, Variants: frame-rigid, frame-tractor
-                    cab, Variants: cab-V1-->
+<!-- VariantGroups: 
+        frame
+          Variants: frame-rigid, frame-tractor
+        cab, Variants: cab-V1-->
 
 <!-- Constraints: and frame-rigid cab-V1 -->
+<!-- Variant Operation Mapping
+        frame-rigid -> mount
+        frame-tractor -> scan-barcode
+        cab-v1 -> mount-cab
+        -->
 <testData>
   <operations>
     <operation>

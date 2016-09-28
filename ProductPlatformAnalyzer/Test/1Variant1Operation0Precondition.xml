@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<!-- Simple One variant one operation case
+<!-- Simple One variant one operation no precondition case
       Process should finish -->
 <!-- Operations: scan-barcode
-				, mount
-				, test_frame_rigid -->
+ -->
 
-<!-- Variants: frame-rigid, Operations: scan-barcode new -->
+<!-- Variants: frame-rigid -->
 
 <!-- VariantGroups: frame, Variants: frame-rigid -->
 

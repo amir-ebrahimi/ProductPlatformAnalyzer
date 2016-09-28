@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<!-- Process should finish -->
+<!-- 2 Variants 2 Operations, one of which has pre and post condition
+Process should finish -->
 
 <!-- Operations: 
         scan-barcode
