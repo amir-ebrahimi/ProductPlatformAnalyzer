@@ -17,6 +17,9 @@ namespace ProductPlatformAnalyzer
         public int trueProbability { get; set; }
         public int falseProbability { get; set; }
         public int expressionProbability { get; set; }
+        public int maxTraitNumber { get; set; }
+        public int maxNoOfTraitAttributes { get; set; }
+        public int maxResourceNumber { get; set; }
         public List<int> lOverallChosenVariantCodes { get; set; }
         public List<int> lOverallFreeVariantCodes { get; set; }
         public List<int> lOverallChosenOperationCodes { get; set; }
@@ -32,6 +35,9 @@ namespace ProductPlatformAnalyzer
             trueProbability = 100;
             falseProbability = 0;
             expressionProbability = 0;
+            maxTraitNumber = 0;
+            maxResourceNumber = 0;
+            maxNoOfTraitAttributes = 0;
 
             myRandom = new Random();
             lFrameworkWrapper = new FrameworkWrapper();
@@ -48,7 +54,10 @@ namespace ProductPlatformAnalyzer
                                     , int pMaxOperationNumber
                                     , int pTrueProbability
                                     , int pFalseProbability
-                                    , int pExpressionProbability)
+                                    , int pExpressionProbability
+                                    , int pMaxTraitNumber
+                                    , int pMaxNoOfTraitAttributes
+                                    , int pMaxResourceNumber)
         {
             if (pMaxVariantGroupNumber != 0)
                 maxVariantGroupNumber = pMaxVariantGroupNumber;
@@ -68,6 +77,12 @@ namespace ProductPlatformAnalyzer
                 falseProbability = pFalseProbability;
             if (pExpressionProbability != 0)
                 expressionProbability = pExpressionProbability;
+            if (pMaxTraitNumber != 0)
+                maxTraitNumber = pMaxTraitNumber;
+            if (pMaxNoOfTraitAttributes != 0)
+                maxNoOfTraitAttributes = pMaxNoOfTraitAttributes;
+            if (pMaxResourceNumber != 0)
+                maxResourceNumber = pMaxResourceNumber;
 
             createVariants();
             createVariantGroups();
@@ -76,7 +91,66 @@ namespace ProductPlatformAnalyzer
             updateOperationPrePostConditions();
 
             createVariantOperationMapping();
+
+            //createTraits();
+            //createResources();
             lFrameworkWrapper.PrintDataSummary();
+        }
+
+        private void createTraits()
+        {
+            try
+            {
+                List<trait> lInheritedTraits = new List<trait>();
+                List<Tuple<string,string>> lTraitAttributes = new List<Tuple<string,string>>();
+                for (int i = 0; i < maxTraitNumber; i++)
+                {
+                    string lTraitName = "T" + i;
+                    lTraitAttributes = makeRandomSetOfTraitAttributes(lTraitName);
+                    lFrameworkWrapper.createTraitInstance(lTraitName
+                                                            , lInheritedTraits
+                                                            , lTraitAttributes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createTraits");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private List<Tuple<string, string>> makeRandomSetOfTraitAttributes(string pTraitName)
+        {
+            List<Tuple<string, string>> lTraitAttributes = new List<Tuple<string, string>>();
+            try
+            {
+                int lNoOfAttributes = myRandom.Next(1, maxNoOfTraitAttributes);
+
+                for (int i = 0; i < lNoOfAttributes; i++)
+                {
+                    Tuple<string, string> lAttributeTuple = new Tuple<string, string>("int", pTraitName + "Att" + i);
+                    lTraitAttributes.Add(lAttributeTuple);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in makeRandomSetOfTraitAttributes");
+                Console.WriteLine(ex.Message);
+            }
+            return lTraitAttributes;
+        }
+
+        private void createResources()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createResources");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void resetOverallFreeVariantCodes()

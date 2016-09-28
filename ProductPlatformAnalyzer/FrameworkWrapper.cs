@@ -912,49 +912,74 @@ namespace ProductPlatformAnalyzer
                 string lDataSummary = "";
 
                 //Operations
-                lDataSummary += "Operations:" + System.Environment.NewLine;
-                foreach (operation lOperation in OperationList)
+                if (operationList.Count > 0)
                 {
-                    lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
-                    lDataSummary += "Operation Display Name: " + lOperation.displayName + System.Environment.NewLine;
-                    foreach (string lPreconditionOperationName in lOperation.precondition)
-                        lDataSummary += "Operation Precondition: " + lPreconditionOperationName + System.Environment.NewLine;
+                    lDataSummary += "Operations:" + System.Environment.NewLine;
+                    foreach (operation lOperation in OperationList)
+                    {
+                        lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
+                        lDataSummary += "Operation Display Name: " + lOperation.displayName + System.Environment.NewLine;
+                        foreach (string lPreconditionOperationName in lOperation.precondition)
+                            lDataSummary += "Operation Precondition: " + lPreconditionOperationName + System.Environment.NewLine;
 
-                    foreach (string lPostconditionOperationName in lOperation.postcondition)
-                        lDataSummary += "Operation Postcondition: " + lPostconditionOperationName + System.Environment.NewLine;
+                        foreach (string lPostconditionOperationName in lOperation.postcondition)
+                            lDataSummary += "Operation Postcondition: " + lPostconditionOperationName + System.Environment.NewLine;
+                    }
                 }
 
                 //Variants
-                lDataSummary += "Variants:" + System.Environment.NewLine;
-                foreach (variant lVariant in VariantList)
+                if (variantList.Count > 0)
                 {
-                    lDataSummary += "Variant Name: " + lVariant.names + System.Environment.NewLine;
-                    lDataSummary += "Variant Index: " + lVariant.index + System.Environment.NewLine;
-                    lDataSummary += "Variant Display Name: " + lVariant.displayName + System.Environment.NewLine;
-/*                    foreach (operation lManOperation in lVariant.manOperations)
-                        lDataSummary += "Variant Manufacturing Operation: " + lManOperation.names + System.Environment.NewLine;*/
-                }
-
-                //Variantgroups
-                lDataSummary += "Variant Groups:" + System.Environment.NewLine;
-                foreach (variantGroup lVariantGroup in VariantGroupList)
-                {
-                    lDataSummary += "Variant Group Name: " + lVariantGroup.names + System.Environment.NewLine;
-                    lDataSummary += "Variant Group Cardinality: " + lVariantGroup.gCardinality + System.Environment.NewLine;
-                    foreach (variant lVariant in lVariantGroup.variant)
-                        lDataSummary += "Variant Group Variant: " + lVariant.displayName + System.Environment.NewLine;
-
-                }
-
-                //VariantOperationMappings
-                lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
-                foreach (variantOperations lVariantOperations in variantsOperations)
-                {
-                    lDataSummary += "Variant Name: " + lVariantOperations.getVariantExpr() + System.Environment.NewLine;
-                    lDataSummary += "Operations: " + System.Environment.NewLine;
-                    foreach (operation lOperation in lVariantOperations.getOperations())
+                    lDataSummary += "Variants:" + System.Environment.NewLine;
+                    foreach (variant lVariant in VariantList)
                     {
-                        lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
+                        lDataSummary += "Variant Name: " + lVariant.names + System.Environment.NewLine;
+                        lDataSummary += "Variant Index: " + lVariant.index + System.Environment.NewLine;
+                        lDataSummary += "Variant Display Name: " + lVariant.displayName + System.Environment.NewLine;
+                        /*                    foreach (operation lManOperation in lVariant.manOperations)
+                                                lDataSummary += "Variant Manufacturing Operation: " + lManOperation.names + System.Environment.NewLine;*/
+                    }
+
+                    //Variantgroups
+                    lDataSummary += "Variant Groups:" + System.Environment.NewLine;
+                    foreach (variantGroup lVariantGroup in VariantGroupList)
+                    {
+                        lDataSummary += "Variant Group Name: " + lVariantGroup.names + System.Environment.NewLine;
+                        lDataSummary += "Variant Group Cardinality: " + lVariantGroup.gCardinality + System.Environment.NewLine;
+                        foreach (variant lVariant in lVariantGroup.variant)
+                            lDataSummary += "Variant Group Variant: " + lVariant.displayName + System.Environment.NewLine;
+
+                    }
+                }
+
+                if (variantsOperations.Count > 0)
+                {
+                    //VariantOperationMappings
+                    lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
+                    foreach (variantOperations lVariantOperations in variantsOperations)
+                    {
+                        lDataSummary += "Variant Name: " + lVariantOperations.getVariantExpr() + System.Environment.NewLine;
+                        lDataSummary += "Operations: " + System.Environment.NewLine;
+                        foreach (operation lOperation in lVariantOperations.getOperations())
+                        {
+                            lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
+                        }
+                    }
+                }
+
+                //Traits
+                if (traitList.Count > 0)
+                {
+                    lDataSummary += "Traits:" + System.Environment.NewLine;
+                    foreach (trait lTrait in traitList)
+                    {
+                        lDataSummary += "Trait Name: " + lTrait.names + System.Environment.NewLine;
+                        lDataSummary += "Attributes: " + System.Environment.NewLine;
+                        foreach (Tuple<string, string> lAttribute in lTrait.attributes)
+                        {
+                            lDataSummary += "Attribute Name: " + lAttribute.Item2 + System.Environment.NewLine;
+                            lDataSummary += "Attribute Type: " + lAttribute.Item1 + System.Environment.NewLine;
+                        }
                     }
                 }
 

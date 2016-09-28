@@ -100,7 +100,7 @@ namespace ProductPlatformAnalyzer
                 //lFrameworkWrapper.LoadInitialDataFromXMLFile("C:/Users/Amir/Desktop/Output/InitialData/TestData1.xml");
 
                 //Creating random data
-                lRandomTestCreator.createRandomData(2, 4, 3, 100, 0, 0);
+                lRandomTestCreator.createRandomData(2, 4, 3, 100, 0, 0, 4, 3, 2);
                 //Console.WriteLine(lFrameworkWrapper.getConstraintList());
             }
             catch (Exception ex)
