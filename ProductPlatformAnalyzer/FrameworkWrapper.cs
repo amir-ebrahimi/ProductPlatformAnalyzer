@@ -866,8 +866,15 @@ namespace ProductPlatformAnalyzer
             try
             {
                 String[] parts = pActiveOperationName.Split('_');
-                if (parts[2] != null)
-                    lVariantIndex = Convert.ToInt32(parts[2]);
+                //ActiveOperationInstance: OperationName_State_Variant_Transition
+                if (parts.Length >= 3)
+                {
+                    if (parts[2] != null)
+                        lVariantIndex = Convert.ToInt32(parts[2]);
+                }
+                else
+                    //This means that the variant for the active operation has not been mentioned so this operation should be considered for all active variants
+                    lVariantIndex = -1;
             }
             catch (Exception ex)
             {
@@ -886,8 +893,15 @@ namespace ProductPlatformAnalyzer
                 if (!pActiveOperationName.Contains("Possible") && !pActiveOperationName.Contains("Use"))
                 {
                     String[] parts = pActiveOperationName.Split('_');
-                    if (parts[3] != null)
-                        lOpTransNum = Convert.ToInt32(parts[3]);
+                    //ActiveOperationInstance: OperationName_State_Variant_Transition
+                    if (parts.Length.Equals(4))
+                    {
+                        if (parts[3] != null)
+                            lOpTransNum = Convert.ToInt32(parts[3]);
+                    }
+                    else
+                        //This means that for the active operation the transition number has not been mentioned hence it should be considered from the first transition
+                        lOpTransNum = 0;
                 }
 
             }
