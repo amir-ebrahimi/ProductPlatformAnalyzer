@@ -154,7 +154,8 @@
             <operationName>out0-axle1-auto-wsTruckPos</operationName>
             <displayName>out0_axle1_auto_wsTruckPos</displayName>
             <requirements>
-                <requirement>and TTruckPositioning: == 1 type TWorkshopControl: == 2 level</requirement>
+                <requirement>TTruckPositioning: == 1 type</requirement>
+                <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition></operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -163,7 +164,8 @@
             <operationName>axle1-axle2-auto-wsTruckPos</operationName>
             <displayName>axle1_axle2_auto_wsTruckPos</displayName>
             <requirements>
-                <requirement>and TTruckPositioning: == 1 type TWorkshopControl: == 2 level</requirement>
+                <requirement>TTruckPositioning: == 1 type</requirement>
+                <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -172,7 +174,8 @@
             <operationName>axle1-out1-auto-wsTruckPos</operationName>
             <displayName>axle1_out1_auto_wsTruckPos</displayName>
             <requirements>
-                <requirement>and TTruckPositioning: == 1 type TWorkshopControl: == 2 level</requirement>
+                <requirement>TTruckPositioning: == 1 type</requirement>
+                <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -181,7 +184,8 @@
             <operationName>axle2-out1-auto-wsTruckPos</operationName>
             <displayName>axle2_out1_auto_wsTruckPos</displayName>
             <requirements>
-                <requirement>and TTruckPositioning: == 1 type TWorkshopControl: == 2 level</requirement>
+                <requirement>TTruckPositioning: == 1 type</requirement>
+                <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle2-man reset-from-bt-mode-axle2</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -226,7 +230,8 @@
             <operationName>add-pressure-sensor</operationName>
             <displayName>add_pressure_sensor</displayName>
             <requirements>
-                <requirement>and TTechnician: >= 1 level TRollers: == 1 air-pressure-sensors</requirement>
+                <requirement>TTechnician: >= 1 level</requirement>
+                <requirement>TRollers: == 1 air-pressure-sensors</requirement>
             </requirements>
             <operationPrecondition></operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -235,7 +240,8 @@
             <operationName>remove-pressure-sensor</operationName>
             <displayName>remove_pressure_sensor</displayName>
             <requirements>
-                <requirement>and TTechnician: >= 1 level TRollers: == 1 air-pressure-sensors</requirement>
+                <requirement>TTechnician: >= 1 level</requirement>
+                <requirement>TRollers: == 1 air-pressure-sensors</requirement>
             </requirements>
             <operationPrecondition>and brake-test-axle1-man or brake-test-axle2-man brake-test-axle2-man_U</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -244,7 +250,8 @@
             <operationName>connect-wl</operationName>
             <displayName>connect_wl</displayName>
             <requirements>
-                <requirement>and TWorkshopControl: >= 1 level TWorkshopControl: == 2 connect</requirement>
+                <requirement>TWorkshopControl: >= 1 level</requirement>
+                <requirement>TWorkshopControl: == 2 connect</requirement>
             </requirements>
             <operationPrecondition></operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -253,7 +260,8 @@
             <operationName>disconnect-wl</operationName>
             <displayName>disconnect_wl</displayName>
             <requirements>
-                <requirement>and TWorkshopControl: >= 1 level TWorkshopControl: == 2 connect</requirement>
+                <requirement>TWorkshopControl: >= 1 level</requirement>
+                <requirement>TWorkshopControl: == 2 connect</requirement>
             </requirements>
             <operationPrecondition>and reset-from-bt-mode-axle1 or reset-from-bt-mode-axle2 reset-from-bt-mode-axle2_U or axle1-out1-auto-wsTruckPos axle1-out1-auto-wsTruckPos_U or axle2-out1-auto-wsTruckPos axle2-out1-auto-wsTruckPos_U or
                 axle1-out1-auto-truckSelfPos axle1-out1-auto-truckSelfPos_U or axle2-out1-auto-truckSelfPos axle2-out1-auto-truckSelfPos_U</operationPrecondition>
@@ -263,7 +271,9 @@
             <operationName>brake-test-axle1-man</operationName>
             <displayName>brake_test_axle1_man</displayName>
             <requirements>
-                <requirement>and TTechnician: >= 1 level TRollers: >= 1 type TRollers: >= 1 software</requirement>
+                <requirement>TTechnician: >= 1 level</requirement>
+                <requirement>TRollers: >= 1 type</requirement>
+                <requirement>TRollers: >= 1 software</requirement>
             </requirements>
             <operationPrecondition>and add-pressure-sensor or out0-axle1-man out0-axle1-auto-wsTruckPos out0-axle1-auto-truckSelfPos</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -272,7 +282,9 @@
             <operationName>brake-test-axle2-man</operationName>
             <displayName>brake_test_axle2_man</displayName>
             <requirements>
-                <requirement>and TTechnician: >= 1 level TRollers: >= 1 type TRollers: >= 1 software</requirement>
+                <requirement>TTechnician: >= 1 level</requirement>
+                <requirement>TRollers: >= 1 type</requirement>
+                <requirement>TRollers: >= 1 software</requirement>
             </requirements>
             <operationPrecondition>or axle1-axle2-man axle1-axle2-auto-wsTruckPos axle1-axle2-auto-truckSelfPos</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -299,7 +311,9 @@
             <operationName>brake-test-axle1-auto</operationName>
             <displayName>brake_test_axle1_auto</displayName>
             <requirements>
-                <requirement>and TWorkshopControl: >= 1 level TRollers: >= 1 type TRollers: >= 2 software</requirement>
+                <requirement>TWorkshopControl: >= 1 level</requirement>
+                <requirement>TRollers: >= 1 type</requirement>
+                <requirement>TRollers: >= 2 software</requirement>
             </requirements>
             <operationPrecondition>set-in-bt-mode-axle1</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -326,7 +340,9 @@
             <operationName>brake-test-axle2-auto</operationName>
             <displayName>brake_test_axle2_auto</displayName>
             <requirements>
-                <requirement>and TWorkshopControl: >= 1 level TRollers: >= 1 type TRollers: >= 2 software</requirement>
+                <requirement>TWorkshopControl: >= 1 level</requirement>
+                <requirement>TRollers: >= 1 type</requirement>
+                <requirement>TRollers: >= 2 software</requirement>
             </requirements>
             <operationPrecondition>set-in-bt-mode-axle2</operationPrecondition>
             <operationPostcondition></operationPostcondition>
@@ -419,7 +435,7 @@
         </variantOperationMapping>
         <variantOperationMapping>
             <variantRefs>
-                <variantRef>and axle1 $\neg$axle2 use_man_drive</variantRef>
+                <variantRef>and axle1 !axle2 use_man_drive</variantRef>
             </variantRefs>
             <operationRefs>
                 <operationRef>axle1-out1-man</operationRef>
@@ -451,7 +467,7 @@
         </variantOperationMapping>
         <variantOperationMapping>
             <variantRefs>
-                <variantRef>and axle1 $\neg$axle2 use_auto_drive vds use_wsTruckPos</variantRef>
+                <variantRef>and axle1 !axle2 use_auto_drive vds use_wsTruckPos</variantRef>
             </variantRefs>
             <operationRefs>
                 <operationRef>axle1-out1-auto-wsTruckPos</operationRef>
@@ -483,7 +499,7 @@
         </variantOperationMapping>
         <variantOperationMapping>
             <variantRefs>
-                <variantRef>and axle1 $\neg$axle2 use_auto_drive vds truckSelfPos use_truckSelfPos</variantRef>
+                <variantRef>and axle1 !axle2 use_auto_drive vds truckSelfPos use_truckSelfPos</variantRef>
             </variantRefs>
             <operationRefs>
                 <operationRef>axle1-out1-auto-truckSelfPos</operationRef>
