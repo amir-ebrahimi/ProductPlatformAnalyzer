@@ -900,8 +900,10 @@ namespace ProductPlatformAnalyzer
                             lOpTransNum = Convert.ToInt32(parts[3]);
                     }
                     else
+                    {
                         //This means that for the active operation the transition number has not been mentioned hence it should be considered from the first transition
                         lOpTransNum = 0;
+                    }
                 }
 
             }
