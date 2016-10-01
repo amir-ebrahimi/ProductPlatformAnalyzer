@@ -1280,7 +1280,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
-            List<variantOperations> operations = new List<variantOperations>(fwrapper.getVariantsOperations());
+            List<variantOperations> lVariantOperationsList = new List<variantOperations>(fwrapper.getVariantsOperationsList());
 
             writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1316,7 +1316,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("th");
             writer.WriteEndTag("tr");
 
-            foreach (variantOperations vop in operations)
+            foreach (variantOperations vop in lVariantOperationsList)
             {
 
                 writer.WriteBeginTag("tr");

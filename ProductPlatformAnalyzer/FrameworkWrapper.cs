@@ -14,7 +14,7 @@ namespace ProductPlatformAnalyzer
         private List<variant> variantList;
         private List<string> constraintList;
         private List<operation> operationList;
-        private List<variantOperations> variantsOperations;
+        private List<variantOperations> variantsOperationsList;
         private List<string> activeOperationInstanceNamesList;
         private List<virtualVariant2VariantExpr> virtualVariant2VariantExprList;
         private List<string> activeOperationNamesList;
@@ -53,10 +53,10 @@ namespace ProductPlatformAnalyzer
             set { this.operationList = value; }
         }
 
-        public List<variantOperations> VariantsOperations
+        public List<variantOperations> VariantsOperationsList
         {
-            get { return this.variantsOperations; }
-            set { this.variantsOperations = value; }
+            get { return this.variantsOperationsList; }
+            set { this.variantsOperationsList = value; }
         }
 
         public List<string> ActiveOperationNamesList
@@ -104,7 +104,7 @@ namespace ProductPlatformAnalyzer
             activeOperationInstanceNamesList = new List<String>();
             activeOperationNamesList = new List<String>();
             inActiveOperationNamesList = new List<string>();
-            variantsOperations = new List<variantOperations>();
+            variantsOperationsList = new List<variantOperations>();
             stationList = new List<station>();
             resourceList = new List<resource>();
             traitList = new List<trait>();
@@ -122,16 +122,16 @@ namespace ProductPlatformAnalyzer
             List<operation> lResultOperations = null;
             try
             {
-                foreach (variantOperations lVariantOperations in VariantsOperations)
+                foreach (variantOperations lVariantOperations in VariantsOperationsList)
                 {
                     if (lVariantOperations.getVariantExpr().Equals(pVariantExpr))
                         lResultOperations = lVariantOperations.getOperations();
                 }
 
                 //TODO: fix the LINQ query for this
-                /*List<operation> lOperations = (from variantsOperations in VariantsOperations
-                                         where variantsOperations.getVariantExpr() == pVariantExpr.Trim()
-                                         select variantsOperations.getOperations()).ToList();
+                /*List<operation> lOperations = (from variantsOperations in VariantsOperationsList
+                                         where VariantsOperationsList.getVariantExpr() == pVariantExpr.Trim()
+                                         select VariantsOperationsList.getOperations()).ToList();
 
                 if (lOperations.Count >= 1)
                     lResultOperations = lOperations;*/
@@ -661,14 +661,14 @@ namespace ProductPlatformAnalyzer
         }
         */
 
-        public List<variantOperations> getVariantsOperations()
+        public List<variantOperations> getVariantsOperationsList()
         {
-            return VariantsOperations;
+            return VariantsOperationsList;
         }
 
-        public void setVariantsOperations(List<variantOperations> pVariantsOperations)
+        public void setVariantsOperationsList(List<variantOperations> pVariantsOperationsList)
         {
-            VariantsOperations = pVariantsOperations;
+            VariantsOperationsList = pVariantsOperationsList;
         }
 
         public string ReturnStringElements(List<String> pList)
@@ -702,6 +702,26 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return tempResultVariant;
+        }
+
+        public variant findVariantWithIndex(int pVariantIndex)
+        {
+            variant lResultVariant = null;
+            try
+            {
+                //TODO: write with LINQ
+                foreach (variant lVariant in VariantList)
+                {
+                    if (lVariant.index.Equals(pVariantIndex))
+                        lResultVariant = lVariant;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in findVariantWithIndex");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
         }
 
         public int findLastVariantIndex()
@@ -860,6 +880,60 @@ namespace ProductPlatformAnalyzer
             return lNextStateActiveOperationName;
         }
 
+        public string getOperationNameFromActiveOperation(string pActiveOperationName)
+        {
+            string lResultOperationName = "";
+            try
+            {
+                string[] parts = pActiveOperationName.Split('_');
+                //ActiveOperationInstance: OperationName_State_Variant_Transition
+                if (parts.Length >= 1)
+                    lResultOperationName = parts[0];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getOperationNameFromActiveOperation");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperationName;
+        }
+
+        public operation getOperationFromActiveOperation(string pActiveOperationName)
+        {
+            operation lResultOperation = null;
+            try
+            {
+                string[] parts = pActiveOperationName.Split('_');
+                //ActiveOperationInstance: OperationName_State_Variant_Transition
+                if (parts.Length >= 1)
+                    lResultOperation = findOperationWithName(parts[0]);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getOperationFromActiveOperation");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperation;
+        }
+
+        public variant getVariantFromActiveOperationName(string pActiveOperationName)
+        {
+            variant lResultVariant = null;
+            try
+            {
+                string[] parts = pActiveOperationName.Split('_');
+                //ActiveOperationInstance: OperationName_State_Variant_Transition
+                if (parts.Length >= 2)
+                    lResultVariant = findVariantWithIndex(int.Parse(parts[2]));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getVariantFromActiveOperation");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
         public int getVariantIndexFromActiveOperation(String pActiveOperationName)
         {
             int lVariantIndex = -1;
@@ -902,7 +976,8 @@ namespace ProductPlatformAnalyzer
                     else
                     {
                         //This means that for the active operation the transition number has not been mentioned hence it should be considered from the first transition
-                        lOpTransNum = 0;
+                        lOpTransNum = calculateTransitionNumberForActiveOperation(pActiveOperationName);
+                        setActiveOperationMissingTransitionNumber(pActiveOperationName, lOpTransNum);
                     }
                 }
 
@@ -915,9 +990,185 @@ namespace ProductPlatformAnalyzer
             return lOpTransNum;
         }
 
+        private void calculateVariantIndexForActiveOperation(string pActiveOperationName)
+        {
+            try
+            {
+                variant lActiveVariant = getVariantFromActiveOperationName(pActiveOperationName);
+                operation lActiveOperation = getOperationFromActiveOperation(pActiveOperationName);
+                //Here we have to find any variantOperations which ourActive Operation is part of
+                foreach (variantOperations lVariantOperations in VariantsOperationsList)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in calculateVariantIndexForActiveOperation");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private int calculateTransitionNumberForActiveOperation(string pActiveOperationName)
+        {
+            int lTransitionNo = 0;
+            try
+            {
+                variant lActiveVariant = getVariantFromActiveOperationName(pActiveOperationName);
+                operation lActiveOperation = getOperationFromActiveOperation(pActiveOperationName);
+                //Here we have to find any variantOperations which ourActive Operation is part of
+                foreach (variantOperations lVariantOperations in VariantsOperationsList)
+                {
+                    string lVariantExpression = lVariantOperations.getVariantExpr();
+
+                    if (lVariantExpression.Contains(lActiveVariant.names))
+                    {
+                        lTransitionNo = 0;
+                        foreach (operation lOperation in lVariantOperations.getOperations())
+                        {
+                            lTransitionNo += 2;
+                            if (lOperation.Equals(lActiveOperation))
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in calculateTransitionNumberForActiveOperation");
+                Console.WriteLine(ex.Message);
+            }
+            return lTransitionNo;
+        }
+
+        private void setActiveOperationMissingTransitionNumber(string pActiveOperationName, int pCalculatedTransitionNumber)
+        {
+            try
+            {
+                string lNewOperationName = pActiveOperationName + "_" + pCalculatedTransitionNumber;
+
+                //Here we know that the operation does not have a transition number hence we set the transition number of the operation to 0
+                updateOperationName(pActiveOperationName, lNewOperationName);
+
+                refactorOperationName(pActiveOperationName, lNewOperationName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in setActiveOperationMissingTransitionNumber");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void refactorOperationName(string pOldOperationName, string pNewOperationName)
+        {
+            try
+            {
+                //But as this operation name has changed we have to change any reference which is to this operation:
+                //1. First in the local operation list
+                updateOperationNameInLocalList(pOldOperationName, pNewOperationName);
+
+                //2. Second in the pre-condition or post condition of any of the other operations
+                updateOperationNameInPrePostConditions(pOldOperationName, pNewOperationName);
+
+                //3. Third in the variant-operation mappings
+                updateOperationNameInVariantOperationMapping(pOldOperationName, pNewOperationName);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in refactorOperationName");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void updateOperationName(string pOldOperationName, string pNewOperationName)
+        {
+            try
+            {
+                operation lFoundOperation = OperationList.Find(item => item.names.Equals(pOldOperationName));
+                if (lFoundOperation != null)
+                    lFoundOperation.names = pNewOperationName;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in updateOperationName");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void updateOperationNameInVariantOperationMapping(string pOldOperationName, string pNewOperationName)
+        {
+            try
+            {
+                //In this function the name of one of the operations in the local list has changed so we want to update any possible references to this operation in the variantOperationsList
+                foreach (variantOperations lVariantOperations in VariantsOperationsList)
+                {
+                    var lOperation = lVariantOperations.getOperations().Find(item => item.names.Contains(pOldOperationName));
+                    if (lOperation != null)
+                    {
+                        lVariantOperations.getOperations().Remove(lOperation);
+                        lOperation.names = pNewOperationName;
+                        lVariantOperations.getOperations().Add(lOperation);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in updateOperationNameInVariantOperationMapping");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void updateOperationNameInPrePostConditions(string pOldOperationName, string pNewOperationName)
+        {
+            try
+            {
+                
+                //In this function the name of one of the operations in the local list has changed so we want to update the pre/post condition of any operation that references this operation
+                foreach (operation lOperation in operationList)
+                {
+                    var lPrecondition = lOperation.precondition.Find(item => item.Contains(pOldOperationName));
+                    if (lPrecondition != null)
+                    {
+                        lOperation.precondition.Remove(pOldOperationName);
+                        lOperation.precondition.Add(pNewOperationName);
+                    }
+
+                    var lPostCondition = lOperation.postcondition.Find(item => item.Contains(pOldOperationName));
+                    if (lPostCondition != null)
+                    {
+                        lOperation.postcondition.Remove(pOldOperationName);
+                        lOperation.postcondition.Add(pNewOperationName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in updateOperationNameInPrePostConditions");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void updateOperationNameInLocalList(string pOldOperationName, string pNewOperationName)
+        {
+            try
+            {
+                //In this function the name of one of the operations in the local list has changed so we want to update the local operation list
+                operation lOperationToChangeName = operationList.Find(item => item.names.Equals(pOldOperationName));
+                if (lOperationToChangeName != null)
+                    lOperationToChangeName.names = pNewOperationName;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in updateOperationNameInLocalList");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public void addVariantsOperations(variantOperations pVariantOperations)
         {
-            VariantsOperations.Add(pVariantOperations);
+            VariantsOperationsList.Add(pVariantOperations);
         }
 
         public void PrintDataSummary()
@@ -968,11 +1219,11 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
-                if (variantsOperations.Count > 0)
+                if (VariantsOperationsList.Count > 0)
                 {
                     //VariantOperationMappings
                     lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
-                    foreach (variantOperations lVariantOperations in variantsOperations)
+                    foreach (variantOperations lVariantOperations in VariantsOperationsList)
                     {
                         lDataSummary += "Variant Name: " + lVariantOperations.getVariantExpr() + System.Environment.NewLine;
                         lDataSummary += "Operations: " + System.Environment.NewLine;

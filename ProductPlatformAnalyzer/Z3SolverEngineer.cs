@@ -563,13 +563,13 @@ namespace ProductPlatformAnalyzer
                 //formula 4
                 // C = (BIG AND) (O_I_j_0 <=> V_j) AND (! O_e_j_0) AND (! O_f_j_0) AND (O_u_j_0 <=> (! V_j))
                 //This formula has to be applied to all operations, both operations which are active and operations which are inactive
-                List<variantOperations> lVariantsOperations = lFrameworkWrapper.getVariantsOperations();
+                List<variantOperations> lVariantsOperationsList = lFrameworkWrapper.getVariantsOperationsList();
 
-                foreach (variantOperations lVariantOperation in lVariantsOperations)
+                foreach (variantOperations lVariantOperations in lVariantsOperationsList)
                 {
-                    variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperation);
+                    variant currentVariant = lFrameworkWrapper.ReturnCurrentVariant(lVariantOperations);
 
-                    List<operation> lOperationList = lVariantOperation.getOperations();
+                    List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
                         //operation lOperation = lOperationList[0];
@@ -1037,12 +1037,12 @@ namespace ProductPlatformAnalyzer
             {
                 //Loop over the variant-operation mappings
                 //For each mapping find the current variant and current operations
-                List<variantOperations> lVariantOperations = lFrameworkWrapper.getVariantsOperations();
+                List<variantOperations> lVariantOperationsList = lFrameworkWrapper.getVariantsOperationsList();
 
                 //Next state of operation
                 int lNewState = pState + 1;
 
-                foreach (variantOperations lCurrentVariantOperations in lVariantOperations)
+                foreach (variantOperations lCurrentVariantOperations in lVariantOperationsList)
                 {
                     variant lCurrentVariant = lFrameworkWrapper.ReturnCurrentVariant(lCurrentVariantOperations);
 
