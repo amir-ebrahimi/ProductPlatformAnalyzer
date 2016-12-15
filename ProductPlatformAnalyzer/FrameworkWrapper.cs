@@ -300,6 +300,10 @@ namespace ProductPlatformAnalyzer
             return resultOperation;
         }
 
+        /// <summary>
+        /// This function checks the requirement field of the operations
+        /// </summary>
+        /// <returns>The result of the analysis of the requirment field of the operations</returns>
         public bool checkPreAnalysis()
         {
             bool lPreAnalysisResult = true;

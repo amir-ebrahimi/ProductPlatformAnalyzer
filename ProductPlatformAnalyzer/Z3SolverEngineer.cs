@@ -18,6 +18,8 @@ namespace ProductPlatformAnalyzer
         private bool lDebugMode;
         private bool lOpSeqAnalysis;
         private bool lNeedPreAnalysis;
+        private bool lPreAnalysisResult;
+
 
         private BoolExpr lOp_I_CurrentState;
         private BoolExpr lOp_E_CurrentState;
@@ -40,6 +42,7 @@ namespace ProductPlatformAnalyzer
             lDebugMode = false;
             lOpSeqAnalysis = true;
             lNeedPreAnalysis = true;
+            lPreAnalysisResult = true;
         }
 
         public void ResetAnalyzer()
@@ -115,29 +118,14 @@ namespace ProductPlatformAnalyzer
             bool lTestResult = false;
             try
             {
-                bool lPreAnalysisResult = true;
-
                 lOpSeqAnalysis = true;
 
-                convertFVariants2Z3Variants();
-                convertFOperations2Z3Operations(pState);
+                convertProductPlatformNConfigurationRules();
 
-                if (lNeedPreAnalysis && pState == 0)
-                    lPreAnalysisResult = lFrameworkWrapper.checkPreAnalysis();
+                convertOperationsNPrecedenceRulesNOperationVariantRelations(pState);
 
                 if (lPreAnalysisResult)
                 {
-
-                    //formula 2
-                    produceVariantGroupGCardinalityConstraints();
-                    //formula 3
-                    convertFConstraint2Z3Constraint();
-                    //forula 4
-                    initializeFVariantOperation2Z3Constraints();
-
-                    //formula 5 and New Formula
-                    convertFOperations2Z3ConstraintNewVersion(pState);
-
                     //New formulas for implementing resources
                     if (lFrameworkWrapper.ResourceList.Count != 0)
                     {
@@ -172,6 +160,59 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lTestResult;
+        }
+
+        /// <summary>
+        /// This function converts the static part of the product platform, i.e. variants, 
+        /// and configuration rules, i.e. variant group cardinality and constraint rules
+        /// </summary>
+        private void convertProductPlatformNConfigurationRules()
+        {
+            try
+            {
+                convertFVariants2Z3Variants();
+                //formula 2
+                produceVariantGroupGCardinalityConstraints();
+                //formula 3
+                convertFConstraint2Z3Constraint();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertProductPlatformNConfigurationRules");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// This function converts the dynamic part of the product platform, i.e. operations 
+        /// and operation relations (precedence rules)
+        /// and the relationship between operations and variants
+        /// </summary>
+        /// <param name="pState"></param>
+        private void convertOperationsNPrecedenceRulesNOperationVariantRelations(int pState)
+        {
+            try
+            {
+                convertFOperations2Z3Operations(pState);
+
+                if (lNeedPreAnalysis && pState == 0)
+                    lPreAnalysisResult = lFrameworkWrapper.checkPreAnalysis();
+
+                if (lPreAnalysisResult)
+                {
+                    //forula 4
+                    initializeFVariantOperation2Z3Constraints();
+
+                    //formula 5 and New Formula
+                    convertFOperations2Z3ConstraintNewVersion(pState);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertOperationsNPrecedenceRulesNOperationVariantRelations");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void convertFResource2Z3Constraints()
