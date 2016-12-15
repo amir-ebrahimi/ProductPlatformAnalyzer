@@ -113,7 +113,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool testConstraintConvertion(int pState, String pFile, bool done)
+        public bool testConstraintConvertion(int pState, String pFile, bool pDone)
         {
             bool lTestResult = false;
             try
@@ -124,35 +124,9 @@ namespace ProductPlatformAnalyzer
 
                 convertOperationsNPrecedenceRulesNOperationVariantRelations(pState);
 
-                if (lPreAnalysisResult)
-                {
-                    //New formulas for implementing resources
-                    if (lFrameworkWrapper.ResourceList.Count != 0)
-                    {
-                        convertFResource2Z3Constraints();
-                        checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints();
-                    }
+                convertResourcesNOperationResourceRelations();
 
-                    if (lOpSeqAnalysis)
-                    {
-                        if (!done)
-                            //formula 7 and 8
-                            convertFGoals2Z3GoalsVersion2(pState);
-                    }
-
-                    if (!done)
-                    {
-                        Console.WriteLine("Analysis No: " + pState);
-                        lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
-
-                        lZ3Solver.WriteDebugFile(pState);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Finished: ");
-                        lTestResult = analyseZ3Model(pState, done, lFrameworkWrapper);
-                    }
-                }
+                lTestResult = convertGoalNAnlyzeResults(pState, pDone);
             }
             catch (Exception ex)
             {
@@ -213,6 +187,73 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in convertOperationsNPrecedenceRulesNOperationVariantRelations");
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// This function converts the resources and the operation resource relationships
+        /// </summary>
+        private void convertResourcesNOperationResourceRelations()
+        {
+            try
+            {
+                if (lPreAnalysisResult)
+                {
+                    //New formulas for implementing resources
+                    if (lFrameworkWrapper.ResourceList.Count != 0)
+                    {
+                        convertFResource2Z3Constraints();
+                        checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertResourcesNOperationResourceRelations");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// This function converts the goals and analyzes the result of the goals
+        /// </summary>
+        /// <param name="pState"></param>
+        /// <param name="pDone"></param>
+        /// <returns>Analysis result of the goal</returns>
+        private bool convertGoalNAnlyzeResults(int pState, bool pDone)
+        {
+            bool lTestResult = false;
+            try
+            {
+                if (lPreAnalysisResult)
+                {
+                    if (lOpSeqAnalysis)
+                    {
+                        if (!pDone)
+                            //formula 7 and 8
+                            convertFGoals2Z3GoalsVersion2(pState);
+                    }
+
+                    if (!pDone)
+                    {
+                        Console.WriteLine("Analysis No: " + pState);
+                        lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper);
+
+                        lZ3Solver.WriteDebugFile(pState);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Finished: ");
+                        lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in convertGoalNAnlyzeResults");
+                Console.WriteLine(ex.Message);
+            }
+            return lTestResult;
         }
 
         private void convertFResource2Z3Constraints()
