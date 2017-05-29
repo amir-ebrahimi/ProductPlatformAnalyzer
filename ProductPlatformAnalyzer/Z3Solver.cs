@@ -1092,6 +1092,11 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+
+        /// <summary>
+        /// This function is usd to output the previously filled DebugText to a external file with the name Debug indexed by the transition number which it was in
+        /// </summary>
+        /// <param name="pState">Transition number</param>
         public void WriteDebugFile(int pState)
         {
             try
@@ -1162,9 +1167,17 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool CheckSatisfiability(int pState, bool done, FrameworkWrapper wrapper)
+        public bool CheckSatisfiability(int pState
+                                        , bool done
+                                        , FrameworkWrapper wrapper
+                                        , bool pGoalAnalysis
+                                        , bool pReportAnalysisTiming
+                                        , bool pReportUnsatCore
+                                        , string pStrExprToCheck = "")
         {
             bool lSatisfiabilityResult = false;
+
+            ////TODO: seperate the analysis part from the reporting part, and the reporting part should have variation points
 
             try
             {
@@ -1175,7 +1188,8 @@ namespace ProductPlatformAnalyzer
 
                 if (done)
                 {
-                    sat = iSolver.Check();
+                    //Check the whole model
+                    sat = CheckModelSatisfiability();
                     if (sat == Status.UNSATISFIABLE)
                     {
                         Console.WriteLine("Neither a counterexample nor a satisfiable finished-result could be produced.");
@@ -1183,14 +1197,16 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    Expr lExprToCheck = FindBoolExpressionUsingName("P" + pState);
-                    sat = iSolver.Check(lExprToCheck);
+                    if (pGoalAnalysis)
+                        //Check one specific expression
+                        sat = CheckModelSatisfiability(pStrExprToCheck);
+                    else if (pStrExprToCheck != "")
+                        //Check one specific expression
+                        sat = CheckModelSatisfiability(pStrExprToCheck);
+                    else
+                        sat = CheckModelSatisfiability();
                 }
-
-
-
                 stopwatch.Stop();
-
 
                 if (sat == Status.SATISFIABLE)
                 {
@@ -1214,7 +1230,8 @@ namespace ProductPlatformAnalyzer
                     if (done)
                     {
                         //Print and writes an output file showing the result of a finished test
-                        Console.WriteLine("Time: " + stopwatch.Elapsed);
+                        if (pReportAnalysisTiming)
+                            Console.WriteLine("Time: " + stopwatch.Elapsed);
                         output.printFinished();
                         output.writeFinished();
                         output.writeFinishedNoPost();
@@ -1223,7 +1240,8 @@ namespace ProductPlatformAnalyzer
                     {
                         //Print and writes an output file showing the result of a deadlocked test
                         Console.WriteLine("Satisfiable");
-                        Console.WriteLine("Time: " + stopwatch.Elapsed);
+                        if (pReportAnalysisTiming)
+                            Console.WriteLine("Time: " + stopwatch.Elapsed);
                         output.printCounterExample();
                         output.writeCounterExample();
                         output.writeCounterExampleNoPost();
@@ -1241,12 +1259,16 @@ namespace ProductPlatformAnalyzer
                 {
                     lSatisfiabilityResult = false;
                     Console.WriteLine("Unsatisfiable");
-                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+                    if (pReportAnalysisTiming)
+                        Console.WriteLine("Time: " + stopwatch.Elapsed);
                     //Console.WriteLine("proof: {0}", iSolver.Proof);
                     //Console.WriteLine("core: ");
-                    foreach (Expr c in iSolver.UnsatCore)
+                    if (pReportUnsatCore)
                     {
-                        Console.WriteLine("{0}", c);
+                        foreach (Expr c in iSolver.UnsatCore)
+                        {
+                            Console.WriteLine("{0}", c);
+                        }
                     }
                 }
             }
@@ -1256,6 +1278,34 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lSatisfiabilityResult;
+        }
+
+        /// <summary>
+        /// This function checks the model for the satisfiability either for one specific expression or for the whole model
+        /// </summary>
+        /// <param name="pExprToCheck">The specific expression which needs to be checked</param>
+        /// <returns>The result of checking the model</returns>
+        public Status CheckModelSatisfiability(string pStrExprToCheck = "")
+        {
+            Status lReturnStatus = Status.UNKNOWN;
+            try
+            {
+                if (pStrExprToCheck == "")
+                    lReturnStatus = iSolver.Check();
+                else
+                {
+                    Expr lExprToCheck = FindBoolExpressionUsingName(pStrExprToCheck);
+                    lReturnStatus = iSolver.Check(lExprToCheck);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CheckModelSatisfiability");               
+                Console.WriteLine(ex.Message);
+            }
+            return lReturnStatus;
         }
 
         public Expr FindExprInExprList(String pExprName)

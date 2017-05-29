@@ -2399,7 +2399,7 @@ namespace ProductPlatformAnalyzer
                             conValue = fwrapper.getPostconditionForOperation(exp.operation);
                         else
                             conValue = fwrapper.getPreconditionForOperation(exp.operation);
-                        list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
+                            list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
                         conditions.Add(list);
                     }
                 }
@@ -2469,15 +2469,20 @@ namespace ProductPlatformAnalyzer
 
         private string consToString(List<string> pcons)
         {
-            string exp = GeneralUtilities.parseExpression(pcons[0], "infix");
+            string exp = "";
 
             try
             {
-                pcons.RemoveAt(0);
-                foreach (string con in pcons)
+                if (pcons.Count > 0)
                 {
-                    exp = exp + "and" + GeneralUtilities.parseExpression(con, "infix");
+                    exp = GeneralUtilities.parseExpression(pcons[0], "infix");
+                    pcons.RemoveAt(0);
+                    foreach (string con in pcons)
+                    {
+                        exp = exp + "and" + GeneralUtilities.parseExpression(con, "infix");
+                    }
                 }
+
             }
             catch (Exception ex)
             {

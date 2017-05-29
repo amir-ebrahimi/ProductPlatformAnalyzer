@@ -19,6 +19,7 @@ namespace ProductPlatformAnalyzer
         private List<virtualVariant2VariantExpr> virtualVariant2VariantExprList;
         private List<string> activeOperationNamesList;
         private List<string> inActiveOperationNamesList;
+        private List<string> operationInstanceList;
         private List<station> stationList;
         private List<resource> resourceList;
         private List<trait> traitList;
@@ -77,6 +78,12 @@ namespace ProductPlatformAnalyzer
             set { this.inActiveOperationNamesList = value; }
         }
 
+        public List<string> OperationInstanceList
+        {
+            get { return this.operationInstanceList; }
+            set { this.operationInstanceList = value; }
+        }
+
         public List<station> StationList
         {
             get { return this.stationList; }
@@ -101,9 +108,10 @@ namespace ProductPlatformAnalyzer
             variantGroupList = new List<variantGroup>();
             constraintList = new List<string>();
             operationList = new List<operation>();
-            activeOperationInstanceNamesList = new List<String>();
-            activeOperationNamesList = new List<String>();
+            activeOperationInstanceNamesList = new List<string>();
+            activeOperationNamesList = new List<string>();
             inActiveOperationNamesList = new List<string>();
+            operationInstanceList = new List<string>();
             variantsOperationsList = new List<variantOperations>();
             stationList = new List<station>();
             resourceList = new List<resource>();
@@ -112,11 +120,52 @@ namespace ProductPlatformAnalyzer
             VirtualCounter = 0;
         }
 
+        /// <summary>
+        /// Returns the number of operations
+        /// </summary>
+        /// <returns>number of operations</returns>
         public int getNumberOfOperations()
         {
             return OperationList.Count();
         }
 
+        /// <summary>
+        /// Returns the number of operations which are active, meaning they are related to a variant
+        /// </summary>
+        /// <returns>Number of active operations</returns>
+        public int getNumberOfActiveOperations()
+        {
+            return activeOperationNamesList.Count();
+        }
+
+        /// <summary>
+        /// This function returns a list of operation names
+        /// </summary>
+        /// <returns>List of operation names</returns>
+        public List<string> getListOfOperationNames()
+        {
+            List<string> lOperationNames = new List<string>();
+            try
+            {
+                foreach (operation lOperation in operationList)
+                {
+                    if (!lOperationNames.Contains(lOperation.names))
+                        lOperationNames.Add(lOperation.names);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getListOfOperationNames");
+                Console.WriteLine(ex.Message);
+            }
+            return lOperationNames;
+        }
+
+        /// <summary>
+        /// Returns the list of variant operations corresponding to a specific variant
+        /// </summary>
+        /// <param name="pVariantExpr">The variant which we want to return its variant operations</param>
+        /// <returns>The list of variant operations corresponding to that variant</returns>
         public List<operation> getVariantExprOperations(string pVariantExpr)
         {
             List<operation> lResultOperations = null;
@@ -144,7 +193,7 @@ namespace ProductPlatformAnalyzer
             }
             return lResultOperations;
         }
-
+        
         public operation findOperationWithName(String pOperationName)
         {
             operation tempResultOperation = null;
@@ -771,13 +820,21 @@ namespace ProductPlatformAnalyzer
         public void addActiveOperationInstanceName(String pOperationInstanceName)
         {
             //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            ActiveOperationInstanceNamesList.Add(pOperationInstanceName);
+            if (!ActiveOperationInstanceNamesList.Contains(pOperationInstanceName))
+                ActiveOperationInstanceNamesList.Add(pOperationInstanceName);
         }
 
         public void addActiveOperationName(String pOperationName)
         {
             //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            ActiveOperationNamesList.Add(pOperationName);
+            if (!ActiveOperationNamesList.Contains(pOperationName))
+                ActiveOperationNamesList.Add(pOperationName);
+        }
+
+        public void addOperationInstance(string pOperationInstance)
+        {
+            if (!operationInstanceList.Contains(pOperationInstance))
+                operationInstanceList.Add(pOperationInstance);
         }
 
         public void addStation(station pStation)
@@ -833,9 +890,42 @@ namespace ProductPlatformAnalyzer
             TraitList.Add(pTrait);
         }
 
+        //TODO: Either this function or the next function is not needed
+        /// <summary>
+        /// Takes a specific operation and looks in the list of variant operations to see if this operation is part of any variant operation list
+        /// </summary>
+        /// <param name="pOperation">The operation we want to check if it is active</param>
+        /// <returns>If an operation is active or not</returns>
+        public bool isOperationActive(operation pOperation)
+        {
+            bool lOperationActive = false;
+            try
+            {
+                foreach (variantOperations lVariantOperations in VariantsOperationsList)
+                {
+                    foreach (operation lOperation in lVariantOperations.getOperations())
+                    {
+                        if (lOperation.Equals(pOperation))
+                            lOperationActive = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in isOperationActive");
+                Console.WriteLine(ex.Message);
+            }
+            return lOperationActive;
+        }
+
+        //TODO: Either this function or the previous function is not needed
+        /// <summary>
+        /// In this function we have an operation name which we want to know if it is an active operation or not?
+        /// </summary>
+        /// <param name="pOperationName">Operation name which we want to check</param>
+        /// <returns>If the operation is active or not</returns>
         public bool isActiveOperation(String pOperationName)
         {
-            //In this function we have an operation name which we want to know if it is an active operation or not?
             bool lResult = false;
             try
             {
@@ -856,10 +946,58 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
+        /// <summary>
+        /// this function takes an operation instance variable name and looks at the variant code 
+        /// if the variant code is 0 this means the operation instance is inactive hence the function will return false, otherwise it will return true
+        /// </summary>
+        /// <param name="pOperationInstanceVariableName">operation instance variable name</param>
+        /// <returns>if the operation instance is active</returns>
+        public bool isOperationInstanceActive(string pOperationInstanceVariableName)
+        {
+            bool lResult = false;
+
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstanceVariableName.Split('_');
+                if (!lOperationInstanceParts[2].Equals("0"))
+                    lResult = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in isOperationInstanceActive");
+                Console.WriteLine(ex.Message);
+            }
+
+            return lResult;
+        }
+
+        /// <summary>
+        /// This funcion takes an operation instance and returns the operation name
+        /// </summary>
+        /// <param name="pOperationInstance"></param>
+        /// <returns></returns>
+        public string ReturnOperationNameFromOperationInstance(string pOperationInstance)
+        {
+            string lOperationName = "";
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstance.Split('_');
+
+                lOperationName = lOperationInstanceParts[0];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in returnOperationNameFromOperationInstance");
+                Console.WriteLine(ex.Message);
+            }
+            return lOperationName;
+        }
+
         public void addInActiveOperationName(String pOperationName)
         {
             //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            InActiveOperationNamesList.Add(pOperationName);
+            if (! InActiveOperationNamesList.Contains(pOperationName))
+                InActiveOperationNamesList.Add(pOperationName);
         }
 
         public String giveNextStateActiveOperationName(String pActiveOperationName)
@@ -1815,34 +1953,41 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createTraitInstances(XmlDocument pXDoc)
+        public bool createTraitInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//trait");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
+                    lDataLoaded = false;
+                else
                 {
-                    List<Tuple<string, string>> lAttributes = new List<Tuple<string, string>>();
-
-                    List<trait> lInheritTraits = new List<trait>();
-
-                    XmlNodeList inheritList = lNode["inherit"].ChildNodes;
-                    foreach (XmlNode lTraitName in inheritList)
+                    foreach (XmlNode lNode in nodeList)
                     {
-                        lInheritTraits.Add(findTraitWithName(lTraitName.InnerText));
-                    }
+                        List<Tuple<string, string>> lAttributes = new List<Tuple<string, string>>();
 
-                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
-                    foreach (XmlNode lAttribute in attributeList)
-                    {
-                        lAttributes.Add(new Tuple<string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeType")
-                                        , getXMLNodeAttributeInnerText(lAttribute, "attributeName")));
-                    }
+                        List<trait> lInheritTraits = new List<trait>();
 
-                    createTraitInstance(getXMLNodeAttributeInnerText(lNode, "traitName")
-                                                            , lInheritTraits
-                                                            , lAttributes);
+                        XmlNodeList inheritList = lNode["inherit"].ChildNodes;
+                        foreach (XmlNode lTraitName in inheritList)
+                        {
+                            lInheritTraits.Add(findTraitWithName(lTraitName.InnerText));
+                        }
+
+                        XmlNodeList attributeList = lNode["attributes"].ChildNodes;
+                        foreach (XmlNode lAttribute in attributeList)
+                        {
+                            lAttributes.Add(new Tuple<string, string>(getXMLNodeAttributeInnerText(lAttribute, "attributeType")
+                                            , getXMLNodeAttributeInnerText(lAttribute, "attributeName")));
+                        }
+
+                        createTraitInstance(getXMLNodeAttributeInnerText(lNode, "traitName")
+                                                                , lInheritTraits
+                                                                , lAttributes);
+                    }
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)
@@ -1850,39 +1995,47 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createTraitInstances");
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createResourceInstances(XmlDocument pXDoc)
+        public bool createResourceInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//resource");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
+                    lDataLoaded = false;
+                else
                 {
-                    List<Tuple<string, string, string>> lAttributes = new List<Tuple<string,string,string>>();
-                    List<trait> lTraits = new List<trait>();
-                    XmlNodeList traitNamesList = lNode["traits"].ChildNodes;
-                    foreach (XmlNode lTraitRef in traitNamesList)
+                    foreach (XmlNode lNode in nodeList)
                     {
-                        string lTraitName = lTraitRef.InnerText;
-                        if (lTraitName != "")
-                            lTraits.Add(findTraitWithName(lTraitName));
+                        List<Tuple<string, string, string>> lAttributes = new List<Tuple<string, string, string>>();
+                        List<trait> lTraits = new List<trait>();
+                        XmlNodeList traitNamesList = lNode["traits"].ChildNodes;
+                        foreach (XmlNode lTraitRef in traitNamesList)
+                        {
+                            string lTraitName = lTraitRef.InnerText;
+                            if (lTraitName != "")
+                                lTraits.Add(findTraitWithName(lTraitName));
+                        }
+
+                        XmlNodeList attributeList = lNode["attributes"].ChildNodes;
+                        foreach (XmlNode lAttribute in attributeList)
+                        {
+                            lAttributes.Add(new Tuple<string, string, string>(getXMLNodeAttributeInnerText(lAttribute, "attributeName")
+                                                                            , getXMLNodeAttributeInnerText(lAttribute, "attributeType")
+                                                                            , getXMLNodeAttributeInnerText(lAttribute, "attributeValue")));
+                        }
+
+
+                        CreateResourceInstance(getXMLNodeAttributeInnerText(lNode, "resourceName")
+                                                                , lTraits
+                                                                , lAttributes);
                     }
-
-                    XmlNodeList attributeList = lNode["attributes"].ChildNodes;
-                    foreach (XmlNode lAttribute in attributeList)
-                    {
-                        lAttributes.Add(new Tuple<string,string,string>(getXMLNodeAttributeInnerText(lAttribute, "attributeName")
-                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeType")
-                                                                        ,getXMLNodeAttributeInnerText(lAttribute, "attributeValue")));
-                    }
-
-
-                    CreateResourceInstance(getXMLNodeAttributeInnerText(lNode, "resourceName")
-                                                            , lTraits
-                                                            , lAttributes);
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)
@@ -1890,6 +2043,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createResourceInstances");
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
 
         //TODO: rename this function to show that you are loading from input
@@ -1922,18 +2076,25 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createConstraintInstances(XmlDocument pXDoc)
+        public bool createConstraintInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//constraint");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
+                    lDataLoaded = false;
+                else
                 {
-                    string lPrefixFormat = getXMLNodeAttributeInnerText(lNode, "logic");
-                    //TODO: if the constraint are converted into infix format this line has to be used
-                    //string lPrefixFormat = GeneralUtilities.parseExpression(lPrefixFormat, "prefix");
-                    addConstraint(lPrefixFormat);
+                    foreach (XmlNode lNode in nodeList)
+                    {
+                        string lPrefixFormat = getXMLNodeAttributeInnerText(lNode, "logic");
+                        //TODO: if the constraint are converted into infix format this line has to be used
+                        //string lPrefixFormat = GeneralUtilities.parseExpression(lPrefixFormat, "prefix");
+                        addConstraint(lPrefixFormat);
+                    }
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)
@@ -1941,28 +2102,40 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createConstraintInstances");                
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createVariantGroupInstances(XmlDocument pXDoc)
+        public bool createVariantGroupInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variantGroup");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
                 {
-                    List<string> lVariantGroupVariants = new List<string>();
+                    lDataLoaded = false;
+                    Console.WriteLine("Initial data did not contain variant group information! Data not loaded.");
 
-                    XmlNodeList variantGroupVariantsNodeList = lNode["variantRefs"].ChildNodes;
-                    foreach (XmlNode lVariantGroupVariant in variantGroupVariantsNodeList)
+                }
+                else
+                {
+                    foreach (XmlNode lNode in nodeList)
                     {
-                        lVariantGroupVariants.Add(lVariantGroupVariant.InnerText);
-                    }
+                        List<string> lVariantGroupVariants = new List<string>();
 
-                    CreateVariantGroupInstance(getXMLNodeAttributeInnerText(lNode,"variantGroupName")
-                                            , getXMLNodeAttributeInnerText(lNode,"groupCardinality")
-                                            , lVariantGroupVariants);
+                        XmlNodeList variantGroupVariantsNodeList = lNode["variantRefs"].ChildNodes;
+                        foreach (XmlNode lVariantGroupVariant in variantGroupVariantsNodeList)
+                        {
+                            lVariantGroupVariants.Add(lVariantGroupVariant.InnerText);
+                        }
+
+                        CreateVariantGroupInstance(getXMLNodeAttributeInnerText(lNode, "variantGroupName")
+                                                , getXMLNodeAttributeInnerText(lNode, "groupCardinality")
+                                                , lVariantGroupVariants);
+                    }
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)
@@ -1970,32 +2143,44 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createVariantGroupInstances");                
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createVariantInstances(XmlDocument pXDoc)
+        public bool createVariantInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//variant");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
                 {
-                    /*List<string> lVariantManufacturingOperations = new List<string>();
+                    lDataLoaded = false;
+                    Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
 
-                    XmlNodeList variantManufacturingOperationsNodeList = lNode["variantManufacturingOps"].ChildNodes;
-                    foreach (XmlNode lManufacturingOp in variantManufacturingOperationsNodeList)
+                }
+                else
+                {
+                    foreach (XmlNode lNode in nodeList)
                     {
-                        lVariantManufacturingOperations.Add(lManufacturingOp.InnerText);
-                    }
+                        /*List<string> lVariantManufacturingOperations = new List<string>();
 
-                    CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
-                                            , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
-                                            , getXMLNodeAttributeInnerText(lNode, "variantDisplayName")
-                                            , lVariantManufacturingOperations);*/
-                    CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
-                                            , int.Parse(getXMLNodeAttributeInnerText(lNode,"variantIndex"))
-                                            , getXMLNodeAttributeInnerText(lNode,"variantDisplayName"));
+                        XmlNodeList variantManufacturingOperationsNodeList = lNode["variantManufacturingOps"].ChildNodes;
+                        foreach (XmlNode lManufacturingOp in variantManufacturingOperationsNodeList)
+                        {
+                            lVariantManufacturingOperations.Add(lManufacturingOp.InnerText);
+                        }
+
+                        CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
+                                                , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
+                                                , getXMLNodeAttributeInnerText(lNode, "variantDisplayName")
+                                                , lVariantManufacturingOperations);*/
+                        CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
+                                                , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
+                                                , getXMLNodeAttributeInnerText(lNode, "variantDisplayName"));
+                    }
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)
@@ -2003,54 +2188,66 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createVariantInstances");                
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
 
         //TODO: rename this function to show that you are loading from input
-        public void createOperationInstances(XmlDocument pXDoc)
+        public bool createOperationInstances(XmlDocument pXDoc)
         {
+            bool lDataLoaded = false;
             try
             {
                 XmlNodeList nodeList = pXDoc.DocumentElement.SelectNodes("//operation");
 
-                foreach (XmlNode lNode in nodeList)
+                if (nodeList.Count.Equals(0))
                 {
-                    List<string> lOperationPrecondition = new List<string>();
-                    List<string> lOperationPostcondition = new List<string>();
-                    List<string> lOperationRequirement = new List<string>();
-
-                    if (lNode["requirements"] != null)
+                    lDataLoaded = false;
+                    Console.WriteLine("Initial data did not contain operation infor! Data not loaded.");
+                }
+                else
+                {
+                    foreach (XmlNode lNode in nodeList)
                     {
-                        XmlNodeList opRequirementsList = lNode["requirements"].ChildNodes;
-                        foreach (XmlNode lOpRequirement in opRequirementsList)
-                        {
-                            lOperationRequirement.Add(lOpRequirement.InnerText);
-                        }
-                    }
+                        List<string> lOperationPrecondition = new List<string>();
+                        List<string> lOperationPostcondition = new List<string>();
+                        List<string> lOperationRequirement = new List<string>();
 
-                    if (lNode["operationPrecondition"] != null)
-                    {
-                        XmlNodeList opPreconditionNodeList = lNode["operationPrecondition"].ChildNodes;
-                        foreach (XmlNode lOpPrecondition in opPreconditionNodeList)
+                        if (lNode["requirements"] != null)
                         {
-                            lOperationPrecondition.Add(lOpPrecondition.InnerText);
-                        }
-                    }
-
-                    if (lNode["operationPostcondition"] != null)
-                    {
-                        XmlNodeList opPostconditionNodeList = lNode["operationPostcondition"].ChildNodes;
-                        foreach (XmlNode lOpPostcondition in opPostconditionNodeList)
-                        {
-                            lOperationPostcondition.Add(lOpPostcondition.InnerText);
+                            XmlNodeList opRequirementsList = lNode["requirements"].ChildNodes;
+                            foreach (XmlNode lOpRequirement in opRequirementsList)
+                            {
+                                lOperationRequirement.Add(lOpRequirement.InnerText);
+                            }
                         }
 
+                        if (lNode["operationPrecondition"] != null)
+                        {
+                            XmlNodeList opPreconditionNodeList = lNode["operationPrecondition"].ChildNodes;
+                            foreach (XmlNode lOpPrecondition in opPreconditionNodeList)
+                            {
+                                lOperationPrecondition.Add(lOpPrecondition.InnerText);
+                            }
+                        }
+
+                        if (lNode["operationPostcondition"] != null)
+                        {
+                            XmlNodeList opPostconditionNodeList = lNode["operationPostcondition"].ChildNodes;
+                            foreach (XmlNode lOpPostcondition in opPostconditionNodeList)
+                            {
+                                lOperationPostcondition.Add(lOpPostcondition.InnerText);
+                            }
+
+                        }
+
+                        CreateOperationInstance(getXMLNodeAttributeInnerText(lNode, "operationName")
+                                                , getXMLNodeAttributeInnerText(lNode, "displayName")
+                                                , lOperationRequirement
+                                                , lOperationPrecondition
+                                                , lOperationPostcondition);
+                        lDataLoaded = true;
                     }
 
-                    CreateOperationInstance(getXMLNodeAttributeInnerText(lNode, "operationName")
-                                            , getXMLNodeAttributeInnerText(lNode,"displayName")
-                                            , lOperationRequirement
-                                            , lOperationPrecondition
-                                            , lOperationPostcondition);
                 }
             }
             catch (Exception ex)
@@ -2058,7 +2255,8 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in createOperationInstances");
                 Console.WriteLine(ex.Message);
             }
+            return lDataLoaded;
         }
-
+        
     }
 }

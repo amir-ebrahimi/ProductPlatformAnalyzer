@@ -1,0 +1,28 @@
+﻿<?xml version="1.0"?>
+<!-- Simple insufficient data which should not make the system crash
+Process should finish -->
+
+<!-- Operations: 
+        scan-barcode
+
+    Variants: 
+
+    VariantGroups: 
+
+    Constraints:  -->
+<testData>
+  <operations>
+    <operation>
+      <operationName>scan-barcode</operationName>
+      <displayName>Scan barcode</displayName>
+    </operation>
+  </operations>
+  <variants>
+  </variants>
+  <variantGroups>
+  </variantGroups>
+  <constraints>
+  </constraints>
+  <variantOperationMappings>
+  </variantOperationMappings>
+</testData>
