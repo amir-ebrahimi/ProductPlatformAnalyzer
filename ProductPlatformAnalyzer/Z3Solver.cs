@@ -445,6 +445,27 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        /// <summary>
+        /// This function takes two operand and returns the expression which is the implecation of these two operands
+        /// </summary>
+        /// <param name="pOperand1">Left hand side of the implecation</param>
+        /// <param name="pOperand2">Right hand side of the implecation</param>
+        /// <returns>Implecation expression</returns>
+        public BoolExpr ImpliesOperator(BoolExpr pOperand1, BoolExpr pOperand2)
+        {
+            BoolExpr lResultExpr = null;
+            try
+            {
+                lResultExpr = iCtx.MkImplies(pOperand1, pOperand2);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ImpliesOperator");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
+        }
+
         public void AddSimpleConstraint(String pConstraint, String pConstraintSource)
         {
             try
@@ -1278,6 +1299,20 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lSatisfiabilityResult;
+        }
+
+        public void SolverPushFunction()
+        {
+            iSolver.Push();
+            if (iDebugMode)
+                iDebugText += "(push); \r\n";
+        }
+
+        public void SolverPopFunction()
+        {
+            iSolver.Pop();
+            if (iDebugMode)
+                iDebugText += "(pop); \r\n";
         }
 
         /// <summary>

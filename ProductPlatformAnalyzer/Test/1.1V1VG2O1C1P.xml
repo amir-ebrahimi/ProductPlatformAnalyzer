@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Simple 1 Variant 2 Operations one with pre and post condition
-Process should finish -->
+Analysis should be able to complete. -->
 
 <!-- Operations: 
         scan-barcode
@@ -16,7 +16,7 @@ Process should finish -->
 
 <!-- Constraints: frame-rigid -->
 
-<!-- Variant-Operation mapping
+<!-- Variant-Operation mapping:
       Variant: frame-rigid
       Operations: scan-barcode
                   mount -->

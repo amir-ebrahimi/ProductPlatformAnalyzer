@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- 2 Variants 2 Operations, one of which has pre and post condition
+Process should finish -->
+
+<!-- Operations: 
+        scan-barcode
+				mount
+          Pre: scan-barcode_F_2_2
+          Post: scan-barcode_F_2_2
+
+     Variants: 
+        frame-rigid
+				frame-tractor
+
+    VariantGroups: 
+        frame
+          choose exactly one
+          Variants: 
+            frame-rigid
+            frame-tractor
+
+    Constraints: frame-tractor 
+    
+    Variant Operation Mapping:
+      frame-rigid -> mount
+      frame-tractor -> scan-barcode
+    -->
+<testData>
+<operations>
+	<operation>
+		<operationName>scan-barcode</operationName>
+		<displayName>Scan barcode</displayName>
+	</operation>
+	<operation>
+		<operationName>mount</operationName>
+		<displayName>mount</displayName>
+		<operationPrecondition>
+			<operationName>scan-barcode_F_2_2</operationName>
+		</operationPrecondition>
+		<operationPostcondition>
+			<operationName>scan-barcode_F_2_2</operationName>
+		</operationPostcondition>
+	</operation>
+</operations>
+<variants>
+	<variant>
+		<variantName>frame-rigid</variantName>
+		<variantIndex>1</variantIndex>
+		<variantDisplayName>frame rigid</variantDisplayName>
+	</variant>
+	<variant>
+		<variantName>frame-tractor</variantName>
+		<variantIndex>2</variantIndex>
+		<variantDisplayName>frame tractor</variantDisplayName>
+	</variant>
+</variants>
+<variantGroups>
+	<variantGroup>
+		<variantGroupName>frame</variantGroupName>
+		<groupCardinality>choose exactly one</groupCardinality>
+    	<variantRefs>
+      		<variantRef>frame-rigid</variantRef>
+      		<variantRef>frame-tractor</variantRef>
+		</variantRefs>
+	</variantGroup>
+</variantGroups>
+<constraints>
+	<constraint>
+    <logic>frame-tractor</logic>
+  </constraint>
+</constraints>
+<variantOperationMappings>
+	<variantOperationMapping>
+		<variantRefs>
+    		<variantRef>frame-rigid</variantRef>
+    	</variantRefs>
+    <operationRefs>
+      <operationRef>mount</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+	<variantOperationMapping>
+		<variantRefs>
+    		<variantRef>frame-tractor</variantRef>
+    	</variantRefs>
+    	<operationRefs>
+      		<operationRef>scan-barcode</operationRef>
+		</operationRefs>
+	</variantOperationMapping>
+</variantOperationMappings>
+</testData>

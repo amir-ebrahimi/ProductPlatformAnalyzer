@@ -1,0 +1,77 @@
+﻿<?xml version="1.0"?>
+<!-- 2 Variant 2 Operations
+    Analysis should finish -->
+
+<!-- Operations: 
+        O1
+				O2    -->
+
+<!-- Variants: 
+        V1
+				V2 -->
+
+<!-- VariantGroups: 
+        VG
+          choose at least one
+          Variants: 
+            V1
+            V2 -->
+<!--Variant-Operation Mapping:
+      Variant: V1
+      Operation: O1
+      
+      Variant: V2
+      Operation: O2-->
+
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <displayName>O1</displayName>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <displayName>O2</displayName>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>V1</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>V2</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>V2</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O1</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O2</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>

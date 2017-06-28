@@ -972,6 +972,48 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
+        /// This function takes an instace variable of an operation and checks if it is in the initial state or not
+        /// </summary>
+        /// <param name="pOperationInstanceVariableName">Operaton instance variable name</param>
+        /// <returns>If the operation instance variable is in the intial state or not</returns>
+        public bool isOperationInstanceInitialState(string pOperationInstanceVariableName)
+        {
+            bool lResult = false;
+            try
+            {
+                if (pOperationInstanceVariableName.Contains("_I_"))
+                    lResult = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in isOperationInstanceInitialState");
+                Console.WriteLine(ex.Message);
+            }
+            return lResult;
+        }
+
+        /// <summary>
+        /// This function takes an instace variable of an operation and checks if it is in the unused state or not
+        /// </summary>
+        /// <param name="pOperationInstanceVariableName">Operaton instance variable name</param>
+        /// <returns>If the operation instance variable is in the unused state or not</returns>
+        public bool isOperationInstanceUnusedState(string pOperationInstanceVariableName)
+        {
+            bool lResult = false;
+            try
+            {
+                if (pOperationInstanceVariableName.Contains("_U_"))
+                    lResult = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in isOperationInstanceUnusedState");
+                Console.WriteLine(ex.Message);
+            }
+            return lResult;
+        }
+
+        /// <summary>
         /// This funcion takes an operation instance and returns the operation name
         /// </summary>
         /// <param name="pOperationInstance"></param>
@@ -2116,7 +2158,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    Console.WriteLine("Initial data did not contain variant group information! Data not loaded.");
+                    throw new InitialDataIncompleteException("Initial data did not contain variant group information! Data not loaded.");
+                    ////Console.WriteLine("Initial data did not contain variant group information! Data not loaded.");
 
                 }
                 else
@@ -2157,7 +2200,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    throw new InitialDataIncompleteException("Initial data did not contain variant information! Data not loaded.");
+                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
@@ -2202,7 +2246,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    Console.WriteLine("Initial data did not contain operation infor! Data not loaded.");
+                    throw new InitialDataIncompleteException("Initial data did not contain operation infor! Data not loaded.");
+                    ////Console.WriteLine("Initial data did not contain operation infor! Data not loaded.");
                 }
                 else
                 {
@@ -2258,5 +2303,18 @@ namespace ProductPlatformAnalyzer
             return lDataLoaded;
         }
         
+    }
+
+    public class InitialDataIncompleteException : Exception
+    {
+        public InitialDataIncompleteException() : base()
+        {
+
+        }
+
+        public InitialDataIncompleteException(string message) : base(message)
+        {
+
+        }
     }
 }

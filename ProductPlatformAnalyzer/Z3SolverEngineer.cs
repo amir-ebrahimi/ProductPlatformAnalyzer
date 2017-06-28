@@ -34,7 +34,7 @@ namespace ProductPlatformAnalyzer
         Choose_All
     }
 
-    class Z3SolverEngineer
+    public class Z3SolverEngineer
     {
         private FrameworkWrapper lFrameworkWrapper;
         private Z3Solver lZ3Solver;
@@ -58,6 +58,9 @@ namespace ProductPlatformAnalyzer
         private BoolExpr lOpPrecondition;
         private BoolExpr lOpPostcondition;
 
+        private List<BoolExpr> lConfigurationConstraints;
+        private List<BoolExpr> lPConstraints;
+
         //boolean variation point variables for model building
         private bool lConvertVariants;
         private bool lConvertConfigurationRules;
@@ -66,6 +69,7 @@ namespace ProductPlatformAnalyzer
         private bool lConvertVariantOperationRelations;
         private bool lConvertResources;
         private bool lConvertGoal;
+        private bool lBuildPConstraints;
 
         //boolean variation point variables for reporting in output
         private bool lReportAnalysisResult;
@@ -73,6 +77,7 @@ namespace ProductPlatformAnalyzer
         private bool lReportAnalysisTiming;
         private bool lReportUnsatCore;
         private bool lReportStopBetweenEachTransition;
+        private bool lStopAEndOfAnalysis;
 
         public Z3SolverEngineer()
         {
@@ -83,10 +88,12 @@ namespace ProductPlatformAnalyzer
             lOpSeqAnalysis = true;
             lNeedPreAnalysis = true;
             lPreAnalysisResult = true;
+            lConfigurationConstraints = new List<BoolExpr>();
+            lPConstraints = new List<BoolExpr>();
 
             //boolean variation point variables
-            setVariationPoints(true, true, true, true, true, true, true);
-            setReportType(true, true, true, true, true);
+            setVariationPoints(true, true, true, true, true, true, true, false);
+            setReportType(true, true, true, true, true, true);
         }
 
         /// <summary>
@@ -96,7 +103,8 @@ namespace ProductPlatformAnalyzer
                                     , bool pAnalysisDetailResult
                                     , bool pAnalysisTiming
                                     , bool pUnsatCore
-                                    , bool pStopBetweenEachTransition)
+                                    , bool pStopBetweenEachTransition
+                                    , bool pStopAtEndOfAnalysis)
         {
             try
             {
@@ -105,6 +113,7 @@ namespace ProductPlatformAnalyzer
                 lReportAnalysisTiming = pAnalysisTiming;
                 lReportUnsatCore = pUnsatCore;
                 lReportStopBetweenEachTransition = pStopBetweenEachTransition;
+                lStopAEndOfAnalysis = pStopAtEndOfAnalysis;
             }
             catch (Exception ex)
             {
@@ -119,7 +128,8 @@ namespace ProductPlatformAnalyzer
                                         , bool pConvertOperationPrecedenceRules
                                         , bool pConvertVariantOperationRelations
                                         , bool pConvertResources
-                                        , bool pConvertGoal)
+                                        , bool pConvertGoal
+                                        , bool pBuildPConstaints)
         {
             try
             {
@@ -131,6 +141,7 @@ namespace ProductPlatformAnalyzer
                 lConvertResources = pConvertResources;
                 lConvertGoal = pConvertGoal;
 
+                lBuildPConstraints = pBuildPConstaints;
             }
             catch (Exception ex)
             {
@@ -202,7 +213,7 @@ namespace ProductPlatformAnalyzer
                     case InitializerSource.InternalFile:
                         {
                             //LoadInitialDataFromXMLFile("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Test/1V2O1PreNoTransitions.xml");
-                            lDataLoaded = LoadInitialDataFromXMLFile("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Test/1V2O1UnSelectableO1PreNoTransitions.xml");
+                            lDataLoaded = LoadInitialDataFromXMLFile("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Test/" + endPath);
                             break;
                         }
                     case InitializerSource.RandomData:
@@ -224,10 +235,11 @@ namespace ProductPlatformAnalyzer
             return lDataLoaded;
         }
 
+        ////New Version Commented out
         /// <summary>
         /// Uses the stated variation points that have been set according to the analysis type to build the model
         /// </summary>
-        public void MakeProdutPlatformModel()
+        /*public void MakeProdutPlatformModel()
         {
             try
             {
@@ -279,10 +291,10 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("error in MakeProdutPlatformModel");
                 Console.WriteLine(ex.Message);
             }
-        }
+        }*/
 
 
-        public void MakeStaticPartOfProductPlatformModel(string pExtraConfigurationRule = "")
+        public void MakeStaticPartOfProductPlatformModel(AnalysisType pAnalysisType, string pExtraConfigurationRule = "")
         {
             try
             {
@@ -293,10 +305,13 @@ namespace ProductPlatformAnalyzer
 
                 //If it is asked for the configuration rules to be added to the model then they are added
                 //Variation Point
-                ////if (lConvertConfigurationRules)
-                ////    convertConfigurationRules(pExtraConfigurationRule);
+                
                 if (lConvertConfigurationRules)
-                    AddExtraConstraint2Z3Constraint(pExtraConfigurationRule);
+                    convertFConstraint2Z3Constraint(pAnalysisType, pExtraConfigurationRule);
+
+                ////I am not sure this part would be needed here, hence I added it to the previous part.
+                ////if (lConvertConfigurationRules)
+                ////    AddExtraConstraint2Z3Constraint(pExtraConfigurationRule);
 
                 //If it is asked for the resources to be added to the model then they are added
                 //Variation Point
@@ -321,7 +336,7 @@ namespace ProductPlatformAnalyzer
 
                 //If it is asked for the operation precedence rues to be added to the model then they are added
                 //Variation Point
-                if (lConvertOperationPrecedenceRules)
+                if (lConvertOperationPrecedenceRules || lBuildPConstraints)
                     convertOperationsPrecedenceRulesNOperationVariantRelations(pTransitionNo);
 
                 //Now the goal is added to the model
@@ -640,6 +655,8 @@ namespace ProductPlatformAnalyzer
                                                                     , lReportAnalysisTiming
                                                                     , lReportUnsatCore
                                                                     , pStrExprToCheck);
+
+                        lZ3Solver.WriteDebugFile(pState);
                     }
                 }
 
@@ -1121,7 +1138,13 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lFirstOperand = lZ3Solver.FindBoolExpressionUsingName(lOperation.names + "_U_" + currentVariant.index + "_0");
                             BoolExpr lFourthPart = lZ3Solver.TwoWayImpliesOperator(lFirstOperand, lZ3Solver.NotOperator(currentVariant.names));
 
-                            lZ3Solver.AddAndOperator2Constraints(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart }, "formula4-ActiveOperations");
+                            BoolExpr lWholeFormula = lZ3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart });
+
+                            if (lConvertOperationPrecedenceRules)
+                                lZ3Solver.AddAndOperator2Constraints(new List<BoolExpr>() {lWholeFormula}, "formula4-ActiveOperations");
+
+                            if (lBuildPConstraints)
+                                AddPrecedanceConstraintToLocalList(lWholeFormula);
 
                         }
                     }
@@ -1149,6 +1172,23 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        /// <summary>
+        /// This function adds the precedence constraint to the local list of precedence constraints which will be used for one type of analysis
+        /// </summary>
+        /// <param name="pPrecedanceConstraint">Precedence constraint which will be added</param>
+        private void AddPrecedanceConstraintToLocalList(BoolExpr pPrecedanceConstraint)
+        {
+            try
+            {
+                if (!lPConstraints.Contains(pPrecedanceConstraint))
+                lPConstraints.Add(pPrecedanceConstraint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddPrecedanceConstraintToLocalList");
+                Console.WriteLine(ex.Message);
+            }
+        }
         /*public void convertFOperations2Z3Constraint(int pState)
         {
             //Loop over variant list
@@ -1640,7 +1680,13 @@ namespace ProductPlatformAnalyzer
                     }
                 }
                 if (formulaSix != null)
-                    lZ3Solver.AddConstraintToSolver(formulaSix, "formula6");
+                {
+                    if (lConvertOperationPrecedenceRules)
+                        lZ3Solver.AddConstraintToSolver(formulaSix, "formula6");
+
+                    if (lBuildPConstraints)
+                        AddPrecedanceConstraintToLocalList(formulaSix);
+                }
             }
             catch (Exception ex)
             {
@@ -1702,7 +1748,14 @@ namespace ProductPlatformAnalyzer
             {
                 //Formula 5.7
                 //O_F_k_j => O_F_k_j+1
-                lZ3Solver.AddImpliesOperator2Constraints(lOp_F_CurrentState, lOp_F_NextState, "formula5.7");
+
+                BoolExpr lWholeFormula = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lOp_F_CurrentState, lOp_F_NextState });
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.7");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -1717,7 +1770,14 @@ namespace ProductPlatformAnalyzer
             {
                 //Formula 5.6
                 //O_U_k_j => O_U_k_j+1
-                lZ3Solver.AddTwoWayImpliesOperator2Constraints(lOp_U_CurrentState, lOp_U_NextState, "formula5.6");
+
+                BoolExpr lWholeFormula = lZ3Solver.TwoWayImpliesOperator(lOp_U_CurrentState, lOp_U_NextState);
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.6");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -1737,7 +1797,14 @@ namespace ProductPlatformAnalyzer
                 resetOperationPostcondition(pOperation, pCurrentVariant, pState, "formula5.4");
 
                 BoolExpr lLeftHandSide = lZ3Solver.AndOperator(new List<BoolExpr>() { lOp_E_CurrentState, lOpPostcondition });
-                lZ3Solver.AddImpliesOperator2Constraints(lLeftHandSide, lOp_F_NextState, "formula5.4");
+
+                BoolExpr lWholeFormula = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { lLeftHandSide, lOp_F_NextState });
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.4");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -1778,7 +1845,13 @@ namespace ProductPlatformAnalyzer
                                                                                                     , lZ3Solver.NotOperator(lOp_E_CurrentState)
                                                                                                     , lZ3Solver.NotOperator(lOp_F_CurrentState)})});
 
-                lZ3Solver.AddAndOperator2Constraints(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart }, "formula5.3-Secondpart");
+                BoolExpr lWholeFormula = lZ3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart });
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.3-Secondpart");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -1821,7 +1894,13 @@ namespace ProductPlatformAnalyzer
 
                 tempRightHandSideTwo = lZ3Solver.TwoWayImpliesOperator(lOp_I_CurrentState, lOp_I_NextState);
 
-                lZ3Solver.AddImpliesOperator2Constraints(tempLeftHandSideTwo, tempRightHandSideTwo, "formula5.2");
+                BoolExpr lWholeFormula = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideTwo, tempRightHandSideTwo });
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.2");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -1842,7 +1921,13 @@ namespace ProductPlatformAnalyzer
                 //else
                 //    tempLeftHandSideOne = lOp_I_CurrentState;
 
-                lZ3Solver.AddImpliesOperator2Constraints(tempLeftHandSideOne, lOp_E_NextState, "formula5.1");
+                BoolExpr lWholeFormula = lZ3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideOne, lOp_E_NextState });
+
+                if (lConvertOperationPrecedenceRules)
+                    lZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.1");
+
+                if (lBuildPConstraints)
+                    AddPrecedanceConstraintToLocalList(lWholeFormula);
             }
             catch (Exception ex)
             {
@@ -2143,7 +2228,7 @@ namespace ProductPlatformAnalyzer
         /// Also adds any given extra constraints to the Z3 model
         /// </summary>
         /// <param name="pExtraConfigurationRule"></param>
-        public void convertFConstraint2Z3Constraint(string pExtraConfigurationRule = "")
+        public void convertFConstraint2Z3Constraint(AnalysisType pAnalysisType, string pExtraConfigurationRule = "")
         {
             try
             {
@@ -2152,8 +2237,14 @@ namespace ProductPlatformAnalyzer
                 List<string> localConstraintList = lFrameworkWrapper.ConstraintList;
 
                 foreach (string lConstraint in localConstraintList)
-                    lZ3Solver.AddConstraintToSolver(returnFBooleanExpression2Z3Constraint(lConstraint)
+                {
+                    BoolExpr lBoolExprConstraint = returnFBooleanExpression2Z3Constraint(lConstraint);
+                    lZ3Solver.AddConstraintToSolver(lBoolExprConstraint
                                                     , "formula3");
+                    if (pAnalysisType == AnalysisType.AlwaysSelectedVariantAnalysis || pAnalysisType == AnalysisType.AlwaysSelectedOperationAnalysis)
+                        AddConfigurationConstraintToLocalList(lBoolExprConstraint);
+
+                }
 
                 //TODO: by default this extra configuration rule can be an array
                 if (pExtraConfigurationRule != "")
@@ -2164,6 +2255,24 @@ namespace ProductPlatformAnalyzer
             catch (Exception ex)
             {
                 Console.WriteLine("error in convertFConstraint2Z3Constraint");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// This function populates the local list of configuration constraints which is used for one of the analysis
+        /// </summary>
+        /// <param name="pConfigurationConstraint">Configuration constraint which is to be added to the list</param>
+        private void AddConfigurationConstraintToLocalList(BoolExpr pConfigurationConstraint)
+        {
+            try
+            {
+                if (!lConfigurationConstraints.Contains(pConfigurationConstraint))
+                    lConfigurationConstraints.Add(pConfigurationConstraint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddConfigurationConstraintToLocalList");
                 Console.WriteLine(ex.Message);
             }
         }
@@ -2475,7 +2584,8 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// This analysis checks if there are any variants which are not able to be selected and manufactured
         /// </summary>
-        public bool VariantSelectabilityAnalysis()
+        public bool VariantSelectabilityAnalysis(bool pVariationPointsSet
+                                                    , bool pReportTypeSet)
         {
             bool lAnalysisResult = false;
             try
@@ -2501,13 +2611,21 @@ namespace ProductPlatformAnalyzer
                 //Step A, check the product platform structurally without the goal
                 //        this check is done for each seperate variant from the variant group
                 //        this checks to see if any of the rules are conflicting each other
-                setVariationPoints(true, true, true, true, true, false, false);
+                if (!pVariationPointsSet)
+                    setVariationPoints(true, true, true, true, true, false, false, false);
+
+                if (!pReportTypeSet)
+                    setReportType(true, true, false, false, false, true);
 
                 //Then we have to go over all variants one by one, for this we use the list we previously filled
                 foreach (variant lCurrentVariant in lVariantList)
                 {
                     Console.WriteLine("---------------------------------------------------------------------");
                     Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
+
+
+                    ////TODO: Added as new version
+                    MakeStaticPartOfProductPlatformModel(AnalysisType.VariantSelectabilityAnalysis);
 
                     ////TODO: Added as new version
                     for (int lTransitionNo = 0; lTransitionNo < lMaxNoOfTransitions; lTransitionNo++)
@@ -2518,15 +2636,16 @@ namespace ProductPlatformAnalyzer
                         lAnalysisComplete = false;
 
                         ////TODO: Added as new version
-                        MakeStaticPartOfProductPlatformModel(lCurrentVariant.names);
-                        ////TODO: Added as new version
                         MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
+
+                        lZ3Solver.SolverPushFunction();
+
+                        addStandAloneConstraint2Z3Solver(lZ3Solver.FindBoolExpressionUsingName(lCurrentVariant.names));
 
                         //For each variant check if this statement holds - carry out the analysis
                         lAnalysisResult = AnalyzeProductPlatform(lTransitionNo
                                                                 , lAnalysisComplete
-                                                                , AnalysisType.VariantSelectabilityAnalysis
-                                                                , lCurrentVariant.names);
+                                                                , AnalysisType.VariantSelectabilityAnalysis);
 
                         //if the result of the previous analysis is true then we go to the next analysis part
                         if (!lAnalysisResult)
@@ -2536,6 +2655,8 @@ namespace ProductPlatformAnalyzer
                                 lUnselectableVariantList.Add(lCurrentVariant);
                             break;
                         }
+
+                        lZ3Solver.SolverPopFunction();
 
                         ////TODO: Added as new version
                         //If all the transition cycles are completed then the analysis is completed
@@ -2566,7 +2687,8 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// This analysis checks if there are any variants which are always selected
         /// </summary>
-        public bool AlwaysSelectedVariantAnalysis()
+        public bool AlwaysSelectedVariantAnalysis(bool pVariationPointsSet
+                                                    , bool pReportTypeSet)
         {
             bool lAnalysisResult = false;
             try
@@ -2591,7 +2713,11 @@ namespace ProductPlatformAnalyzer
                 //To start empty the constraint set to initialize the analysiss
                 //In order to analyze this goal we have first add the C (configuration rules) and P (Operation precedence rules) to the constraints
                 //In order to add the C and the P we set the coresponding variation points
-                setVariationPoints(true, false, true, false, true, false, true);
+                if (!pVariationPointsSet)
+                    setVariationPoints(true, true, true, false, true, false, false, true);
+
+                if (!pReportTypeSet)
+                    setReportType(true, true, false, false, false, true);
 
                 //Then we have to go over all variants one by one
                 foreach (variant lCurrentVariant in lVariantList)
@@ -2600,17 +2726,41 @@ namespace ProductPlatformAnalyzer
                     Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
 
                     ////TODO: Added as new version
+                    lAnalysisComplete = false;
+
+                    ////TODO: Added as new version
+                    MakeStaticPartOfProductPlatformModel(AnalysisType.AlwaysSelectedVariantAnalysis);
+
                     for (int lTransitionNo = 0; lTransitionNo < lMaxNoOfTransitions; lTransitionNo++)
                     {
                         Console.WriteLine("--------------------Transition: " + lTransitionNo + " --------------------");
 
                         ////TODO: Added as new version
-                        MakeStaticPartOfProductPlatformModel();
-                        ////TODO: Added as new version
                         MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
+
+
+                        lZ3Solver.SolverPushFunction();
 
                         BoolExpr lStandAloneConstraint = null;
                         //Here we have to build an expression which shows C and P => V_i and assign it to the variable just defined
+                        BoolExpr lRightHandSide = null;
+                        BoolExpr lLeftHandSide = null;
+
+                        ////TODO: only do this if the two list are not empty!
+                        BoolExpr lP = lZ3Solver.AndOperator(lPConstraints);
+
+                        if (lConfigurationConstraints.Count > 0)
+                        {
+                            BoolExpr lC = lZ3Solver.AndOperator(lConfigurationConstraints);
+                            lRightHandSide = lZ3Solver.AndOperator(new List<BoolExpr>() { lC, lP });
+                        }
+                        else
+                            lRightHandSide = lP;
+
+                        lLeftHandSide = lZ3Solver.NotOperator(lZ3Solver.FindBoolExpressionUsingName(lCurrentVariant.names));
+
+                        /////lStandAloneConstraint = lZ3Solver.ImpliesOperator(lRightHandSide, lZ3Solver.FindBoolExpressionUsingName(lCurrentVariant.names));
+                        lStandAloneConstraint = lZ3Solver.AndOperator(new List<BoolExpr>() { lRightHandSide, lLeftHandSide} );
 
                         addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
@@ -2627,7 +2777,8 @@ namespace ProductPlatformAnalyzer
                         }
 
                         //if it does hold we go to the next variant
-                    
+                        lZ3Solver.SolverPopFunction();
+
                         ////TODO: Added as new version
                         //If all the transition cycles are completed then the analysis is completed
                         if (lTransitionNo == lMaxNoOfTransitions - 1)
@@ -2651,7 +2802,8 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// This analysis checks if there are any operations which are always selected
         /// </summary>
-        public bool AlwaysSelectedOperationAnalysis()
+        public bool AlwaysSelectedOperationAnalysis(bool pVariationPointsSet
+                                                    , bool pReportTypeSet)
         {
             bool lAnalysisResult = false;
             try
@@ -2678,7 +2830,11 @@ namespace ProductPlatformAnalyzer
                 //To start empty the constraint set to initialize the analysiss
                 //In order to analyze this goal we have first add the C (configuration rules) and P (Operation precedence rules) to the constraints
                 //In order to add the C and the P we set the coresponding variation points
-                setVariationPoints(true, false, true, false, true, false, true);
+                if (!pVariationPointsSet)
+                    setVariationPoints(true, true, true, true, true, false, false, true);
+
+                if (!pReportTypeSet)
+                    setReportType(true, false, false, false, false, true);
 
                 ////TODO: Added as new version
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
@@ -2686,38 +2842,66 @@ namespace ProductPlatformAnalyzer
                 int lTransitionNo = 0;
 
                 ////TODO: Added as new version
-                MakeStaticPartOfProductPlatformModel();
+                MakeStaticPartOfProductPlatformModel(AnalysisType.AlwaysSelectedOperationAnalysis);
                 ////TODO: Added as new version
                 MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
 
                 foreach (string lOperationInstanceVariableName in lOperationInstanceVariableNames)
                 {
-                    if (lFrameworkWrapper.isOperationInstanceActive(lOperationInstanceVariableName))
+                    //Here we have to check if the operation instance variable is the Unused state of an operation, because in this analysis it is only needed to check if 
+                    //for each operation the instance variable of the unused state can be true or not.
+                    if (lFrameworkWrapper.isOperationInstanceUnusedState(lOperationInstanceVariableName))
                     {
-                        BoolExpr lStandAloneConstraint = null;
-
-                        //TODO: Here we have to build an expression which shows C and P => O_i and assign it to the variable just defined!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-                        addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
-
-                        //For each variant check if this statement holds - carry out the analysis
-                        lAnalysisResult = AnalyzeProductPlatform(lTransitionNo
-                                                                , lAnalysisComplete
-                                                                , AnalysisType.AlwaysSelectedOperationAnalysis);
-                        if (!lAnalysisResult && !lAnalysisComplete)
+                        if (lFrameworkWrapper.isOperationInstanceActive(lOperationInstanceVariableName))
                         {
-                            //if it does not hold, then it is not possible to select that operation and it should be added to a list
+                            lZ3Solver.SolverPushFunction();
 
-                            string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
+                            BoolExpr lStandAloneConstraint = null;
 
-                            lNotAlwaysSelectedOperationNameList.Add(lOperationName);
+                            //TODO: Here we have to build an expression which shows C and P => !O_u and assign it to the variable just defined!!!!!!!!!!!!!!!!!!!!!!!!!
+                            BoolExpr lRightHandSide = null;
+                            BoolExpr lLeftHandSide = null;
+
+                            ////TODO: only do this if the two list are not empty!
+                            BoolExpr lP = lZ3Solver.AndOperator(lPConstraints);
+
+                            if (lConfigurationConstraints.Count > 0)
+                            {
+                                BoolExpr lC = lZ3Solver.AndOperator(lConfigurationConstraints);
+                                lRightHandSide = lZ3Solver.AndOperator(new List<BoolExpr>() { lC, lP });
+                            }
+                            else
+                                lRightHandSide = lP;
+
+                            /////lLeftHandSide = lZ3Solver.NotOperator(lZ3Solver.FindBoolExpressionUsingName(lOperationInstanceVariableName));
+                            lLeftHandSide = lZ3Solver.FindBoolExpressionUsingName(lOperationInstanceVariableName);
+
+                            /////lStandAloneConstraint = lZ3Solver.ImpliesOperator(lRightHandSide, lLeftHandSide);
+                            lStandAloneConstraint = lZ3Solver.AndOperator(new List<BoolExpr> () {lRightHandSide, lLeftHandSide});
+
+                            addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+
+                            //For each variant check if this statement holds - carry out the analysis
+                            lAnalysisResult = AnalyzeProductPlatform(lTransitionNo
+                                                                    , lAnalysisComplete
+                                                                    , AnalysisType.AlwaysSelectedOperationAnalysis);
+                            if (!lAnalysisResult && !lAnalysisComplete)
+                            {
+                                //if it does not hold, then it is not possible to select that operation and it should be added to a list
+
+                                string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
+
+                                if (!lNotAlwaysSelectedOperationNameList.Contains(lOperationName))
+                                    lNotAlwaysSelectedOperationNameList.Add(lOperationName);
+                            }
+
+                            lZ3Solver.SolverPopFunction();
+                            //if it does hold we go to the next variant
                         }
-
-                        //if it does hold we go to the next variant
                     }
                     if (lNotAlwaysSelectedOperationNameList.Count != 0)
-                        Console.WriteLine("Operations which are always selected are: " + ReturnOperationNamesStringFromOperationNameList(lNotAlwaysSelectedOperationNameList));
+                        Console.WriteLine("Operations which are always selected are: " 
+                            + ReturnOperationNamesStringFromOperationNameList(lNotAlwaysSelectedOperationNameList));
 
                     ////TODO: when is the analysis complete??????????????
                     //if (??????lTransitionNo == lMaxNoOfTransitions - 1)
@@ -2735,7 +2919,8 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// This analysis checks if there are any operations which are not able to be selected
         /// </summary>
-        public bool OperationSelectabilityAnalysis()
+        public bool OperationSelectabilityAnalysis(bool pVariationPointsSet
+                                                    , bool pReportTypeSet)
         {
             bool lAnalysisResult = false;
             try
@@ -2757,9 +2942,11 @@ namespace ProductPlatformAnalyzer
                 //To start empty the constraint set to initialize the analysiss
                 //In order to analyze this goal we have first add the C (configuration rules) and P (Operation precedence rules) to the constraints
                 //In order to add the C and the P we set the coresponding variation points
-                setVariationPoints(true, true, true, true, true, false, false);
+                if (!pVariationPointsSet)
+                    setVariationPoints(true, true, true, true, true, false, false, false);
 
-                setReportType(true, false, false, false, false);
+                if (!pReportTypeSet)
+                    setReportType(true, false, false, false, false, true);
 
                 ////TODO: Added as new version
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
@@ -2767,48 +2954,57 @@ namespace ProductPlatformAnalyzer
                 int lTransitionNo = 0;
 
                 ////TODO: Added as new version
-                MakeStaticPartOfProductPlatformModel();
+                MakeStaticPartOfProductPlatformModel(AnalysisType.OperationSelectabilityAnalysis);
                 ////TODO: Added as new version
                 MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
 
                 foreach (string lOperationInstanceVariableName in lOperationInstanceVariableNames)
                 {
-                    if (lFrameworkWrapper.isOperationInstanceActive(lOperationInstanceVariableName))
+                    //Here we have to check if the operation instance variable is the Initial state of an operation, because in this analysis it is only needed to check if 
+                    //for each operation the instance variable of the initial state can be true or not.
+                    if (lFrameworkWrapper.isOperationInstanceInitialState(lOperationInstanceVariableName))
                     {
-                        //TODO: Only should be done when a flag is set
-                        Console.WriteLine("----------------------------------------------------------------");
-                        Console.WriteLine("Analysing operation instance named: " + lOperationInstanceVariableName);
-
-                        //For each operation check if this statement holds - carry out the analysis
-                        ////lAnalysisResult = AnalyzeProductPlatform(out lAnalysisComplete, "not " + lCurrentOperation.names + "_U_0_1");
-                        lAnalysisResult = AnalyzeProductPlatform(lTransitionNo
-                                                                , lAnalysisComplete
-                                                                , AnalysisType.OperationSelectabilityAnalysis
-                                                                , lOperationInstanceVariableName);
-                        if (lAnalysisResult)
-                        //if it does hold, then it is possible to select that operation and it should be removed from the list
+                        //Here we check if this operation is an active operation or not, meaning does a variant use this operation for its assembly or not
+                        if (lFrameworkWrapper.isOperationInstanceActive(lOperationInstanceVariableName))
                         {
-                            string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
-                            if (lUnselectableOperationNameList.Contains(lOperationName))
-                                lUnselectableOperationNameList.Remove(lOperationName);
+                            //TODO: Only should be done when a flag is set
+                            Console.WriteLine("----------------------------------------------------------------");
+                            Console.WriteLine("Analysing operation instance named: " + lOperationInstanceVariableName);
+
+                            lZ3Solver.SolverPushFunction();
+
+                            addStandAloneConstraint2Z3Solver(lZ3Solver.FindBoolExpressionUsingName(lOperationInstanceVariableName));
+                            //For each operation check if this statement holds - carry out the analysis
+                            ////lAnalysisResult = AnalyzeProductPlatform(out lAnalysisComplete, "not " + lCurrentOperation.names + "_U_0_1");
+                            lAnalysisResult = AnalyzeProductPlatform(lTransitionNo
+                                                                    , lAnalysisComplete
+                                                                    , AnalysisType.OperationSelectabilityAnalysis);
+                            if (lAnalysisResult)
+                            //if it does hold, then it is possible to select that operation and it should be removed from the list
+                            {
+                                string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
+                                if (lUnselectableOperationNameList.Contains(lOperationName))
+                                    lUnselectableOperationNameList.Remove(lOperationName);
+                            }
+
+                            lZ3Solver.SolverPopFunction();
+                            //if it does hold we go to the next variant
                         }
-
-                        //if it does hold we go to the next variant
-                    }
-                    else
-                    {
-                        //This means the operation instance is inactive hence it should be mentioned
-
-                        //This is when we want to report only the operation name
-                        //Console.WriteLine("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
-
-                        //This is when we want to report the operation instance
-                        string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
-                        if (!lInActiveOperationNameList.Contains(lOperationName))
+                        else
                         {
-                            lInActiveOperationNameList.Add(lOperationName);
-                            if (lUnselectableOperationNameList.Contains(lOperationName))
-                                lUnselectableOperationNameList.Remove(lOperationName);
+                            //This means the operation instance is inactive hence it should be mentioned
+
+                            //This is when we want to report only the operation name
+                            //Console.WriteLine("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
+
+                            //This is when we want to report the operation instance
+                            string lOperationName = lFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
+                            if (!lInActiveOperationNameList.Contains(lOperationName))
+                            {
+                                lInActiveOperationNameList.Add(lOperationName);
+                                if (lUnselectableOperationNameList.Contains(lOperationName))
+                                    lUnselectableOperationNameList.Remove(lOperationName);
+                            }
                         }
                     }
                 }
@@ -3276,81 +3472,57 @@ namespace ProductPlatformAnalyzer
 
             try
             {
-                // These examples need proof generation turned on.
-//                using (Context ctx = new Context(new Dictionary<string, string>() { { "proof", "true" } }))
-                //{
-                    lZ3Solver.setDebugMode(true);
+                lZ3Solver.setDebugMode(true);
 
-                    lLoadInitialData = loadInitialData(InitializerSource.ExternalFile, file);
+                lLoadInitialData = loadInitialData(InitializerSource.InternalFile, file);
 
-                    if (lLoadInitialData)
+                if (lLoadInitialData)
+                {
+                    switch (pAnalysisType)
                     {
-                        /*                    int lNoOfCycles = CalculateAnalysisNoOfCycles();
-
-                                            bool done = false;
-
-                                            lZ3Solver.PrepareDebugDirectory();
-                                            for (int i = 0; i < lNoOfCycles; i++)
-                                            {
-                                                lTestResult = testConstraintConvertion(i, file, done, pExtraConfigurationRule);
-
-                                                if (lTestResult)
-                                                    break;
-                                                //                        lZ3SolverEngineer.ResetAnalyzer();
-                                                Console.ReadKey();
-                                                //ResetAnalyzer();
-
-                                                if (i == lNoOfCycles - 1)
-                                                {
-                                                    done = true;
-                                                    lTestResult = testConstraintConvertion(i, file, done, pExtraConfigurationRule);
-                                                }
-
-                                            }*/
-                        switch (pAnalysisType)
-                        {
-                            case AnalysisType.VariantSelectabilityAnalysis:
-                                {
-                                    lTestResult = VariantSelectabilityAnalysis();
-                                    break;
-                                }
-                            case AnalysisType.AlwaysSelectedVariantAnalysis:
-                                {
-                                    lTestResult = AlwaysSelectedVariantAnalysis();
-                                    break;
-                                }
-                            case AnalysisType.OperationSelectabilityAnalysis:
-                                {
-                                    lTestResult = OperationSelectabilityAnalysis();
-                                    break;
-                                }
-                            case AnalysisType.AlwaysSelectedOperationAnalysis:
-                                {
-                                    lTestResult = AlwaysSelectedOperationAnalysis();
-                                    break;
-                                }
-                            case AnalysisType.CompleteAnalysis:
-                                {
-                                    ////TODO: this analysis was removed as there needs to be a loop over the different transition numbers before it!!!
-                                    ////lTestResult = AnalyzeProductPlatform(out lAnalysisDone, AnalysisType.CompleteAnalysis);
-                                    break;
-                                }
-                            default:
-                                {
-                                    ////TODO: this analysis was removed as there needs to be a loop over the different transition numbers before it!!!
-                                    ////lTestResult = AnalyzeProductPlatform(out lAnalysisDone, AnalysisType.CompleteAnalysis);
-                                    break;
-                                }
-                        }
-                        Console.ReadKey();
-                        //                }
-
+                        case AnalysisType.VariantSelectabilityAnalysis:
+                            {
+                                lTestResult = VariantSelectabilityAnalysis(false, false);
+                                break;
+                            }
+                        case AnalysisType.AlwaysSelectedVariantAnalysis:
+                            {
+                                lTestResult = AlwaysSelectedVariantAnalysis(false, false);
+                                break;
+                            }
+                        case AnalysisType.OperationSelectabilityAnalysis:
+                            {
+                                lTestResult = OperationSelectabilityAnalysis(false, false);
+                                break;
+                            }
+                        case AnalysisType.AlwaysSelectedOperationAnalysis:
+                            {
+                                lTestResult = AlwaysSelectedOperationAnalysis(false, false);
+                                break;
+                            }
+                        case AnalysisType.CompleteAnalysis:
+                            {
+                                ////TODO: this analysis was removed as there needs to be a loop over the different transition numbers before it!!!
+                                ////lTestResult = AnalyzeProductPlatform(out lAnalysisDone, AnalysisType.CompleteAnalysis);
+                                break;
+                            }
+                        default:
+                            {
+                                ////TODO: this analysis was removed as there needs to be a loop over the different transition numbers before it!!!
+                                ////lTestResult = AnalyzeProductPlatform(out lAnalysisDone, AnalysisType.CompleteAnalysis);
+                                break;
+                            }
                     }
-                    else
-                    {
-                        Console.WriteLine("Initial data incomplete! Analysis can't be done!");
+
+                    if (lStopAEndOfAnalysis)
                         Console.ReadKey();
-                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Initial data incomplete! Analysis can't be done!");
+                    //Console.ReadKey();
+                }
 
             }
             catch (Z3Exception ex)
@@ -3376,19 +3548,26 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.VariantSelectabilityAnalysis, "", "0.0V0VG1O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.VariantSelectabilityAnalysis, "", "0.1V0VG1O0C0P.xml");
 
-                //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.VariantSelectabilityAnalysis, "", "1.1V1VG2O1C1P.xml");
+                lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedVariantAnalysis, "", "1.1V1VG2O1C1P.xml");
                 
                 //TODO: for a variant which is selectable what would be a good term for completing the analysis?
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.VariantSelectabilityAnalysis, "", "2.2V1VG2O1C1PNoTransitions-1UnselectV.xml");
 
-                lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedVariantAnalysis, "", "2.2V1VG2O1C1PNoTransitions-1UnselectV.xml");
+                ////VARIANT ALWAYS SELECTABLE
+                //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedVariantAnalysis, "", "2.2V1VG2O1C1PNoTransitions-1UnselectV.xml");
 
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.VariantSelectabilityAnalysis, "", "3.2V1VG2O1C1PNoTransitions.xml");
 
+                //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedVariantAnalysis, "", "3.2V1VG2O1C1PNoTransitions.xml");
                 ////OPERATION SELECTABILITY
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.OperationSelectabilityAnalysis, "", "2.2V1VG2O1C1PNoTransitions-1UnselectV.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.OperationSelectabilityAnalysis, "", "3.2V1VG2O1C1PNoTransitions.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.OperationSelectabilityAnalysis, "", "4.2V1VG3O1C1PNoTransition.xml");
+
+                ////OPERATION ALWAYS SELECTABLE
+                //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedOperationAnalysis, "", "5.2V1VG2O1C1PNoTransition.xml");
+
+                //lZ3SolverEngineer.ProductPlatformAnalysis(AnalysisType.AlwaysSelectedVariantAnalysis, "", "6.2V1VG2O0C0P.xml");
 
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
 <!-- Simple 2 Variant 3 Operations one with pre and post condition
-Process should finish -->
+    One of the operations is inactive, but still all the analysis are working
+Analysis should finish -->
 
 <!-- Operations: 
         scan-barcode

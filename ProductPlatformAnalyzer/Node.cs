@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProductPlatformAnalyzer
 {
-    class Node<T>: IEnumerable<Node<T>>
+    public class Node<T>: IEnumerable<Node<T>>
     {
         private T data;
         private LinkedList<Node<T>> children;

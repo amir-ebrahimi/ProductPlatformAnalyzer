@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductPlatformAnalyzer", "ProductPlatformAnalyzer\ProductPlatformAnalyzer.csproj", "{8EEF2F00-07F1-41C5-8EB1-9E329A3E3135}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductPlatform.Test", "ProductPlatform.Test\ProductPlatform.Test.csproj", "{D033702C-B46D-4EFF-9BE7-034721A4D49B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{8EEF2F00-07F1-41C5-8EB1-9E329A3E3135}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EEF2F00-07F1-41C5-8EB1-9E329A3E3135}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EEF2F00-07F1-41C5-8EB1-9E329A3E3135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D033702C-B46D-4EFF-9BE7-034721A4D49B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D033702C-B46D-4EFF-9BE7-034721A4D49B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D033702C-B46D-4EFF-9BE7-034721A4D49B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D033702C-B46D-4EFF-9BE7-034721A4D49B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
