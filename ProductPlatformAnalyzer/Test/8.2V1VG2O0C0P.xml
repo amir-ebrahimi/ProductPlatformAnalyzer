@@ -23,7 +23,15 @@
       Variant: V2
       Operation: O2-->
 
-<testData>
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1, V2)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, V2 -> O2)}
+      Always Selected Variant: There DOES NOT exists a valid configuration in which not all variants are included. {}
+      Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}      
+      Deadlock Detection Analysis: There exists at least one configuration which leads to a deadlock in production. {}
+      -->
+
+      <testData>
   <operations>
     <operation>
       <operationName>O1</operationName>

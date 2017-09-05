@@ -1,0 +1,10 @@
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\ProductPlatform.Test.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\ProductPlatform.Test.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\ProductPlatformAnalyzer.exe
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\Microsoft.Z3.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\ProductPlatformAnalyzer.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\Microsoft.Z3.xml
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\libz3.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.csprojResolveAssemblyReference.cache
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.pdb

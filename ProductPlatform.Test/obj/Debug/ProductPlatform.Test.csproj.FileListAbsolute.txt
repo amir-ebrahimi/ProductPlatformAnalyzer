@@ -3,8 +3,8 @@ D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\D
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\ProductPlatformAnalyzer.exe
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\Microsoft.Z3.dll
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\ProductPlatformAnalyzer.pdb
-D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\Microsoft.Z3.xml
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\libz3.dll
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Debug\ProductPlatform.Test.csprojResolveAssemblyReference.cache
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Debug\ProductPlatform.Test.dll
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Debug\ProductPlatform.Test.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Debug\Microsoft.Z3.xml

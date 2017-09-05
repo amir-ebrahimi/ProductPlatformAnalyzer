@@ -1,0 +1,89 @@
+﻿<?xml version="1.0"?>
+<!-- 2 Variant 2 Operations
+    Analysis should finish -->
+
+<!-- Operations: 
+        O1
+				O2
+          Precondition: O1-->
+
+<!-- Variants: 
+        V1
+				V2 -->
+
+<!-- VariantGroups: 
+        VG
+          choose exactly one
+          Variants: 
+            V1
+            V2 -->
+<!--Variant-Operation Mapping:
+      Variant: V1
+      Operation: O1
+      
+      Variant: V2
+      Operation: O2-->
+
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1), (V1, V2)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1), (V1 -> O1, V2 -> O2)}
+      Always Selected Variant: There exists a valid configuration in which not all variants are included. {(V1)}
+      Always Selected Operation: There exists a valid configuration in which not all operations are included. {(V1)}
+      Deadlock Detection Analysis: There exists at least one configuration which leads to a deadlock in production. {(V2)}
+      -->
+
+      <testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <displayName>O1</displayName>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <displayName>O2</displayName>
+      <operationPrecondition>
+        <operationRef>O1</operationRef>
+      </operationPrecondition>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>V1</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>V2</variantName>
+      <variantIndex>2</variantIndex>
+      <variantDisplayName>V2</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O1</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O2</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>

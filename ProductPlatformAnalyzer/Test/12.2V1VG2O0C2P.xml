@@ -4,7 +4,7 @@
 
 <!-- Operations: 
         O1
-          Precondition: O2_F_2_2
+          Precondition: O2_F_2_0
 				O2
           Precondition: O1_F_1_2-->
 
@@ -25,20 +25,28 @@
       Variant: V2
       Operation: O2-->
 
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1, V2)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, V2 -> O2)}
+      Always Selected Variant: There DOES NOT exists a valid configuration in which not all variants are included. {}
+      Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}
+      Deadlock Detection Analysis: There exists at least one configuration which leads to a deadlock in production. {(V1), (V2)}
+-->
+
 <testData>
   <operations>
     <operation>
       <operationName>O1</operationName>
       <displayName>O1</displayName>
       <operationPrecondition>
-        <operationRef>O2_F_2_2</operationRef>
+        <operationRef>O2_F</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>O2</operationName>
       <displayName>O2</displayName>
       <operationPrecondition>
-        <operationRef>O1_F_1_2</operationRef>
+        <operationRef>O1_F</operationRef>
       </operationPrecondition>
     </operation>
   </operations>
@@ -50,7 +58,7 @@
     </variant>
     <variant>
       <variantName>V2</variantName>
-      <variantIndex>1</variantIndex>
+      <variantIndex>2</variantIndex>
       <variantDisplayName>V2</variantDisplayName>
     </variant>
   </variants>

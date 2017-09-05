@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<!-- Simple insufficient data which should not make the system crash
+Analysis not able to complete! -->
+
+<!-- Operations: 
+        scan-barcode
+
+    Variants: 
+
+    VariantGroups: 
+
+    Constraints:  -->
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {}
+      Always Selected Variant: There exists a valid configuration in which not all variants are included. {}
+      Always Selected Operation: There exists a valid configuration in which not all operations are included. {}-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>scan-barcode</operationName>
+      <displayName>Scan barcode</displayName>
+    </operation>
+  </operations>
+  <variants>
+  </variants>
+  <variantGroups>
+  </variantGroups>
+  <constraints>
+  </constraints>
+  <variantOperationMappings>
+  </variantOperationMappings>
+</testData>

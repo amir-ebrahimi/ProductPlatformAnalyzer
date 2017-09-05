@@ -155,26 +155,41 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        //Prints values for showing a finished analysis to console
-        public void printFinished()
+        /// <summary>
+        /// Prints chosen operation transitions for showing a finished analysis to console
+        /// </summary>
+        public void printOperationsTransitions()
         {
             try
             {
-                SortAfterValue();
-                Console.WriteLine("\nVariants: ");
-                printVariants();
-
                 SortAfterState();
                 Console.WriteLine("\nOperations in order: ");
                 printOpTransformations();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printFinished");
+                Console.WriteLine("error in printOperationTransitions");
                 Console.WriteLine(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Prints chosen variant values for showing a finished analysis to console
+        /// </summary>
+        public void printChosenVariants()
+        {
+            try
+            {
+                SortAfterValue();
+                Console.WriteLine("\nVariants: ");
+                printVariants();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in printChosenVariants");
+                Console.WriteLine(ex.Message);
+            }
+        }
 
 
         //Writes values for showing a finished analysis to HTML-file

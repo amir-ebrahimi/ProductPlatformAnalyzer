@@ -1,0 +1,105 @@
+﻿<?xml version="1.0"?>
+<!-- Simple 1 Variant 2 Operations one with pre and post condition
+Analysis should be able to complete. -->
+
+<!-- Operations: 
+        O1
+				O2 -->
+
+<!-- Variants: V1	
+                V2
+                V3-->
+
+<!-- VariantGroups: 
+      VG1
+        choose all
+        Variants: V1 
+                  V2
+                  V3-->
+
+<!-- Variant-Operation mapping:
+      Variant: V1
+      Operations: O1
+                  O2 
+      Variant: V2
+      Operations: O1
+                  O2
+      Variant: V3
+      Operations: O1
+      O2-->
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1, V2, V3)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2 V2 -> O1, O2 V3 -> O1, O2)}
+      Always Selected Variant: There DOES NOT exists a valid configuration in which not all variants are included. {}
+      Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <displayName>O1</displayName>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <displayName>O2</displayName>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>V1</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>V2</variantName>
+      <variantIndex>2</variantIndex>
+      <variantDisplayName>V2</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>V3</variantName>
+      <variantIndex>3</variantIndex>
+      <variantDisplayName>V3</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose all</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+        <variantRef>V2</variantRef>
+        <variantRef>V3</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O1</operationRef>
+        <operationRef>O2</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O1</operationRef>
+        <operationRef>O2</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>V3</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>O1</operationRef>
+        <operationRef>O2</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>

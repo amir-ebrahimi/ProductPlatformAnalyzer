@@ -10,114 +10,114 @@ namespace ProductPlatformAnalyzer
 {
     public class FrameworkWrapper
     {
-        private List<variantGroup> variantGroupList;
-        private List<variant> variantList;
-        private List<string> constraintList;
-        private List<operation> operationList;
-        private List<variantOperations> variantsOperationsList;
-        private List<string> activeOperationInstanceNamesList;
-        private List<virtualVariant2VariantExpr> virtualVariant2VariantExprList;
-        private List<string> activeOperationNamesList;
-        private List<string> inActiveOperationNamesList;
-        private List<string> operationInstanceList;
-        private List<station> stationList;
-        private List<resource> resourceList;
-        private List<trait> traitList;
-        private int VirtualCounter;
+        private List<variantGroup> cVariantGroupList;
+        private List<variant> cVariantList;
+        private List<string> cConstraintList;
+        private List<operation> cOperationList;
+        private List<variantOperations> cVariantsOperationsList;
+        private List<string> cActiveOperationInstanceNamesList;
+        private List<virtualVariant2VariantExpr> cVirtualVariant2VariantExprList;
+        private List<string> cActiveOperationNamesList;
+        private List<string> cInActiveOperationNamesList;
+        private List<string> cOperationInstanceList;
+        private List<station> cStationList;
+        private List<resource> cResourceList;
+        private List<trait> cTraitList;
+        private int cVirtualCounter;
 
         public List<variantGroup> VariantGroupList
         {
-            get { return this.variantGroupList; }
-            set { this.variantGroupList = value; }
+            get { return this.cVariantGroupList; }
+            set { this.cVariantGroupList = value; }
         }
 
         public List<variant> VariantList
         {
-            get { return this.variantList; }
-            set { this.variantList = value; }
+            get { return this.cVariantList; }
+            set { this.cVariantList = value; }
         }
 
         private int getNextVirtualIndex()
         {
-            return VirtualCounter++;
+            return cVirtualCounter++;
         }
 
         public List<string> ConstraintList
         {
-            get { return this.constraintList; }
-            set { this.constraintList = value; }
+            get { return this.cConstraintList; }
+            set { this.cConstraintList = value; }
         }
 
         public List<operation> OperationList
         {
-            get { return this.operationList; }
-            set { this.operationList = value; }
+            get { return this.cOperationList; }
+            set { this.cOperationList = value; }
         }
 
         public List<variantOperations> VariantsOperationsList
         {
-            get { return this.variantsOperationsList; }
-            set { this.variantsOperationsList = value; }
+            get { return this.cVariantsOperationsList; }
+            set { this.cVariantsOperationsList = value; }
         }
 
         public List<string> ActiveOperationNamesList
         {
-            get { return this.activeOperationNamesList; }
-            set { this.activeOperationNamesList = value; }
+            get { return this.cActiveOperationNamesList; }
+            set { this.cActiveOperationNamesList = value; }
         }
 
         public List<string> ActiveOperationInstanceNamesList
         {
-            get { return this.activeOperationInstanceNamesList; }
-            set { this.activeOperationInstanceNamesList = value; }
+            get { return this.cActiveOperationInstanceNamesList; }
+            set { this.cActiveOperationInstanceNamesList = value; }
         }
 
         public List<string> InActiveOperationNamesList
         {
-            get { return this.inActiveOperationNamesList; }
-            set { this.inActiveOperationNamesList = value; }
+            get { return this.cInActiveOperationNamesList; }
+            set { this.cInActiveOperationNamesList = value; }
         }
 
         public List<string> OperationInstanceList
         {
-            get { return this.operationInstanceList; }
-            set { this.operationInstanceList = value; }
+            get { return this.cOperationInstanceList; }
+            set { this.cOperationInstanceList = value; }
         }
 
         public List<station> StationList
         {
-            get { return this.stationList; }
-            set { this.stationList = value; }
+            get { return this.cStationList; }
+            set { this.cStationList = value; }
         }
 
         public List<resource> ResourceList
         {
-            get { return this.resourceList; }
-            set { this.resourceList = value; }
+            get { return this.cResourceList; }
+            set { this.cResourceList = value; }
         }
 
         public List<trait> TraitList
         {
-            get { return this.traitList; }
-            set { this.traitList = value; }
+            get { return this.cTraitList; }
+            set { this.cTraitList = value; }
         }
 
         public FrameworkWrapper()
         {
-            variantList = new List<variant>();
-            variantGroupList = new List<variantGroup>();
-            constraintList = new List<string>();
-            operationList = new List<operation>();
-            activeOperationInstanceNamesList = new List<string>();
-            activeOperationNamesList = new List<string>();
-            inActiveOperationNamesList = new List<string>();
-            operationInstanceList = new List<string>();
-            variantsOperationsList = new List<variantOperations>();
-            stationList = new List<station>();
-            resourceList = new List<resource>();
-            traitList = new List<trait>();
-            virtualVariant2VariantExprList = new List<virtualVariant2VariantExpr>();
-            VirtualCounter = 0;
+            cVariantList = new List<variant>();
+            cVariantGroupList = new List<variantGroup>();
+            cConstraintList = new List<string>();
+            cOperationList = new List<operation>();
+            cActiveOperationInstanceNamesList = new List<string>();
+            cActiveOperationNamesList = new List<string>();
+            cInActiveOperationNamesList = new List<string>();
+            cOperationInstanceList = new List<string>();
+            cVariantsOperationsList = new List<variantOperations>();
+            cStationList = new List<station>();
+            cResourceList = new List<resource>();
+            cTraitList = new List<trait>();
+            cVirtualVariant2VariantExprList = new List<virtualVariant2VariantExpr>();
+            cVirtualCounter = 0;
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace ProductPlatformAnalyzer
         /// <returns>Number of active operations</returns>
         public int getNumberOfActiveOperations()
         {
-            return activeOperationNamesList.Count();
+            return cActiveOperationNamesList.Count();
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace ProductPlatformAnalyzer
             List<string> lOperationNames = new List<string>();
             try
             {
-                foreach (operation lOperation in operationList)
+                foreach (operation lOperation in cOperationList)
                 {
                     if (!lOperationNames.Contains(lOperation.names))
                         lOperationNames.Add(lOperation.names);
@@ -215,17 +215,33 @@ namespace ProductPlatformAnalyzer
 
         public List<string> getPreconditionForOperation(string opName)
         {
-            List<string> con;
-            operation op = findOperationWithName(opName);
-            con = new List<string>(op.precondition);
+            List<string> con = null;
+            try
+            {
+                operation op = findOperationWithName(opName);
+                con = new List<string>(op.precondition);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getPreconditionForOperation");                
+                Console.WriteLine(ex.Message);
+            }
             return con;
         }
 
         public List<string> getPostconditionForOperation(string opName)
         {
-            List<string> con;
-            operation op = findOperationWithName(opName);
-            con = new List<string>(op.postcondition);
+            List<string> con = null;
+            try
+            {
+                operation op = findOperationWithName(opName);
+                con = new List<string>(op.postcondition);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getPostconditionForOperation");                
+                Console.WriteLine(ex.Message);
+            }
             return con;
         }
 
@@ -267,11 +283,20 @@ namespace ProductPlatformAnalyzer
 
         public string getVariantGroup(string varName)
         {
-            variant var = findVariantWithName(varName);
-            variantGroup varGroup = getVariantGroup(var);
-            if (varGroup != null)
-                return varGroup.names;
-            return null;
+            string lVariantgroup = "";
+            try
+            {
+                variant var = findVariantWithName(varName);
+                variantGroup varGroup = getVariantGroup(var);
+                if (varGroup != null)
+                    lVariantgroup = varGroup.names;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getVariantGroup");
+                Console.WriteLine(ex.Message);
+            }
+            return lVariantgroup;
         }
 
         public List<variantGroup> getVariantGroupList()
@@ -287,28 +312,45 @@ namespace ProductPlatformAnalyzer
         public List<string> getvariantInstancesForOperation(string op)
         {
             List<string> instances = new List<string>();
-            string[] opParts = new string[4];
-            foreach (string iOp in ActiveOperationInstanceNamesList)
+            try
             {
-                opParts = iOp.Split('_');
-                if (String.Equals(opParts[0], op) && String.Equals(opParts[1], "F") && String.Equals(opParts[3], "0"))
-                    instances.Add(opParts[2]);
+                string[] opParts = new string[4];
+                foreach (string iOp in ActiveOperationInstanceNamesList)
+                {
+                    opParts = iOp.Split('_');
+                    if (String.Equals(opParts[0], op) && String.Equals(opParts[1], "F") && String.Equals(opParts[3], "0"))
+                        instances.Add(opParts[2]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getvariantInstancesForOperation");                
+                Console.WriteLine(ex.Message);
             }
             return instances;
         }
 
         public variantGroup getVariantGroup(variant var)
         {
-            foreach (variantGroup vg in VariantGroupList)
+            variantGroup lVariantGroup = null;
+            try
             {
-
-                foreach (variant v in vg.variant)
+                foreach (variantGroup vg in VariantGroupList)
                 {
-                    if (v.Equals(var))
-                        return vg;
+
+                    foreach (variant v in vg.variant)
+                    {
+                        if (v.Equals(var))
+                            lVariantGroup = vg;
+                    }
                 }
             }
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getVariantGroup");
+                Console.WriteLine(ex.Message);
+            }
+            return lVariantGroup;
         }
 
         public void setActiveOperationInstanceNamesList(List<String> pActiveOperationInstanceNamesList)
@@ -516,7 +558,7 @@ namespace ProductPlatformAnalyzer
             {
                 List<trait> lRequirementTraits = ExtractRequirementFieldTraits(pRequirement);
 
-                List<resource> resources = (from resource in resourceList
+                List<resource> resources = (from resource in cResourceList
                                             where resource.traits.SequenceEqual(lRequirementTraits)
                                             select resource).ToList();
 
@@ -545,7 +587,7 @@ namespace ProductPlatformAnalyzer
 
                     foreach (var lTraitName in lTraitNames)
                     {
-                        var lTraits = from trait in traitList
+                        var lTraits = from trait in cTraitList
                                       where trait.names == lTraitName.Trim()
                                       select trait;
 
@@ -727,11 +769,18 @@ namespace ProductPlatformAnalyzer
         public string ReturnStringElements(List<String> pList)
         {
             string lResultElements = "";
-
-            //TODO: write with LINQ
-            foreach (string lElement in pList)
+            try
             {
-                lResultElements += lElement;
+                //TODO: write with LINQ
+                foreach (string lElement in pList)
+                {
+                    lResultElements += lElement;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnStringElements");                
+                Console.WriteLine(ex.Message);
             }
             return lResultElements;
         }
@@ -819,22 +868,46 @@ namespace ProductPlatformAnalyzer
 
         public void addActiveOperationInstanceName(String pOperationInstanceName)
         {
-            //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            if (!ActiveOperationInstanceNamesList.Contains(pOperationInstanceName))
-                ActiveOperationInstanceNamesList.Add(pOperationInstanceName);
+            try
+            {
+                //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
+                if (!ActiveOperationInstanceNamesList.Contains(pOperationInstanceName))
+                    ActiveOperationInstanceNamesList.Add(pOperationInstanceName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addActiveOperationInstanceName");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void addActiveOperationName(String pOperationName)
         {
-            //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            if (!ActiveOperationNamesList.Contains(pOperationName))
-                ActiveOperationNamesList.Add(pOperationName);
+            try
+            {
+                //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
+                if (!ActiveOperationNamesList.Contains(pOperationName))
+                    ActiveOperationNamesList.Add(pOperationName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addActiveOperationName");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void addOperationInstance(string pOperationInstance)
         {
-            if (!operationInstanceList.Contains(pOperationInstance))
-                operationInstanceList.Add(pOperationInstance);
+            try
+            {
+                if (!cOperationInstanceList.Contains(pOperationInstance))
+                    cOperationInstanceList.Add(pOperationInstance);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addOperationInstance");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void addStation(station pStation)
@@ -1035,11 +1108,113 @@ namespace ProductPlatformAnalyzer
             return lOperationName;
         }
 
+        /// <summary>
+        /// This funcion takes an operation instance and returns the operation
+        /// </summary>
+        /// <param name="pOperationInstance"></param>
+        /// <returns></returns>
+        public operation ReturnOperationFromOperationInstance(string pOperationInstance)
+        {
+            operation lResultOperation = null;
+            try
+            {
+                string lOperationName = "";
+
+                string[] lOperationInstanceParts = pOperationInstance.Split('_');
+
+                lOperationName = lOperationInstanceParts[0];
+
+                lResultOperation = findOperationWithName(lOperationName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in returnOperationNameFromOperationInstance");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperation;
+        }
+
+        /// <summary>
+        /// This function takes an operation instance and returns the operation state from that operation instance
+        /// </summary>
+        /// <param name="pOperationInstance"></param>
+        /// <returns></returns>
+        public string ReturnOperationStateFromOperationInstance(string pOperationInstance)
+        {
+            string lOperationState = "";
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstance.Split('_');
+                lOperationState = lOperationInstanceParts[1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOperationStateFromOperationInstance");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return lOperationState;
+        }
+
+        /// <summary>
+        /// This function takes an operation instance and returns the operation variant from that operation instance
+        /// </summary>
+        /// <param name="pOperationInstance"></param>
+        /// <returns></returns>
+        public variant ReturnOperationVariantFromOperationInstance(string pOperationInstance)
+        {
+            variant lResultVariant;
+            try
+            {
+                string lOperationVariantName = "";
+                string[] lOperationInstanceParts = pOperationInstance.Split('_');
+                lOperationVariantName = lOperationInstanceParts[2];
+                lResultVariant = findVariantWithName(lOperationVariantName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOperationVariantFromOperationInstance");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return lResultVariant;
+        }
+
+        /// <summary>
+        /// This function takes an operation instance and returns the operation transition from that operation instance
+        /// </summary>
+        /// <param name="pOperationInstance"></param>
+        /// <returns></returns>
+        public string ReturnOperationTransitionFromOperationInstance(string pOperationInstance)
+        {
+            string lOperationState = "";
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstance.Split('_');
+                lOperationState = lOperationInstanceParts[3];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOperationTransitionFromOperationInstance");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            return lOperationState;
+        }
+
         public void addInActiveOperationName(String pOperationName)
         {
-            //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
-            if (! InActiveOperationNamesList.Contains(pOperationName))
-                InActiveOperationNamesList.Add(pOperationName);
+            try
+            {
+                //TODO: for now just to be simple we will make the ActiveOperationNamesList just the names of the operations
+                if (!InActiveOperationNamesList.Contains(pOperationName))
+                    InActiveOperationNamesList.Add(pOperationName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addInActiveOperationName");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public String giveNextStateActiveOperationName(String pActiveOperationName)
@@ -1309,7 +1484,7 @@ namespace ProductPlatformAnalyzer
             {
                 
                 //In this function the name of one of the operations in the local list has changed so we want to update the pre/post condition of any operation that references this operation
-                foreach (operation lOperation in operationList)
+                foreach (operation lOperation in cOperationList)
                 {
                     var lPrecondition = lOperation.precondition.Find(item => item.Contains(pOldOperationName));
                     if (lPrecondition != null)
@@ -1338,7 +1513,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //In this function the name of one of the operations in the local list has changed so we want to update the local operation list
-                operation lOperationToChangeName = operationList.Find(item => item.names.Equals(pOldOperationName));
+                operation lOperationToChangeName = cOperationList.Find(item => item.names.Equals(pOldOperationName));
                 if (lOperationToChangeName != null)
                     lOperationToChangeName.names = pNewOperationName;
 
@@ -1363,7 +1538,7 @@ namespace ProductPlatformAnalyzer
                 string lDataSummary = "";
 
                 //Operations
-                if (operationList.Count > 0)
+                if (cOperationList.Count > 0)
                 {
                     lDataSummary += "Operations:" + System.Environment.NewLine;
                     foreach (operation lOperation in OperationList)
@@ -1379,7 +1554,7 @@ namespace ProductPlatformAnalyzer
                 }
 
                 //Variants
-                if (variantList.Count > 0)
+                if (cVariantList.Count > 0)
                 {
                     lDataSummary += "Variants:" + System.Environment.NewLine;
                     foreach (variant lVariant in VariantList)
@@ -1419,10 +1594,10 @@ namespace ProductPlatformAnalyzer
                 }
 
                 //Traits
-                if (traitList.Count > 0)
+                if (cTraitList.Count > 0)
                 {
                     lDataSummary += "Traits:" + System.Environment.NewLine;
-                    foreach (trait lTrait in traitList)
+                    foreach (trait lTrait in cTraitList)
                     {
                         lDataSummary += "Trait Name: " + lTrait.names + System.Environment.NewLine;
                         lDataSummary += "Attributes: " + System.Environment.NewLine;
@@ -1623,7 +1798,7 @@ namespace ProductPlatformAnalyzer
             trait lResultTrait = new trait();
             try
             {
-                List<trait> lTempResultTrait = (from trait in traitList
+                List<trait> lTempResultTrait = (from trait in cTraitList
                                         where trait.names == pTraitName
                                         select trait).ToList();
                 if (lTempResultTrait.Count == 1)
@@ -1781,7 +1956,7 @@ namespace ProductPlatformAnalyzer
                 lTempVirtualVariant.setVirtualVariant(pVirtualVariant);
                 lTempVirtualVariant.setVariantExpr(pVariantExpr);
 
-                virtualVariant2VariantExprList.Add(lTempVirtualVariant);
+                cVirtualVariant2VariantExprList.Add(lTempVirtualVariant);
 
             }
             catch (Exception ex)
@@ -1815,19 +1990,27 @@ namespace ProductPlatformAnalyzer
 
         public void addVirtualVariantToGroup(variant var)
         {
-            foreach (variantGroup vg in VariantGroupList)
+            try
             {
-                if (string.Equals(vg.names, "Virtual-VG"))
+                foreach (variantGroup vg in VariantGroupList)
                 {
-                    vg.variant.Add(var);
-                    return;
+                    if (string.Equals(vg.names, "Virtual-VG"))
+                    {
+                        vg.variant.Add(var);
+                        return;
+                    }
                 }
+
+                List<string> varName = new List<string>();
+                varName.Add(var.names);
+
+                CreateVariantGroupInstance("Virtual-VG", "choose any number", varName);
             }
-
-            List<string> varName = new List<string>();
-            varName.Add(var.names);
-
-            CreateVariantGroupInstance("Virtual-VG", "choose any number", varName);
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in addVirtualVariantToGroup");
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
@@ -1863,12 +2046,19 @@ namespace ProductPlatformAnalyzer
         private int getNextVariantIndex()
         {
             int index = 0;
-            foreach (variant var in VariantList)
+            try
             {
-                if (var.index > index)
-                    index = var.index;
+                foreach (variant var in VariantList)
+                {
+                    if (var.index > index)
+                        index = var.index;
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in getNextVariantIndex");
+                Console.WriteLine(ex.Message);
+            }
             return index + 1;
         }
 
@@ -1894,7 +2084,7 @@ namespace ProductPlatformAnalyzer
             int lResultIndex = 0; 
             try
             {
-                foreach (virtualVariant2VariantExpr virtualVariant2VariantExpr in virtualVariant2VariantExprList)
+                foreach (virtualVariant2VariantExpr virtualVariant2VariantExpr in cVirtualVariant2VariantExprList)
                 {
                     variant virtualVariant = virtualVariant2VariantExpr.getVirtualVariant();
 
@@ -1932,14 +2122,20 @@ namespace ProductPlatformAnalyzer
         public string findVirtualVariantExpression(string lVirtualVariant)
         {
             string lVirtualVariantExpr = "";
-
-            //TODO: if possible rewrite with LINQ
-            foreach (virtualVariant2VariantExpr virtualVariant in virtualVariant2VariantExprList)
+            try
             {
-                if (virtualVariant.getVirtualVariant().names == lVirtualVariant)
-                    lVirtualVariantExpr = virtualVariant.getVariantExpr();
+                //TODO: if possible rewrite with LINQ
+                foreach (virtualVariant2VariantExpr virtualVariant in cVirtualVariant2VariantExprList)
+                {
+                    if (virtualVariant.getVirtualVariant().names == lVirtualVariant)
+                        lVirtualVariantExpr = virtualVariant.getVariantExpr();
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in findVirtualVariantExpression");                
+                Console.WriteLine(ex.Message);
+            }
             return lVirtualVariantExpr;
         }
 
@@ -2169,16 +2365,26 @@ namespace ProductPlatformAnalyzer
                         List<string> lVariantGroupVariants = new List<string>();
 
                         XmlNodeList variantGroupVariantsNodeList = lNode["variantRefs"].ChildNodes;
-                        foreach (XmlNode lVariantGroupVariant in variantGroupVariantsNodeList)
+                        if (variantGroupVariantsNodeList.Count > 0)
                         {
-                            lVariantGroupVariants.Add(lVariantGroupVariant.InnerText);
-                        }
+                            foreach (XmlNode lVariantGroupVariant in variantGroupVariantsNodeList)
+                            {
+                                lVariantGroupVariants.Add(lVariantGroupVariant.InnerText);
+                            }
 
-                        CreateVariantGroupInstance(getXMLNodeAttributeInnerText(lNode, "variantGroupName")
-                                                , getXMLNodeAttributeInnerText(lNode, "groupCardinality")
-                                                , lVariantGroupVariants);
+                            CreateVariantGroupInstance(getXMLNodeAttributeInnerText(lNode, "variantGroupName")
+                                                    , getXMLNodeAttributeInnerText(lNode, "groupCardinality")
+                                                    , lVariantGroupVariants);
+
+                            lDataLoaded = true;
+                        }
+                        else
+                        {
+                            lDataLoaded = false;
+                            Console.WriteLine("Variant group defined without any variants! Data not loaded.");
+
+                        }
                     }
-                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)

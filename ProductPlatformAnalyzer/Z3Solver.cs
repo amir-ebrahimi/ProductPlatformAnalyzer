@@ -10,97 +10,98 @@ namespace ProductPlatformAnalyzer
 {
     class Z3Solver
     {
-        private ArrayExpr Expressions;
-        private List<Expr> ExpressionList;
-        private BoolExpr Constraints;
-        private ArrayList ConstraintList;
-        private Solver iSolver; 
-        private Context iCtx;
-        private int ConstraintCounter;
-        private int BooleanExpressionCounter;
-        private bool iDebugMode;
-        private string iDebugText;
+        private ArrayExpr cExpressions;
+        private List<Expr> cExpressionList;
+        private BoolExpr cConstraints;
+        private ArrayList cConstraintList;
+        private Solver cISolver; 
+        private Context cICtx;
+        private int cConstraintCounter;
+        private int cBooleanExpressionCounter;
+        private bool cIDebugMode;
+        private string cIDebugText;
+        private Model cResultModel;
 
         public Z3Solver()
         {
-            iDebugText = "";
-            iCtx = new Context(new Dictionary<string, string>() { { "proof", "true" } });
-            using (iCtx)
+            cIDebugText = "";
+            cICtx = new Context(new Dictionary<string, string>() { { "proof", "true" } });
+            using (cICtx)
             {
-                this.iSolver = iCtx.MkSolver();
-                this.ExpressionList = new List<Expr>();
-                this.ConstraintList = new ArrayList();
+                this.cISolver = cICtx.MkSolver("QF_FD");
+                this.cExpressionList = new List<Expr>();
+                this.cConstraintList = new ArrayList();
             }
         }
 
         public void setDebugMode(bool pDebugMode)
         {
-            iDebugMode = pDebugMode;
+            cIDebugMode = pDebugMode;
         }
 
         public bool getDebugMode()
         {
-            return iDebugMode;
+            return cIDebugMode;
         }
 
         public void setExpressions(ArrayExpr pExpressions)
         {
-            Expressions = pExpressions;
+            cExpressions = pExpressions;
         }
 
         public void setExpressionList(List<Expr> pExpressionList)
         {
-            ExpressionList = pExpressionList;
+            cExpressionList = pExpressionList;
         }
 
         public ArrayExpr getExpression()
         {
-            return Expressions;
+            return cExpressions;
         }
 
         public List<Expr> getExpressionList()
         {
-            return ExpressionList;
+            return cExpressionList;
         }
 
         public void setConstraints(BoolExpr pConstraints)
         {
-            Constraints = pConstraints;
+            cConstraints = pConstraints;
         }
 
         public void setConstraintList(ArrayList pConstraintList)
         {
-            ConstraintList = pConstraintList;
+            cConstraintList = pConstraintList;
         }
 
         public BoolExpr getConstraints()
         {
-            return Constraints;
+            return cConstraints;
         }
 
         public ArrayList getConstraintList()
         {
-            return ConstraintList;
+            return cConstraintList;
         }
 
         public int getConstraintCounter()
         {
-            return ConstraintCounter;
+            return cConstraintCounter;
         }
 
         public void setConstraintCounter(int pCounter)
         {
-            ConstraintCounter = pCounter;
+            cConstraintCounter = pCounter;
         }
 
         public int getBooleanExpressionCounter()
         {
-            return BooleanExpressionCounter;
+            return cBooleanExpressionCounter;
         }
 
         public void setBooleanExpressionCounter(int pCounter)
         {
-            BooleanExpressionCounter = pCounter;
+            cBooleanExpressionCounter = pCounter;
         }
 
         public int getNextBooleanExpressionCounter()
@@ -137,7 +138,7 @@ namespace ProductPlatformAnalyzer
 
         public BoolExpr getFalseBoolExpr()
         {
-            return iCtx.MkFalse();
+            return cICtx.MkFalse();
         }
 
         public string ReturnStringElements(List<String> pList)
@@ -181,7 +182,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = iCtx.MkAnd(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                    Constraint = cICtx.MkAnd(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -196,8 +197,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                Expr lOperand2 = iCtx.MkConst("pOperand2", iCtx.MkIntSort());
-                BoolExpr lConstraint = iCtx.MkGt((ArithExpr)pOperand1, (ArithExpr)lOperand2);
+                Expr lOperand2 = cICtx.MkConst("pOperand2", cICtx.MkIntSort());
+                BoolExpr lConstraint = cICtx.MkGt((ArithExpr)pOperand1, (ArithExpr)lOperand2);
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
             }
@@ -213,7 +214,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Expr lOperand2 = iCtx.MkConst(pOperand2, iCtx.MkIntSort());
-                BoolExpr lConstraint = iCtx.MkEq((ArithExpr)pOperand1, iCtx.MkInt(pOperand2));
+                BoolExpr lConstraint = cICtx.MkEq((ArithExpr)pOperand1, cICtx.MkInt(pOperand2));
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
             }
@@ -231,7 +232,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr Constraint = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = iCtx.MkAnd(Constraint, pOperandList[i]);
+                    Constraint = cICtx.MkAnd(Constraint, pOperandList[i]);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -249,7 +250,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResultExpression = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = iCtx.MkAnd(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                    lResultExpression = cICtx.MkAnd(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
 
                 return lResultExpression;
             }
@@ -267,7 +268,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResultExpression = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = iCtx.MkAnd(lResultExpression, pOperandList[i]);
+                    lResultExpression = cICtx.MkAnd(lResultExpression, pOperandList[i]);
 
                 return lResultExpression;
             }
@@ -283,7 +284,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = iCtx.MkGt((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkGt((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -300,7 +301,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 Expr lOperand0 = FindExpressionUsingName(pOperand0);
-                lResultExpression = iCtx.MkGt((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkGt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -316,7 +317,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = iCtx.MkLt((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkLt((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -333,7 +334,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 Expr lOperand0 = FindExpressionUsingName(pOperand0);
-                lResultExpression = iCtx.MkLt((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkLt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -349,7 +350,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = iCtx.MkGe((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkGe((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -366,7 +367,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 Expr lOperand0 = FindExpressionUsingName(pOperand0);
-                lResultExpression = iCtx.MkGe((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkGe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -382,7 +383,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = iCtx.MkLe((ArithExpr)pOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkLe((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -399,7 +400,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 Expr lOperand0 = FindExpressionUsingName(pOperand0);
-                lResultExpression = iCtx.MkLe((ArithExpr)lOperand0, iCtx.MkInt(pOperand1));
+                lResultExpression = cICtx.MkLe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
@@ -419,7 +420,7 @@ namespace ProductPlatformAnalyzer
                 Expr lFirstOperand = FindBoolExpressionUsingName(pOperand1);
                 Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
 
-                BoolExpr Expression = iCtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
+                BoolExpr Expression = cICtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
                 return Expression;
             }
@@ -434,7 +435,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr Constraint = iCtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Constraint = cICtx.MkImplies(pOperand1, pOperand2);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -456,7 +457,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpr = null;
             try
             {
-                lResultExpr = iCtx.MkImplies(pOperand1, pOperand2);
+                lResultExpr = cICtx.MkImplies(pOperand1, pOperand2);
             }
             catch (Exception ex)
             {
@@ -491,11 +492,11 @@ namespace ProductPlatformAnalyzer
                 
                 Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
 
-                BoolExpr Expression2 = iCtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
+                BoolExpr Expression2 = cICtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
 
-                BoolExpr Expression1 = iCtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
+                BoolExpr Expression1 = cICtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
-                BoolExpr Expression = iCtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
                 return Expression;
             }
             catch (Exception ex)
@@ -511,10 +512,10 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression1 = iCtx.MkImplies(pOperand1, pOperand2);
-                BoolExpr Expression2 = iCtx.MkImplies(pOperand2, pOperand1);
+                BoolExpr Expression1 = cICtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Expression2 = cICtx.MkImplies(pOperand2, pOperand1);
 
-                BoolExpr Expression = iCtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
                 return Expression;
             }
             catch (Exception ex)
@@ -544,10 +545,10 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression1 = iCtx.MkImplies(pOperand1, pOperand2);
-                BoolExpr Expression2 = iCtx.MkImplies(pOperand2, pOperand1);
+                BoolExpr Expression1 = cICtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Expression2 = cICtx.MkImplies(pOperand2, pOperand1);
 
-                BoolExpr Expression = iCtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
 
                 AddConstraintToSolver(Expression, pConstraintSource);
             }
@@ -565,7 +566,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResultExpression = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = iCtx.MkIff(lResultExpression, pOperandList[i]);
+                    lResultExpression = cICtx.MkIff(lResultExpression, pOperandList[i]);
 
                 return lResultExpression;
             }
@@ -583,7 +584,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResultExpression = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = iCtx.MkImplies(lResultExpression, pOperandList[i]);
+                    lResultExpression = cICtx.MkImplies(lResultExpression, pOperandList[i]);
 
                 return lResultExpression;
             }
@@ -601,7 +602,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr Constraint = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = iCtx.MkOr(Constraint, pOperandList[i]);
+                    Constraint = cICtx.MkOr(Constraint, pOperandList[i]);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -619,7 +620,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = iCtx.MkOr(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                    Constraint = cICtx.MkOr(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -638,7 +639,7 @@ namespace ProductPlatformAnalyzer
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    lResultExpression = iCtx.MkOr(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                    lResultExpression = cICtx.MkOr(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
                 }
                 return lResultExpression;
             }
@@ -656,7 +657,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResultExpr = pOperandList[0];
 
                 for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpr = iCtx.MkOr(lResultExpr, pOperandList[i]);
+                    lResultExpr = cICtx.MkOr(lResultExpr, pOperandList[i]);
 
                 return lResultExpr;
             }
@@ -667,7 +668,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddXorOperator2Constraints(List<String> pOperandList, String pConstraintSource)
+        public void AddPickOneOperator2Constraints(List<String> pOperandList, String pConstraintSource)
         {
             try
             {
@@ -675,22 +676,24 @@ namespace ProductPlatformAnalyzer
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    Expr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
+                    BoolExpr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
                     
-                    Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
-                                            , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
+                    //Optimized   Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
+                    //                            , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
+
+                    Constraint = cICtx.MkXor(Constraint, lOperand);
                 }
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddXorOperator2Constraints, " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in AddPickOneOperator2Constraints, " + ReturnStringElements(pOperandList));
                 throw ex;
             }
         }
 
-        public BoolExpr XorOperator(List<String> pOperandList)
+        public BoolExpr PickOneOperator(List<String> pOperandList)
         {
             try
             {
@@ -698,24 +701,45 @@ namespace ProductPlatformAnalyzer
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    Expr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
+                    BoolExpr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
 
-                    lResultExpression = iCtx.MkOr(iCtx.MkAnd(lResultExpression, iCtx.MkNot((BoolExpr)lOperand))
-                                            , iCtx.MkAnd(iCtx.MkNot(lResultExpression), (BoolExpr)lOperand));
+                    //TODO: it is impossible to use the xor operator straight because with three operands it will not give the right answer
+
+                    AddBooleanExpression("Xor-helper" + i);
+
+                    BoolExpr lTempImplies;
+                    BoolExpr lHelperBoolExpr;
+
+                    if (i.Equals(1))
+                        lTempImplies = ImpliesOperator(new List<BoolExpr>() { lResultExpression, (BoolExpr)lOperand });
+                    else
+                        lTempImplies = ImpliesOperator(new List<BoolExpr>() { FindBoolExpressionUsingName("Xor-helper" + (i - 1)), (BoolExpr)lOperand });
+
+                    lHelperBoolExpr = ImpliesOperator(FindBoolExpressionUsingName("Xor-helper" + i), lTempImplies);
+                    AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
+
+                    AddConstraintToSolver(FindBoolExpressionUsingName("Xor-helper" + i), "Building Xor Operator");
+
+                    
+                    //lResultExpression = cICtx.MkOr(cICtx.MkAnd(lResultExpression, cICtx.MkNot((BoolExpr)lOperand))
+                    //                        , cICtx.MkAnd(cICtx.MkNot(lResultExpression), (BoolExpr)lOperand));
+
+                    //lResultExpression = cICtx.MkXor(lResultExpression, lOperand);
                 }
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in XorOperator, " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in PickOneOperator, " + ReturnStringElements(pOperandList));
                 throw ex;
             }
         }
 
-        public void AddXorOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
+        public void AddPickOneOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
         {
             try
             {
+                /* Optmized:
                 //We should show
                 //or pOperand1 pOperand2 pOperand3 ...
                 //and (=> pOperand1 (and (not pOperand2) (not pOperand3) ...))
@@ -742,15 +766,45 @@ namespace ProductPlatformAnalyzer
                 }
 
                 AddConstraintToSolver(lOrPartConstraint, pConstraintSource);
-                AddConstraintToSolver(lAndPartConstraint, pConstraintSource);
+                AddConstraintToSolver(lAndPartConstraint, pConstraintSource);*/
+
+                //This implementation was not working either
+                /*
+                BoolExpr Constraint = pOperandList[0];
+
+                for (int i = 1; i < pOperandList.Count; i++)
+                {
+                    BoolExpr lOperand = pOperandList[i];
+
+                    //Optimized   Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
+                    //                            , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
+
+                    Constraint = cICtx.MkXor(Constraint, lOperand);
+                }
+                 */
+
+                BoolExpr Constraint;
+                int[] lCoeffecient = new int[pOperandList.Count];
+                for (int i = 0; i < lCoeffecient.Length; i++)
+			    {
+                    lCoeffecient[i] = 1;			 
+			    }
+                BoolExpr[] lOperandsArray = new BoolExpr[pOperandList.Count];
+                for (int i = 0; i < lOperandsArray.Length; i++)
+                {
+                    lOperandsArray[i] = pOperandList[i];
+                }
+                Constraint = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+                AddConstraintToSolver(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddXorOperator2Constraints, " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in AddPickOneOperator2Constraints, " + ReturnBoolExprElementNames(pOperandList));
                 throw ex;
             }
         }
 
+        /*Optimized:
         private BoolExpr XorHelper(List<BoolExpr> pOperandList)
         {
             BoolExpr lResultExpr = iCtx.MkNot(pOperandList[0]);
@@ -767,26 +821,66 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lResultExpr;
-        }
+        }*/
 
-        public BoolExpr XorOperator(List<BoolExpr> pOperandList)
+        public BoolExpr PickOneOperator(List<BoolExpr> pOperandList)
         {
             try
             {
-                BoolExpr lResultExpression = pOperandList[0];
+                BoolExpr lResultExpression;
+                int[] lCoeffecient = new int[pOperandList.Count];
+                for (int i = 0; i < lCoeffecient.Length; i++)
+                {
+                    lCoeffecient[i] = 1;
+                }
+                BoolExpr[] lOperandsArray = new BoolExpr[pOperandList.Count];
+                for (int i = 0; i < lOperandsArray.Length; i++)
+                {
+                    lOperandsArray[i] = pOperandList[i];
+                }
+                lResultExpression = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+
+                //This implementation did not work because it had to have one of the first two operands true and the rest could not become true
+                /*
+                //BoolExpr lResultExpression = pOperandList[0];
+                List<BoolExpr> lResultExpressionList = new List<BoolExpr>();
 
                 for (int i = 1; i < pOperandList.Count; i++)
                 {
-                    Expr lOperand = pOperandList[i];
+                    BoolExpr lOperand = pOperandList[i];
+                    //TODO: it is impossible to use the xor operator straight because with three operands it will not give the right answer
 
-                    lResultExpression = iCtx.MkOr(iCtx.MkAnd(lResultExpression, iCtx.MkNot((BoolExpr)lOperand))
-                                            , iCtx.MkAnd(iCtx.MkNot(lResultExpression), (BoolExpr)lOperand));
-                }
+                    AddBooleanExpression("Xor-helper" + i);
+
+                    BoolExpr lTempImplies;
+                    BoolExpr lHelperBoolExpr;
+
+                    if (i.Equals(1))
+                        //lTempImplies = ImpliesOperator(new List<BoolExpr>(){ pOperandList[0], pOperandList[i] });
+                        lTempImplies = cICtx.MkXor( pOperandList[0], pOperandList[i] );
+                    else
+                        //lTempImplies = ImpliesOperator(new List<BoolExpr>(){ FindBoolExpressionUsingName("Xor-helper" + (i-1)), pOperandList[i]});
+                        lTempImplies = cICtx.MkXor( FindBoolExpressionUsingName("Xor-helper" + (i - 1)), pOperandList[i] );
+
+                    lHelperBoolExpr = ImpliesOperator(FindBoolExpressionUsingName("Xor-helper" + i), lTempImplies);
+                    //AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
+                    lResultExpressionList.Add(lHelperBoolExpr);
+
+                    //AddConstraintToSolver(FindBoolExpressionUsingName("Xor-helper" + i), "Building Xor Operator");
+                    lResultExpressionList.Add(FindBoolExpressionUsingName("Xor-helper" + i));
+
+                    //Tried this it did not work for more thand two operands, it can make more than one true at the same time
+                    //lResultExpression = cICtx.MkOr(cICtx.MkAnd(lResultExpression, cICtx.MkNot((BoolExpr)lOperand))
+                    //                        , cICtx.MkAnd(cICtx.MkNot(lResultExpression), (BoolExpr)lOperand));
+
+                    //Tried this it did not work for more thand two operands, it can make more than one true at the same time
+                    //lResultExpression = cICtx.MkXor(lResultExpression, lOperand);
+                }*/
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in XorOperator, " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in PickOneOperator, " + ReturnBoolExprElementNames(pOperandList));
                 throw ex;
             }
         }
@@ -799,7 +893,7 @@ namespace ProductPlatformAnalyzer
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindBoolExpressionUsingName(pOperand);
 
-                BoolExpr Constraint = iCtx.MkNot((BoolExpr)lOperand);
+                BoolExpr Constraint = cICtx.MkNot((BoolExpr)lOperand);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
@@ -818,7 +912,7 @@ namespace ProductPlatformAnalyzer
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindBoolExpressionUsingName(pOperand);
 
-                BoolExpr Expression = iCtx.MkNot((BoolExpr)lOperand);
+                BoolExpr Expression = cICtx.MkNot((BoolExpr)lOperand);
 
                 return Expression;
             }
@@ -835,7 +929,7 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression = iCtx.MkNot(pOperand);
+                BoolExpr Expression = cICtx.MkNot(pOperand);
 
                 return Expression;
             }
@@ -850,7 +944,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr lResult = iCtx.MkBoolConst(pOperand);
+                BoolExpr lResult = cICtx.MkBoolConst(pOperand);
 
                 return lResult;
             }
@@ -869,11 +963,11 @@ namespace ProductPlatformAnalyzer
                 //Also using the solver.AssertAndTrack function which requires to use another named
                 //Boolean expression to track this constraint
                 int lConstraintIndex = getNextConstraintCounter();
-                BoolExpr ConstraintTracker = iCtx.MkBoolConst("Constraint" + lConstraintIndex);
-                iSolver.AssertAndTrack(pConstraint, ConstraintTracker);
+                BoolExpr ConstraintTracker = cICtx.MkBoolConst("Constraint" + lConstraintIndex);
+                cISolver.AssertAndTrack(pConstraint, ConstraintTracker);
 
-                if (iDebugMode)
-                    iDebugText += "(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n";
+                if (cIDebugMode)
+                    cIDebugText += "(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n";
                 //Console.WriteLine("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
             }
             catch (Exception ex)
@@ -922,11 +1016,11 @@ namespace ProductPlatformAnalyzer
             {
                 //TODO: this is just for one requirement not including the &&
                 if (pExprName.Contains('<') || pExprName.Contains('>') || pExprName.Contains(">=") || pExprName.Contains("<=") || pExprName.Contains("=="))
-                    resultExpr = iCtx.MkBoolConst(pExprName);
+                    resultExpr = cICtx.MkBoolConst(pExprName);
                 else
                 {
-                    Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkIntSort());
-                    foreach (Expr currentExpr in ExpressionList)
+                    Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
+                    foreach (Expr currentExpr in cExpressionList)
                     {
                         if (currentExpr.Equals(tempExpr))
                         {
@@ -952,7 +1046,7 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpr = null;
             try
             {
-                lResultExpr = iCtx.MkBoolConst(pExpression);
+                lResultExpr = cICtx.MkBoolConst(pExpression);
             }
             catch (Exception ex)
             {
@@ -967,16 +1061,16 @@ namespace ProductPlatformAnalyzer
             Expr resultExpr = null;
             try
             {
-                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
+                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
 
-                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                List<Expr> lFoundExpr = (from Expr in cExpressionList
                                  where Expr == tempExpr
                                  select Expr).ToList();
-                if (lFoundExpr != null)
+                if (lFoundExpr != null && lFoundExpr.Count != 0)
                     resultExpr = lFoundExpr[0];
 
-                if (resultExpr == null)
-                    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
+                //if (resultExpr == null || lFoundExpr.Count.Equals(0))
+                //    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
@@ -991,16 +1085,16 @@ namespace ProductPlatformAnalyzer
             Expr resultExpr = null;
             try
             {
-                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkIntSort());
-
-                List<Expr> lFoundExpr = (from Expr in ExpressionList
+                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
+                
+                List<Expr> lFoundExpr = (from Expr in cExpressionList
                                          where Expr == tempExpr
                                          select Expr).ToList();
                 if (lFoundExpr != null)
                     resultExpr = lFoundExpr[0];
 
-                if (resultExpr == null)
-                    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
+                //if (resultExpr == null)
+                //    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
@@ -1016,12 +1110,12 @@ namespace ProductPlatformAnalyzer
             {
                 int newBooleanExpressionCounter = getNextBooleanExpressionCounter();
 
-                Expr tempExpr = iCtx.MkConst(pExprName + "-V" + newBooleanExpressionCounter, iCtx.MkBoolSort());
+                Expr tempExpr = cICtx.MkConst(pExprName + "-V" + newBooleanExpressionCounter, cICtx.MkBoolSort());
                 setBooleanExpressionCounter(newBooleanExpressionCounter);
-                ExpressionList.Add(tempExpr);
+                cExpressionList.Add(tempExpr);
 
-                if (iDebugMode)
-                    iDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
+                if (cIDebugMode)
+                    cIDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
             }
             catch (Exception ex)
             {
@@ -1034,13 +1128,13 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkBoolSort());
-                if (!ExpressionList.Contains(tempExpr))
+                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
+                if (!cExpressionList.Contains(tempExpr))
                 {
-                    ExpressionList.Add(tempExpr);
+                    cExpressionList.Add(tempExpr);
 
-                    if (iDebugMode)
-                        iDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
+                    if (cIDebugMode)
+                        cIDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
                 }
             }
             catch (Exception ex)
@@ -1067,13 +1161,13 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                Expr tempExpr = iCtx.MkConst(pExprName, iCtx.MkIntSort());
-                if (!ExpressionList.Contains(tempExpr))
+                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
+                if (!cExpressionList.Contains(tempExpr))
                 {
-                    ExpressionList.Add(tempExpr);
+                    cExpressionList.Add(tempExpr);
 
-                    if (iDebugMode)
-                        iDebugText += "(declare-const " + pExprName + " Int)" + "\r\n";
+                    if (cIDebugMode)
+                        cIDebugText += "(declare-const " + pExprName + " Int)" + "\r\n";
                 }
             }
             catch (Exception ex)
@@ -1109,6 +1203,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
+                Console.WriteLine("error in PrepareDebugDirectory");
                 throw ex;
             }
         }
@@ -1118,16 +1213,19 @@ namespace ProductPlatformAnalyzer
         /// This function is usd to output the previously filled DebugText to a external file with the name Debug indexed by the transition number which it was in
         /// </summary>
         /// <param name="pState">Transition number</param>
-        public void WriteDebugFile(int pState)
+        public void WriteDebugFile(int pState, int pModelIndex)
         {
             try
             {
                 string exePath = Directory.GetCurrentDirectory();
                 string endPath = null;
 
-                endPath = "Output/Debug/Debug" + pState + ".txt";
+                if (pState != -1)
+                    endPath = "Output/Debug/Transition" + pState + ".txt";
+                else
+                    endPath = "Output/Debug/Model" + pModelIndex + ".txt";
 
-                System.IO.File.WriteAllText(exePath + "../../../" + endPath, iDebugText);
+                System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugText);
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/Debug" + pState + ".txt",iDebugText);
             }
             catch (Exception ex)
@@ -1136,6 +1234,485 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public Status CheckSatisfiability(int pState
+                                        , bool pDone
+                                        , FrameworkWrapper pWrapper
+                                        , bool pReportGoalAnalysis
+                                        , bool pReportAnalysisDetail
+                                        , bool pReportVariants
+                                        , bool pReportTransitions
+                                        , bool pReportAnalysisTiming
+                                        , bool pReportUnsatCore
+                                        , string pStrExprToCheck = "")
+        {
+            //Status lSatisfiabilityResult =  Status.UNKNOWN;
+            Status lSat = Status.UNKNOWN;
+
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+
+/*                if (pDone)
+                {
+                    //Check the whole model
+                    lSat = CheckModelSatisfiability();
+                    if (lSat == Status.UNSATISFIABLE)
+                    {
+                        Console.WriteLine("Neither a counterexample nor a satisfiable finished-result could be produced.");
+                    }
+                }
+                else
+                {
+                    if (pReportGoalAnalysis)
+                        //Check one specific expression
+                        lSat = CheckModelSatisfiability(pStrExprToCheck);
+                    else if (pStrExprToCheck != "")
+                        //Check one specific expression
+                        lSat = CheckModelSatisfiability(pStrExprToCheck);
+                    else
+                        lSat = CheckModelSatisfiability();
+
+                }*/
+
+                if (pStrExprToCheck != "")
+                    //Check one specific expression
+                    lSat = CheckModelSatisfiability(pStrExprToCheck);
+                else
+                    lSat = CheckModelSatisfiability();
+
+                stopwatch.Stop();
+
+                if (lSat == Status.SATISFIABLE)
+                {
+                    //lSatisfiabilityResult = true;
+                    cResultModel = cISolver.Model;
+/*                    OutputHandler output = new OutputHandler(wrapper);
+
+                                        //adding expressions from model to outputhandler
+                                        foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
+                                        {
+                                            Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                                            if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
+                                            {
+                                                string value = "" + resultModel.Evaluate(lCurrentExpr);
+                                                output.addExp(lCurrentExpr.ToString(), value, pState);
+                                            }
+                                        }*/
+
+
+/*                    if (pDone)
+                    {
+                        //Print and writes an output file showing the result of a finished test
+                        if (pReportAnalysisTiming)
+                            Console.WriteLine("Time: " + stopwatch.Elapsed);
+
+                        if (pAnalysisDetail)
+                        {
+                            output.printChosenVariants();
+                            output.printOperationsTransitions();
+                        }
+                        output.writeFinished();
+                        output.writeFinishedNoPost();
+                    }
+                    else
+                    {
+                        //Print and writes an output file showing the result of a deadlocked test
+                        if (pReportAnalysisDetail)
+                            Console.WriteLine("Satisfiable");
+
+                        if (pReportAnalysisTiming)
+                            Console.WriteLine("Time: " + stopwatch.Elapsed);
+
+                        if (pAnalysisDetail)
+                            output.printCounterExample();
+                        output.writeCounterExample();
+                        output.writeCounterExampleNoPost();
+                    }*/
+//                    output.writeDebugFile();
+
+                    //foreach (Expr lExpression in ExpressionList)
+                    //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
+
+                    ////Taken this to the reporting function in Z3SolverEngineer
+                    /*if (pReportAnalysisDetail)
+                        Console.WriteLine("Satisfiable");*/
+
+                    //Adding this model value to the assertions
+                    ////AddModelItem2SolverAssertion(pWrapper, resultModel);
+                    //CheckSatisfiability();
+                }
+                else
+                {
+                    //lSatisfiabilityResult = false;
+
+                    ////Taken this to the reporting function in Z3SolverEngineer
+                    /*if (pReportAnalysisDetail)
+                        Console.WriteLine("Unsatisfiable");*/
+
+/*                    //Console.WriteLine("proof: {0}", iSolver.Proof);
+                    //Console.WriteLine("core: ");
+                    if (pReportUnsatCore)
+                    {
+                        foreach (Expr c in iSolver.UnsatCore)
+                        {
+                            Console.WriteLine("{0}", c);
+                        }
+                    }*/
+                }
+
+                //TODO: in the best case all the details about the analysis including the time of the analysis 
+                //should be in one class instance which can be reached by the reporting procedure in the Z3SolverEngineer
+                if (pReportAnalysisDetail && pReportAnalysisTiming)
+                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+
+
+/*                ReportSolverResult(pState
+                                    , pDone
+                                    , pWrapper
+                                    , lSat
+                                    , pReportAnalysisDetail
+                                    , pReportVariants
+                                    , pReportTransitions
+                                    , pReportUnsatCore);*/
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CheckSatisfiability");               
+                Console.WriteLine(ex.Message);
+            }
+            return lSat;
+        }
+
+        public void ReportSolverResult(int pState
+                                        , bool pDone
+                                        , FrameworkWrapper pFrameworkWrapper
+                                        , Status pSatResult
+                                        , bool pReportAnalysisDetail
+                                        , bool pReportVariants
+                                        , bool pReportTransitions
+                                        , bool pReportUnsatCore)
+        {
+            try
+            {
+                if (pSatResult.Equals(Status.SATISFIABLE))
+                {
+                    Model resultModel = cISolver.Model;
+
+                    OutputHandler output = new OutputHandler(pFrameworkWrapper);
+
+                    //adding expressions from model to outputhandler
+                    foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
+                    {
+                        Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                        if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
+                        {
+                            string value = "" + resultModel.Evaluate(lCurrentExpr);
+                            output.addExp(lCurrentExpr.ToString(), value, pState);
+                        }
+                    }
+
+                    if (pDone)
+                    {
+                        //Print and writes an output file showing the result of a finished test
+                        if (pReportAnalysisDetail)
+                        {
+                            Console.WriteLine("Model No " + pState + ":");
+                            if (pReportVariants)
+                            {
+                                output.printChosenVariants();
+                            }
+                            if (pReportTransitions)
+                                output.printOperationsTransitions();
+                        }
+                        output.writeFinished();
+                        output.writeFinishedNoPost();
+                    }
+                    else
+                    {
+                        //Print and writes an output file showing the result of a deadlocked test
+                        if (pReportAnalysisDetail)
+                            output.printCounterExample();
+                        output.writeCounterExample();
+                        output.writeCounterExampleNoPost();
+                    }
+                    output.writeDebugFile();
+                }
+                else
+                {
+                    //Console.WriteLine("proof: {0}", iSolver.Proof);
+                    //Console.WriteLine("core: ");
+                    if (pReportUnsatCore)
+                    {
+                        foreach (Expr c in cISolver.UnsatCore)
+                        {
+                            Console.WriteLine("{0}", c);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReportSolverResults");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Uses the local solver to populate the output handler
+        /// </summary>
+        /// <param name="pState"></param>
+        /// <param name="pOutputHandler"></param>
+        /// <returns></returns>
+        public OutputHandler PopulateOutputHandler(int pState, OutputHandler pOutputHandler)
+        {
+            OutputHandler lOutputHandler = pOutputHandler;
+            try
+            {
+                Model resultModel = cISolver.Model;
+
+                //adding expressions from model to outputhandler
+                foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
+                {
+                    Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                    if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
+                    {
+                        string value = "" + resultModel.Evaluate(lCurrentExpr);
+                        lOutputHandler.addExp(lCurrentExpr.ToString(), value, pState);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in PopulateOutputHandler");                
+                Console.WriteLine(ex.Message);
+            }
+            return lOutputHandler;
+        }
+
+        /// <summary>
+        /// This function writes the unsat core of the solver to the console screen
+        /// </summary>
+        public void ConsoleWriteUnsatCore()
+        {
+            try
+            {
+                foreach (Expr c in cISolver.UnsatCore)
+                    Console.WriteLine("{0}", c);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ConsoleWriteUnsatCore");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void SolverPushFunction()
+        {
+            try
+            {
+                cISolver.Push();
+                if (cIDebugMode)
+                    cIDebugText += "(push); \r\n";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in SolverPushFunction");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void SolverPopFunction()
+        {
+            try
+            {
+                cISolver.Pop();
+                if (cIDebugMode)
+                    cIDebugText += "(pop); \r\n";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in SolverPopFunction");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// This function checks the model for the satisfiability either for one specific expression or for the whole model
+        /// </summary>
+        /// <param name="pExprToCheck">The specific expression which needs to be checked</param>
+        /// <returns>The result of checking the model</returns>
+        public Status CheckModelSatisfiability(string pStrExprToCheck = "")
+        {
+            Status lReturnStatus = Status.UNKNOWN;
+            try
+            {
+                if (pStrExprToCheck == "")
+                    lReturnStatus = cISolver.Check();
+                else
+                {
+                    Expr lExprToCheck = FindBoolExpressionUsingName(pStrExprToCheck);
+                    lReturnStatus = cISolver.Check(lExprToCheck);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in CheckModelSatisfiability");               
+                Console.WriteLine(ex.Message);
+            }
+            return lReturnStatus;
+        }
+
+        public Expr FindExprInExprList(String pExprName)
+        {
+            Expr lResultExpr = null;
+            try
+            {
+                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                                         where Expr.ToString().Equals(pExprName)
+                                         select Expr).ToList();
+                if (lFoundExpr.Count != 0)
+                    lResultExpr = lFoundExpr[0];
+                //else
+                  //  Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in FindExprInExprList!");                
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
+        }
+
+
+        public Expr FindExprInExprListWithNull(String pExprName)
+        {
+            Expr lResultExpr = null;
+            try
+            {
+                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                                         where Expr.ToString().Equals(pExprName)
+                                         select Expr).ToList();
+                if (lFoundExpr.Count != 0)
+                    lResultExpr = lFoundExpr[0];
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in FindExprInExprList!");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultExpr;
+        }
+
+
+        //public void AddModelItem2SolverAssertion(FrameworkWrapper pFrameworkWrapper, Model pResultModel)
+        public void AddModelItem2SolverAssertion(FrameworkWrapper pFrameworkWrapper)
+        {
+            try
+            {
+                //Adding this model value to the assertions
+                BoolExpr addedConstraint = cICtx.MkBoolConst("AddedConstraint");
+
+                //should we concentrate on the expressions JUST used in the given model?
+                //We should negate the model itself and add it again to the constraint list
+                //should we not care about the other expressions which are not used in the model?
+
+                /////////////////////SHOULD BE REMOVED//////////////////////////////
+                //Expr one = iCtx.MkNumeral(1, iCtx.MkRealSort());
+                //BoolExpr tempExpression = iCtx.MkEq((ArithExpr)one, (ArithExpr)one);
+                //foreach (Expr lExpression in ExpressionList)
+                //{
+
+                //    tempExpression = iCtx.MkAnd(iCtx.MkEq(lExpression, pResultModel.Evaluate(lExpression))
+                //                                , tempExpression);
+                //}
+                /////////////////////SHOULD BE REMOVED//////////////////////////////
+
+                BoolExpr tempExpression = null;
+                string lLocalDebugText = "";
+                //foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
+                foreach (FuncDecl lFunctionDecleration in cResultModel.ConstDecls)
+                    {
+                    Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
+                    if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))  
+                    {
+                        if (tempExpression == null)
+                        {
+                            //if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            if (cResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            {
+                                //If the value of the variable is true
+                                tempExpression = cICtx.MkNot((BoolExpr)lCurrentExpr);
+                                lLocalDebugText += "(not " + lCurrentExpr.ToString() + " ) ";
+                            }
+                            else
+                            { 
+                                //If the value of the variable is false
+                                tempExpression = (BoolExpr)lCurrentExpr;
+                                lLocalDebugText += "( " + lCurrentExpr.ToString() + " ) ";
+                            }
+
+                        }
+                        else
+                        {
+                            //if (!pResultModel.Evaluate(lCurrentExpr).IsTrue && !pResultModel.Evaluate(lCurrentExpr).IsFalse)
+                            if (!cResultModel.Evaluate(lCurrentExpr).IsTrue && !cResultModel.Evaluate(lCurrentExpr).IsFalse)
+                            {
+                                //If the value of the variable is neither true nor false (it is don't care, meaning both true and false values for this variable will satisfy the model)
+                                tempExpression = cICtx.MkAnd(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lLocalDebugText = "(and " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " ))";
+                            }
+                            //else if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            else if (cResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            {
+                                tempExpression = cICtx.MkAnd(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lLocalDebugText = "(and " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " )) ";
+                            }
+                            else
+                            { 
+                                tempExpression = cICtx.MkAnd(tempExpression, (BoolExpr)lCurrentExpr);
+                                lLocalDebugText = "(and " + lLocalDebugText + " " + lCurrentExpr.ToString() + " ) ";
+                            }
+                        }
+                    }
+                    //Console.WriteLine(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
+                }
+
+                //tempExpression = iCtx.MkNot(tempExpression);
+                cISolver.AssertAndTrack(tempExpression, addedConstraint);
+                cIDebugText += "(assert " + lLocalDebugText + ")\r\n";
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in AddModelItem2SolverAssertion!");
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        public BoolExpr MakeTrueNFalseExpr(bool pTrue)
+        {
+            BoolExpr lResultExpr;
+            Expr l1 = cICtx.MkNumeral(1, cICtx.MkIntSort());
+            Expr l2 = cICtx.MkNumeral(2, cICtx.MkIntSort());
+            if (pTrue)
+                lResultExpr = cICtx.MkEq(l1, l1);
+            else
+                lResultExpr = cICtx.MkEq(l1, l2);
+
+            return lResultExpr;
+        }
+        /// <summary>
+        /// First piece of code to get used to Z3 API
+        /// </summary>
+        /// <param name="ctx"></param>
         public static void MicrosoftMyGetAllModelExample(Context ctx)
         {
             Console.WriteLine("Z3Solver.MyGetAllModelExample");
@@ -1159,7 +1736,15 @@ namespace ProductPlatformAnalyzer
             MicrosoftCheckSatisfiability(ctx, solver, x, y, z);
         }
 
-        public static void MicrosoftCheckSatisfiability(Context pCtx, Solver pSolver, Expr pX, Expr pY,Expr pZ)
+        /// <summary>
+        /// First Piece of code just to get used to coding Z3 API
+        /// </summary>
+        /// <param name="pCtx"></param>
+        /// <param name="pSolver"></param>
+        /// <param name="pX"></param>
+        /// <param name="pY"></param>
+        /// <param name="pZ"></param>
+        public static void MicrosoftCheckSatisfiability(Context pCtx, Solver pSolver, Expr pX, Expr pY, Expr pZ)
         {
             Status sat = pSolver.Check();
 
@@ -1188,264 +1773,15 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool CheckSatisfiability(int pState
-                                        , bool done
-                                        , FrameworkWrapper wrapper
-                                        , bool pGoalAnalysis
-                                        , bool pReportAnalysisTiming
-                                        , bool pReportUnsatCore
-                                        , string pStrExprToCheck = "")
-        {
-            bool lSatisfiabilityResult = false;
-
-            ////TODO: seperate the analysis part from the reporting part, and the reporting part should have variation points
-
-            try
-            {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                Status sat;
-
-                if (done)
-                {
-                    //Check the whole model
-                    sat = CheckModelSatisfiability();
-                    if (sat == Status.UNSATISFIABLE)
-                    {
-                        Console.WriteLine("Neither a counterexample nor a satisfiable finished-result could be produced.");
-                    }
-                }
-                else
-                {
-                    if (pGoalAnalysis)
-                        //Check one specific expression
-                        sat = CheckModelSatisfiability(pStrExprToCheck);
-                    else if (pStrExprToCheck != "")
-                        //Check one specific expression
-                        sat = CheckModelSatisfiability(pStrExprToCheck);
-                    else
-                        sat = CheckModelSatisfiability();
-                }
-                stopwatch.Stop();
-
-                if (sat == Status.SATISFIABLE)
-                {
-                    lSatisfiabilityResult = true;
-                    Model resultModel = iSolver.Model;
-
-                    OutputHandler output = new OutputHandler(wrapper);
-
-                    //adding expressions from model to outputhandler
-                    foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
-                    {
-                        Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
-                        if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
-                        {
-                            string value = "" + resultModel.Evaluate(lCurrentExpr);
-                            output.addExp(lCurrentExpr.ToString(), value, pState);
-                        }
-                    }
-
-
-                    if (done)
-                    {
-                        //Print and writes an output file showing the result of a finished test
-                        if (pReportAnalysisTiming)
-                            Console.WriteLine("Time: " + stopwatch.Elapsed);
-                        output.printFinished();
-                        output.writeFinished();
-                        output.writeFinishedNoPost();
-                    }
-                    else
-                    {
-                        //Print and writes an output file showing the result of a deadlocked test
-                        Console.WriteLine("Satisfiable");
-                        if (pReportAnalysisTiming)
-                            Console.WriteLine("Time: " + stopwatch.Elapsed);
-                        output.printCounterExample();
-                        output.writeCounterExample();
-                        output.writeCounterExampleNoPost();
-                    }
-                    output.writeDebugFile();
-
-                    //foreach (Expr lExpression in ExpressionList)
-                    //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
-
-                    //Adding this model value to the assertions
-                    AddModelItem2SolverAssertion(resultModel);
-                    //CheckSatisfiability();
-                }
-                else
-                {
-                    lSatisfiabilityResult = false;
-                    Console.WriteLine("Unsatisfiable");
-                    if (pReportAnalysisTiming)
-                        Console.WriteLine("Time: " + stopwatch.Elapsed);
-                    //Console.WriteLine("proof: {0}", iSolver.Proof);
-                    //Console.WriteLine("core: ");
-                    if (pReportUnsatCore)
-                    {
-                        foreach (Expr c in iSolver.UnsatCore)
-                        {
-                            Console.WriteLine("{0}", c);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in CheckSatisfiability");               
-                Console.WriteLine(ex.Message);
-            }
-            return lSatisfiabilityResult;
-        }
-
-        public void SolverPushFunction()
-        {
-            iSolver.Push();
-            if (iDebugMode)
-                iDebugText += "(push); \r\n";
-        }
-
-        public void SolverPopFunction()
-        {
-            iSolver.Pop();
-            if (iDebugMode)
-                iDebugText += "(pop); \r\n";
-        }
-
         /// <summary>
-        /// This function checks the model for the satisfiability either for one specific expression or for the whole model
+        /// First piece of code to get used to Z3 API
         /// </summary>
-        /// <param name="pExprToCheck">The specific expression which needs to be checked</param>
-        /// <returns>The result of checking the model</returns>
-        public Status CheckModelSatisfiability(string pStrExprToCheck = "")
-        {
-            Status lReturnStatus = Status.UNKNOWN;
-            try
-            {
-                if (pStrExprToCheck == "")
-                    lReturnStatus = iSolver.Check();
-                else
-                {
-                    Expr lExprToCheck = FindBoolExpressionUsingName(pStrExprToCheck);
-                    lReturnStatus = iSolver.Check(lExprToCheck);
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in CheckModelSatisfiability");               
-                Console.WriteLine(ex.Message);
-            }
-            return lReturnStatus;
-        }
-
-        public Expr FindExprInExprList(String pExprName)
-        {
-            Expr lResultExpr = null;
-            try
-            {
-                List<Expr> lFoundExpr = (from Expr in ExpressionList
-                                         where Expr.ToString().Equals(pExprName)
-                                         select Expr).ToList();
-                if (lFoundExpr.Count != 0)
-                    lResultExpr = lFoundExpr[0];
-                //else
-                  //  Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in FindExprInExprList!");                
-                Console.WriteLine(ex.Message);
-            }
-            return lResultExpr;
-        }
-
-
-        public Expr FindExprInExprListWithNull(String pExprName)
-        {
-            Expr lResultExpr = null;
-            try
-            {
-                List<Expr> lFoundExpr = (from Expr in ExpressionList
-                                         where Expr.ToString().Equals(pExprName)
-                                         select Expr).ToList();
-                if (lFoundExpr.Count != 0)
-                    lResultExpr = lFoundExpr[0];
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in FindExprInExprList!");
-                Console.WriteLine(ex.Message);
-            }
-            return lResultExpr;
-        }
-
-
-        public void AddModelItem2SolverAssertion(Model pResultModel)
-        {
-            try
-            {
-                //Adding this model value to the assertions
-                BoolExpr addedConstraint = iCtx.MkBoolConst("AddedConstraint");
-
-                //should we concentrate on the expressions JUST used in the given model?
-                //We should negate the model itself and add it again to the constraint list
-                //should we not care about the other expressions which are not used in the model?
-
-                /////////////////////SHOULD BE REMOVED//////////////////////////////
-                //Expr one = iCtx.MkNumeral(1, iCtx.MkRealSort());
-                //BoolExpr tempExpression = iCtx.MkEq((ArithExpr)one, (ArithExpr)one);
-                //foreach (Expr lExpression in ExpressionList)
-                //{
-
-                //    tempExpression = iCtx.MkAnd(iCtx.MkEq(lExpression, pResultModel.Evaluate(lExpression))
-                //                                , tempExpression);
-                //}
-                /////////////////////SHOULD BE REMOVED//////////////////////////////
-
-                BoolExpr tempExpression = null;
-                foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
-                {
-                    Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
-                    if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))  
-                    {
-                        if (tempExpression == null)
-                        {
-                            if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                                tempExpression = (BoolExpr)lCurrentExpr;
-                            else
-                                tempExpression = iCtx.MkNot((BoolExpr)lCurrentExpr);
-
-                        }
-                        else
-                        {
-                            if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                                tempExpression = iCtx.MkAnd(tempExpression, (BoolExpr)lCurrentExpr);
-                            else
-                                tempExpression = iCtx.MkAnd(tempExpression, iCtx.MkNot((BoolExpr)lCurrentExpr));
-                        }
-                    }
-                    //Console.WriteLine(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
-                }
-
-                //tempExpression = iCtx.MkNot(tempExpression);
-                iSolver.AssertAndTrack(tempExpression, addedConstraint);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in AddModelItem2SolverAssertion!");
-                Console.WriteLine(ex.Message);
-            }
-
-        }
-        
+        /// <param name="pctx"></param>
+        /// <param name="pSolver"></param>
+        /// <param name="pResultModel"></param>
+        /// <param name="pX"></param>
+        /// <param name="pY"></param>
+        /// <returns></returns>
         public static Solver MicrosoftAddModelItem2SolverAssertion(Context pctx, Solver pSolver, Model pResultModel, Expr pX, Expr pY)
         {
             Solver resultSolver = pSolver;
