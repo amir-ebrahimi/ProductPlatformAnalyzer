@@ -25,7 +25,7 @@ namespace ProductPlatformAnalyzer
         public Z3Solver()
         {
             cIDebugText = "";
-            cICtx = new Context(new Dictionary<string, string>() { { "proof", "true" } });
+            cICtx = new Context(new Dictionary<string, string>() { { "proof", "false" } });
             using (cICtx)
             {
                 this.cISolver = cICtx.MkSolver("QF_FD");

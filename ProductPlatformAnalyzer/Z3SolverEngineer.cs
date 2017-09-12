@@ -5136,8 +5136,8 @@ namespace ProductPlatformAnalyzer
                 //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                 //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                 //             , Build P Constraints, Number Of Models Required
-                lZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
-                                                    , Enumerations.AnalysisType.VariantSelectabilityAnalysis
+                lZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
+                                                    , Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis
                                                     , 4);
 
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
@@ -5147,7 +5147,7 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis("0.0V0VG1O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("0.1V0VG1O0C0P.xml");
 
-                lZ3SolverEngineer.ProductPlatformAnalysis("1.0.1V1VG2O0C0P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis("1.0.1V1VG2O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("1.1.2V1VG2O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("1.2.3V1VG2O0C0P.xml");
 
@@ -5156,7 +5156,9 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis("2.2.3V1VG2O0C0P.xml");
 
                 //lZ3SolverEngineer.ProductPlatformAnalysis("4.0.1V1VG2O0C1P.xml");
-                //lZ3SolverEngineer.ProductPlatformAnalysis("4.1.3V2VG2O0C0P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis("4.1.1V1VG2O0C1P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis("4.2.1V1VG2O0C1P.xml");
+                lZ3SolverEngineer.ProductPlatformAnalysis("4.3.1V1VG2O0C1P.xml");
 
                 //lZ3SolverEngineer.ProductPlatformAnalysis("5.0.4V2VG2O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("5.1.4V2VG2O0C0P.xml");

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8EEF2F00-07F1-41C5-8EB1-9E329A3E3135}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProductPlatformAnalyzer</RootNamespace>
+    <AssemblyName>ProductPlatformAnalyzer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Z3">
+      <HintPath>..\..\..\z3-4.5.0-x86-win\bin\Microsoft.Z3.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="FrameworkWrapper.cs" />
+    <Compile Include="GeneralUtilities.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="OutputHandler.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomTestCreator.cs" />
+    <Compile Include="xsd\xmlfile.cs" />
+    <Compile Include="Z3Solver.cs" />
+    <Compile Include="Z3SolverEngineer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="Test\4.1.1V1VG2O0C1P.xml" />
+    <Content Include="Test\4.2.1V1VG2O0C1P.xml" />
+    <Content Include="Test\4.3.1V1VG2O0C1P.xml" />
+    <Content Include="Test\9.2.2V1VG2O0C1P.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Debug\Debug0.txt" />
+    <Content Include="Debug\Debug1.txt" />
+    <Content Include="Debug\Debug2.txt" />
+    <Content Include="Debug\Debug3.txt" />
+    <Content Include="Debug\Debug4.txt" />
+    <Content Include="Test\0.0.0V0VG0O0C0P.xml" />
+    <Content Include="Test\0.1.0V0VG1O0C0P.xml" />
+    <Content Include="Test\0.2.1V0VG1O0C0P.xml" />
+    <Content Include="Test\10.2V1VG2O0C1P.xml" />
+    <Content Include="Test\11.2V1VG2O0C1P.xml" />
+    <Content Include="Test\12.2V1VG2O0C2P.xml" />
+    <Content Include="Test\13.2V1VG2O0C2P.xml" />
+    <Content Include="Test\14.2V1VG2O0C2P.xml" />
+    <Content Include="Test\1.1.2V1VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\2.1.3V1VG2O0C0P.xml" />
+    <Content Include="Test\2.2.3V1VG2O0C0P.xml" />
+    <Content Include="Test\2.0.3V1VG2O0C0P.xml" />
+    <Content Include="Test\4.0.1V1VG2O0C1P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\Old4.1.3V2VG2O0C0P.xml" />
+    <Content Include="Test\5.1.4V2VG2O0C0P.xml" />
+    <Content Include="Test\5.2.4V2VG2O0C0P.xml" />
+    <Content Include="Test\5.3.4V2VG2O0C0P.xml" />
+    <Content Include="Test\5.4.4V2VG2O0C0P.xml" />
+    <Content Include="Test\5.0.4V2VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\5.5.4V2VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\9.1.2V1VG2O0C1P.xml" />
+    <Content Include="Test\9.3.2V1VG2O0C1P.xml" />
+    <Content Include="Test\Old3.2V1VG2O1C1PNoTransitions.xml" />
+    <Content Include="Test\1.2.3V1VG2O0C0P.xml" />
+    <Content Include="Test\6.2V1VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\7.2V1VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\8.2V1VG2O0C0P.xml" />
+    <Content Include="Test\9.0.2V1VG2O0C1P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\SpecialCase.2V1VG1O1C0P-NOTConstraint.xml" />
+    <Content Include="Test\Old4.2V1VG3O1C1PNoTransition.xml" />
+    <Content Include="Test\Old5.2V1VG2O1C1PNoTransition.xml" />
+    <Content Include="Test\brakeTest_volvo.xml" />
+    <Content Include="Test\Case1Demo.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\Case2Demo.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\Case3Demo.xml" />
+    <Content Include="Test\TestData10.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\TestData11.xml" />
+    <Content Include="Test\1.0.1V1VG2O0C0P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\SpecialCase.2Variant2Operation1Precondition.xml" />
+    <Content Include="Test\SpecialCase.3Variant3Operation0PreconditionAndConstraint.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\TestData4.xml" />
+    <Content Include="Test\TestData5.xml" />
+    <Content Include="Test\TestData6.xml" />
+    <Content Include="Test\TestData7.xml" />
+    <Content Include="Test\TestData8.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\TestData81.xml" />
+    <Content Include="Test\TestData9.xml" />
+    <Content Include="Test\VirtualVariantTest1.xml" />
+    <Content Include="Test\VirtualVariantTest2.xml" />
+    <Content Include="Test\VirtualVariantTest3.xml" />
+    <Content Include="Test\VirtualVariantTest4.xml" />
+    <Content Include="Test\Old2.2V1VG2O1C1PNoTransitions-1UnselectV.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

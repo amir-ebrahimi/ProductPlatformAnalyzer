@@ -5,7 +5,7 @@ Analysis should be able to complete. -->
 <!-- Operations: 
         O1
 				O2 
-          Precondition: O1-->
+          Precondition: O1_F_1-->
 
 <!-- Variants: V1-->
 
@@ -34,6 +34,9 @@ Analysis should be able to complete. -->
     <operation>
       <operationName>O2</operationName>
       <displayName>O2</displayName>
+      <operationPrecondition>
+        <operationRef>O1_F_1</operationRef>
+      </operationPrecondition>
     </operation>
   </operations>
   <variants>
