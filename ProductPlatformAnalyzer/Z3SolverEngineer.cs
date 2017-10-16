@@ -7,6 +7,9 @@ using Microsoft.Z3;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using CAEX_ClassModel;
+using AMLEngineExtensions;
+using CAEX_ClassModel.Validation;
 
 namespace ProductPlatformAnalyzer
 {
@@ -15,6 +18,7 @@ namespace ProductPlatformAnalyzer
         private FrameworkWrapper cFrameworkWrapper;
         private Z3Solver cZ3Solver;
         private RandomTestCreator cRandomTestCreator;
+
         private bool cDebugMode;
         private bool cOpSeqAnalysis;
         private bool cNeedPreAnalysis;
@@ -462,12 +466,38 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
+        /// Load AML File data
+        /// </summary>
+        /// <param name="pFile"></param>
+        /// <returns>If the data is loaded correctly or not</returns>
+        public bool loadAMLInitialData(string pFile)
+        {
+            bool lDataLoaded = true;
+            try
+            {
+                var document = CAEXDocument.LoadFromFile(pFile);
+                
+                var converter = new AMLConverter(document);
+
+                //This function populate should return a boolean result which indicates if the population is done right or not
+                converter.Populate();
+                converter.PopulateFrameworkWrapper(cFrameworkWrapper);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in loadAMLInitialData");
+                Console.WriteLine(ex.Message);
+            }
+            return lDataLoaded;
+        }
+
+        /// <summary>
         /// This function loads the initial data from the external fle to internal lists
         /// </summary>
         /// <param name="pInitialData"></param>
         /// <param name="pFile"></param>
-        /// <returns></returns>
-        public bool loadInitialData(Enumerations.InitializerSource pInitialData, String pFile)
+        /// <returns>If the data is loaded correctly or not</returns>
+        public bool loadInitialData(Enumerations.InitializerSource pInitialData, String pIntialDataFilePath)
         {
             bool lDataLoaded = false;
             try
@@ -477,26 +507,23 @@ namespace ProductPlatformAnalyzer
                 //lFrameworkWrapper.createTestData6();
 
                 //Reading data from an XML file
+                /* Comment: The path should not be set in the analyzer, it should be set from the outside
                 string exePath = Directory.GetCurrentDirectory();
                 string endPath = null;
                 if (pFile != null)
                     endPath = pFile;
                 else
                     endPath = "";
+                 */
 
                 switch (pInitialData)
                 {
-                    case Enumerations.InitializerSource.ExternalFile:
+                    case Enumerations.InitializerSource.InitialDataFile:
                         {
 //                            LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
-                            lDataLoaded = LoadInitialDataFromXMLFile("../../Test/" + endPath);
-                            //             lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
-                            break;
-                        }
-                    case Enumerations.InitializerSource.InternalFile:
-                        {
-                            //LoadInitialDataFromXMLFile("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Test/1V2O1PreNoTransitions.xml");
-                            lDataLoaded = LoadInitialDataFromXMLFile("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Test/" + endPath);
+//                            lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
+//                            lDataLoaded = LoadInitialDataFromXMLFile("../../Test/" + endPath);
+                            lDataLoaded = LoadInitialDataFromXMLFile(pIntialDataFilePath);
                             break;
                         }
                     case Enumerations.InitializerSource.RandomData:
@@ -817,167 +844,218 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (pSatResult.Equals(Status.SATISFIABLE))
+                OutputHandler output = new OutputHandler(pFrameworkWrapper);
+
+                output = cZ3Solver.PopulateOutputHandler(pState, output);
+
+                switch (cAnalysisType)
                 {
-                    OutputHandler output = new OutputHandler(pFrameworkWrapper);
-
-                    output = cZ3Solver.PopulateOutputHandler(pState, output);
-
-                    if (cAnalysisType.Equals(Enumerations.AnalysisType.ModelEnumerationAnalysis))
-                    {
-                        //What does the satisfiable result in this analysis mean?
-                        if (cReportAnalysisResult)
-                            Console.WriteLine("The ProductPlatform has a model to satisfy it.");
-
-                        //Means that there has been a model which has been found
-                        Console.WriteLine("Model No " + pState + ":");
-                        if (cReportVariantsResult)
-                            output.printChosenVariants();
-                        if (cReportTransitionsResult)
-                            output.printOperationsTransitions();
-
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.VariantSelectabilityAnalysis))
-                    {
-                        if (pExtraField != null)
+                    case Enumerations.AnalysisType.ModelEnumerationAnalysis:
                         {
-                            variant lAnalyzedVariant = (variant) pExtraField;
-                            //What does the satisfiable result in this analysis mean?
-                            if (cReportAnalysisResult)
+                            if (pSatResult.Equals(Status.SATISFIABLE))
                             {
-                                Console.WriteLine("---------------------------------------------------------------------");
-                                Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
-                                Console.WriteLine(lAnalyzedVariant.names + " is Selectable.");
+                                //What does the satisfiable result in this analysis mean?
+                                if (cReportAnalysisResult)
+                                    Console.WriteLine("The ProductPlatform has a model to satisfy it.");
 
-                            }
-
-                        }
-
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.OperationSelectabilityAnalysis))
-                    {
-                        if (pExtraField != null)
-                        {
-                            string lAnalyzedOperationName = (string)pExtraField;
-                            //What does the satisfiable result in this analysis mean?
-                            if (cReportAnalysisResult)
-                            {
-                                //Initial info
-                                Console.WriteLine("----------------------------------------------------------------");
-                                Console.WriteLine("Analysing operation named: " + lAnalyzedOperationName);
-
-                                //Analysis Result
-                                Console.WriteLine(lAnalyzedOperationName + " is selectable.");
-                            }
-                        }
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis))
-                    {
-                        if (pExtraField != null)
-                        {
-                            variant lAnalyzedVariant = (variant)pExtraField;
-                            if (cReportAnalysisResult)
-                            {
-                                //Initial info
-                                Console.WriteLine("---------------------------------------------------------------------");
-                                Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
-
-                                //Analysis Result
-                                //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                                Console.WriteLine("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
-
-                            }
-
-                        }
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis))
-                    { 
-                        if (pExtraField != null)
-                        {
-                            string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
-
-                            //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
-                            Console.WriteLine("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
-                        }
-                    }
-                    else
-                    {
-                        if (pDone)
-                        {
-                            //Print and writes an output file showing the result of a finished test
-                            if (cReportAnalysisDetailResult)
-                            {
+                                //Means that there has been a model which has been found
                                 Console.WriteLine("Model No " + pState + ":");
                                 if (cReportVariantsResult)
-                                {
                                     output.printChosenVariants();
-                                }
                                 if (cReportTransitionsResult)
                                     output.printOperationsTransitions();
                             }
-                            output.writeFinished();
-                            output.writeFinishedNoPost();
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
+                                //What does the unsatisfiable result in this analysis mean?
+                                if (cReportAnalysisResult)
+                                    Console.WriteLine("The ProductPlatform has no more valid models.");
+                            }
+                            break;
                         }
-                        else
+                    case Enumerations.AnalysisType.VariantSelectabilityAnalysis:
                         {
-                            //Print and writes an output file showing the result of a deadlocked test
-                            if (cReportAnalysisDetailResult)
-                                output.printCounterExample();
-                            output.writeCounterExample();
-                            output.writeCounterExampleNoPost();
-                        }
-                    }
-                    output.writeDebugFile();
-                }
-                else
-                {
-                    if (cAnalysisType.Equals(Enumerations.AnalysisType.ModelEnumerationAnalysis))
-                    {
-                        //What does the unsatisfiable result in this analysis mean?
-                        if (cReportAnalysisResult)
-                            Console.WriteLine("The ProductPlatform has no more valid models.");
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.VariantSelectabilityAnalysis))
-                    {
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    variant lAnalyzedVariant = (variant)pExtraField;
+                                    //What does the satisfiable result in this analysis mean?
+                                    if (cReportAnalysisResult)
+                                    {
+                                        Console.WriteLine("---------------------------------------------------------------------");
+                                        Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
+                                        Console.WriteLine(lAnalyzedVariant.names + " is Selectable.");
 
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.OperationSelectabilityAnalysis))
-                    {
-                        //Here we check if this operation is in active operation or not, meaning does a variant use this operation for its assembly or not
-                        if (!cFrameworkWrapper.isOperationInstanceActive(pExtraField.ToString()))
+                                    }
+                                }
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
+
+                            }
+                            break;
+                        }
+                    case Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis:
+                        {
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    variant lAnalyzedVariant = (variant)pExtraField;
+                                    if (cReportAnalysisResult)
+                                    {
+                                        //Initial info
+                                        Console.WriteLine("---------------------------------------------------------------------");
+                                        Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
+
+                                        //Analysis Result
+                                        //if it does hold, then there is a configuration which is valid and this current variant is not present in it
+                                        Console.WriteLine("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
+                                    }
+                                }
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    variant lAnalyzedVariant = (variant)pExtraField;
+                                    Console.WriteLine("All valid configurations DO include " + lAnalyzedVariant.names + ".");
+                                }
+                            }
+                            break;
+                        }
+                    case Enumerations.AnalysisType.OperationSelectabilityAnalysis:
+                        {
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    string lAnalyzedOperationName = (string)pExtraField;
+                                    //What does the satisfiable result in this analysis mean?
+                                    if (cReportAnalysisResult)
+                                    {
+                                        //Initial info
+                                        Console.WriteLine("----------------------------------------------------------------");
+                                        Console.WriteLine("Analysing operation named: " + lAnalyzedOperationName);
+
+                                        //Analysis Result
+                                        Console.WriteLine(lAnalyzedOperationName + " is selectable.");
+                                    }
+                                }
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
+                                //Here we check if this operation is in active operation or not, meaning does a variant use this operation for its assembly or not
+                                if (!cFrameworkWrapper.isOperationInstanceActive(pExtraField.ToString()))
+                                {
+
+                                    //This means the operation instance is inactive hence it should be mentioned
+
+                                    //This is when we want to report only the operation name
+                                    Console.WriteLine("Operation " + cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString()) + " is inactive!");
+                                }
+                            }
+                            break;
+                        }
+                    case Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis:
+                        {
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
+
+                                    //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
+                                    Console.WriteLine("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
+                                }
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
+                                if (pExtraField != null)
+                                {
+                                    string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
+
+                                    Console.WriteLine("All valid configurations DO include " + lOperationName + ".");
+                                }
+                            }
+                            break;
+                        }
+                    case Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis:
                         {
 
-                            //This means the operation instance is inactive hence it should be mentioned
+                            //if (pDone)
+                            //{
+                                //If the analysis is complete, all transitions have been done
+                                if (pSatResult.Equals(Status.SATISFIABLE))
+                                {
+                                    //If the result of the analysis is SAT meaning that there has been a deadlock found
 
-                            //This is when we want to report only the operation name
-                            Console.WriteLine("Operation " + cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString()) + " is inactive!");
+                                    //Print and writes an output file showing the result of a deadlocked test
+                                    if (cReportAnalysisDetailResult)
+                                        output.printCounterExample();
+                                    output.writeCounterExample();
+                                    output.writeCounterExampleNoPost();
+
+                                    //Console.WriteLine("proof: {0}", iSolver.Proof);
+                                    //Console.WriteLine("core: ");
+                                    if (cReportUnsatCore)
+                                        cZ3Solver.ConsoleWriteUnsatCore();
+                                }
+                                /*else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                                {
+                                    //If the result of the analysis is UNSAT meaning that there was NO deadlock found
+
+                                    //Print and writes an output file showing the result of a finished test
+                                    if (cReportAnalysisDetailResult)
+                                    {
+                                        Console.WriteLine("Model No " + pState + ":");
+                                        if (cReportVariantsResult)
+                                        {
+                                            output.printChosenVariants();
+                                        }
+                                        if (cReportTransitionsResult)
+                                            output.printOperationsTransitions();
+                                    }
+                                    output.writeFinished();
+                                    output.writeFinishedNoPost();
+                                }*/
+                            //}
+                            /*else
+                            {
+                                //If it is in the middle of the analysis, not all transitions have been done
+                                if (cReportVariantsResult)
+                                    output.printChosenVariants();
+                                if (cReportTransitionsResult)
+                                    output.printOperationsTransitions();
+                            }*/
+
+                            break;
                         }
-
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis))
-                    {
-
-                        if (pExtraField != null)
+                    case Enumerations.AnalysisType.AlwaysDeadlockAnalysis:
                         {
-                            variant lAnalyzedVariant = (variant)pExtraField;
-                            Console.WriteLine("All valid configurations DO include " + lAnalyzedVariant.names + ".");
-                        }
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
 
-                    }
-                    else if (cAnalysisType.Equals(Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis))
-                    {
-                        if (pExtraField != null)
+                            }
+                            break;
+                        }
+                    case Enumerations.AnalysisType.CompleteAnalysis:
                         {
-                            string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
+                            if (pSatResult.Equals(Status.SATISFIABLE))
+                            {
+                            }
+                            else if (pSatResult.Equals(Status.UNSATISFIABLE))
+                            {
 
-                            Console.WriteLine("All valid configurations DO include " + lOperationName + ".");
+                            }
+                            break;
                         }
-                    }
-
-                    //Console.WriteLine("proof: {0}", iSolver.Proof);
-                    //Console.WriteLine("core: ");
-                    if (cReportUnsatCore)
-                        cZ3Solver.ConsoleWriteUnsatCore();
+                    default:
+                        break;
                 }
             }
             catch (Exception ex)
@@ -3461,15 +3539,13 @@ namespace ProductPlatformAnalyzer
                                                                 , lAnalysisComplete);
 
                         //if the result of the previous analysis is true then we go to the next analysis part
+
                         if (lInternalAnalysisResult.Equals(Status.SATISFIABLE))
                         {
                             //If the result is true it means we have found a deadlock!
                             Console.WriteLine("A deadlock was found!");
+                            ReportSolverResult(lTransitionNo + 1, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
                             break;
-                        }
-                        if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
-                        {
-                            //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
                         }
 
                         //TODO: Do we need a stand alone constraint????????? Considering that this line comes with a stand alone constraint!!!
@@ -3482,14 +3558,19 @@ namespace ProductPlatformAnalyzer
                     }
 //                }
 
-                    //Translating the internal analysis result to the user specific analysis result 
-                    if (lInternalAnalysisResult.Equals(Status.SATISFIABLE))
-                        lAnalysisResult = true;
-                    else
-                        lAnalysisResult = false;
+                //Translating the internal analysis result to the user specific analysis result 
+                if (lInternalAnalysisResult.Equals(Status.SATISFIABLE))
+                    lAnalysisResult = true;
+                else
+                    lAnalysisResult = false;
 
-                    Console.WriteLine("Analysis Report: ");
-                //TODO: How to give a analysis report?????
+                Console.WriteLine("Analysis Report: ");
+
+                if (!lAnalysisResult)
+                {
+                    //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
+                    Console.WriteLine("NO deadlock was found!");
+                }
             }
             catch (Exception ex)
             {
@@ -5039,7 +5120,7 @@ namespace ProductPlatformAnalyzer
         /// <param name="pExtraConfigurationRule">Any configuration rule whch needs to be added to the product platform configuration rule set</param>
         /// <param name="pInternalFileData">In case the initial data file is internal it has to be provided here</param>
         /// <returns>The result of the analysis</returns>
-        public bool ProductPlatformAnalysis(string pInternalFileData = "", string pExtraConfigurationRule = "")
+        public bool ProductPlatformAnalysis(string pInternalFileData = "", string pExtraConfigurationRule = "", bool pAMLFileData = false)
         {
             bool lLoadInitialData = false;
             bool lTestResult = false;
@@ -5053,7 +5134,11 @@ namespace ProductPlatformAnalyzer
             {
                 cZ3Solver.setDebugMode(true);
 
-                lLoadInitialData = loadInitialData(Enumerations.InitializerSource.InternalFile, file);
+                if (!pAMLFileData)
+                    lLoadInitialData = loadInitialData(Enumerations.InitializerSource.InitialDataFile, file);
+                else
+                    lLoadInitialData = loadAMLInitialData(file);
+
 
                 if (lLoadInitialData)
                 {
@@ -5131,6 +5216,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                string lPathPrefix = "../../Test/";
+
                 Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
                 //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
@@ -5143,7 +5230,7 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
                 lZ3SolverEngineer.setReportType(true, true, true, false, false, true, false, true);
 
-                //lZ3SolverEngineer.ProductPlatformAnalysis("0.0V0VG0O0C0P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis(pathPrefix + "0.0V0VG0O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("0.0V0VG1O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("0.1V0VG1O0C0P.xml");
 
@@ -5158,7 +5245,7 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis("4.0.1V1VG2O0C1P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("4.1.1V1VG2O0C1P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("4.2.1V1VG2O0C1P.xml");
-                lZ3SolverEngineer.ProductPlatformAnalysis("4.3.1V1VG2O0C1P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis("4.3.1V1VG2O0C1P.xml");
 
                 //lZ3SolverEngineer.ProductPlatformAnalysis("5.0.4V2VG2O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("5.1.4V2VG2O0C0P.xml");
@@ -5181,6 +5268,7 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis("12.2V1VG2O0C2P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("13.2V1VG2O0C2P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis("14.2V1VG2O0C2P.xml");
+                lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "demo_variant.aml","",true);
 
             }
             catch (Exception ex)

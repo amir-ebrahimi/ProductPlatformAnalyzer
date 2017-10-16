@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CAEXFile FileName="demo_variant.aml" SchemaVersion="2.15" xsi:noNamespaceSchemaLocation="CAEX_ClassModel_V2.15.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<AdditionalInformation>
+		<WriterHeader>
+			<WriterName>AutomationML Editor</WriterName>
+			<WriterID>916578CA-FE0D-474E-A4FC-9E1719892369</WriterID>
+			<WriterVendor>AutomationML e.V.</WriterVendor>
+			<WriterVendorURL>www.AutomationML.org</WriterVendorURL>
+			<WriterVersion>4.7.0.0</WriterVersion>
+			<WriterRelease>4.7.0.0</WriterRelease>
+			<LastWritingDateTime>2017-10-11T20:44:20.8105077+02:00</LastWritingDateTime>
+			<WriterProjectTitle>unspecified</WriterProjectTitle>
+			<WriterProjectID>unspecified</WriterProjectID>
+		</WriterHeader>
+	</AdditionalInformation>
+	<AdditionalInformation AutomationMLVersion="2.0" />
+	<InstanceHierarchy Name="ProductPlatform">
+		<Version>1.0.0</Version>
+		<InternalElement Name="Variants" ID="fad7decf-23fb-4761-a564-fe2a597528a9">
+			<InternalElement Name="frame-rigid" ID="c703df3e-bb74-4b03-ae18-0f544a8c483d">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="frame-V2" ID="a2bee08e-353b-4c4a-90e5-63f8f092db0c">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="internal-brake-sensor" ID="0f66a703-d7c4-4f39-a3f9-a759e88c621b">
+				<InternalElement Name="mapped_operations" ID="9520276a-a7e7-4ce2-9ee9-da3e7b108709">
+					<InternalElement Name="truck-enter-brake-test-rig" ID="973e601a-8d4d-4ab6-900c-ca79ca9f0cae" RefBaseSystemUnitPath="50fd062c-6ed9-4f2e-91c0-eaaddf9c9cd8"></InternalElement>
+					<InternalElement Name="brake-test-internal" ID="85976b1e-76ff-41c8-ba02-921b8e0a8566" RefBaseSystemUnitPath="218eecc1-2c95-4011-b460-c03450afe934"></InternalElement>
+					<InternalElement Name="truck-leaves-brake-rig" ID="daf516ca-e93a-470c-9d6d-a2d5996b02b2" RefBaseSystemUnitPath="53194bb8-fe8b-43ac-b921-1466948ddb55"></InternalElement>
+					<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/OperationGroup" />
+				</InternalElement>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="light-sensor" ID="02d116bd-af43-4ed2-a993-d7d3ccaf4032">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="brake-test" ID="c42edf83-3fcb-46de-8f7f-a2088e214229">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="light-test" ID="e3b82a00-ee2f-45e0-b844-2d7a3a34124b">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="no-internal-brake-sensor" ID="e94a0014-91c8-47bb-852d-ff5bac0b1f16">
+				<InternalElement Name="mapped_operations" ID="9daa662b-bdef-4dff-8dd2-4d5395606c61">
+					<InternalElement Name="truck-enter-brake-test-rig" ID="e3261c22-4b34-4270-a929-4f7b6c17291c" RefBaseSystemUnitPath="50fd062c-6ed9-4f2e-91c0-eaaddf9c9cd8"></InternalElement>
+					<InternalElement Name="brake-test-external" ID="563d7569-ed3a-4769-aeb1-1de28fce1f69" RefBaseSystemUnitPath="fed3e52f-2c7f-42b0-932d-7a9d6d5a3124"></InternalElement>
+					<InternalElement Name="truck-leaves-brake-rig" ID="d9200511-d83e-4718-8550-fea396bea4db" RefBaseSystemUnitPath="53194bb8-fe8b-43ac-b921-1466948ddb55"></InternalElement>
+					<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/OperationGroup" />
+				</InternalElement>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ProductStructure" />
+		</InternalElement>
+		<InternalElement Name="Operations" ID="68daed6c-ca9f-46f9-a425-1084519bf106">
+			<InternalElement Name="truck-enter-brake-test-rig" ID="50fd062c-6ed9-4f2e-91c0-eaaddf9c9cd8">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="brake-test-internal" ID="218eecc1-2c95-4011-b460-c03450afe934">
+				<Attribute Name="precondition" AttributeDataType="xs:string">
+					<Value>truck-enter-brake-test-rig</Value>
+				</Attribute>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="brake-test-external" ID="fed3e52f-2c7f-42b0-932d-7a9d6d5a3124">
+				<Attribute Name="precondition" AttributeDataType="xs:string">
+					<Value>truck-enter-brake-test-rig</Value>
+				</Attribute>
+				<Attribute Name="requirements" AttributeDataType="xs:string">
+					<Description>Requirements each separated by semicolon.</Description>
+					<Value>sensor : &gt;= 1 Nbr</Value>
+				</Attribute>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="truck-leaves-brake-rig" ID="53194bb8-fe8b-43ac-b921-1466948ddb55">
+				<Attribute Name="precondition" AttributeDataType="xs:string">
+					<Value>brake-test-internal</Value>
+				</Attribute>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ProcessStructure" />
+		</InternalElement>
+		<InternalElement Name="Resources" ID="87ff92ba-42b4-4d85-9a33-826ec6ac9627">
+			<InternalElement Name="external-sensor" ID="b36ba048-c72a-487f-b52f-81a72f57e197">
+				<Attribute Name="Nbr">
+					<Value>2</Value>
+				</Attribute>
+				<InternalElement Name="sensor" ID="e51c0936-4d91-4470-80ab-3d33753f3267">
+					<Attribute Name="Nbr" AttributeDataType="xs:int" />
+					<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Trait" />
+				</InternalElement>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Resource" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ResourceStructure" />
+		</InternalElement>
+		<InternalElement Name="Frame" ID="462f81eb-aa53-4971-8bbd-97e9b9f803c0">
+			<Attribute Name="groupCardinality" AttributeDataType="xs:string">
+				<Value>Choose exactly one</Value>
+				<Constraint Name="cardinality">
+					<OrdinalScaledType>
+						<RequiredValue>1</RequiredValue>
+					</OrdinalScaledType>
+				</Constraint>
+			</Attribute>
+			<InternalElement Name="frame-rigid" ID="068eca42-6e97-4a74-8f1e-d80d166ed887" RefBaseSystemUnitPath="c703df3e-bb74-4b03-ae18-0f544a8c483d"></InternalElement>
+			<InternalElement Name="frame-V2" ID="d544616f-4591-42d3-a6ba-c1d294bc4ee2" RefBaseSystemUnitPath="a2bee08e-353b-4c4a-90e5-63f8f092db0c"></InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/VariantGroup" />
+		</InternalElement>
+		<InternalElement Name="BrakeSensors" ID="665c5413-9269-4f3a-83e4-4e9f36f6cf46">
+			<Attribute Name="groupCardinality" AttributeDataType="xs:string">
+				<Value>Choose at least one</Value>
+				<Constraint Name="cardinality">
+					<OrdinalScaledType>
+						<RequiredMinValue>1</RequiredMinValue>
+					</OrdinalScaledType>
+				</Constraint>
+			</Attribute>
+			<InternalElement Name="internal-brake-sensor" ID="bfab7f1d-7a3d-4831-9ad5-246ea178a1d4" RefBaseSystemUnitPath="0f66a703-d7c4-4f39-a3f9-a759e88c621b"></InternalElement>
+			<InternalElement Name="no-internal-brake-sensor" ID="e76e27cf-3265-4434-a0ba-a655e8298d42" RefBaseSystemUnitPath="e94a0014-91c8-47bb-852d-ff5bac0b1f16"></InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/VariantGroup" />
+		</InternalElement>
+		<InternalElement Name="LightSensors" ID="46727752-2ad8-4f06-ad78-605d0a4ac5a2">
+			<Attribute Name="groupCardinality" AttributeDataType="xs:string">
+				<Value>Choose at least one</Value>
+				<Constraint Name="cardinality">
+					<OrdinalScaledType>
+						<RequiredMinValue>1</RequiredMinValue>
+					</OrdinalScaledType>
+				</Constraint>
+			</Attribute>
+			<InternalElement Name="light-sensor" ID="84048b43-f01b-461f-b09b-89724f3ff5fe" RefBaseSystemUnitPath="02d116bd-af43-4ed2-a993-d7d3ccaf4032"></InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/VariantGroup" />
+		</InternalElement>
+		<InternalElement Name="Tests" ID="0085c240-20d4-4427-9b26-706742c668c8">
+			<Attribute Name="groupCardinality" AttributeDataType="xs:string">
+				<Value>Choose at least one</Value>
+				<Constraint Name="cardinality">
+					<OrdinalScaledType>
+						<RequiredMinValue>1</RequiredMinValue>
+					</OrdinalScaledType>
+				</Constraint>
+			</Attribute>
+			<InternalElement Name="brake-test" ID="4f4c5772-45e1-431a-b2e8-e3b2f5e918ce" RefBaseSystemUnitPath="c42edf83-3fcb-46de-8f7f-a2088e214229"></InternalElement>
+			<InternalElement Name="light-test" ID="3b81ce86-0446-48c4-903b-53abc69f45af" RefBaseSystemUnitPath="e3b82a00-ee2f-45e0-b844-2d7a3a34124b"></InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/VariantGroup" />
+		</InternalElement>
+		<InternalElement Name="Constraints" ID="eed94712-84e5-4f03-9379-350cd4573b5f">
+			<InternalElement Name="Constraint_1" ID="ffaf341f-4d98-4512-aaa7-07bb459bb6dc">
+				<Attribute Name="logic" AttributeDataType="xs:string">
+					<Value>and (and frame-rigid brake-test) no-internal-brake-sensor</Value>
+				</Attribute>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Constraint" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure" />
+		</InternalElement>
+	</InstanceHierarchy>
+	<InterfaceClassLib Name="AutomationMLInterfaceClassLib">
+		<Description>Standard Automation Markup Language Interface Class Library</Description>
+		<Version>2.2.0</Version>
+		<InterfaceClass Name="AutomationMLBaseInterface">
+			<InterfaceClass Name="Order" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<Attribute Name="Direction" AttributeDataType="xs:string" />
+			</InterfaceClass>
+			<InterfaceClass Name="PortConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="InterlockingConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="PPRConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="ExternalDataConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+				<InterfaceClass Name="COLLADAInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+				<InterfaceClass Name="PLCopenXMLInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+			</InterfaceClass>
+			<InterfaceClass Name="Communication" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<InterfaceClass Name="SignalInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/Communication" />
+			</InterfaceClass>
+		</InterfaceClass>
+	</InterfaceClassLib>
+	<RoleClassLib Name="AutomationMLBaseRoleClassLib">
+		<Description>Automation Markup Language base role class library</Description>
+		<Version>2.2.0</Version>
+		<RoleClass Name="AutomationMLBaseRole">
+			<RoleClass Name="Group" RefBaseClassPath="AutomationMLBaseRole">
+				<Attribute Name="AssociatedFacet" AttributeDataType="xs:string" />
+			</RoleClass>
+			<RoleClass Name="Facet" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Port" RefBaseClassPath="AutomationMLBaseRole">
+				<Attribute Name="Direction" AttributeDataType="xs:string" />
+				<Attribute Name="Cardinality">
+					<Attribute Name="MinOccur" AttributeDataType="xs:unsignedInt" />
+					<Attribute Name="MaxOccur" AttributeDataType="xs:unsignedInt" />
+				</Attribute>
+				<Attribute Name="Category" AttributeDataType="xs:string" />
+				<ExternalInterface Name="ConnectionPoint" ID="9942bd9c-c19d-44e4-a197-11b9edf264e7" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/PortConnector" />
+			</RoleClass>
+			<RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Product" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Process" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Structure" RefBaseClassPath="AutomationMLBaseRole">
+				<RoleClass Name="ProductStructure" RefBaseClassPath="Structure" />
+				<RoleClass Name="ProcessStructure" RefBaseClassPath="Structure" />
+				<RoleClass Name="ResourceStructure" RefBaseClassPath="Structure" />
+			</RoleClass>
+			<RoleClass Name="PropertySet" RefBaseClassPath="AutomationMLBaseRole" />
+		</RoleClass>
+	</RoleClassLib>
+	<RoleClassLib Name="ProductPlatformRoleClassLib">
+		<Version>1.0.0</Version>
+		<RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource" />
+		<RoleClass Name="Variant" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Product" />
+		<RoleClass Name="Operation" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Process">
+			<Attribute Name="precondition" AttributeDataType="xs:string"></Attribute>
+			<Attribute Name="requirements" />
+		</RoleClass>
+		<RoleClass Name="Trait" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Facet" />
+		<RoleClass Name="VariantGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group"></RoleClass>
+		<RoleClass Name="OperationGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group"></RoleClass>
+		<RoleClass Name="Constraint" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole">
+			<Attribute Name="logic" AttributeDataType="xs:string" />
+		</RoleClass>
+	</RoleClassLib>
+</CAEXFile>

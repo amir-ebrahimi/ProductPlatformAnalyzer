@@ -28,8 +28,7 @@ namespace ProductPlatformAnalyzer
 
         public enum InitializerSource
         {
-            ExternalFile,
-            InternalFile,
+            InitialDataFile,
             RandomData
         }
 
