@@ -144,8 +144,6 @@
     <operation>
       <operationName>truck-enter-brake-test-rig</operationName>
       <displayName>truck enter brake test rig</displayName>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>brake-test-internal</operationName>
@@ -153,7 +151,6 @@
       <operationPrecondition>
         <operationName>truck-enter-brake-test-rig_F_3_2</operationName>
       </operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>brake-test-external</operationName>
@@ -161,8 +158,6 @@
       <requirements>
         <requirement>sensor : >= 1 Nbr</requirement>
       </requirements>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>truck-leaves-brake-rig</operationName>
@@ -170,7 +165,6 @@
       <operationPrecondition>
         <operationName>brake-test-internal_F_3_4</operationName>
       </operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>    
   </operations>
   <traits>

@@ -245,7 +245,7 @@ namespace ProductPlatformAnalyzer
             return con;
         }
 
-        public List<String> getActiveOperationNamesList(int pState)
+        public List<String> getActiveOperationNamesList(int pState, string pOperationStateToFilter = "")
         {
             List<String> tempActiveOperationNamesList = new List<string>();
             try
@@ -253,7 +253,8 @@ namespace ProductPlatformAnalyzer
                 foreach (String operationName in ActiveOperationInstanceNamesList)
                 {
                     if (getOperationStateFromOperationName(operationName).Equals(pState.ToString()))
-                        tempActiveOperationNamesList.Add(operationName);
+                        if (pOperationStateToFilter!="" && operationName.Contains("_"+ pOperationStateToFilter + "_"))
+                            tempActiveOperationNamesList.Add(operationName);
                 }
             }
             catch (Exception ex)
@@ -363,6 +364,7 @@ namespace ProductPlatformAnalyzer
             InActiveOperationNamesList = pInActiveOperationNamesList;
         }
 
+
         public operation getOperationFromOperationName(string pOperationName)
         {
             operation resultOperation = null;
@@ -422,17 +424,22 @@ namespace ProductPlatformAnalyzer
             bool lCheckResult = false;
             try
             {
-                //Check syntax of Requirement field
-                lCheckResult = CheckOperationsRequirementFieldSyntax(pOperation.requirements);
+                if (pOperation.requirements != null)
+                {
+                    //Check syntax of Requirement field
+                    lCheckResult = CheckOperationsRequirementFieldSyntax(pOperation.requirements);
 
-                //for each part of (Trait)+ check that the traits are existing objects
-                lCheckResult = CheckExistanceOfRequirementTraits(pOperation.requirements);
+                    //for each part of (Trait)+ check that the traits are existing objects
+                    lCheckResult = CheckExistanceOfRequirementTraits(pOperation.requirements);
 
-                //Check to find resource which inheritance field matches the  (Trait)+ part of the requirement field
-                lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.requirements);
+                    //Check to find resource which inheritance field matches the  (Trait)+ part of the requirement field
+                    lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.requirements);
 
-                //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
-                AddRelevantResourceNameToOperationRequirementAttributes(pOperation);
+                    //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
+                    AddRelevantResourceNameToOperationRequirementAttributes(pOperation);
+                }
+                else
+                    lCheckResult = true;
             }
             catch (Exception ex)
             {
@@ -1151,9 +1158,27 @@ namespace ProductPlatformAnalyzer
             {
                 Console.WriteLine("error in ReturnOperationStateFromOperationInstance");
                 Console.WriteLine(ex.Message);
-                throw;
             }
             return lOperationState;
+        }
+
+        public List<operation> ReturnOneVariantsOperations(variant pVariant)
+        {
+            List<operation> lResultOperationList = new List<operation>();
+            try
+            {
+                foreach (var lVariantOperations in cVariantsOperationsList)
+                {
+                    if (lVariantOperations.getVariantExpr().Equals(pVariant.names))
+                        lResultOperationList = lVariantOperations.getOperations();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ReturnOneVariantsOperations");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperationList;
         }
 
         /// <summary>
@@ -1166,10 +1191,10 @@ namespace ProductPlatformAnalyzer
             variant lResultVariant;
             try
             {
-                string lOperationVariantName = "";
+                int lOperationVariantIndex;
                 string[] lOperationInstanceParts = pOperationInstance.Split('_');
-                lOperationVariantName = lOperationInstanceParts[2];
-                lResultVariant = findVariantWithName(lOperationVariantName);
+                lOperationVariantIndex = int.Parse(lOperationInstanceParts[2]);
+                lResultVariant = findVariantWithIndex(lOperationVariantIndex);
             }
             catch (Exception ex)
             {

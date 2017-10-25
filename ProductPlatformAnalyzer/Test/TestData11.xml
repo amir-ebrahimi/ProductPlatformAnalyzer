@@ -93,8 +93,6 @@
     <operation>
       <operationName>brake-test-internal</operationName>
       <displayName>brake test internal</displayName>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>brake-test-external</operationName>
@@ -102,8 +100,6 @@
       <requirements>
         <requirement>sensor : >= 2 No</requirement>
       </requirements>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
   </operations>
   <traits>

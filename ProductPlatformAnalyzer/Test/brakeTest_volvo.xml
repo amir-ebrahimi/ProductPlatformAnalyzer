@@ -120,8 +120,6 @@
             <requirements>
                 <requirement>TTechnician: >= 1 level</requirement>
             </requirements>
-            <operationPrecondition></operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-axle2-man</operationName>
@@ -130,7 +128,6 @@
                 <requirement>TTechnician: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-out1-man</operationName>
@@ -139,7 +136,6 @@
                 <requirement>TTechnician: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle2-out1-man</operationName>
@@ -148,7 +144,6 @@
                 <requirement>TTechnician: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle2-man reset-from-bt-mode-axle2</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>out0-axle1-auto-wsTruckPos</operationName>
@@ -157,8 +152,6 @@
                 <requirement>TTruckPositioning: == 1 type</requirement>
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
-            <operationPrecondition></operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-axle2-auto-wsTruckPos</operationName>
@@ -168,7 +161,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-out1-auto-wsTruckPos</operationName>
@@ -178,7 +170,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle2-out1-auto-wsTruckPos</operationName>
@@ -188,7 +179,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle2-man reset-from-bt-mode-axle2</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>out0-axle1-auto-truckSelfPos</operationName>
@@ -196,8 +186,6 @@
             <requirements>
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
-            <operationPrecondition></operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-axle2-auto-truckSelfPos</operationName>
@@ -206,7 +194,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle1-out1-auto-truckSelfPos</operationName>
@@ -215,7 +202,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle1-man reset-from-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>axle2-out1-auto-truckSelfPos</operationName>
@@ -224,7 +210,6 @@
                 <requirement>TWorkshopControl: == 2 level</requirement>
             </requirements>
             <operationPrecondition>or brake-test-axle2-man reset-from-bt-mode-axle2</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>add-pressure-sensor</operationName>
@@ -233,8 +218,6 @@
                 <requirement>TTechnician: >= 1 level</requirement>
                 <requirement>TRollers: == 1 air-pressure-sensors</requirement>
             </requirements>
-            <operationPrecondition></operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>remove-pressure-sensor</operationName>
@@ -244,7 +227,6 @@
                 <requirement>TRollers: == 1 air-pressure-sensors</requirement>
             </requirements>
             <operationPrecondition>and brake-test-axle1-man or brake-test-axle2-man brake-test-axle2-man_U</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>connect-wl</operationName>
@@ -253,8 +235,6 @@
                 <requirement>TWorkshopControl: >= 1 level</requirement>
                 <requirement>TWorkshopControl: == 2 connect</requirement>
             </requirements>
-            <operationPrecondition></operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>disconnect-wl</operationName>
@@ -265,7 +245,6 @@
             </requirements>
             <operationPrecondition>and reset-from-bt-mode-axle1 or reset-from-bt-mode-axle2 reset-from-bt-mode-axle2_U or axle1-out1-auto-wsTruckPos axle1-out1-auto-wsTruckPos_U or axle2-out1-auto-wsTruckPos axle2-out1-auto-wsTruckPos_U or
                 axle1-out1-auto-truckSelfPos axle1-out1-auto-truckSelfPos_U or axle2-out1-auto-truckSelfPos axle2-out1-auto-truckSelfPos_U</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>brake-test-axle1-man</operationName>
@@ -276,7 +255,6 @@
                 <requirement>TRollers: >= 1 software</requirement>
             </requirements>
             <operationPrecondition>and add-pressure-sensor or out0-axle1-man out0-axle1-auto-wsTruckPos out0-axle1-auto-truckSelfPos</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>brake-test-axle2-man</operationName>
@@ -287,7 +265,6 @@
                 <requirement>TRollers: >= 1 software</requirement>
             </requirements>
             <operationPrecondition>or axle1-axle2-man axle1-axle2-auto-wsTruckPos axle1-axle2-auto-truckSelfPos</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>set-in-bt-mode-axle1</operationName>
@@ -296,7 +273,6 @@
                 <requirement>TWorkshopControl: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>and connect-wl or out0-axle1-man out0-axle1-auto-wsTruckPos out0-axle1-auto-truckSelfPos</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>reset-from-bt-mode-axle1</operationName>
@@ -305,7 +281,6 @@
                 <requirement>TWorkshopControl: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>brake-test-axle1-auto</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>brake-test-axle1-auto</operationName>
@@ -316,7 +291,6 @@
                 <requirement>TRollers: >= 2 software</requirement>
             </requirements>
             <operationPrecondition>set-in-bt-mode-axle1</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>set-in-bt-mode-axle2</operationName>
@@ -325,7 +299,6 @@
                 <requirement>TWorkshopControl: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>and connect-wl or axle1-axle2-man axle1-axle2-auto-wsTruckPos axle1-axle2-auto-truckSelfPos</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>reset-from-bt-mode-axle2</operationName>
@@ -334,7 +307,6 @@
                 <requirement>TWorkshopControl: >= 1 level</requirement>
             </requirements>
             <operationPrecondition>brake-test-axle2-auto</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
         <operation>
             <operationName>brake-test-axle2-auto</operationName>
@@ -345,7 +317,6 @@
                 <requirement>TRollers: >= 2 software</requirement>
             </requirements>
             <operationPrecondition>set-in-bt-mode-axle2</operationPrecondition>
-            <operationPostcondition></operationPostcondition>
         </operation>
     </operations>
     <traits>

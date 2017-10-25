@@ -57,8 +57,6 @@
       <requirements>
         <requirement>RobotT1, SpotWeldingAbility : >= 5 maxload</requirement>
       </requirements>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>Lift2</operationName>
@@ -66,8 +64,6 @@
       <requirements>
         <requirement>RobotT1 : >= 8 maxload</requirement>
       </requirements>
-      <operationPrecondition></operationPrecondition>
-      <operationPostcondition></operationPostcondition>
     </operation>
 
   </operations>

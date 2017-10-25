@@ -8,6 +8,20 @@ namespace ProductPlatformAnalyzer
 {
     public class Enumerations
     {
+        public enum LogicOperator
+        {
+            and,
+            or,
+            xor,
+            not
+        }
+
+        public enum InputFileType
+        {
+            XML,
+            AML
+        }
+
         public enum GeneralAnalysisType
         {
             Static,
@@ -16,7 +30,8 @@ namespace ProductPlatformAnalyzer
 
         public enum AnalysisType
         {
-            ModelEnumerationAnalysis,
+            ProductModelEnumerationAnalysis,
+            ProductManufacturingModelEnumerationAnalysis,
             VariantSelectabilityAnalysis,
             AlwaysSelectedVariantAnalysis,
             OperationSelectabilityAnalysis,

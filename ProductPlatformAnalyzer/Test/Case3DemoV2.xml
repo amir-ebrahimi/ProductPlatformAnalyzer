@@ -35,20 +35,20 @@
           light-test
 
       Constraints:
-        and (and frame-rigid brake-test) no-internal-brake-sensor
+        (frame-rigid and brake-test) and no-internal-sensor
       
       Operation:
       truck-enter-brake-test-rig
       
       brake-test-internal
-        Pre: truck-enter-brake-test-rig_F_3_2
+        Pre: truck-enter-brake-test-rig
       
       brake-test-external
         Req: sensor : >= 1 Nbr
-        Pre: truck-enter-brake-test-rig_F_3_2
+        Pre: truck-enter-brake-test-rig
       
       truck-leaves-brake-rig
-        Pre: brake-test-internal_F_3_4
+        Pre: brake-test-external
       
       Traits:
         sensor
@@ -148,7 +148,7 @@
       <operationName>brake-test-internal</operationName>
       <displayName>brake test internal</displayName>
       <operationPrecondition>
-        <operationName>truck-enter-brake-test-rig_F_7_2</operationName>
+        <operationName>truck-enter-brake-test-rig</operationName>
       </operationPrecondition>
     </operation>
     <operation>
@@ -158,14 +158,14 @@
         <requirement>sensor : >= 1 Nbr</requirement>
       </requirements>
       <operationPrecondition>
-        <operationName>truck-enter-brake-test-rig_F_7_2</operationName>
+        <operationName>truck-enter-brake-test-rig</operationName>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>truck-leaves-brake-rig</operationName>
       <displayName>truck leaves brake rig</displayName>
       <operationPrecondition>
-        <operationName>brake-test-external_F_7_4</operationName>
+        <operationName>brake-test-external</operationName>
       </operationPrecondition>
     </operation>
   </operations>

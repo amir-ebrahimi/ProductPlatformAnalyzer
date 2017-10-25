@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CAEXFile FileName="Volvo_CAB.aml" SchemaVersion="2.15" xsi:noNamespaceSchemaLocation="CAEX_ClassModel_V2.15.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<AdditionalInformation>
+		<WriterHeader>
+			<WriterName>AutomationML Editor</WriterName>
+			<WriterID>916578CA-FE0D-474E-A4FC-9E1719892369</WriterID>
+			<WriterVendor>AutomationML e.V.</WriterVendor>
+			<WriterVendorURL>www.AutomationML.org</WriterVendorURL>
+			<WriterVersion>4.7.0.0</WriterVersion>
+			<WriterRelease>4.7.0.0</WriterRelease>
+			<LastWritingDateTime>2017-10-24T09:33:02.065+02:00</LastWritingDateTime>
+			<WriterProjectTitle>unspecified</WriterProjectTitle>
+			<WriterProjectID>unspecified</WriterProjectID>
+		</WriterHeader>
+	</AdditionalInformation>
+	<AdditionalInformation AutomationMLVersion="2.0" />
+	<InstanceHierarchy Name="ProductPlatform">
+		<Version>1.0.0</Version>
+		<InternalElement Name="Variants" ID="fad7decf-23fb-4761-a564-fe2a597528a9">
+			<InternalElement Name="Frontlid-A" ID="c703df3e-bb74-4b03-ae18-0f544a8c483d">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<InternalElement Name="Frontlid-A-and-Frontlid-B" ID="a2bee08e-353b-4c4a-90e5-63f8f092db0c">
+				<InternalElement Name="OperationMapping" ID="faf9427d-8b65-44dc-b320-d5d1f8130ff0">
+					<InternalElement Name="Clamp-Frontlid-A" ID="1a915051-5fd6-4a0e-9702-71590d71ae74" RefBaseSystemUnitPath="b9cddfee-0cc6-4ab1-a45d-94532d16c1b0"></InternalElement>
+					<InternalElement Name="Spot-weld-Frontlid-A" ID="5e56b89a-bd3f-44aa-a0f8-b9f1ad481e7f" RefBaseSystemUnitPath="f7e85dba-99c0-4daf-85b6-02093f948d2c"></InternalElement>
+					<InternalElement Name="Unclamp-Frontlid-A" ID="34fc3128-0513-409a-8c12-002f1de7a495" RefBaseSystemUnitPath="cc2569b1-aaea-48d4-a6b4-e0cfd97c7377"></InternalElement>
+					<InternalElement Name="Move-Frontlid-A-to-Glue-Station" ID="292afb73-d6b7-4d66-ad31-f46d8af8623b" RefBaseSystemUnitPath="1dfc1433-758b-4558-a54d-0268eb4796a2"></InternalElement>
+					<InternalElement Name="Glue-Frontlid-A" ID="3d5d0993-b221-4fe5-8aaa-fb272573415f" RefBaseSystemUnitPath="0291f3b7-3129-4e52-bd6f-9385e73374c2"></InternalElement>
+					<InternalElement Name="Clamp-Frontlid-B" ID="3dceb36a-8f98-4a98-94fc-5810e7611b95" RefBaseSystemUnitPath="5ceef5a4-80f5-4361-84e6-0eb6e91b91eb"></InternalElement>
+					<InternalElement Name="Move-Frontlid-A-to-Fixture-2" ID="c5811f60-a2f9-4b32-bb3b-7d5469a348c6" RefBaseSystemUnitPath="8dfe588d-a883-448d-a894-098951a9bc74"></InternalElement>
+					<InternalElement Name="Merge-Frontlid-A-and-B" ID="a1aed0fc-88c6-4734-84b6-a34028835a55" RefBaseSystemUnitPath="2c52fc92-1180-41e6-b33c-194a290af83e"></InternalElement>
+					<InternalElement Name="Unclamp-Frontlid" ID="e701e7ff-da22-4bf3-b254-f79e26b3222a" RefBaseSystemUnitPath="f87f1225-d2b7-4f8a-adf3-54da90b93361"></InternalElement>
+					<InternalElement Name="Move-Frontlid-to-TurnTable" ID="32ebe82e-7651-4142-8dc5-ce5e23448b62" RefBaseSystemUnitPath="92e2f038-30ad-443d-b3d0-2326dbf58b43"></InternalElement>
+					<InternalElement Name="Clamp-Turn-Table" ID="40ff0852-13d1-4168-bcbc-a362598d18f9" RefBaseSystemUnitPath="4cfe2028-ac4a-4bae-9de6-c0df2f4f2222"></InternalElement>
+					<InternalElement Name="Rabbet-Side-A" ID="2cdac2b1-b08f-402b-9118-2ba3b4e7909e" RefBaseSystemUnitPath="1532f612-f77f-478e-922e-d8abdba74ad8"></InternalElement>
+					<InternalElement Name="Rotate-TurnTable" ID="72b2ecc2-3c57-427c-b61c-d888ab34c94e" RefBaseSystemUnitPath="a6a723ce-63d3-43a6-a894-3d2a22a308cb"></InternalElement>
+					<InternalElement Name="Rabbet-Side-B" ID="05b7eb78-9acb-4090-9b7f-7905b448f9a5" RefBaseSystemUnitPath="7f57f4bc-b298-489e-8d14-675aa77e212e"></InternalElement>
+					<InternalElement Name="Move-Frontlid-to-Output-Buffer" ID="be3ed8d0-1458-43f0-85bb-2bb90fb6b626" RefBaseSystemUnitPath="6b9418ba-dd4f-463b-baff-a014c96d0754"></InternalElement>
+					<InternalElement Name="AR41-Switch-Tool-to-Gripper" ID="b878bca8-4054-441a-ab58-7c912f792914" RefBaseSystemUnitPath="80b2d1d4-1fa0-4b71-ad83-f09832bc9e81"></InternalElement>
+					<InternalElement Name="AR41-Switch-Tool-to-SpotWeld" ID="d965059a-119d-486d-9144-c2b1323da5dd" RefBaseSystemUnitPath="c97f29ae-5618-44e5-bec1-bc910416eaef"></InternalElement>
+					<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/OperationGroup" />
+				</InternalElement>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Variant" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ProductStructure" />
+		</InternalElement>
+		<InternalElement Name="Operations" ID="68daed6c-ca9f-46f9-a425-1084519bf106">
+			<InternalElement Name="Clamp-Frontlid-A" ID="b9cddfee-0cc6-4ab1-a45d-94532d16c1b0">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Spot-weld-Frontlid-A" ID="f7e85dba-99c0-4daf-85b6-02093f948d2c">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Unclamp-Frontlid-A" ID="cc2569b1-aaea-48d4-a6b4-e0cfd97c7377">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Move-Frontlid-A-to-Glue-Station" ID="1dfc1433-758b-4558-a54d-0268eb4796a2">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Glue-Frontlid-A" ID="0291f3b7-3129-4e52-bd6f-9385e73374c2">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Clamp-Frontlid-B" ID="5ceef5a4-80f5-4361-84e6-0eb6e91b91eb">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Move-Frontlid-A-to-Fixture-2" ID="8dfe588d-a883-448d-a894-098951a9bc74">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Merge-Frontlid-A-and-B" ID="2c52fc92-1180-41e6-b33c-194a290af83e">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Unclamp-Frontlid" ID="f87f1225-d2b7-4f8a-adf3-54da90b93361">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Move-Frontlid-to-TurnTable" ID="92e2f038-30ad-443d-b3d0-2326dbf58b43">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Clamp-Turn-Table" ID="4cfe2028-ac4a-4bae-9de6-c0df2f4f2222">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Rabbet-Side-A" ID="1532f612-f77f-478e-922e-d8abdba74ad8">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Rotate-TurnTable" ID="a6a723ce-63d3-43a6-a894-3d2a22a308cb">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Rabbet-Side-B" ID="7f57f4bc-b298-489e-8d14-675aa77e212e">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="Move-Frontlid-to-Output-Buffer" ID="6b9418ba-dd4f-463b-baff-a014c96d0754">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="AR41-Switch-Tool-to-Gripper" ID="80b2d1d4-1fa0-4b71-ad83-f09832bc9e81">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<InternalElement Name="AR41-Switch-Tool-to-SpotWeld" ID="c97f29ae-5618-44e5-bec1-bc910416eaef">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Operation" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ProcessStructure" />
+		</InternalElement>
+		<InternalElement Name="Resources" ID="87ff92ba-42b4-4d85-9a33-826ec6ac9627">
+			<InternalElement Name="external-sensor" ID="b36ba048-c72a-487f-b52f-81a72f57e197">
+				<Attribute Name="Nbr">
+					<Value>2</Value>
+				</Attribute>
+				<InternalElement Name="sensor" ID="e51c0936-4d91-4470-80ab-3d33753f3267">
+					<Attribute Name="Nbr" AttributeDataType="xs:int" />
+					<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Trait" />
+				</InternalElement>
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Resource" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure/ResourceStructure" />
+		</InternalElement>
+		<InternalElement Name="Frontlid" ID="462f81eb-aa53-4971-8bbd-97e9b9f803c0">
+			<Attribute Name="groupCardinality" AttributeDataType="xs:string">
+				<Value>Choose exactly one</Value>
+				<Constraint Name="cardinality">
+					<OrdinalScaledType>
+						<RequiredValue>1</RequiredValue>
+					</OrdinalScaledType>
+				</Constraint>
+			</Attribute>
+			<InternalElement Name="Frontlid-A" ID="f887a7ed-557e-4da2-bc1e-c2964a67a95f" RefBaseSystemUnitPath="c703df3e-bb74-4b03-ae18-0f544a8c483d"></InternalElement>
+			<InternalElement Name="Frontlid-A-and-Frontlid-B" ID="0e2e0f9b-3e8b-4eb7-959d-701f0c8ca9ba" RefBaseSystemUnitPath="a2bee08e-353b-4c4a-90e5-63f8f092db0c"></InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/VariantGroup" />
+		</InternalElement>
+		<InternalElement Name="Constraints" ID="eed94712-84e5-4f03-9379-350cd4573b5f">
+			<InternalElement Name="InternalElement1" ID="9b7e9368-d91f-4912-aa5b-890d4316db21">
+				<RoleRequirements RefBaseRoleClassPath="ProductPlatformRoleClassLib/Constraint" />
+			</InternalElement>
+			<RoleRequirements RefBaseRoleClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Structure" />
+		</InternalElement>
+	</InstanceHierarchy>
+	<InterfaceClassLib Name="AutomationMLInterfaceClassLib">
+		<Description>Standard Automation Markup Language Interface Class Library</Description>
+		<Version>2.2.0</Version>
+		<InterfaceClass Name="AutomationMLBaseInterface">
+			<InterfaceClass Name="Order" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<Attribute Name="Direction" AttributeDataType="xs:string" />
+			</InterfaceClass>
+			<InterfaceClass Name="PortConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="InterlockingConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="PPRConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface" />
+			<InterfaceClass Name="ExternalDataConnector" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+				<InterfaceClass Name="COLLADAInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+				<InterfaceClass Name="PLCopenXMLInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+			</InterfaceClass>
+			<InterfaceClass Name="Communication" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface">
+				<InterfaceClass Name="SignalInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/Communication" />
+			</InterfaceClass>
+		</InterfaceClass>
+	</InterfaceClassLib>
+	<RoleClassLib Name="AutomationMLBaseRoleClassLib">
+		<Description>Automation Markup Language base role class library</Description>
+		<Version>2.2.0</Version>
+		<RoleClass Name="AutomationMLBaseRole">
+			<RoleClass Name="Group" RefBaseClassPath="AutomationMLBaseRole">
+				<Attribute Name="AssociatedFacet" AttributeDataType="xs:string" />
+			</RoleClass>
+			<RoleClass Name="Facet" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Port" RefBaseClassPath="AutomationMLBaseRole">
+				<Attribute Name="Direction" AttributeDataType="xs:string" />
+				<Attribute Name="Cardinality">
+					<Attribute Name="MinOccur" AttributeDataType="xs:unsignedInt" />
+					<Attribute Name="MaxOccur" AttributeDataType="xs:unsignedInt" />
+				</Attribute>
+				<Attribute Name="Category" AttributeDataType="xs:string" />
+				<ExternalInterface Name="ConnectionPoint" ID="9942bd9c-c19d-44e4-a197-11b9edf264e7" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/PortConnector" />
+			</RoleClass>
+			<RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Product" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Process" RefBaseClassPath="AutomationMLBaseRole" />
+			<RoleClass Name="Structure" RefBaseClassPath="AutomationMLBaseRole">
+				<RoleClass Name="ProductStructure" RefBaseClassPath="Structure" />
+				<RoleClass Name="ProcessStructure" RefBaseClassPath="Structure" />
+				<RoleClass Name="ResourceStructure" RefBaseClassPath="Structure" />
+			</RoleClass>
+			<RoleClass Name="PropertySet" RefBaseClassPath="AutomationMLBaseRole" />
+		</RoleClass>
+	</RoleClassLib>
+	<RoleClassLib Name="ProductPlatformRoleClassLib">
+		<Version>1.0.0</Version>
+		<RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource" />
+		<RoleClass Name="Variant" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Product" />
+		<RoleClass Name="Operation" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Process">
+			<Attribute Name="precondition" AttributeDataType="xs:string"></Attribute>
+			<Attribute Name="requirements" />
+		</RoleClass>
+		<RoleClass Name="Trait" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Facet" />
+		<RoleClass Name="VariantGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group"></RoleClass>
+		<RoleClass Name="OperationGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group"></RoleClass>
+		<RoleClass Name="Constraint" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole">
+			<Attribute Name="logic" AttributeDataType="xs:string">
+				<Value>Frontlid-A-and-Frontlid-B</Value>
+			</Attribute>
+		</RoleClass>
+	</RoleClassLib>
+</CAEXFile>

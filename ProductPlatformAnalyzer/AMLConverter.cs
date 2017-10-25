@@ -149,14 +149,19 @@ namespace ProductPlatformAnalyzer
                     var pos = ie.GetAttributeValue("postcondition");
                     var req  = ie.GetAttributeValue("requirements").Split(reqSeparator);
                     // create an operation and set fields
-                    operation tempOperation = new operation
-                    {
-                        names = parent.Name(),
-                        displayName = parent.Name(),
-                        precondition = new List<string>(new string[] { pre }),
-                        postcondition = new List<string>(new string[] { pos }),
-                        requirements = new List<string>(req)
-                    };
+
+                    operation tempOperation = new operation();
+                    
+                    tempOperation.names = parent.Name();
+                    tempOperation.displayName = parent.Name();
+                    if (pre.ToString() != "")
+                        tempOperation.precondition = new List<string>(new string[] { pre });
+                    if (pos.ToString() != "")
+                        tempOperation.postcondition = new List<string>(new string[] { pos });
+                    if (req.Count() > 0)
+                        if (req[0] != "")
+                            tempOperation.requirements = new List<string>(req);
+
                     operations.Add(tempOperation);
                     // store ID and operation
                     id2OperationMappings.Add(ie.ID.Value, tempOperation);

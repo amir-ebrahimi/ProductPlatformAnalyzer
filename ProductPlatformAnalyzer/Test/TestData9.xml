@@ -82,8 +82,6 @@
 		<operationPrecondition>
 			<operationName>run-break-test_F</operationName>
 		</operationPrecondition>
-		<operationPrecondition>
-		</operationPrecondition>
 	</operation>
 </operations>
 <variants>

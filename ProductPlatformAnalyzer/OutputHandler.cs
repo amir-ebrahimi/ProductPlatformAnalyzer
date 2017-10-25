@@ -477,6 +477,53 @@ namespace ProductPlatformAnalyzer
 
         }
 
+        public void writeModel()
+        {
+            StringWriter stringwriter = new StringWriter();
+            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+
+            try
+            {
+                writeDocStart(writer);
+                writeTabList(writer);
+
+                writer.WriteFullBeginTag("div id=\"tabs-1\"");
+                writeInput(writer);
+                writer.WriteEndTag("div");
+
+
+                writer.WriteFullBeginTag("div id=\"tabs-2\"");
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Model found.");
+                writer.WriteEndTag("p");
+
+                writeChosenVariants(writer);
+                //writeOpStateTable(writer);
+                writeTransitionTableState(writer);
+                writeOpOrder(writer);
+                //writeTransitionDiagram(writer);
+                writeAvailableResources(writer);
+                writeFalsePrePost(writer);
+
+                writer.WriteEndTag("div");
+                writeDocEnd(writer);
+
+                File.WriteAllText(path + "Model.htm", stringwriter.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in writeModel");
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
         public void writeCounterExampleNoPost()
         {
             StringWriter stringwriter = new StringWriter();
@@ -519,6 +566,53 @@ namespace ProductPlatformAnalyzer
             catch (Exception ex)
             {
                 Console.WriteLine("error in writeCounterExampleNoPost");
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void writeModelNoPost()
+        {
+            StringWriter stringwriter = new StringWriter();
+            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+
+            try
+            {
+                writeDocStart(writer);
+                writeTabList(writer);
+
+                writer.WriteFullBeginTag("div id=\"tabs-1\"");
+                writeInputNoPost(writer);
+                writer.WriteEndTag("div");
+
+                writer.WriteFullBeginTag("div id=\"tabs-2\"");
+
+                writer.WriteBeginTag("p class=\"resultHeading\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Analysis result");
+                writer.WriteEndTag("p");
+
+                writer.WriteBeginTag("p class=\"discription\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+                writer.Write("Model found.");
+                writer.WriteEndTag("p");
+
+                writeChosenVariants(writer);
+                //writeOpStateTable(writer);
+                writeTransitionTableState(writer);
+                writeOpOrder(writer);
+                //writeTransitionDiagram(writer);
+                writeAvailableResources(writer);
+                writeFalsePre(writer);
+
+                writer.WriteEndTag("div");
+                writeDocEnd(writer);
+
+                File.WriteAllText(path + "ModelNoPost.htm", stringwriter.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in writeModelNoPost");
                 Console.WriteLine(ex.Message);
             }
 
@@ -1135,13 +1229,36 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (string pre in op.precondition)
+                if (op.precondition != null)
                 {
-                    if (!pre.Contains("Possible"))
+                    foreach (string pre in op.precondition)
+                    {
+                        if (!pre.Contains("Possible"))
+                        {
+                            writer.WriteBeginTag("li");
+                            writer.Write(HtmlTextWriter.TagRightChar);
+                            writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
+                            writer.WriteEndTag("li");
+                        }
+                    }
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                if (op.postcondition != null)
+                {
+                    foreach (string post in op.postcondition)
                     {
                         writer.WriteBeginTag("li");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
+                        writer.Write(GeneralUtilities.parseExpression(post, "infix"));
                         writer.WriteEndTag("li");
                     }
                 }
@@ -1155,29 +1272,15 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (string post in op.postcondition)
+                if (op.requirements != null)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(GeneralUtilities.parseExpression(post, "infix"));
-                    writer.WriteEndTag("li");
-                }
-                writer.WriteEndTag("ul");
-
-                writer.WriteEndTag("td");
-
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                foreach (string req in op.requirements)
-                {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(GeneralUtilities.parseExpression(req, "infix"));
-                    writer.WriteEndTag("li");
+                    foreach (string req in op.requirements)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(GeneralUtilities.parseExpression(req, "infix"));
+                        writer.WriteEndTag("li");
+                    }
                 }
                 writer.WriteEndTag("ul");
 
@@ -1256,13 +1359,17 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (string pre in op.precondition)
+                if (op.precondition != null)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
-                    writer.WriteEndTag("li");
+                    foreach (string pre in op.precondition)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
+                        writer.WriteEndTag("li");
+                    }
                 }
+
                 writer.WriteEndTag("ul");
 
                 writer.WriteEndTag("td");
@@ -1273,12 +1380,15 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (string req in op.requirements)
+                if (op.requirements != null)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(req);
-                    writer.WriteEndTag("li");
+                    foreach (string req in op.requirements)
+                    {
+                        writer.WriteBeginTag("li");
+                        writer.Write(HtmlTextWriter.TagRightChar);
+                        writer.Write(req);
+                        writer.WriteEndTag("li");
+                    }
                 }
                 writer.WriteEndTag("ul");
 
@@ -1825,6 +1935,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("th");
             writer.WriteEndTag("tr");
 
+            outputResult.Sort((x, y) => x.state.CompareTo(y.state));
 
             foreach (OutputExp exp in outputResult)
             {

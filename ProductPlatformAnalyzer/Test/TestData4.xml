@@ -33,8 +33,6 @@
 	<operation>
 		<operationName>scan-barcode</operationName>
 		<displayName>Scan barcode</displayName>
-		<operationPrecondition></operationPrecondition>
-		<operationPostcondition></operationPostcondition>
 	</operation>
 	<operation>
 		<operationName>test-frame-rigid</operationName>

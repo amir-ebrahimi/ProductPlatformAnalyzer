@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Process should finish -->
+<!-- First example of including resources -->
+<!--  Variant:
+        Frontlid_A_N_Frontlid_B
+        Frontlid_A
+        
+      VariantGroup
+        Frontlid
+        Choose exactly one
+        Variants:
+          Frontlid_A_N_Frontlid_B
+          Frontlid_A
+          
+      Constraints:
+        None
+      
+      Operation:
+      Clamp_Frontlid_A
+        Pre:
+      
+      Spot_weld_Frontlid_A
+        Pre: Clamp_Frontlid_A AND AR41_Switch_Tool_To_SpotWeld
+      
+      Unclamp_Frontlid_A
+        Pre: Spot_weld_Frontlid_A
+      
+      Move_Frontlid_A_to_Glue_Station
+        Pre: Unclamp_Frontlid_A
+      
+      Glue_Frontlid_A
+        Pre: Move_Frontlid_A_to_Glue_Station
+      
+      Clamp_Frontlid_B
+        Pre:
+      
+      Move_Frontlid_A_to_Fixture_2
+        Pre: Clamp_Frontlid_B AND Glue_Frontlid_A
+      
+      Merge_Frontlid_A_and_B
+        Pre: Move_Frontlid_A_to_Fixture_2
+      
+      Unclamp_Frontlid
+        Pre: Merge_Frontlid_A_and_B
+      
+      Move_Frontlid_to_TurnTable
+        Pre: Unclamp_Frontlid
+      
+      Clamp_Turn_Table
+        Pre: Move_Frontlid_to_TurnTable
+      
+      Rabbet_Side_A
+        Pre: Clamp_Turn_Table
+      
+      Rotate_TurnTable
+        Pre: Rabbet_Side_A
+      
+      Rabbet_Side_B
+        Pre: Rotate_TurnTable
+      
+      Move_Frontlid_to_Output_Buffer
+        Pre: Rabbet_Side_B AND AR41_Switch_Tool_To_Grippe
+      
+      AR41_Switch_Tool_to_Gripper
+        Pre:
+      
+      AR41_Switch_Tool_to_SpotWeld
+        Pre:
+      
+      Traits:
+        sensor
+        Attribute: int,Nbr
+        
+      Resource: 
+        AR31
+
+        AR41
+        
+        AR71
+        
+        GlueMachine
+        
+        TurnTable
+        
+      Variant Operation Mapping
+        Frontlid_A_N_Frontlid_B -> Clamp_Frontlid_B
+                                  , Move_Frontlid_A_to_Fixture_2
+                                  , Merge_Frontlid_A_and_B
+                                  , Unclamp_Frontlid
+                                  , Move_Frontlid_to_TurnTable
+                                  , Clamp_Turn_Table
+                                  , Rabbet_Side_A
+                                  , Rotate_TurnTable
+                                  , Rabbet_Side_B
+                                  , Move_Frontlid_to_Output_Buffer
+                                  , AR41_Switch_Tool_to_Gripper
+                                  , AR41_Switch_Tool_to_SpotWeld
+        Frontlid_A -> Clamp_Frontlid_A
+                    , Spot_weld_Frontlid_A
+                    , Unclamp_Frontlid_A
+                    , Move_Frontlid_A_to_Glue_Station
+                    , Glue_Frontlid_A
+
+-->
+<testData>
+  <variants>
+    <variant>
+      <variantName>Frontlid-A-N-Frontlid-B</variantName>
+      <variantIndex>1</variantIndex>
+      <variantDisplayName>Frontlid-A-N-Frontlid-B</variantDisplayName>
+    </variant>
+    <variant>
+      <variantName>Frontlid-A</variantName>
+      <variantIndex>2</variantIndex>
+      <variantDisplayName>Frontlid-A</variantDisplayName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>Frontlid</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Frontlid-A-N-Frontlid-B</variantRef>
+        <variantRef>Frontlid-A</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>and Frontlid-A (not Frontlid-A-N-Frontlid-B)</logic>
+    </constraint>
+  </constraints>
+  <operations>
+    <operation>
+      <operationName>Clamp-Frontlid-A</operationName>
+      <displayName>Clamp-Frontlid-A</displayName>
+    </operation>
+    <operation>
+      <operationName>Spot-weld-Frontlid-A</operationName>
+      <displayName>Spot-weld-Frontlid-A</displayName>
+      <operationPrecondition>
+        <operationName>Clamp-Frontlid-A</operationName>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Unclamp-Frontlid-A</operationName>
+      <displayName>Unclamp-Frontlid-A</displayName>
+      <operationPrecondition>
+        <operationName>Spot-weld-Frontlid-A</operationName>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
+      <displayName>Move-Frontlid-A-to-Glue-Station</displayName>
+      <operationPrecondition>
+        <operationName>Unclamp-Frontlid-A</operationName>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Glue-Frontlid-A</operationName>
+      <displayName>Glue-Frontlid-A</displayName>
+      <operationPrecondition>
+        <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
+      </operationPrecondition>
+    </operation>
+  </operations>
+  <resources>
+    <resource>
+      <resourceName>AR31</resourceName>
+      <traits></traits>
+      <attributes></attributes>
+    </resource>
+    <resource>
+      <resourceName>AR41</resourceName>
+      <traits></traits>
+      <attributes></attributes>
+    </resource>
+    <resource>
+      <resourceName>AR71</resourceName>
+      <traits></traits>
+      <attributes></attributes>
+    </resource>
+    <resource>
+      <resourceName>GlueMachine</resourceName>
+      <traits></traits>
+      <attributes></attributes>
+    </resource>
+    <resource>
+      <resourceName>TurnTable</resourceName>
+      <traits></traits>
+      <attributes></attributes>
+    </resource>
+  </resources>
+  <variantOperationMappings>
+    <variantOperationMapping>
+      <variantRefs>
+        <variantRef>Frontlid-A</variantRef>
+      </variantRefs>
+      <operationRefs>
+        <operationRef>Clamp-Frontlid-A</operationRef>
+        <operationRef>Spot-weld-Frontlid-A</operationRef>
+        <operationRef>Unclamp-Frontlid-A</operationRef>
+        <operationRef>Move-Frontlid-A-to-Glue-Station</operationRef>
+        <operationRef>Glue-Frontlid-A</operationRef>
+      </operationRefs>
+    </variantOperationMapping>
+  </variantOperationMappings>
+</testData>

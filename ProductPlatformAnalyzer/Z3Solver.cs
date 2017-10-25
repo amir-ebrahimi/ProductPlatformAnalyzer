@@ -1022,7 +1022,7 @@ namespace ProductPlatformAnalyzer
                     Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
                     foreach (Expr currentExpr in cExpressionList)
                     {
-                        if (currentExpr.Equals(tempExpr))
+                        if (currentExpr.ToString().Equals(pExprName))
                         {
                             resultExpr = currentExpr;
                             break;
