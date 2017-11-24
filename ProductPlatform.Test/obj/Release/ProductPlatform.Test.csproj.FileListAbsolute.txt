@@ -8,3 +8,10 @@ D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\R
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.csprojResolveAssemblyReference.cache
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.dll
 D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\obj\Release\ProductPlatform.Test.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\AMLEngine.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\AltovaXML.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\Altova.dll
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\AMLEngine.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\AMLEngine.xml
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\AltovaXML.pdb
+D:\LocalImplementation\GitHub\ProductPlatformAnalyzer\ProductPlatform.Test\bin\Release\Altova.pdb

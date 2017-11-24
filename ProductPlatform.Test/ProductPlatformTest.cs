@@ -98,7 +98,7 @@ namespace ProductPlatform.Test
                     bool lDataLoaded = false;
 
                     Console.WriteLine("LoadInitialData Test on : " + lTestData.lTestFile);
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InternalFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     Assert.AreEqual(lDataLoaded, lTestData.lLoadDataExpectedResult);
                 }
@@ -123,7 +123,7 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InternalFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     if (lDataLoaded)
                     {
@@ -138,8 +138,14 @@ namespace ProductPlatform.Test
                                                             , lTestData.lAnalysisType
                                                             , lTestData.lNoOfModelsRequired);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
-                        lZ3SolverEngineer.setReportType(true, false, false, false, false, false, false, false);
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file)
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true);
 
                         lAnalysisResult = lZ3SolverEngineer.VariantSelectabilityAnalysis(false, true);
 
@@ -171,7 +177,7 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InternalFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     if (lDataLoaded)
                     {
@@ -186,8 +192,14 @@ namespace ProductPlatform.Test
                                                             , lTestData.lAnalysisType
                                                             , lTestData.lNoOfModelsRequired);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
-                        lZ3SolverEngineer.setReportType(true, false, false, false, false, false, false, false);
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file)
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true);
 
                         lAnalysisResult = lZ3SolverEngineer.AlwaysSelectedVariantAnalysis(false, true);
 
@@ -219,7 +231,7 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InternalFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     if (lDataLoaded)
                     {
@@ -234,8 +246,14 @@ namespace ProductPlatform.Test
                                                             , lTestData.lAnalysisType
                                                             , lTestData.lNoOfModelsRequired);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
-                        lZ3SolverEngineer.setReportType(true, false, false, false, false, false, false, false);
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file)
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true);
 
                         lAnalysisResult = lZ3SolverEngineer.OperationSelectabilityAnalysis(false, true);
 
@@ -268,7 +286,7 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InternalFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     if (lDataLoaded)
                     {
@@ -282,8 +300,14 @@ namespace ProductPlatform.Test
                                                             , lTestData.lAnalysisType
                                                             , lTestData.lNoOfModelsRequired);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result, Transitions Result, Analysis Timing, Unsat Core, Stop between each transition, Stop at end of analysis
-                        lZ3SolverEngineer.setReportType(true, false, false, false, false, false, false, false);
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file)
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true);
 
                         lAnalysisResult = lZ3SolverEngineer.AlwaysSelectedOperationAnalysis(false, true);
 

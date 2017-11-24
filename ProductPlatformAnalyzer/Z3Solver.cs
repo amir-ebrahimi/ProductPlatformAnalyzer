@@ -5,13 +5,14 @@ using Microsoft.Z3;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace ProductPlatformAnalyzer
 {
     class Z3Solver
     {
         private ArrayExpr cExpressions;
-        private List<Expr> cExpressionList;
+        private Dictionary<string, Expr> cExpressionDictionary;
         private BoolExpr cConstraints;
         private ArrayList cConstraintList;
         private Solver cISolver; 
@@ -19,17 +20,17 @@ namespace ProductPlatformAnalyzer
         private int cConstraintCounter;
         private int cBooleanExpressionCounter;
         private bool cIDebugMode;
-        private string cIDebugText;
+        private StringBuilder cIDebugText;
         private Model cResultModel;
 
         public Z3Solver()
         {
-            cIDebugText = "";
+            cIDebugText = new StringBuilder();
             cICtx = new Context(new Dictionary<string, string>() { { "proof", "false" } });
             using (cICtx)
             {
                 this.cISolver = cICtx.MkSolver("QF_FD");
-                this.cExpressionList = new List<Expr>();
+                this.cExpressionDictionary = new Dictionary<string, Expr>();
                 this.cConstraintList = new ArrayList();
             }
         }
@@ -49,9 +50,9 @@ namespace ProductPlatformAnalyzer
             cExpressions = pExpressions;
         }
 
-        public void setExpressionList(List<Expr> pExpressionList)
+        public void setExpressionList(Dictionary<string, Expr> pExpressionDictionary)
         {
-            cExpressionList = pExpressionList;
+            cExpressionDictionary = pExpressionDictionary;
         }
 
         public ArrayExpr getExpression()
@@ -59,9 +60,9 @@ namespace ProductPlatformAnalyzer
             return cExpressions;
         }
 
-        public List<Expr> getExpressionList()
+        public Dictionary<string, Expr> getExpressionList()
         {
-            return cExpressionList;
+            return cExpressionDictionary;
         }
 
         public void setConstraints(BoolExpr pConstraints)
@@ -141,7 +142,7 @@ namespace ProductPlatformAnalyzer
             return cICtx.MkFalse();
         }
 
-        public string ReturnStringElements(List<String> pList)
+        public string ReturnStringElements(HashSet<String> pList)
         {
             string lResultElements = "";
             try
@@ -158,7 +159,7 @@ namespace ProductPlatformAnalyzer
             return lResultElements;
         }
 
-        public string ReturnBoolExprElementNames(List<BoolExpr> pList)
+        public string ReturnBoolExprElementNames(HashSet<BoolExpr> pList)
         {
             string lResultElementNames = "";
             try
@@ -175,20 +176,25 @@ namespace ProductPlatformAnalyzer
             return lResultElementNames;
         }
 
-        public void AddAndOperator2Constraints(List<String> pOperandList, String pConstraintSource)
+        public void AddAndOperator2Constraints(HashSet<string> pOperandSet, string pConstraintSource)
         {
             try
             {
-                BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
+                BoolExpr lConstraint = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = cICtx.MkAnd(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                foreach (string lOperand in pOperandSet)
+                {
+                    if (lConstraint == null)
+                        lConstraint = (BoolExpr)FindExprInExprSet(lOperand);
+                    else
+                        lConstraint = cICtx.MkAnd(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
+                }
 
-                AddConstraintToSolver(Constraint, pConstraintSource);
+                AddConstraintToSolver(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddAndOperator2Constraints, params: " + ReturnStringElements(pOperandList) );
+                Console.WriteLine("error in AddAndOperator2Constraints" );
                 throw ex;
             }
         }
@@ -225,56 +231,71 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddAndOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
+        public void AddAndOperator2Constraints(HashSet<BoolExpr> pOperandSet, string pConstraintSource)
         {
             try
             {
-                BoolExpr Constraint = pOperandList[0];
+                BoolExpr lConstraint = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = cICtx.MkAnd(Constraint, pOperandList[i]);
+                foreach (BoolExpr lOperand in pOperandSet)
+                {
+                    if (lConstraint == null)
+                        lConstraint = lOperand;
+                    else
+                        lConstraint = cICtx.MkAnd(lConstraint, lOperand);
+                }
 
-                AddConstraintToSolver(Constraint, pConstraintSource);
+                AddConstraintToSolver(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddAndOperator2Constraints, params: " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in AddAndOperator2Constraints");
                 throw ex;
             }
         }
 
-        public BoolExpr AndOperator(List<String> pOperandList)
+        public BoolExpr AndOperator(HashSet<string> pOperandSet)
         {
             try
             {
-                BoolExpr lResultExpression = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
+                BoolExpr lResultExpression = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = cICtx.MkAnd(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                foreach (string lOperand in pOperandSet)
+                {
+                    if (lResultExpression == null)
+                        lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
+                    else
+                        lResultExpression = cICtx.MkAnd(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
+                }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AndOperator, params: " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in AndOperator");
                 throw ex;
             }
         }
 
-        public BoolExpr AndOperator(List<BoolExpr> pOperandList)
+        public BoolExpr AndOperator(HashSet<BoolExpr> pOperandSet)
         {
             try
             {
-                BoolExpr lResultExpression = pOperandList[0];
+                BoolExpr lResultExpression = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = cICtx.MkAnd(lResultExpression, pOperandList[i]);
+                foreach (BoolExpr lOperand in pOperandSet)
+                {
+                    if (lResultExpression ==null)
+                        lResultExpression = lOperand;
+                    else
+                        lResultExpression = cICtx.MkAnd(lResultExpression, lOperand);
+                }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AndOperator, params: " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in AndOperator");
                 throw ex;
             }
         }
@@ -300,7 +321,8 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                //Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                Expr lOperand0 = FindExprInExprSet(pOperand0);
                 lResultExpression = cICtx.MkGt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
@@ -333,7 +355,8 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                //Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                Expr lOperand0 = FindExprInExprSet(pOperand0);
                 lResultExpression = cICtx.MkLt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
@@ -366,7 +389,8 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                //Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                Expr lOperand0 = FindExprInExprSet(pOperand0);
                 lResultExpression = cICtx.MkGe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
@@ -399,7 +423,8 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                //Expr lOperand0 = FindExpressionUsingName(pOperand0);
+                Expr lOperand0 = FindExprInExprSet(pOperand0);
                 lResultExpression = cICtx.MkLe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
 
             }
@@ -411,14 +436,14 @@ namespace ProductPlatformAnalyzer
             return lResultExpression;
         }
 
-        public BoolExpr IffOperator(String pOperand1, String pOperand2)
+        public BoolExpr IffOperator(string pOperand1, string pOperand2)
         {
             try
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lFirstOperand = FindBoolExpressionUsingName(pOperand1);
-                Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
+                Expr lFirstOperand = FindExprInExprSet(pOperand1);
+                Expr lSecondOperand = FindExprInExprSet(pOperand2);
 
                 BoolExpr Expression = cICtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
@@ -431,7 +456,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, String pConstraintSource)
+        public void AddImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource)
         {
             try
             {
@@ -467,11 +492,11 @@ namespace ProductPlatformAnalyzer
             return lResultExpr;
         }
 
-        public void AddSimpleConstraint(String pConstraint, String pConstraintSource)
+        public void AddSimpleConstraint(string pConstraint, string pConstraintSource)
         {
             try
             {
-                BoolExpr lConstraint = FindBoolExpressionUsingName(pConstraint);
+                BoolExpr lConstraint = (BoolExpr)FindExprInExprSet(pConstraint);
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
             }
@@ -482,15 +507,15 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr TwoWayImpliesOperator(String pOperand1, String pOperand2)
+        public BoolExpr TwoWayImpliesOperator(string pOperand1, string pOperand2)
         {
             try
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lFirstOperand = FindBoolExpressionUsingName(pOperand1);
+                Expr lFirstOperand = FindExprInExprSet(pOperand1);
                 
-                Expr lSecondOperand = FindBoolExpressionUsingName(pOperand2);
+                Expr lSecondOperand = FindExprInExprSet(pOperand2);
 
                 BoolExpr Expression2 = cICtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
 
@@ -539,7 +564,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddTwoWayImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, String pConstraintSource)
+        public void AddTwoWayImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource)
         {
             try
             {
@@ -559,339 +584,268 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr IffOperator(List<BoolExpr> pOperandList)
+        public BoolExpr IffOperator(HashSet<BoolExpr> pOperandSet)
         {
             try
             {
-                BoolExpr lResultExpression = pOperandList[0];
+                BoolExpr lResultExpression = null ;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = cICtx.MkIff(lResultExpression, pOperandList[i]);
-
-                return lResultExpression;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in IffOperator, params: " + ReturnBoolExprElementNames(pOperandList));
-                throw ex;
-            }
-        }
-
-        public BoolExpr ImpliesOperator(List<BoolExpr> pOperandList)
-        {
-            try
-            {
-                BoolExpr lResultExpression = pOperandList[0];
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpression = cICtx.MkImplies(lResultExpression, pOperandList[i]);
-
-                return lResultExpression;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in ImpliesOperator, params: " + ReturnBoolExprElementNames(pOperandList));
-                throw ex;
-            }
-        }
-
-        public void AddOrOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
-        {
-            try
-            {
-                BoolExpr Constraint = pOperandList[0];
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = cICtx.MkOr(Constraint, pOperandList[i]);
-
-                AddConstraintToSolver(Constraint, pConstraintSource);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in AddOrOperator2Constraints, params: " + ReturnBoolExprElementNames(pOperandList));
-                throw ex;
-            }
-        }
-
-        public void AddOrOperator2Constraints(List<String> pOperandList, String pConstraintSource)
-        {
-            try
-            {
-                BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                    Constraint = cICtx.MkOr(Constraint, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
-
-                AddConstraintToSolver(Constraint, pConstraintSource);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in AddOrOperator2Constraints, params: " + ReturnStringElements(pOperandList));
-                throw ex;
-            }
-        }
-
-        public BoolExpr OrOperator(List<String> pOperandList)
-        {
-            try
-            {
-                BoolExpr lResultExpression = (BoolExpr)FindExpressionUsingName(pOperandList[0]);
-
-                for (int i = 1; i < pOperandList.Count; i++)
+                foreach (BoolExpr lOperand in pOperandSet)
                 {
-                    lResultExpression = cICtx.MkOr(lResultExpression, (BoolExpr)FindBoolExpressionUsingName(pOperandList[i]));
+                    if (lResultExpression == null)
+                        lResultExpression = lOperand;
+                    else
+                        lResultExpression = cICtx.MkIff(lResultExpression, lOperand);
+                }
+
+                return lResultExpression;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in IffOperator");
+                throw ex;
+            }
+        }
+
+        public BoolExpr ImpliesOperator(HashSet<BoolExpr> pOperandSet)
+        {
+            try
+            {
+                BoolExpr lResultExpression = null;
+
+                foreach (BoolExpr lOperand in pOperandSet)
+                {
+                    if (lResultExpression == null)
+                        lResultExpression = lOperand;
+                    else
+                        lResultExpression = cICtx.MkImplies(lResultExpression, lOperand);
+                }
+
+                return lResultExpression;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in ImpliesOperator");
+                throw ex;
+            }
+        }
+
+        public void AddOrOperator2Constraints(HashSet<BoolExpr> pOperandSet, string pConstraintSource)
+        {
+            try
+            {
+                BoolExpr lConstraint = null;
+
+                foreach (BoolExpr lOperand in pOperandSet)
+                {
+                    if (lConstraint == null)
+                        lConstraint = lOperand;
+                    else
+                        lConstraint = cICtx.MkOr(lConstraint, lOperand);
+                }
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddOrOperator2Constraints");
+                throw ex;
+            }
+        }
+
+        public void AddOrOperator2Constraints(HashSet<string> pOperandSet, string pConstraintSource)
+        {
+            try
+            {
+                BoolExpr lConstraint = null;
+
+                foreach (string lOperand in pOperandSet)
+                {
+                    if (lConstraint == null)
+                        lConstraint = (BoolExpr)FindExprInExprSet(lOperand);
+                    else
+                        lConstraint = cICtx.MkOr(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
+                }
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in AddOrOperator2Constraints");
+                throw ex;
+            }
+        }
+
+        public BoolExpr OrOperator(HashSet<string> pOperandSet)
+        {
+            try
+            {
+                BoolExpr lResultExpression = null;
+
+                foreach (string lOperand in pOperandSet)
+                {
+                    if (lResultExpression == null)
+                        lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
+                    else
+                        lResultExpression = cICtx.MkOr(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
                 }
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OrOperator, params: " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in OrOperator");
                 throw ex;
             }
         }
 
-        public BoolExpr OrOperator(List<BoolExpr> pOperandList)
+        public BoolExpr OrOperator(HashSet<BoolExpr> pOperandSet)
         {
             try
             {
-                BoolExpr lResultExpr = pOperandList[0];
+                BoolExpr lResultExpr = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
-                    lResultExpr = cICtx.MkOr(lResultExpr, pOperandList[i]);
-
+                foreach (BoolExpr lOperand in pOperandSet)
+                {
+                    if (lResultExpr == null)
+                        lResultExpr = lOperand;
+                    else
+                        lResultExpr = cICtx.MkOr(lResultExpr, lOperand);
+                }
                 return lResultExpr;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OrOperator, params: " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in OrOperator");
                 throw ex;
             }
         }
 
-        public void AddPickOneOperator2Constraints(List<String> pOperandList, String pConstraintSource)
+        public void AddPickOneOperator2Constraints(HashSet<string> pOperandSet, string pConstraintSource)
         {
             try
             {
-                BoolExpr Constraint = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
+                BoolExpr lConstraint = null;
 
-                for (int i = 1; i < pOperandList.Count; i++)
+                foreach (string lOperand in pOperandSet)
                 {
-                    BoolExpr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
-                    
-                    //Optimized   Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
-                    //                            , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
+                    if (lConstraint == null)
+                        lConstraint = (BoolExpr)FindExprInExprSet(lOperand);
+                    else
+                        lConstraint = cICtx.MkXor(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
 
-                    Constraint = cICtx.MkXor(Constraint, lOperand);
                 }
-
-                AddConstraintToSolver(Constraint, pConstraintSource);
+                AddConstraintToSolver(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddPickOneOperator2Constraints, " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
 
-        public BoolExpr PickOneOperator(List<String> pOperandList)
+        public BoolExpr PickOneOperator(HashSet<string> pOperandSet)
         {
             try
             {
-                BoolExpr lResultExpression = (BoolExpr)FindBoolExpressionUsingName(pOperandList[0]);
-
-                for (int i = 1; i < pOperandList.Count; i++)
+                BoolExpr lResultExpression = null;
+                int lCounter = 1;
+                foreach (string lOperand in pOperandSet)
                 {
-                    BoolExpr lOperand = FindBoolExpressionUsingName(pOperandList[i]);
-
-                    //TODO: it is impossible to use the xor operator straight because with three operands it will not give the right answer
-
-                    AddBooleanExpression("Xor-helper" + i);
-
-                    BoolExpr lTempImplies;
-                    BoolExpr lHelperBoolExpr;
-
-                    if (i.Equals(1))
-                        lTempImplies = ImpliesOperator(new List<BoolExpr>() { lResultExpression, (BoolExpr)lOperand });
+                    if (lResultExpression == null)
+                        lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lTempImplies = ImpliesOperator(new List<BoolExpr>() { FindBoolExpressionUsingName("Xor-helper" + (i - 1)), (BoolExpr)lOperand });
+                    {
+                        AddBooleanExpression("Xor-helper" + lCounter);
 
-                    lHelperBoolExpr = ImpliesOperator(FindBoolExpressionUsingName("Xor-helper" + i), lTempImplies);
-                    AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
+                        BoolExpr lTempImplies;
+                        BoolExpr lHelperBoolExpr;
 
-                    AddConstraintToSolver(FindBoolExpressionUsingName("Xor-helper" + i), "Building Xor Operator");
+                        if (lCounter.Equals(1))
+                            lTempImplies = ImpliesOperator(new HashSet<BoolExpr>() { lResultExpression, (BoolExpr)FindExprInExprSet(lOperand) });
+                        else
+                            lTempImplies = ImpliesOperator(new HashSet<BoolExpr>() { (BoolExpr)FindExprInExprSet("Xor-helper" + (lCounter - 1)), (BoolExpr)FindExprInExprSet(lOperand) });
 
-                    
-                    //lResultExpression = cICtx.MkOr(cICtx.MkAnd(lResultExpression, cICtx.MkNot((BoolExpr)lOperand))
-                    //                        , cICtx.MkAnd(cICtx.MkNot(lResultExpression), (BoolExpr)lOperand));
+                        lHelperBoolExpr = ImpliesOperator((BoolExpr)FindExprInExprSet("Xor-helper" + lCounter), lTempImplies);
+                        AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
 
-                    //lResultExpression = cICtx.MkXor(lResultExpression, lOperand);
+                        AddConstraintToSolver((BoolExpr)FindExprInExprSet("Xor-helper" + lCounter), "Building Xor Operator");
+
+                        lCounter++;
+                    }
                 }
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PickOneOperator, " + ReturnStringElements(pOperandList));
+                Console.WriteLine("error in PickOneOperator");
                 throw ex;
             }
         }
 
-        public void AddPickOneOperator2Constraints(List<BoolExpr> pOperandList, String pConstraintSource)
+        public void AddPickOneOperator2Constraints(HashSet<BoolExpr> pOperandSet, string pConstraintSource)
         {
             try
             {
-                /* Optmized:
-                //We should show
-                //or pOperand1 pOperand2 pOperand3 ...
-                //and (=> pOperand1 (and (not pOperand2) (not pOperand3) ...))
-                //    (=> pOperand2 (and (not pOperand1) (not pOperand3) ...))
-                //    (=> pOperand3 (and (not pOperand1) (not pOperand2) ...))
-
-                BoolExpr lOrPartConstraint = pOperandList[0];
-                BoolExpr lAndPartConstraint = null;
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                {
-                    BoolExpr lOperand = pOperandList[i];
-
-                    lOrPartConstraint = iCtx.MkOr(lOrPartConstraint, lOperand);
-
-                    //Temporarilly remove the active operand to make the rest of the list 
-                    List<BoolExpr> lTempRestOfOperandList = pOperandList;
-                    lTempRestOfOperandList.Remove(lOperand);
-                    lAndPartConstraint = iCtx.MkAnd(iCtx.MkImplies(lOperand, XorHelper(lTempRestOfOperandList)));
-
-                    //This line was the previous implementation which now should be removed
-                    //Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot(lOperand))
-                    //                        , iCtx.MkAnd(iCtx.MkNot(Constraint), lOperand));
-                }
-
-                AddConstraintToSolver(lOrPartConstraint, pConstraintSource);
-                AddConstraintToSolver(lAndPartConstraint, pConstraintSource);*/
-
-                //This implementation was not working either
-                /*
-                BoolExpr Constraint = pOperandList[0];
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                {
-                    BoolExpr lOperand = pOperandList[i];
-
-                    //Optimized   Constraint = iCtx.MkOr(iCtx.MkAnd(Constraint, iCtx.MkNot((BoolExpr)lOperand))
-                    //                            , iCtx.MkAnd(iCtx.MkNot(Constraint), (BoolExpr)lOperand));
-
-                    Constraint = cICtx.MkXor(Constraint, lOperand);
-                }
-                 */
-
                 BoolExpr Constraint;
-                int[] lCoeffecient = new int[pOperandList.Count];
+                int[] lCoeffecient = new int[pOperandSet.Count];
                 for (int i = 0; i < lCoeffecient.Length; i++)
 			    {
                     lCoeffecient[i] = 1;			 
 			    }
-                BoolExpr[] lOperandsArray = new BoolExpr[pOperandList.Count];
-                for (int i = 0; i < lOperandsArray.Length; i++)
+                BoolExpr[] lOperandsArray = new BoolExpr[pOperandSet.Count];
+
+                int lCounter = 0;
+                foreach (BoolExpr lOperand in pOperandSet)
                 {
-                    lOperandsArray[i] = pOperandList[i];
+                    lOperandsArray[lCounter] = lOperand;
+                    lCounter++;
                 }
                 Constraint = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddPickOneOperator2Constraints, " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
 
-        /*Optimized:
-        private BoolExpr XorHelper(List<BoolExpr> pOperandList)
-        {
-            BoolExpr lResultExpr = iCtx.MkNot(pOperandList[0]);
-            try
-            {
-                foreach (BoolExpr lOperand in pOperandList)
-                {
-                    lResultExpr = iCtx.MkAnd(lResultExpr, iCtx.MkNot(lOperand));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error in XorHelper");
-                Console.WriteLine(ex.Message);
-            }
-            return lResultExpr;
-        }*/
-
-        public BoolExpr PickOneOperator(List<BoolExpr> pOperandList)
+        public BoolExpr PickOneOperator(HashSet<BoolExpr> pOperandSet)
         {
             try
             {
                 BoolExpr lResultExpression;
-                int[] lCoeffecient = new int[pOperandList.Count];
+                int[] lCoeffecient = new int[pOperandSet.Count];
                 for (int i = 0; i < lCoeffecient.Length; i++)
                 {
                     lCoeffecient[i] = 1;
                 }
-                BoolExpr[] lOperandsArray = new BoolExpr[pOperandList.Count];
-                for (int i = 0; i < lOperandsArray.Length; i++)
+                BoolExpr[] lOperandsArray = new BoolExpr[pOperandSet.Count];
+
+                int lCounter = 0;
+                foreach (BoolExpr lOperand in pOperandSet)
                 {
-                    lOperandsArray[i] = pOperandList[i];
+                    lOperandsArray[lCounter] = lOperand;
+                    lCounter++;
                 }
                 lResultExpression = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
 
-                //This implementation did not work because it had to have one of the first two operands true and the rest could not become true
-                /*
-                //BoolExpr lResultExpression = pOperandList[0];
-                List<BoolExpr> lResultExpressionList = new List<BoolExpr>();
-
-                for (int i = 1; i < pOperandList.Count; i++)
-                {
-                    BoolExpr lOperand = pOperandList[i];
-                    //TODO: it is impossible to use the xor operator straight because with three operands it will not give the right answer
-
-                    AddBooleanExpression("Xor-helper" + i);
-
-                    BoolExpr lTempImplies;
-                    BoolExpr lHelperBoolExpr;
-
-                    if (i.Equals(1))
-                        //lTempImplies = ImpliesOperator(new List<BoolExpr>(){ pOperandList[0], pOperandList[i] });
-                        lTempImplies = cICtx.MkXor( pOperandList[0], pOperandList[i] );
-                    else
-                        //lTempImplies = ImpliesOperator(new List<BoolExpr>(){ FindBoolExpressionUsingName("Xor-helper" + (i-1)), pOperandList[i]});
-                        lTempImplies = cICtx.MkXor( FindBoolExpressionUsingName("Xor-helper" + (i - 1)), pOperandList[i] );
-
-                    lHelperBoolExpr = ImpliesOperator(FindBoolExpressionUsingName("Xor-helper" + i), lTempImplies);
-                    //AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
-                    lResultExpressionList.Add(lHelperBoolExpr);
-
-                    //AddConstraintToSolver(FindBoolExpressionUsingName("Xor-helper" + i), "Building Xor Operator");
-                    lResultExpressionList.Add(FindBoolExpressionUsingName("Xor-helper" + i));
-
-                    //Tried this it did not work for more thand two operands, it can make more than one true at the same time
-                    //lResultExpression = cICtx.MkOr(cICtx.MkAnd(lResultExpression, cICtx.MkNot((BoolExpr)lOperand))
-                    //                        , cICtx.MkAnd(cICtx.MkNot(lResultExpression), (BoolExpr)lOperand));
-
-                    //Tried this it did not work for more thand two operands, it can make more than one true at the same time
-                    //lResultExpression = cICtx.MkXor(lResultExpression, lOperand);
-                }*/
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PickOneOperator, " + ReturnBoolExprElementNames(pOperandList));
+                Console.WriteLine("error in PickOneOperator");
                 throw ex;
             }
         }
 
-        public void AddNotOperator2Constraints(String pOperand, String pConstraintSource)
+        public void AddNotOperator2Constraints(string pOperand, string pConstraintSource)
         {
             try
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lOperand = FindBoolExpressionUsingName(pOperand);
+                Expr lOperand = FindExprInExprSet(pOperand);
 
                 BoolExpr Constraint = cICtx.MkNot((BoolExpr)lOperand);
 
@@ -904,13 +858,13 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr NotOperator(String pOperand)
+        public BoolExpr NotOperator(string pOperand)
         {
             try
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                Expr lOperand = FindBoolExpressionUsingName(pOperand);
+                Expr lOperand = FindExprInExprSet(pOperand);
 
                 BoolExpr Expression = cICtx.MkNot((BoolExpr)lOperand);
 
@@ -940,7 +894,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr MakeBoolVariable(String pOperand)
+        public BoolExpr MakeBoolVariable(string pOperand)
         {
             try
             {
@@ -955,7 +909,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddConstraintToSolver(BoolExpr pConstraint, String pConstraintSource)
+        public void AddConstraintToSolver(BoolExpr pConstraint, string pConstraintSource)
         {
             try
             {
@@ -967,7 +921,7 @@ namespace ProductPlatformAnalyzer
                 cISolver.AssertAndTrack(pConstraint, ConstraintTracker);
 
                 if (cIDebugMode)
-                    cIDebugText += "(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n";
+                    cIDebugText.Append("(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n");
                 //Console.WriteLine("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
             }
             catch (Exception ex)
@@ -998,7 +952,7 @@ namespace ProductPlatformAnalyzer
                     }
                 }
                 if (resultExpr == null)
-                    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
+                    Console.WriteLine("error in FindExprInExprList, Variable " + pExprName + " could not be found");
 
             }
             catch (Exception ex)
@@ -1009,7 +963,8 @@ namespace ProductPlatformAnalyzer
             return resultExpr;
         }*/
 
-        public Expr FindExpressionUsingName(String pExprName)
+        //TODO: Urgent make sure when this code is used
+        /*public Expr FindExpressionUsingName(String pExprName)
         {
             Expr resultExpr = null;
             try
@@ -1020,7 +975,7 @@ namespace ProductPlatformAnalyzer
                 else
                 {
                     Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
-                    foreach (Expr currentExpr in cExpressionList)
+                    foreach (Expr currentExpr in cExpressionDictionary)
                     {
                         if (currentExpr.ToString().Equals(pExprName))
                         {
@@ -1039,7 +994,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return resultExpr;
-        }
+        }*/
 
         public BoolExpr MakeBoolExprFromString(string pExpression)
         {
@@ -1056,38 +1011,38 @@ namespace ProductPlatformAnalyzer
             return lResultExpr;
         }
 
-        public BoolExpr FindBoolExpressionUsingName(String pExprName)
+        /*public BoolExpr FindExprInExprList(String pExprName)
         {
             Expr resultExpr = null;
             try
             {
                 Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
 
-                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                HashSet<Expr> lFoundExpr = (from Expr in cExpressionDictionary
                                  where Expr == tempExpr
                                  select Expr).ToList();
                 if (lFoundExpr != null && lFoundExpr.Count != 0)
                     resultExpr = lFoundExpr[0];
 
                 //if (resultExpr == null || lFoundExpr.Count.Equals(0))
-                //    Console.WriteLine("error in FindBoolExpressionUsingName, Variable " + pExprName + " could not be found");
+                //    Console.WriteLine("error in FindExprInExprList, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindBoolExpressionUsingName, " + pExprName);
+                Console.WriteLine("error in FindExprInExprList, " + pExprName);
                 throw ex;
             }
             return (BoolExpr)resultExpr;
-        }
+        }*/
 
-        public IntExpr FindIntExpressionUsingName(String pExprName)
+        /*public IntExpr FindIntExpressionUsingName(String pExprName)
         {
             Expr resultExpr = null;
             try
             {
                 Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
                 
-                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                HashSet<Expr> lFoundExpr = (from Expr in cExpressionDictionary
                                          where Expr == tempExpr
                                          select Expr).ToList();
                 if (lFoundExpr != null)
@@ -1102,9 +1057,9 @@ namespace ProductPlatformAnalyzer
                 throw ex;
             }
             return (IntExpr)resultExpr;
-        }
+        }*/
 
-        public void AddBooleanExpressionWithIndex(String pExprName)
+        public void AddBooleanExpressionWithIndex(string pExprName)
         {
             try
             {
@@ -1112,10 +1067,10 @@ namespace ProductPlatformAnalyzer
 
                 Expr tempExpr = cICtx.MkConst(pExprName + "-V" + newBooleanExpressionCounter, cICtx.MkBoolSort());
                 setBooleanExpressionCounter(newBooleanExpressionCounter);
-                cExpressionList.Add(tempExpr);
+                cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
                 if (cIDebugMode)
-                    cIDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
+                    cIDebugText.Append("(declare-const " + pExprName + " Bool)" + "\r\n");
             }
             catch (Exception ex)
             {
@@ -1124,17 +1079,17 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddBooleanExpression(String pExprName)
+        public void AddBooleanExpression(string pExprName)
         {
             try
             {
                 Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
-                if (!cExpressionList.Contains(tempExpr))
+                if (!cExpressionDictionary.ContainsKey(tempExpr.ToString()))
                 {
-                    cExpressionList.Add(tempExpr);
+                    cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
                     if (cIDebugMode)
-                        cIDebugText += "(declare-const " + pExprName + " Bool)" + "\r\n";
+                        cIDebugText.Append("(declare-const " + pExprName + " Bool)" + "\r\n");
                 }
             }
             catch (Exception ex)
@@ -1157,17 +1112,17 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
         }
-        public void AddIntegerExpression(String pExprName)
+        public void AddIntegerExpression(string pExprName)
         {
             try
             {
                 Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
-                if (!cExpressionList.Contains(tempExpr))
+                if (!cExpressionDictionary.ContainsKey(tempExpr.ToString()))
                 {
-                    cExpressionList.Add(tempExpr);
+                    cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
                     if (cIDebugMode)
-                        cIDebugText += "(declare-const " + pExprName + " Int)" + "\r\n";
+                        cIDebugText.Append("(declare-const " + pExprName + " Int)" + "\r\n");
                 }
             }
             catch (Exception ex)
@@ -1190,7 +1145,7 @@ namespace ProductPlatformAnalyzer
                 System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(exePath + "../../../" + endPath);
                 //System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(@"C:\Users\amir\Desktop\Output\Debug");
 
-                foreach (System.IO.FileInfo file in directory.GetFiles()) file.Delete();
+                foreach (System.IO.FileInfo lFile in directory.GetFiles()) lFile.Delete();
 
                 endPath = "Output/Debug";
                 System.IO.Directory.CreateDirectory(exePath + "../../../" + endPath);
@@ -1198,7 +1153,11 @@ namespace ProductPlatformAnalyzer
 
                 System.IO.DirectoryInfo directoryDebug = new System.IO.DirectoryInfo(exePath + "../../../" + endPath);
                 
-                foreach (System.IO.FileInfo file in directoryDebug.GetFiles()) file.Delete();
+                foreach (System.IO.FileInfo lFile in directoryDebug.GetFiles())
+                {
+                    if (!lFile.Name.Contains("DataSummary"))
+                        lFile.Delete();
+                }
 
             }
             catch (Exception ex)
@@ -1225,7 +1184,7 @@ namespace ProductPlatformAnalyzer
                 else
                     endPath = "Output/Debug/Model" + pModelIndex + ".txt";
 
-                System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugText);
+                System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugText.ToString());
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/Debug" + pState + ".txt",iDebugText);
             }
             catch (Exception ex)
@@ -1406,7 +1365,8 @@ namespace ProductPlatformAnalyzer
                     //adding expressions from model to outputhandler
                     foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                     {
-                        Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                        //Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                        Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
                         if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
                         {
                             string value = "" + resultModel.Evaluate(lCurrentExpr);
@@ -1476,7 +1436,8 @@ namespace ProductPlatformAnalyzer
                 //adding expressions from model to outputhandler
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                 {
-                    Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                    //Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
+                    Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
                     if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
@@ -1515,7 +1476,7 @@ namespace ProductPlatformAnalyzer
             {
                 cISolver.Push();
                 if (cIDebugMode)
-                    cIDebugText += "(push); \r\n";
+                    cIDebugText.Append("(push); \r\n");
             }
             catch (Exception ex)
             {
@@ -1530,7 +1491,7 @@ namespace ProductPlatformAnalyzer
             {
                 cISolver.Pop();
                 if (cIDebugMode)
-                    cIDebugText += "(pop); \r\n";
+                    cIDebugText.Append("(pop); \r\n");
             }
             catch (Exception ex)
             {
@@ -1553,7 +1514,7 @@ namespace ProductPlatformAnalyzer
                     lReturnStatus = cISolver.Check();
                 else
                 {
-                    Expr lExprToCheck = FindBoolExpressionUsingName(pStrExprToCheck);
+                    Expr lExprToCheck = FindExprInExprSet(pStrExprToCheck);
                     lReturnStatus = cISolver.Check(lExprToCheck);
                 }
 
@@ -1567,35 +1528,39 @@ namespace ProductPlatformAnalyzer
             return lReturnStatus;
         }
 
-        public Expr FindExprInExprList(String pExprName)
+        public Expr FindExprInExprSet(string pExprName)
         {
             Expr lResultExpr = null;
             try
             {
-                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                /*HashSet<Expr> lFoundExpr = (from Expr in cExpressionDictionary
                                          where Expr.ToString().Equals(pExprName)
                                          select Expr).ToList();
+
                 if (lFoundExpr.Count != 0)
-                    lResultExpr = lFoundExpr[0];
+                    lResultExpr = lFoundExpr[0];*/
+                if (cExpressionDictionary.ContainsKey(pExprName))
+                    lResultExpr = cExpressionDictionary[pExprName];
                 //else
-                  //  Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
+                //    Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
+                //TODO: terminate program
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in FindExprInExprList!");                
+                Console.WriteLine("Error in FindExprInExprSet!");                
                 Console.WriteLine(ex.Message);
             }
             return lResultExpr;
         }
 
 
-        public Expr FindExprInExprListWithNull(String pExprName)
+        /*public Expr FindExprInExprListWithNull(String pExprName)
         {
             Expr lResultExpr = null;
             try
             {
-                List<Expr> lFoundExpr = (from Expr in cExpressionList
+                HashSet<Expr> lFoundExpr = (from Expr in cExpressionDictionary
                                          where Expr.ToString().Equals(pExprName)
                                          select Expr).ToList();
                 if (lFoundExpr.Count != 0)
@@ -1608,7 +1573,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lResultExpr;
-        }
+        }*/
 
 
         //public void AddModelItem2SolverAssertion(FrameworkWrapper pFrameworkWrapper, Model pResultModel)
@@ -1639,7 +1604,7 @@ namespace ProductPlatformAnalyzer
                 //foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
                 foreach (FuncDecl lFunctionDecleration in cResultModel.ConstDecls)
                     {
-                    Expr lCurrentExpr = FindExprInExprList(lFunctionDecleration.Name.ToString());
+                    Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
                     if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))  
                     {
                         if (tempExpression == null)
@@ -1686,7 +1651,7 @@ namespace ProductPlatformAnalyzer
 
                 //tempExpression = iCtx.MkNot(tempExpression);
                 cISolver.AssertAndTrack(tempExpression, addedConstraint);
-                cIDebugText += "(assert " + lLocalDebugText + ")\r\n";
+                cIDebugText.Append("(assert " + lLocalDebugText + ")\r\n");
 
             }
             catch (Exception ex)

@@ -1,8 +1,12 @@
 ﻿using System;
-using System.IO;
-using System.Web.UI;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using Microsoft.Z3;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Web.UI;
 
 namespace ProductPlatformAnalyzer
 {
@@ -344,6 +348,7 @@ namespace ProductPlatformAnalyzer
 
                 writeOperationsWithPrePostCon(writer);
                 writeVariantOperationMappings(writer);
+                writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
@@ -391,7 +396,7 @@ namespace ProductPlatformAnalyzer
                 writeResourcesAndTraits(writer);
 
                 writeOperationsWithPreCon(writer);
-                writeVariantOperationMappings(writer);
+                writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
@@ -1055,7 +1060,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeVariants(HtmlTextWriter writer)
         {
-            List<variantGroup> variants = fwrapper.getVariantGroupList();
+            HashSet<variantGroup> variants = fwrapper.getVariantGroupSet();
 
 
             writer.WriteBeginTag("table style=\"margin-left:40px\"");
@@ -1091,12 +1096,12 @@ namespace ProductPlatformAnalyzer
 
                     writer.WriteEndTag("tr");
 
-                    foreach (variant var in group.variant)
+                    foreach (variant var in group.variants)
                     {
                         writer.WriteFullBeginTag("tr");
                         writer.WriteBeginTag("td");
                         writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(var.displayName);
+                        writer.Write(var.names);
                         writer.WriteEndTag("td");
 
                         writer.WriteEndTag("tr");
@@ -1109,7 +1114,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeConstraints(HtmlTextWriter writer)
         {
-            ArrayList constraints = new ArrayList(fwrapper.getConstraintList());
+            HashSet<string> constraints = new HashSet<string>(fwrapper.getConstraintSet());
 
             if (constraints.Count != 0)
             {
@@ -1158,7 +1163,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
         {
-            List<operation> operations = new List<operation>(fwrapper.OperationList);
+            HashSet<operation> operations = new HashSet<operation>(fwrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1252,7 +1257,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.postcondition != null)
+                /*if (op.postcondition != null)
                 {
                     foreach (string post in op.postcondition)
                     {
@@ -1261,7 +1266,7 @@ namespace ProductPlatformAnalyzer
                         writer.Write(GeneralUtilities.parseExpression(post, "infix"));
                         writer.WriteEndTag("li");
                     }
-                }
+                }*/
                 writer.WriteEndTag("ul");
 
                 writer.WriteEndTag("td");
@@ -1297,7 +1302,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPreCon(HtmlTextWriter writer)
         {
-            List<operation> operations = new List<operation>(fwrapper.OperationList);
+            HashSet<operation> operations = new HashSet<operation>(fwrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1403,9 +1408,86 @@ namespace ProductPlatformAnalyzer
         }
 
 
+        private void writePartOperationMappings(HtmlTextWriter writer)
+        {
+            HashSet<partOperations> lPartOperationsList = new HashSet<partOperations>(fwrapper.getPartsOperationsSet());
+
+            writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write(" Part operation mappings");
+
+            writer.WriteBeginTag("span id=\"titleMArr\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.Write("&#x25BC");
+            writer.WriteEndTag("span");
+            writer.WriteEndTag("p");
+
+            writer.WriteBeginTag("div id=\"inMContent\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("tr");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Parts");
+
+            writer.WriteEndTag("th");
+
+            writer.WriteBeginTag("th");
+            writer.Write(HtmlTextWriter.TagRightChar);
+
+            writer.Write("Operations");
+
+            writer.WriteEndTag("th");
+            writer.WriteEndTag("tr");
+
+            foreach (partOperations vop in lPartOperationsList)
+            {
+
+                writer.WriteBeginTag("tr");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.Write(replaceVirtual(vop.getPartExpr()));
+
+                writer.WriteEndTag("td");
+
+
+                writer.WriteBeginTag("td");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
+                writer.Write(HtmlTextWriter.TagRightChar);
+
+                foreach (operation op in vop.getOperations())
+                {
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(op.names);
+                    writer.WriteEndTag("li");
+                }
+                writer.WriteEndTag("ul");
+
+                writer.WriteEndTag("td");
+
+                writer.WriteEndTag("tr");
+            }
+
+            writer.WriteEndTag("table");
+            writer.WriteEndTag("div");
+
+        }
+
         private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
-            List<variantOperations> lVariantOperationsList = new List<variantOperations>(fwrapper.getVariantsOperationsList());
+            HashSet<variantOperations> lVariantOperationsList = new HashSet<variantOperations>(fwrapper.getVariantsOperationsSet());
 
             writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1513,7 +1595,7 @@ namespace ProductPlatformAnalyzer
         private void writeTraits(HtmlTextWriter writer)
         {
 
-            List<trait> traits = new List<trait>(fwrapper.TraitList);
+            HashSet<trait> traits = new HashSet<trait>(fwrapper.TraitSet);
 
             if (traits.Count != 0)
             {
@@ -1617,7 +1699,7 @@ namespace ProductPlatformAnalyzer
         private void writeResources(HtmlTextWriter writer)
         {
 
-            List<resource> resources = new List<resource>(fwrapper.ResourceList);
+            HashSet<resource> resources = new HashSet<resource>(fwrapper.ResourceSet);
 
             if (resources.Count != 0)
             {
@@ -1719,7 +1801,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeFalsePre(HtmlTextWriter writer)
         {
-            List<String[]> conditions = getConditionsStateWithValues(getLastState());
+            HashSet<String[]> conditions = getConditionsStateWithValues(getLastState());
 
             if (conditions.Count != 0)
             {
@@ -1795,7 +1877,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeFalsePrePost(HtmlTextWriter writer)
         {
-            List<String[]> conditions = getConditionsStateWithValues(getLastState());
+            HashSet<String[]> conditions = getConditionsStateWithValues(getLastState());
 
             if (conditions.Count != 0)
             {
@@ -2506,10 +2588,10 @@ namespace ProductPlatformAnalyzer
         }
 
         //Returns false pre and post conditions for lstate with the pre/post condition
-        private List<String[]> getConditionsStateWithValues(int lstate)
+        private HashSet<String[]> getConditionsStateWithValues(int lstate)
         {
-            List<String[]> conditions = new List<String[]>();
-            List<String> conValue = new List<String>();
+            HashSet<String[]> conditions = new HashSet<String[]>();
+            HashSet<String> conValue = new HashSet<String>();
             string[] list;
 
             try
@@ -2521,9 +2603,9 @@ namespace ProductPlatformAnalyzer
                         (String.Equals(exp.opState, "PreCondition"))) &&
                         String.Equals(exp.value, "false"))
                     {
-                        if (String.Equals(exp.opState, "PostCondition"))
+                        /*if (String.Equals(exp.opState, "PostCondition"))
                             conValue = fwrapper.getPostconditionForOperation(exp.operation);
-                        else
+                        else*/
                             conValue = fwrapper.getPreconditionForOperation(exp.operation);
                             list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
                         conditions.Add(list);
@@ -2593,7 +2675,7 @@ namespace ProductPlatformAnalyzer
             return ops;
         }
 
-        private string consToString(List<string> pcons)
+        private string consToString(HashSet<string> pcons)
         {
             string exp = "";
 
@@ -2601,8 +2683,9 @@ namespace ProductPlatformAnalyzer
             {
                 if (pcons.Count > 0)
                 {
-                    exp = GeneralUtilities.parseExpression(pcons[0], "infix");
-                    pcons.RemoveAt(0);
+                    string lTemp = pcons.First();
+                    exp = GeneralUtilities.parseExpression(lTemp, "infix");
+                    pcons.Remove(lTemp);
                     foreach (string con in pcons)
                     {
                         exp = exp + "and" + GeneralUtilities.parseExpression(con, "infix");

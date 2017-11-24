@@ -4,8 +4,10 @@ Analysis should be able to complete. -->
 
 <!-- Operations: 
         O1
-				O2 
-          Precondition: O1_F_1_2-->
+				O2
+          Precondition: O3
+        O3
+-->
 
 <!-- Variants: V1-->
 
@@ -17,14 +19,8 @@ Analysis should be able to complete. -->
 <!-- Variant-Operation mapping:
       Variant: V1
       Operations: O1
-                  O2 
+                  O2
 -->
-<!--Analysis Expected Results:
-      Data not loaded as variant group has no variants defined!
-      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1), (V2), (V3)}
-      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2), (V2 -> O1, O2), (V3 -> O1, O2)}
-      Always Selected Variant: There exists a valid configuration in which not all variants are included. {(V1), (V2), (V3), ...}
-      Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}-->
 <testData>
   <operations>
     <operation>
@@ -33,8 +29,11 @@ Analysis should be able to complete. -->
     <operation>
       <operationName>O2</operationName>
       <operationPrecondition>
-        <operationRef>O1_F_1_2</operationRef>
+        <operationRef>O3</operationRef>
       </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>O3</operationName>
     </operation>
   </operations>
   <variants>

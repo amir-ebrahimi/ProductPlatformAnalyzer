@@ -141,7 +141,7 @@
     <operation>
       <operationName>Spot-weld-Frontlid-A</operationName>
       <operationPrecondition>
-        <operationName>Clamp-Frontlid-A</operationName>
+        <operationName>Rotate-TurnTable</operationName>
       </operationPrecondition>
     </operation>
     <operation>

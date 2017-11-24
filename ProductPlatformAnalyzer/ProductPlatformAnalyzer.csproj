@@ -72,6 +72,18 @@
     <Compile Include="Z3SolverEngineer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Test\3.0.2V1VG2O1C0P.xml" />
+    <Content Include="Test\3.1.2V1VG2O2C0P.xml" />
+    <Content Include="Test\3.2.2V1VG2O1C0P.xml" />
+    <Content Include="Test\3.3.2V1VG2O1C0P.xml" />
+    <Content Include="Test\3.4.2V1VG2O1C0P.xml" />
+    <Content Include="Test\3.5.2V1VG2O1C0P.xml" />
+    <Content Include="Test\4.4.1V1VG3O0C1P.xml" />
+    <Content Include="Test\4.5.1V1VG3O0C1P.xml" />
+    <Content Include="Test\4.6.1V1VG3O0C1P.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\4.7.1V1VG5O0C4P.xml" />
     <Content Include="Test\Volvo_CAB.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -81,6 +93,7 @@
     <Content Include="Test\Volvo_CAB_V3.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Test\Volvo_CAB_V4.xml" />
     <None Include="App.config" />
     <Content Include="Test\4.1.1V1VG2O0C1P.xml" />
     <Content Include="Test\4.2.1V1VG2O0C1P.xml">

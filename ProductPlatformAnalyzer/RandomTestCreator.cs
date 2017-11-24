@@ -8,106 +8,192 @@ namespace ProductPlatformAnalyzer
 {
     class RandomTestCreator
     {
-        public int maxVariantGroupNumber { get; set; }
-        public List<int> variantGroupList { get; set; }
-        public int maxVariantNumber { get; set; }
-        public List<int> variantList { get; set; }
-        public int maxOperationNumber { get; set; }
-        public List<int> operationList { get; set; }
-        public int trueProbability { get; set; }
-        public int falseProbability { get; set; }
-        public int expressionProbability { get; set; }
-        public int maxTraitNumber { get; set; }
-        public int maxNoOfTraitAttributes { get; set; }
-        public int maxResourceNumber { get; set; }
-        public List<int> lOverallChosenVariantCodes { get; set; }
-        public List<int> lOverallFreeVariantCodes { get; set; }
-        public List<int> lOverallChosenOperationCodes { get; set; }
-        public List<int> lOverallFreeOperationCodes { get; set; }
+        public int cMaxVariantGroupNumber { get; set; }
+        public List<int> cVariantGroupList { get; set; }
+        public int cMaxVariantNumber { get; set; }
+        public List<int> cVariantList { get; set; }
+        public int cMaxPartNumber { get; set; }
+        public int cMaxOperationNumber { get; set; }
+        public List<int> cOperationList { get; set; }
+        public int cTrueProbability { get; set; }
+        public int cFalseProbability { get; set; }
+        public int cExpressionProbability { get; set; }
+        public int cMaxTraitNumber { get; set; }
+        public int cMaxNoOfTraitAttributes { get; set; }
+        public int cMaxResourceNumber { get; set; }
+        public Dictionary<int, operation> cOperationCodeLookup { get; set; }
+        public Dictionary<int, part> cPartCodeLookup { get; set; }
+        public Dictionary<int, variant> cVariantCodeLookup { get; set; }
+        public List<int> cOverallChosenVariantCodes { get; set; }
+        public List<int> cOverallFreeVariantCodes { get; set; }
+        public List<int> cOverallChosenOperationCodes { get; set; }
+        public List<int> cOverallFreeOperationCodes { get; set; }
 
-        private Random myRandom;
-        private FrameworkWrapper lFrameworkWrapper;
+        private Random cMyRandom;
+        private FrameworkWrapper cFrameworkWrapper;
         public RandomTestCreator()
         {
-            maxVariantGroupNumber = 1;
-            maxVariantNumber = 1;
-            maxOperationNumber = 1;
-            trueProbability = 100;
-            falseProbability = 0;
-            expressionProbability = 0;
-            maxTraitNumber = 0;
-            maxResourceNumber = 0;
-            maxNoOfTraitAttributes = 0;
+            cMaxVariantGroupNumber = 1;
+            cMaxVariantNumber = 1;
+            cMaxPartNumber = 0;
+            cMaxOperationNumber = 1;
+            cTrueProbability = 100;
+            cFalseProbability = 0;
+            cExpressionProbability = 0;
+            cMaxTraitNumber = 0;
+            cMaxResourceNumber = 0;
+            cMaxNoOfTraitAttributes = 0;
 
-            myRandom = new Random();
-            lFrameworkWrapper = new FrameworkWrapper();
+            cMyRandom = new Random();
 
-            variantGroupList = new List<int>();
-            lOverallChosenVariantCodes = new List<int>();
-            lOverallFreeVariantCodes = new List<int>();
-            lOverallChosenOperationCodes = new List<int>();
-            lOverallFreeOperationCodes = new List<int>();
+            cOperationCodeLookup = new Dictionary<int, operation>();
+            cPartCodeLookup = new Dictionary<int, part>();
+            cVariantCodeLookup = new Dictionary<int, variant>();
+
+            cVariantGroupList = new List<int>();
+            cOverallChosenVariantCodes = new List<int>();
+            cOverallFreeVariantCodes = new List<int>();
+            cOverallChosenOperationCodes = new List<int>();
+            cOverallFreeOperationCodes = new List<int>();
         }
 
-        public void createRandomData(int pMaxVariantGroupNumber
+        public operation operationLookupByCode(int pOperationCode)
+        {
+            operation lResultOperation = null;
+            try
+            {
+                if (cOperationCodeLookup.ContainsKey(pOperationCode))
+                    lResultOperation = cOperationCodeLookup[pOperationCode];
+                else
+                    Console.WriteLine("Operation " + pOperationCode + " not found in Dictionary!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in operationLookupByCode");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultOperation;
+        }
+
+        public part partLookupByCode(int pPartCode)
+        {
+            part lResultPart = null;
+            try
+            {
+                if (cPartCodeLookup.ContainsKey(pPartCode))
+                    lResultPart = cPartCodeLookup[pPartCode];
+                else
+                    Console.WriteLine("Part " + pPartCode + " not found in Dictionary!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in partLookupByCode");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultPart;
+        }
+
+        public variant variantLookupByCode(int pVariantCode)
+        {
+            variant lResultVariant = null;
+            try
+            {
+                if (cVariantCodeLookup.ContainsKey(pVariantCode))
+                    lResultVariant = cVariantCodeLookup[pVariantCode];
+                else
+                    Console.WriteLine("Variant " + pVariantCode + " not found in Dictionary!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in variantLookupByCode");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariant;
+        }
+
+        public bool createRandomData(int pMaxVariantGroupNumber
                                     , int pMaxVariantNumber
+                                    , int pMaxPartNumber
                                     , int pMaxOperationNumber
                                     , int pTrueProbability
                                     , int pFalseProbability
                                     , int pExpressionProbability
                                     , int pMaxTraitNumber
                                     , int pMaxNoOfTraitAttributes
-                                    , int pMaxResourceNumber)
+                                    , int pMaxResourceNumber
+                                    , FrameworkWrapper pFrameworkWrapper)
         {
-            if (pMaxVariantGroupNumber != 0)
-                maxVariantGroupNumber = pMaxVariantGroupNumber;
-            if (pMaxVariantNumber != 0)
+            bool lResult = false;
+            try
             {
-                maxVariantNumber = pMaxVariantNumber;
-                resetOverallFreeVariantCodes();
+                if (pMaxVariantGroupNumber != 0)
+                    cMaxVariantGroupNumber = pMaxVariantGroupNumber;
+                if (pMaxVariantNumber != 0)
+                {
+                    cMaxVariantNumber = pMaxVariantNumber;
+                    resetOverallFreeVariantCodes();
+                }
+                if (pMaxPartNumber != 0)
+                    cMaxPartNumber = pMaxPartNumber;
+
+                if (pMaxOperationNumber != 0)
+                {
+                    cMaxOperationNumber = pMaxOperationNumber;
+                    resetOverallFreeOperationCodes();
+                }
+                if (pTrueProbability != 0)
+                    cTrueProbability = pTrueProbability;
+                if (pFalseProbability != 0)
+                    cFalseProbability = pFalseProbability;
+                if (pExpressionProbability != 0)
+                    cExpressionProbability = pExpressionProbability;
+                if (pMaxTraitNumber != 0)
+                    cMaxTraitNumber = pMaxTraitNumber;
+                if (pMaxNoOfTraitAttributes != 0)
+                    cMaxNoOfTraitAttributes = pMaxNoOfTraitAttributes;
+                if (pMaxResourceNumber != 0)
+                    cMaxResourceNumber = pMaxResourceNumber;
+                if (pFrameworkWrapper != null)
+                    cFrameworkWrapper = pFrameworkWrapper;
+
+
+                createVariants();
+                createVariantGroups();
+                createParts();
+
+                createOperations();
+                updateOperationPrePostConditions();
+
+                createVariantOperationMapping();
+                createPartOperationMapping();
+                createItemUsageRules();
+
+                //createTraits();
+                //createResources();
+                cFrameworkWrapper.PrintDataSummary();
+
+                lResult = true;
             }
-            if (pMaxOperationNumber != 0)
+            catch (Exception ex)
             {
-                maxOperationNumber = pMaxOperationNumber;
-                resetOverallFreeOperationCodes();
+                Console.WriteLine("error in createRandomData");
+                Console.WriteLine(ex.Message);
+                
             }
-            if (pTrueProbability != 0)
-                trueProbability = pTrueProbability;
-            if (pFalseProbability != 0)
-                falseProbability = pFalseProbability;
-            if (pExpressionProbability != 0)
-                expressionProbability = pExpressionProbability;
-            if (pMaxTraitNumber != 0)
-                maxTraitNumber = pMaxTraitNumber;
-            if (pMaxNoOfTraitAttributes != 0)
-                maxNoOfTraitAttributes = pMaxNoOfTraitAttributes;
-            if (pMaxResourceNumber != 0)
-                maxResourceNumber = pMaxResourceNumber;
-
-            createVariants();
-            createVariantGroups();
-
-            createOperations();
-            updateOperationPrePostConditions();
-
-            createVariantOperationMapping();
-
-            //createTraits();
-            //createResources();
-            lFrameworkWrapper.PrintDataSummary();
+            return lResult;
         }
 
         private void createTraits()
         {
             try
             {
-                List<trait> lInheritedTraits = new List<trait>();
-                List<Tuple<string,string>> lTraitAttributes = new List<Tuple<string,string>>();
-                for (int i = 0; i < maxTraitNumber; i++)
+                HashSet<trait> lInheritedTraits = new HashSet<trait>();
+                HashSet<Tuple<string,string>> lTraitAttributes = new HashSet<Tuple<string,string>>();
+                for (int i = 0; i < cMaxTraitNumber; i++)
                 {
                     string lTraitName = "T" + i;
                     lTraitAttributes = makeRandomSetOfTraitAttributes(lTraitName);
-                    lFrameworkWrapper.createTraitInstance(lTraitName
+                    cFrameworkWrapper.createTraitInstance(lTraitName
                                                             , lInheritedTraits
                                                             , lTraitAttributes);
                 }
@@ -119,12 +205,12 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private List<Tuple<string, string>> makeRandomSetOfTraitAttributes(string pTraitName)
+        private HashSet<Tuple<string, string>> makeRandomSetOfTraitAttributes(string pTraitName)
         {
-            List<Tuple<string, string>> lTraitAttributes = new List<Tuple<string, string>>();
+            HashSet<Tuple<string, string>> lTraitAttributes = new HashSet<Tuple<string, string>>();
             try
             {
-                int lNoOfAttributes = myRandom.Next(1, maxNoOfTraitAttributes);
+                int lNoOfAttributes = cMyRandom.Next(1, cMaxNoOfTraitAttributes);
 
                 for (int i = 0; i < lNoOfAttributes; i++)
                 {
@@ -157,8 +243,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                for (int i = 0; i < maxVariantNumber; i++)
-                    lOverallFreeVariantCodes.Add(i);
+                for (int i = 0; i < cMaxVariantNumber; i++)
+                    cOverallFreeVariantCodes.Add(i);
             }
             catch (Exception ex)
             {
@@ -171,10 +257,10 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                lOverallFreeOperationCodes.RemoveRange(0,lOverallFreeOperationCodes.Count);
+                cOverallFreeOperationCodes.RemoveRange(0,cOverallFreeOperationCodes.Count);
 
-                for (int i = 0; i < maxOperationNumber; i++)
-                    lOverallFreeOperationCodes.Add(i);
+                for (int i = 0; i < cMaxOperationNumber; i++)
+                    cOverallFreeOperationCodes.Add(i);
             }
             catch (Exception ex)
             {
@@ -187,16 +273,55 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (variant lVariant in lFrameworkWrapper.VariantList)
+                foreach (variant lVariant in cFrameworkWrapper.VariantSet)
                 {
                     resetOverallFreeOperationCodes();
-                    List<string> lRandomOperationCodes = pickASeriesOfRandomOperations(true);
-                    lFrameworkWrapper.CreateVariantOperationMappingInstance(lVariant.names, lRandomOperationCodes);
+                    HashSet<operation> lRandomOperations = pickASeriesOfRandomOperations(true);
+                    cFrameworkWrapper.CreateVariantOperationMappingInstance(lVariant.names, lRandomOperations);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantOperationMapping");
+                Console.WriteLine("error in createPartOperationMapping");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void createPartOperationMapping()
+        {
+            try
+            {
+                foreach (part lPart in cFrameworkWrapper.PartSet)
+                {
+                    resetOverallFreeOperationCodes();
+                    HashSet<operation> lRandomOperations = pickASeriesOfRandomOperations(true);
+                    cFrameworkWrapper.CreatePartOperationMappingInstance(lPart.names, lRandomOperations);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createPartOperationMapping");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void createItemUsageRules()
+        {
+            try
+            {
+                if (cMaxPartNumber > 0)
+                {
+                    foreach (variant lVariant in cFrameworkWrapper.VariantSet)
+                    {
+                        resetOverallFreeOperationCodes();
+                        HashSet<part> lRandomParts = pickASeriesOfRandomParts(true);
+                        cFrameworkWrapper.CreateItemUsageRuleInstance(lVariant, lRandomParts);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createItemUsageRules");
                 Console.WriteLine(ex.Message);
             }
         }
@@ -205,10 +330,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                List<string> lVariantList = new List<string>();
-
-                for (int i = 0; i < maxVariantGroupNumber; i++)
-                    lFrameworkWrapper.CreateVariantGroupInstance("VG-" + i
+                for (int i = 0; i < cMaxVariantGroupNumber; i++)
+                    cFrameworkWrapper.CreateVariantGroupInstance("VG-" + i
                                                                     , pickRandomGroupCardinality()
                                                                     , pickASeriesOfRandomVariants());
             }
@@ -241,20 +364,48 @@ namespace ProductPlatformAnalyzer
             return lResultList;
         }
 
-        private List<string> pickASeriesOfRandomOperations(bool pRepeatOperationsAllowed)
+        private HashSet<string> pickASeriesOfRandomOperationNames(bool pRepeatOperationsAllowed)
         {
-            List<string> lChosenOperations = new List<string>();
+            HashSet<string> lChosenOperations = new HashSet<string>();
             try
             {
-                if (!lOverallFreeOperationCodes.Count.Equals(0))
+                if (!cOverallFreeOperationCodes.Count.Equals(0))
                 {
-                    int lNoOfOperations = myRandom.Next(1, lOverallFreeOperationCodes.Count);
+                    int lNoOfOperations = cMyRandom.Next(1, cOverallFreeOperationCodes.Count);
 
-                    List<int> lChosenOperationCodes = new List<int>();
+                    HashSet<int> lChosenOperationCodes = new HashSet<int>();
+                    int lRandomOperationCode = 0;
                     for (int i = 0; i < lNoOfOperations; i++)
-                        lChosenOperationCodes.Add(pickRandomOperationCode(pRepeatOperationsAllowed));
+                    {
+                        lRandomOperationCode = cMyRandom.Next(1, cMaxOperationNumber);
+                        lChosenOperations.Add(operationLookupByCode(lRandomOperationCode).names);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in pickASeriesOfRandomOperationNames");
+                Console.WriteLine(ex.Message);
+            }
+            return lChosenOperations;
+        }
 
-                    lChosenOperations = returnOperationNames(lChosenOperationCodes);
+        private HashSet<operation> pickASeriesOfRandomOperations(bool pRepeatOperationsAllowed)
+        {
+            HashSet<operation> lChosenOperations = new HashSet<operation>();
+            try
+            {
+                if (!cOverallFreeOperationCodes.Count.Equals(0))
+                {
+                    int lNoOfOperations = cMyRandom.Next(1, cMaxOperationNumber);
+
+                    HashSet<int> lChosenOperationCodes = new HashSet<int>();
+                    int lRandomOperationCode = 0;
+                    for (int i = 0; i < lNoOfOperations; i++)
+                    {
+                        lRandomOperationCode = cMyRandom.Next(1, cOperationCodeLookup.Count);
+                        lChosenOperations.Add(operationLookupByCode(lRandomOperationCode));
+                    }
                 }
             }
             catch (Exception ex)
@@ -265,17 +416,104 @@ namespace ProductPlatformAnalyzer
             return lChosenOperations;
         }
 
-        private int pickRandomOperationCode(bool pRepeatOperationsAllowed)
+        private HashSet<variant> pickASeriesOfRandomVariants(bool pRepeatVariantsAllowed)
+        {
+            HashSet<variant> lChosenVariants = new HashSet<variant>();
+            try
+            {
+                int lNoOfVariants = cMyRandom.Next(1, cMaxVariantNumber);
+
+                int lRandomVariantCode = 0;
+                for (int i = 0; i < lNoOfVariants; i++)
+                {
+                    lRandomVariantCode = cMyRandom.Next(1, cVariantCodeLookup.Count);
+                    lChosenVariants.Add(variantLookupByCode(lRandomVariantCode));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in pickASeriesOfRandomVariants");
+                Console.WriteLine(ex.Message);
+            }
+            return lChosenVariants;
+        }
+
+        private HashSet<part> pickASeriesOfRandomParts(bool pRepeatPartsAllowed)
+        {
+            HashSet<part> lChosenParts = new HashSet<part>();
+            try
+            {
+                int lNoOfParts = cMyRandom.Next(1, cMaxPartNumber);
+
+                int lRandomPartCode = 0;
+                for (int i = 0; i < lNoOfParts; i++)
+                {
+                    lRandomPartCode = cMyRandom.Next(1, cPartCodeLookup.Count);
+                    lChosenParts.Add(partLookupByCode(lRandomPartCode));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in pickASeriesOfRandomVariants");
+                Console.WriteLine(ex.Message);
+            }
+            return lChosenParts;
+        }
+
+        /*private HashSet<int> pickASeriesOfRandomOperationCodes(bool pRepeatOperationsAllowed)
+        {
+            HashSet<int> lChosenOperationCodes = new HashSet<int>();
+            try
+            {
+                if (!cOverallFreeOperationCodes.Count.Equals(0))
+                {
+                    int lNoOfOperations = cMyRandom.Next(1, cOverallFreeOperationCodes.Count);
+
+                    for (int i = 0; i < lNoOfOperations; i++)
+                        lChosenOperationCodes.Add(pickRandomOperationCode(pRepeatOperationsAllowed));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in pickASeriesOfRandomOperationCodes");
+                Console.WriteLine(ex.Message);
+            }
+            return lChosenOperationCodes;
+        }*/
+
+        /*private HashSet<operation> pickASeriesOfRandomOperations(bool pRepeatOperationsAllowed)
+        {
+            HashSet<operation> lChosenOperations = new HashSet<operation>();
+            try
+            {
+                HashSet<string> lChosenOperationNames = new HashSet<string>();
+                lChosenOperationNames = pickASeriesOfRandomOperationNames(pRepeatOperationsAllowed);
+
+                foreach (var lOperationName in lChosenOperationNames)
+                {
+                    lChosenOperations.Add(cFrameworkWrapper.operationLookupByName(lOperationName));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in pickASeriesOfRandomOperations");
+                Console.WriteLine(ex.Message);
+            }
+            return lChosenOperations;
+        }*/
+
+        /*private int pickRandomOperationCode(bool pRepeatOperationsAllowed)
         {
             int lResultOperationCode = 0;
             try
             {
-                int lOperationIndex = myRandom.Next(0, lOverallFreeOperationCodes.Count);
-                int lOperationCode = lOverallFreeOperationCodes[lOperationIndex];
+                int lOperationIndex = cMyRandom.Next(0, cOverallFreeOperationCodes.Count);
+                int lOperationCode = cOverallFreeOperationCodes[lOperationIndex];
 
-                lOverallChosenOperationCodes.Add(lOperationCode);
+                cOverallChosenOperationCodes.Add(lOperationCode);
                 if (!pRepeatOperationsAllowed)
-                    lOverallFreeOperationCodes.Remove(lOperationCode);
+                    cOverallFreeOperationCodes.Remove(lOperationCode);
 
                 lResultOperationCode = lOperationCode;
             }
@@ -285,11 +523,11 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
             return lResultOperationCode;
-        }
+        }*/
 
-        private List<string> returnOperationNames(List<int> pOperationCodes)
+        private HashSet<string> returnOperationNames(HashSet<int> pOperationCodes)
         {
-            List<string> lResultList = new List<string>();
+            HashSet<string> lResultList = new HashSet<string>();
             try
             {
                 foreach (int lOperationCode in pOperationCodes)
@@ -305,14 +543,14 @@ namespace ProductPlatformAnalyzer
             return lResultList;
         }
 
-        private List<string> pickASeriesOfRandomVariants()
+        private HashSet<variant> pickASeriesOfRandomVariants()
         {
-            List<string> lChosenVariants = new List<string>();
+            HashSet<variant> lChosenVariants = new HashSet<variant>();
             try
             {
                 //This function returns a series of randomly piched variants which will be bound to a specific variantgroup
-                int lNoOfVariants = myRandom.Next(1, lOverallFreeVariantCodes.Count);
-                List<int> lChosenVariantCodes = new List<int>();
+                int lNoOfVariants = cMyRandom.Next(1, cOverallFreeVariantCodes.Count);
+                HashSet<int> lChosenVariantCodes = new HashSet<int>();
                 int lChosenVariantCode;
 
                 for (int i = 0; i < lNoOfVariants; i++)
@@ -321,14 +559,19 @@ namespace ProductPlatformAnalyzer
                     lChosenVariantCode = returnRandomVariantCode();
 
                     //We don't want a group to have zero variants
-                    if (!lOverallChosenVariantCodes.Contains(lChosenVariantCode))
+                    if (!cOverallChosenVariantCodes.Contains(lChosenVariantCode))
                     {
                         updateChosenVariantCode(lChosenVariantCode);
                         lChosenVariantCodes.Add(lChosenVariantCode);
                     }
                 }
 
-                lChosenVariants = returnVariantNames(lChosenVariantCodes);
+                HashSet<string> lVariantNames = returnVariantNames(lChosenVariantCodes);
+
+                foreach (string lVariantName in lVariantNames)
+	            {
+                    lChosenVariants.Add(cFrameworkWrapper.variantLookupByName(lVariantName));		 
+	            }
             }
             catch (Exception ex)
             {
@@ -338,9 +581,9 @@ namespace ProductPlatformAnalyzer
             return lChosenVariants;
         }
 
-        private List<string> returnVariantNames(List<int> pVariantCodes)
+        private HashSet<string> returnVariantNames(HashSet<int> pVariantCodes)
         {
-            List<string> lResultList = new List<string>();
+            HashSet<string> lResultList = new HashSet<string>();
             try
             {
                 foreach (int lVariantCode in pVariantCodes)
@@ -361,8 +604,8 @@ namespace ProductPlatformAnalyzer
             int lResultVariantCode = 0;
             try
             {
-                int lRandomVariantIndex = myRandom.Next(0, lOverallFreeVariantCodes.Count);
-                lResultVariantCode = lOverallFreeVariantCodes[lRandomVariantIndex];
+                int lRandomVariantIndex = cMyRandom.Next(0, cOverallFreeVariantCodes.Count);
+                lResultVariantCode = cOverallFreeVariantCodes[lRandomVariantIndex];
             }
             catch (Exception ex)
             {
@@ -376,8 +619,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                lOverallChosenVariantCodes.Add(pChosenVariantCode);
-                lOverallFreeVariantCodes.Remove(pChosenVariantCode);
+                cOverallChosenVariantCodes.Add(pChosenVariantCode);
+                cOverallFreeVariantCodes.Remove(pChosenVariantCode);
             }
             catch (Exception ex)
             {
@@ -391,7 +634,7 @@ namespace ProductPlatformAnalyzer
             string lResultGroupCardinality = "";
             try
             {
-                int lGroupcardinality = myRandom.Next(1, 2);
+                int lGroupcardinality = cMyRandom.Next(1, 2);
 
                 if (lGroupcardinality == 1)
                     lResultGroupCardinality = "choose exactly one";
@@ -410,11 +653,30 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                for (int i = 0; i < maxVariantNumber; i++)
+                variant lTempVariant = null;
+                for (int i = 0; i < cMaxVariantNumber; i++)
                 {
-                    lFrameworkWrapper.CreateVariantInstance("V-" + i
-                                                            , i
-                                                            , "V-" + i);
+                    lTempVariant = cFrameworkWrapper.CreateVariantInstance("V-" + i);
+                    cVariantCodeLookup.Add(i, lTempVariant);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in createVariants");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void createParts()
+        {
+            try
+            {
+                part lTempPart = null;
+                for (int i = 0; i < cMaxPartNumber; i++)
+                {
+                    lTempPart = cFrameworkWrapper.CreatePartInstance("P-" + i);
+                    cPartCodeLookup.Add(i, lTempPart);
                 }
 
             }
@@ -430,17 +692,20 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: we have to also make two random list fir preconditions and postconditions
-                List<string> lOperationPrecondition = new List<string>();
-                List<string> lOperationPostcondition = new List<string>();
-                List<string> lOperationRequiremnt = new List<string>();
+                HashSet<string> lOperationPrecondition = new HashSet<string>();
+                HashSet<string> lOperationPostcondition = new HashSet<string>();
+                HashSet<string> lOperationRequiremnt = new HashSet<string>();
 
-                for (int i = 0; i < maxOperationNumber; i++)
+                operation lTempOperation = null;
+                for (int i = 0; i < cMaxOperationNumber; i++)
                 {
-                    lFrameworkWrapper.CreateOperationInstance("O-" + i
-                                                            , "O-" + i
-                                                            , lOperationRequiremnt
-                                                            , lOperationPrecondition
-                                                            , lOperationPostcondition);
+                    
+                    lTempOperation = cFrameworkWrapper.CreateOperationInstance("O-" + i
+                                                                            , lOperationRequiremnt
+                                                                            , lOperationPrecondition
+                                                                            , lOperationPostcondition);
+                    //Creating a list for operation lookup by code, ONLY for use with in this class
+                    cOperationCodeLookup.Add(i, lTempOperation);
 
                 }
             }
@@ -471,14 +736,14 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (operation lCurrentOperation in lFrameworkWrapper.OperationList)
+                foreach (operation lCurrentOperation in cFrameworkWrapper.OperationSet)
                 {
                     resetOverallFreeOperationCodes();
 
                     //This is because an operation can't be part of its own pre or post condition
-                    lOverallFreeOperationCodes.Remove(returnOperationCode(lCurrentOperation.names));
+                    cOverallFreeOperationCodes.Remove(returnOperationCode(lCurrentOperation.names));
 
-                    lCurrentOperation.precondition = pickASeriesOfRandomOperations(false);
+                    lCurrentOperation.precondition = pickASeriesOfRandomOperationNames(false);
                 }
             }
             catch (Exception ex)

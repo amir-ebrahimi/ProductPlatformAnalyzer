@@ -4,8 +4,10 @@ Analysis should be able to complete. -->
 
 <!-- Operations: 
         O1
-				O2 
-          Precondition: O1_F_1_2-->
+				O2
+        O3
+          Precondition: O1
+          Precondition: O2-->
 
 <!-- Variants: V1-->
 
@@ -17,7 +19,8 @@ Analysis should be able to complete. -->
 <!-- Variant-Operation mapping:
       Variant: V1
       Operations: O1
-                  O2 
+                  O2
+                  O3
 -->
 <!--Analysis Expected Results:
       Data not loaded as variant group has no variants defined!
@@ -32,8 +35,11 @@ Analysis should be able to complete. -->
     </operation>
     <operation>
       <operationName>O2</operationName>
+    </operation>
+    <operation>
+      <operationName>O3</operationName>
       <operationPrecondition>
-        <operationRef>O1_F_1_2</operationRef>
+        <operationRef>O1 OR O2</operationRef>
       </operationPrecondition>
     </operation>
   </operations>
@@ -61,6 +67,7 @@ Analysis should be able to complete. -->
       <operationRefs>
         <operationRef>O1</operationRef>
         <operationRef>O2</operationRef>
+        <operationRef>O3</operationRef>
       </operationRefs>
     </variantOperationMapping>
   </variantOperationMappings>

@@ -19,7 +19,6 @@ Analysis not able to complete! -->
   <operations>
     <operation>
       <operationName>scan-barcode</operationName>
-      <displayName>Scan barcode</displayName>
     </operation>
   </operations>
   <variants>

@@ -40,33 +40,23 @@ Analysis should be able to complete. -->
   <operations>
     <operation>
       <operationName>O1</operationName>
-      <displayName>O1</displayName>
     </operation>
     <operation>
       <operationName>O2</operationName>
-      <displayName>O2</displayName>
     </operation>
   </operations>
   <variants>
     <variant>
       <variantName>V1</variantName>
-      <variantIndex>1</variantIndex>
-      <variantDisplayName>V1</variantDisplayName>
     </variant>
     <variant>
       <variantName>V2</variantName>
-      <variantIndex>2</variantIndex>
-      <variantDisplayName>V2</variantDisplayName>
     </variant>
     <variant>
       <variantName>V3</variantName>
-      <variantIndex>3</variantIndex>
-      <variantDisplayName>V3</variantDisplayName>
     </variant>
     <variant>
       <variantName>V4</variantName>
-      <variantIndex>4</variantIndex>
-      <variantDisplayName>V4</variantDisplayName>
     </variant>
   </variants>
   <variantGroups>

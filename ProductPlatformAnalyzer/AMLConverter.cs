@@ -20,13 +20,13 @@ namespace ProductPlatformAnalyzer
         private CAEXTables tables = null;
 
         // data structures to be populated from the document
-        private List<variantGroup> variantGroups = new List<variantGroup>();
-        private List<variant> variants = new List<variant>();
-        private List<string> constraints = new List<string>();
-        private List<resource> resources = new List<resource>();
-        private List<trait> traits = new List<trait>();
-        private List<operation> operations = new List<operation>();
-        private List<variantOperations> variantOperations = new List<variantOperations>();
+        private HashSet<variantGroup> variantGroups = new HashSet<variantGroup>();
+        private HashSet<variant> variants = new HashSet<variant>();
+        private HashSet<string> constraints = new HashSet<string>();
+        private HashSet<resource> resources = new HashSet<resource>();
+        private HashSet<trait> traits = new HashSet<trait>();
+        private HashSet<operation> operations = new HashSet<operation>();
+        private HashSet<partOperations> variantOperations = new HashSet<partOperations>();
 
         // auxiliary data structures
         private Dictionary<string, variant> id2VariantMappings
@@ -44,13 +44,13 @@ namespace ProductPlatformAnalyzer
 
         public void PopulateFrameworkWrapper(FrameworkWrapper pFrameworkWrapper)
         {
-            pFrameworkWrapper.VariantList = variants;
-            pFrameworkWrapper.VariantGroupList = variantGroups;
-            pFrameworkWrapper.ConstraintList = constraints;
-            pFrameworkWrapper.OperationList = operations;
-            pFrameworkWrapper.VariantsOperationsList = variantOperations;
-            pFrameworkWrapper.ResourceList = resources;
-            pFrameworkWrapper.TraitList = traits;
+            pFrameworkWrapper.VariantSet = variants;
+            pFrameworkWrapper.VariantGroupSet = variantGroups;
+            pFrameworkWrapper.ConstraintSet = constraints;
+            pFrameworkWrapper.OperationSet = operations;
+            pFrameworkWrapper.PartsOperationsSet = variantOperations;
+            pFrameworkWrapper.ResourceSet = resources;
+            pFrameworkWrapper.TraitSet = traits;
         }
 
         // populate the data staructures
@@ -94,7 +94,7 @@ namespace ProductPlatformAnalyzer
                     variant tempVariant = new variant
                     {
                         names = parent.Name(),
-                        index = indexCounter++
+                        //index = indexCounter++
                     };
                     variants.Add(tempVariant);
                     // store ID and variant
@@ -115,7 +115,7 @@ namespace ProductPlatformAnalyzer
                     var cardinality = ie.GetAttributeValue("groupCardinality");
                     List<CAEXObject> elements = new List<CAEXObject>();
                     ie.GetInternalElementsAndExternalInterfaces(elements);
-                    List<variant> variants = new List<variant>();
+                    HashSet<variant> variants = new HashSet<variant>();
                     foreach (InternalElementType e in elements)
                     {
                         if(!e.Name().Equals(parent.Name()))
@@ -129,7 +129,7 @@ namespace ProductPlatformAnalyzer
                     {
                         names = parent.Name(),
                         gCardinality = cardinality,
-                        variant = variants
+                        variants = variants
                     };
                     variantGroups.Add(tempVariantGroup);
                 }
@@ -153,14 +153,14 @@ namespace ProductPlatformAnalyzer
                     operation tempOperation = new operation();
                     
                     tempOperation.names = parent.Name();
-                    tempOperation.displayName = parent.Name();
+                    //tempOperation.displayName = parent.Name();
                     if (pre.ToString() != "")
-                        tempOperation.precondition = new List<string>(new string[] { pre });
-                    if (pos.ToString() != "")
-                        tempOperation.postcondition = new List<string>(new string[] { pos });
+                        tempOperation.precondition = new HashSet<string>(new string[] { pre });
+                    /*if (pos.ToString() != "")
+                        tempOperation.postcondition = new HashSet<string>(new string[] { pos });*/
                     if (req.Count() > 0)
                         if (req[0] != "")
-                            tempOperation.requirements = new List<string>(req);
+                            tempOperation.requirements = new HashSet<string>(req);
 
                     operations.Add(tempOperation);
                     // store ID and operation
@@ -180,7 +180,7 @@ namespace ProductPlatformAnalyzer
                     var elements = new List<CAEXObject>();
                     var ie = parent as InternalElementType;
                     ie.GetInternalElementsAndExternalInterfaces(elements);
-                    List<operation> operations = new List<operation>();
+                    HashSet<operation> operations = new HashSet<operation>();
                     foreach (InternalElementType e in elements)
                     {
                         if (!e.Name().Equals(parent.Name()))
@@ -190,8 +190,8 @@ namespace ProductPlatformAnalyzer
                         }
                     }
                     // create a variantOperation and set field
-                    variantOperations tempVariantOperations = new variantOperations();
-                    tempVariantOperations.setVariantExpr(variantName);
+                    partOperations tempVariantOperations = new partOperations();
+                    tempVariantOperations.setPartExpr(variantName);
                     tempVariantOperations.setOperations(operations);
                     variantOperations.Add(tempVariantOperations);
                 }
@@ -218,8 +218,8 @@ namespace ProductPlatformAnalyzer
                 var parent = roleRef.GetParent();
                 if (parent is InternalElementType)
                 {
-                    List<Tuple<string, string>> attributesField =
-                        new List<Tuple<string, string>>();
+                    HashSet<Tuple<string, string>> attributesField =
+                        new HashSet<Tuple<string, string>>();
                     var traitName = parent.Name();
                     var ie = parent as InternalElementType;
                     foreach (var attr in ie.Attributes())
@@ -234,7 +234,7 @@ namespace ProductPlatformAnalyzer
                     {
                         names = traitName,
                         // In the AML modeling for now, trait cannot inherit trait
-                        inherit = new List<trait>(),
+                        inherit = new HashSet<trait>(),
                         attributes = attributesField
                     };
                     traits.Add(tempTrait);
@@ -253,9 +253,9 @@ namespace ProductPlatformAnalyzer
                 {
                     var resourceName = parent.Name();
                     var displayName = resourceName;
-                    List<Tuple<string, string, string>> attributesField =
-                        new List<Tuple<string, string, string>>();
-                    List<trait> traits = new List<trait>();
+                    HashSet<Tuple<string, string, string>> attributesField =
+                        new HashSet<Tuple<string, string, string>>();
+                    HashSet<trait> traits = new HashSet<trait>();
 
                     var ie = parent as InternalElementType;
                     Dictionary<string, string> traitAttr2value =
@@ -279,7 +279,7 @@ namespace ProductPlatformAnalyzer
                     resource tempResource = new resource
                     {
                         names = resourceName,
-                        displayName = displayName,
+                        //displayName = displayName,
                         traits = traits,
                         attributes = attributesField
                     };

@@ -27,11 +27,9 @@ public partial class variantGroup {
     
     private string namesField;
     
-    private string displayNameField;
-    
     private string gCardinalityField;
     
-    private List<variant> variantField;
+    private HashSet<variant> variantField;
     
     /// <remarks/>
     public string names {
@@ -40,16 +38,6 @@ public partial class variantGroup {
         }
         set {
             this.namesField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string displayName {
-        get {
-            return this.displayNameField;
-        }
-        set {
-            this.displayNameField = value;
         }
     }
     
@@ -65,13 +53,86 @@ public partial class variantGroup {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("variant")]
-    public List<variant> variant {
+    public HashSet<variant> variants {
         get {
             return this.variantField;
         }
         set {
             this.variantField = value;
         }
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        variantGroup lVariantGroup = (variantGroup)obj;
+        return (this.names == lVariantGroup.names && this.variants == lVariantGroup.variants);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.names.GetHashCode() * 2 + this.variants.GetHashCode());
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class variant
+{
+
+    private string namesField;
+
+    /// <remarks/>
+    public string names
+    {
+        get
+        {
+            return this.namesField;
+        }
+        set
+        {
+            this.namesField = value;
+        }
+    }
+    
+    // override object.Equals
+    public override bool Equals (object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType()) 
+            return false;
+
+        variant lVariant = (variant)obj;
+        return (this.names == lVariant.names);
+    }
+    
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return this.names.GetHashCode() * 3;
     }
 }
 
@@ -81,29 +142,10 @@ public partial class variantGroup {
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-public partial class variant {
-
-    private int indexField;
+public partial class part {
 
     private string namesField;
     
-    private string displayNameField;
-    
-    private byte cardinalityField;
-
-    /// <remarks/>
-    public int index
-    {
-        get
-        {
-            return this.indexField;
-        }
-        set
-        {
-            this.indexField = value;
-        }
-    }
-
     /// <remarks/>
     public string names {
         get {
@@ -113,27 +155,31 @@ public partial class variant {
             this.namesField = value;
         }
     }
-    
-    /// <remarks/>
-    public string displayName {
-        get {
-            return this.displayNameField;
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
         }
-        set {
-            this.displayNameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public byte cardinality {
-        get {
-            return this.cardinalityField;
-        }
-        set {
-            this.cardinalityField = value;
-        }
+
+        part lPart = (part)obj;
+        return this.names == lPart.names;
     }
 
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return this.names.GetHashCode() * 5;
+    }
 }
 
 /// <remarks/>
@@ -147,13 +193,9 @@ public partial class operation
 
     private string namesField;
 
-    private string displayNameField;
+    private HashSet<string> preconditionField;
 
-    private List<string> preconditionField;
-
-    private List<string> postconditionField;
-
-    private List<string> requirementsField;
+    private HashSet<string> requirementsField;
 
     /// <remarks/>
     public string names
@@ -169,20 +211,7 @@ public partial class operation
     }
 
     /// <remarks/>
-    public string displayName
-    {
-        get
-        {
-            return this.displayNameField;
-        }
-        set
-        {
-            this.displayNameField = value;
-        }
-    }
-
-    /// <remarks/>
-    public List<string> precondition
+    public HashSet<string> precondition
     {
         get
         {
@@ -195,20 +224,7 @@ public partial class operation
     }
 
     /// <remarks/>
-    public List<string> postcondition
-    {
-        get
-        {
-            return this.postconditionField;
-        }
-        set
-        {
-            this.postconditionField = value;
-        }
-    }
-
-    /// <remarks/>
-    public List<string> requirements
+    public HashSet<string> requirements
     {
         get
         {
@@ -218,6 +234,88 @@ public partial class operation
         {
             this.requirementsField = value;
         }
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        operation lOperation = (operation)obj;
+        return this.names == lOperation.names;
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return this.names.GetHashCode() * 4;
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class partOperations
+{
+    private string PartExpr;
+    private HashSet<operation> Operations;
+
+    public string getPartExpr()
+    {
+        return PartExpr;
+    }
+
+    public void setPartExpr(string pPartExpr)
+    {
+        PartExpr = pPartExpr;
+    }
+
+    public HashSet<operation> getOperations()
+    {
+        return Operations;
+    }
+
+    public void setOperations(HashSet<operation> pOperations)
+    {
+        Operations = pOperations;
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        partOperations lPartOperations = (partOperations)obj;
+        return (this.PartExpr == lPartOperations.PartExpr && this.Operations == lPartOperations.Operations);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.PartExpr.GetHashCode() * 6 + this.Operations.GetHashCode());
     }
 }
 
@@ -230,7 +328,7 @@ public partial class operation
 public partial class variantOperations
 {
     private string VariantExpr;
-    private List<operation> Operations;
+    private HashSet<operation> Operations;
 
     public string getVariantExpr()
     {
@@ -242,16 +340,97 @@ public partial class variantOperations
         VariantExpr = pVariantExpr;
     }
 
-    public List<operation> getOperations()
+    public HashSet<operation> getOperations()
     {
         return Operations;
     }
 
-    public void setOperations(List<operation> pOperations)
+    public void setOperations(HashSet<operation> pOperations)
     {
         Operations = pOperations;
     }
 
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        variantOperations lVariantOperations = (variantOperations)obj;
+        return (this.VariantExpr == lVariantOperations.VariantExpr && this.Operations == lVariantOperations.Operations);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.VariantExpr.GetHashCode() * 12 + this.Operations.GetHashCode());
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.17929")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class itemUsageRule
+{
+    private variant Variant;
+    private HashSet<part> Parts;
+
+    public variant getVariant()
+    {
+        return Variant;
+    }
+
+    public void setVariant(variant pVariant)
+    {
+        Variant = pVariant;
+    }
+
+    public HashSet<part> getParts()
+    {
+        return Parts;
+    }
+
+    public void setParts(HashSet<part> pParts)
+    {
+        Parts = pParts;
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        itemUsageRule lItemUsageRule = (itemUsageRule)obj;
+        return (this.Variant == lItemUsageRule.Variant && this.Parts == lItemUsageRule.Parts);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.Variant.GetHashCode() * 8 + this.Parts.GetHashCode());
+    }
 }
 
 /// <remarks/>
@@ -265,11 +444,9 @@ public partial class resource
 
     private string namesField;
 
-    private string displayNameField;
+    private HashSet<Tuple<string,string,string>> attributesField;
 
-    private List<Tuple<string,string,string>> attributesField;
-
-    private List<trait> traitsField;
+    private HashSet<trait> traitsField;
 
     /// <remarks/>
     public string names
@@ -284,20 +461,7 @@ public partial class resource
         }
     }
 
-    /// <remarks/>
-    public string displayName
-    {
-        get
-        {
-            return this.displayNameField;
-        }
-        set
-        {
-            this.displayNameField = value;
-        }
-    }
-
-    public List<Tuple<string,string,string>> attributes
+    public HashSet<Tuple<string,string,string>> attributes
     {
         get
         {
@@ -309,7 +473,7 @@ public partial class resource
         }
     }
 
-    public List<trait> traits 
+    public HashSet<trait> traits 
     {
         get 
         {
@@ -321,6 +485,30 @@ public partial class resource
         }
     }
 
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        resource lResource = (resource)obj;
+        return (this.names == lResource.names);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.names.GetHashCode() * 9);
+    }
 }
 
 /// <remarks/>
@@ -332,8 +520,8 @@ public partial class resource
 public partial class trait
 {
     private string namesField;
-    private List<trait> inheritField;
-    private List<Tuple<string,string>> attributesField;
+    private HashSet<trait> inheritField;
+    private HashSet<Tuple<string,string>> attributesField;
 
     /// <remarks/>
     public string names
@@ -348,7 +536,7 @@ public partial class trait
         }
     }
 
-    public List<Tuple<string,string>> attributes
+    public HashSet<Tuple<string,string>> attributes
     {
         get
         {
@@ -360,7 +548,7 @@ public partial class trait
         }
     }
 
-    public List<trait> inherit
+    public HashSet<trait> inherit
     {
         get
         {
@@ -371,6 +559,31 @@ public partial class trait
             this.inheritField = value;
         }
     }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        trait lTrait = (trait)obj;
+        return (this.names == lTrait.names);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.names.GetHashCode() * 7);
+    }
 }
 
 /// <remarks/>
@@ -380,38 +593,54 @@ public partial class trait
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
 [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-public partial class station
+public partial class virtualPart2PartExpr
 {
+    private part virtualPart;
+    private string partExpr;
 
-    private string namesField;
-
-    private List<resource> resourcesField;
-
-    /// <remarks/>
-    public string names
+    public part getVirtualPart()
     {
-        get
-        {
-            return this.namesField;
-        }
-        set
-        {
-            this.namesField = value;
-        }
+        return virtualPart;
     }
 
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("variant")]
-    public List<resource> resources
+    public void setVirtualPart(part pVirtualPart)
     {
-        get
+        virtualPart = pVirtualPart;
+    }
+
+    public string getPartExpr()
+    {
+        return partExpr;
+    }
+
+    public void setPartExpr(string pPartExpr)
+    {
+        partExpr = pPartExpr;
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
         {
-            return this.resourcesField;
+            return false;
         }
-        set
-        {
-            this.resourcesField = value;
-        }
+
+        virtualPart2PartExpr lVirtualPart2PartExpr = (virtualPart2PartExpr)obj;
+        return (this.virtualPart == lVirtualPart2PartExpr.virtualPart && this.partExpr == lVirtualPart2PartExpr.partExpr);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.partExpr.GetHashCode() * 10 + this.virtualPart.GetHashCode());
     }
 }
 
@@ -447,6 +676,30 @@ public partial class virtualVariant2VariantExpr
         variantExpr = pVariantExpr;
     }
 
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //       
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237  
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        virtualVariant2VariantExpr lVirtualVariant2VariantExpr = (virtualVariant2VariantExpr)obj;
+        return (this.virtualVariant == lVirtualVariant2VariantExpr.virtualVariant && this.variantExpr == lVirtualVariant2VariantExpr.variantExpr);
+    }
+
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return (this.variantExpr.GetHashCode() * 11 + this.virtualVariant.GetHashCode());
+    }
 }
 
 

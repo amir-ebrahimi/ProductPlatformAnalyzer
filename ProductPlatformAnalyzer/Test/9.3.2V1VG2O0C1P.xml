@@ -36,11 +36,9 @@
   <operations>
     <operation>
       <operationName>O1</operationName>
-      <displayName>O1</displayName>
     </operation>
     <operation>
       <operationName>O2</operationName>
-      <displayName>O2</displayName>
       <operationPrecondition>
         <operationRef>O1_F_1_1</operationRef>
       </operationPrecondition>
@@ -49,13 +47,9 @@
   <variants>
     <variant>
       <variantName>V1</variantName>
-      <variantIndex>1</variantIndex>
-      <variantDisplayName>V1</variantDisplayName>
     </variant>
     <variant>
       <variantName>V2</variantName>
-      <variantIndex>2</variantIndex>
-      <variantDisplayName>V2</variantDisplayName>
     </variant>
   </variants>
   <variantGroups>
