@@ -2457,6 +2457,38 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        /// <summary>
+        /// This function checks the precondition, to see if the operations in the precondition are from the active operations or inactive ones
+        /// incase they are inactive they make that part of the precondition to false
+        /// </summary>
+        /// <param name="pPrecondition"></param>
+        public bool preconditionSanityCheck(string pPrecondition)
+        {
+            bool lSanityCheckResult = false;
+            try
+            {
+                string[] lParts = pPrecondition.Split('_');
+                string lOperationName = lParts[0];
+                operation lOperation = cFrameworkWrapper.operationLookupByName(lOperationName);
+                if (cFrameworkWrapper.isOperationActive(lOperation))
+                {
+                    lSanityCheckResult = true;
+                }
+                else
+                {
+                    //If the operation mentioned in the precondition is inactive
+                    //That means the precondition is going to be false!
+                    lSanityCheckResult = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in preconditionSanityCheck");
+                Console.WriteLine(ex.Message);
+            }
+            return lSanityCheckResult;
+        }
+
         public void resetOperationPrecondition(operation pOperation, variant pVariant, int pState, string pConstraintSource)
         {
             try
@@ -2472,30 +2504,41 @@ namespace ProductPlatformAnalyzer
                         HashSet<BoolExpr> lPreconditionExpressions = new HashSet<BoolExpr>();
                         foreach (var lPrecondition in pOperation.precondition)
                         {
-                            //If the operation HAS a precondition
-                            //By "Complete" we mean it mentions the operation state, variant, and transition
-                            if (IsOperationInstanceComplete(lPrecondition))
+                            //Checks the precondition if the operation is an active operation or an inactive operation
+                            if (preconditionSanityCheck(lPrecondition))
                             {
-                                //If the precondition has all parts mentioned, i.e. operation name, operation state, operation variant, operation transition no
-                                if (cFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lPrecondition) > pState)
+                                //If the operation HAS a precondition
+                                //By "Complete" we mean it mentions the operation state, variant, and transition
+                                if (IsOperationInstanceComplete(lPrecondition))
                                 {
-                                    //This means the precondition is on a transition state which has not been reached yet!
-                                    //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
-                                    cZ3Solver.AddConstraintToSolver(cZ3Solver.NotOperator(lPrecondition), pConstraintSource);
+                                    //If the precondition has all parts mentioned, i.e. operation name, operation state, operation variant, operation transition no
+                                    if (cFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lPrecondition) > pState)
+                                    {
+                                        //This means the precondition is on a transition state which has not been reached yet!
+                                        //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
+                                        cZ3Solver.AddConstraintToSolver(cZ3Solver.NotOperator(lPrecondition), pConstraintSource);
+                                    }
+                                    else
+                                    {
+                                        //We already know that the precondition is a complete operation instance
+                                        //This means the precondition includes an operation status
+                                        //lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
+                                        lPreconditionExpressions.Add((BoolExpr)cZ3Solver.FindExprInExprSet(lPrecondition));
+                                    }
                                 }
                                 else
                                 {
-                                    //We already know that the precondition is a complete operation instance
-                                    //This means the precondition includes an operation status
-                                    //lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
-                                    lPreconditionExpressions.Add((BoolExpr)cZ3Solver.FindExprInExprSet(lPrecondition));
+                                    //BoolExpr lTempBoolExpr = convertIncompleteOperationInstances2CompleteOperationInstanceExpr(lPrecondition, pVariant.index, pState);
+                                    BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lPrecondition);
+                                    lPreconditionExpressions.Add(lTempBoolExpr);
                                 }
                             }
                             else
                             {
-                                //BoolExpr lTempBoolExpr = convertIncompleteOperationInstances2CompleteOperationInstanceExpr(lPrecondition, pVariant.index, pState);
-                                BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lPrecondition);
-                                lPreconditionExpressions.Add(lTempBoolExpr);
+                                //if the sanity check turned out false, meaning the precondition contains references to inactive operations
+                                //which means the precondition should be false
+                                cZ3Solver.AddConstraintToSolver(cZ3Solver.NotOperator(cOpPrecondition), pConstraintSource);
+                                lPreconditionExpressions.Add(cOpPrecondition);
                             }
                         }
                         cOpPrecondition = cZ3Solver.AndOperator(lPreconditionExpressions);
@@ -3571,6 +3614,21 @@ namespace ProductPlatformAnalyzer
                 result = null;
             }
             return result;
+        }
+
+        public BoolExpr FindingADatasBooleanVariable(string pData)
+        {
+            BoolExpr lResultVariable = null;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in FindingADatasBooleanVariable");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultVariable;
         }
 
         //TODO: We need enum for operators to be used here
