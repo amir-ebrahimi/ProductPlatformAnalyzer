@@ -18,6 +18,7 @@ namespace ProductPlatformAnalyzer
     {
         private FrameworkWrapper cFrameworkWrapper;
         private Z3Solver cZ3Solver;
+        private OutputHandler cOutputHandler;
         private RandomTestCreator cRandomTestCreator;
 
         private bool cDebugMode;
@@ -81,9 +82,11 @@ namespace ProductPlatformAnalyzer
         {
             cCurrentTransitionNumber = 0;
 
-            cFrameworkWrapper = new FrameworkWrapper();
-            cRandomTestCreator = new RandomTestCreator();
-            cZ3Solver = new Z3Solver();
+            cOutputHandler = new OutputHandler();
+            cFrameworkWrapper = new FrameworkWrapper(cOutputHandler);
+            cRandomTestCreator = new RandomTestCreator(cOutputHandler);
+            cZ3Solver = new Z3Solver(cOutputHandler);
+
             cDebugMode = false;
             cOpSeqAnalysis = true;
             cNeedPreAnalysis = true;
@@ -97,11 +100,11 @@ namespace ProductPlatformAnalyzer
             //Parameters: Analysis Result, Analysis Detail Result, Variants Result
             //          , Transitions Result, Analysis Timing, Unsat Core
             //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-            //          , Report timings, Debug Mode (Make model file)
+            //          , Report timings, Debug Mode (Make model file), User Messages
             setReportType(true, true, true
                         , true, true, true
                         , true, true, false
-                        , true, true);
+                        , true, true, true);
         }
 
         /// <summary>
@@ -117,7 +120,8 @@ namespace ProductPlatformAnalyzer
                                     , bool pStopAtEndOfAnalysis
                                     , bool pCreateHTMLOutput
                                     , bool pReportTimings
-                                    , bool pDebugMode)
+                                    , bool pDebugMode
+                                    , bool pUserMessages)
         {
             try
             {
@@ -131,12 +135,13 @@ namespace ProductPlatformAnalyzer
                 cStopAEndOfAnalysis = pStopAtEndOfAnalysis;
                 cCreateHTMLOutput = pCreateHTMLOutput;
                 cReportTimings = pReportTimings;
+                cOutputHandler.setEnableUserMessages(pUserMessages);
                 cZ3Solver.setDebugMode(pDebugMode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in setReportType");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in setReportType");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -163,8 +168,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultProductModelEnumerationAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultProductModelEnumerationAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -191,8 +196,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultVariantSelectabilityAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultVariantSelectabilityAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -219,8 +224,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultAlwaysSelectedVariantAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultAlwaysSelectedVariantAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -247,8 +252,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultOperationSelectabilityAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultOperationSelectabilityAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -275,8 +280,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultAlwaysSelectedOperationAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultAlwaysSelectedOperationAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -303,8 +308,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultExistanceOfDeadlockAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultExistanceOfDeadlockAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -331,8 +336,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in DefaultProductManufacturingEnumerationAnalysisVariationPointSetting");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in DefaultProductManufacturingEnumerationAnalysisVariationPointSetting");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -471,8 +476,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in setVariationPoints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in setVariationPoints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -506,8 +511,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in makeExpressionListFromVariantGroupList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in makeExpressionListFromVariantGroupList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -524,8 +529,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in makeExpressionListFromPartList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in makeExpressionListFromPartList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -542,8 +547,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in makeExpressionListFromVariantList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in makeExpressionListFromVariantList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -567,8 +572,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in loadAMLInitialData");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in loadAMLInitialData");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -582,7 +587,8 @@ namespace ProductPlatformAnalyzer
         public bool loadInitialData(Enumerations.InitializerSource pInitialData, String pInitialDataFileName = ""
                                     , int pMaxVariantGroupumber = 0, int pMaxVariantNumber = 0, int pMaxPartNumber = 0
                                     , int pMaxOperationNumber = 0, int pTrueProbability = 0, int pFalseProbability = 0
-                                    , int pExpressionProbability = 0, int pMaxTraitNumber = 0, int pMaxNoOfTraitAttributes = 0, int pMaxResourceNumber = 0)
+                                    , int pExpressionProbability = 0, int pMaxTraitNumber = 0, int pMaxNoOfTraitAttributes = 0
+                                    , int pMaxResourceNumber = 0, int pMaxExpressionOperandNumber = 0)
         {
             bool lDataLoaded = false;
             try
@@ -612,6 +618,7 @@ namespace ProductPlatformAnalyzer
                                                                                 , pMaxOperationNumber
                                                                                 , pTrueProbability, pFalseProbability, pExpressionProbability
                                                                                 , pMaxTraitNumber, pMaxNoOfTraitAttributes, pMaxResourceNumber
+                                                                                , pMaxExpressionOperandNumber
                                                                                 , cFrameworkWrapper);
 
                                 if (pMaxPartNumber > 0)
@@ -629,8 +636,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in loadInitialData");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in loadInitialData");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -652,8 +659,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnInputFileType");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnInputFileType");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataFileType;
         }
@@ -711,8 +718,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in MakeProdutPlatformModel");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in MakeProdutPlatformModel");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -746,8 +753,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in MakeStaticPartOfProductPlatformModel");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in MakeStaticPartOfProductPlatformModel");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -775,8 +782,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in MakeDynamicPartOfProductPlatformModel");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in MakeDynamicPartOfProductPlatformModel");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -868,7 +875,7 @@ namespace ProductPlatformAnalyzer
                         if (!pAnalysisComplete)
                         {
                             if (cGeneralAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
-                                Console.WriteLine("Analysis No: " + pTransitionNo);
+                                cOutputHandler.printMessageToConsole("Analysis No: " + pTransitionNo);
                             ////Removing unwanted code, this function was pointing to a one line function
                             ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
                             lTestResult = cZ3Solver.CheckSatisfiability(pTransitionNo
@@ -896,7 +903,7 @@ namespace ProductPlatformAnalyzer
                             ////TODO: If the analysis is finished why should it check the satisfiablity again???????
                             ////TODO: Have to remember the reason behind this else.
 
-                            Console.WriteLine("Finished: ");
+                            cOutputHandler.printMessageToConsole("Finished: ");
                             ////Removing unwanted code, this function was pointing to a one line function
                             ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
                             lTestResult = lZ3Solver.CheckSatisfiability(pTransitionNo
@@ -931,8 +938,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AnalyzeProductPlatform");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AnalyzeProductPlatform");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTestResult;
         }
@@ -952,9 +959,9 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                OutputHandler output = new OutputHandler(pFrameworkWrapper);
+                cOutputHandler.setFrameworkWrapper(pFrameworkWrapper);
 
-                output = cZ3Solver.PopulateOutputHandler(pState, output);
+                cOutputHandler = cZ3Solver.PopulateOutputHandler(pState, cOutputHandler);
 
                 switch (cAnalysisType)
                 {
@@ -965,19 +972,19 @@ namespace ProductPlatformAnalyzer
                             {
                                 //What does the satisfiable result in this analysis mean?
                                 if (cReportAnalysisResult)
-                                    Console.WriteLine("The ProductPlatform has a model to satisfy it.");
+                                    cOutputHandler.printMessageToConsole("The ProductPlatform has a model to satisfy it.");
 
                                 //Means that there has been a model which has been found
-                                Console.WriteLine("Model No " + pState + ":");
+                                cOutputHandler.printMessageToConsole("Model No " + pState + ":");
                                 if (cReportVariantsResult)
-                                    output.printChosenVariants();
+                                    cOutputHandler.printChosenVariants();
                                 if (cReportTransitionsResult)
-                                    output.printOperationsTransitions();
+                                    cOutputHandler.printOperationsTransitions();
 
                                 if (cCreateHTMLOutput)
                                 {
-                                    output.writeModel();
-                                    output.writeModelNoPost();
+                                    cOutputHandler.writeModel();
+                                    cOutputHandler.writeModelNoPost();
                                 }
 
                             }
@@ -985,19 +992,19 @@ namespace ProductPlatformAnalyzer
                             {
                                 //What does the unsatisfiable result in this analysis mean?
                                 if (cReportAnalysisResult)
-                                    Console.WriteLine("The ProductPlatform has no more valid models.");
+                                    cOutputHandler.printMessageToConsole("The ProductPlatform has no more valid models.");
 
                                 if (cReportAnalysisDetailResult)
-                                    output.printCounterExample();
+                                    cOutputHandler.printCounterExample();
 
                                 if (cCreateHTMLOutput)
                                 {
-                                    output.writeCounterExample();
-                                    output.writeCounterExampleNoPost();
+                                    cOutputHandler.writeCounterExample();
+                                    cOutputHandler.writeCounterExampleNoPost();
                                 }
 
-                                //Console.WriteLine("proof: {0}", iSolver.Proof);
-                                //Console.WriteLine("core: ");
+                                //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
+                                //cOutputHandler.printMessageToConsole("core: ");
                                 if (cReportUnsatCore)
                                     cZ3Solver.ConsoleWriteUnsatCore();
                             }
@@ -1013,9 +1020,9 @@ namespace ProductPlatformAnalyzer
                                     //What does the satisfiable result in this analysis mean?
                                     if (cReportAnalysisResult)
                                     {
-                                        Console.WriteLine("---------------------------------------------------------------------");
-                                        Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
-                                        Console.WriteLine(lAnalyzedVariant.names + " is Selectable.");
+                                        cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+                                        cOutputHandler.printMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
+                                        cOutputHandler.printMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
 
                                     }
                                 }
@@ -1036,12 +1043,12 @@ namespace ProductPlatformAnalyzer
                                     if (cReportAnalysisResult)
                                     {
                                         //Initial info
-                                        Console.WriteLine("---------------------------------------------------------------------");
-                                        Console.WriteLine("Selected Variant: " + lAnalyzedVariant.names);
+                                        cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+                                        cOutputHandler.printMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
 
                                         //Analysis Result
                                         //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                                        Console.WriteLine("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
+                                        cOutputHandler.printMessageToConsole("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
                                     }
                                 }
                             }
@@ -1050,7 +1057,7 @@ namespace ProductPlatformAnalyzer
                                 if (pExtraField != null)
                                 {
                                     part lAnalyzedVariant = (part)pExtraField;
-                                    Console.WriteLine("All valid configurations DO include " + lAnalyzedVariant.names + ".");
+                                    cOutputHandler.printMessageToConsole("All valid configurations DO include " + lAnalyzedVariant.names + ".");
                                 }
                             }
                             break;
@@ -1066,11 +1073,11 @@ namespace ProductPlatformAnalyzer
                                     if (cReportAnalysisResult)
                                     {
                                         //Initial info
-                                        Console.WriteLine("----------------------------------------------------------------");
-                                        Console.WriteLine("Analysing operation named: " + lAnalyzedOperationName);
+                                        cOutputHandler.printMessageToConsole("----------------------------------------------------------------");
+                                        cOutputHandler.printMessageToConsole("Analysing operation named: " + lAnalyzedOperationName);
 
                                         //Analysis Result
-                                        Console.WriteLine(lAnalyzedOperationName + " is selectable.");
+                                        cOutputHandler.printMessageToConsole(lAnalyzedOperationName + " is selectable.");
                                     }
                                 }
                             }
@@ -1083,7 +1090,7 @@ namespace ProductPlatformAnalyzer
                                     //This means the operation instance is inactive hence it should be mentioned
 
                                     //This is when we want to report only the operation name
-                                    Console.WriteLine("Operation " + cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString()) + " is inactive!");
+                                    cOutputHandler.printMessageToConsole("Operation " + cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString()) + " is inactive!");
                                 }
                             }
                             break;
@@ -1097,7 +1104,7 @@ namespace ProductPlatformAnalyzer
                                     string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
 
                                     //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
-                                    Console.WriteLine("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
+                                    cOutputHandler.printMessageToConsole("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
                                 }
                             }
                             else if (pSatResult.Equals(Status.UNSATISFIABLE))
@@ -1106,7 +1113,7 @@ namespace ProductPlatformAnalyzer
                                 {
                                     string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(pExtraField.ToString());
 
-                                    Console.WriteLine("All valid configurations DO include " + lOperationName + ".");
+                                    cOutputHandler.printMessageToConsole("All valid configurations DO include " + lOperationName + ".");
                                 }
                             }
                             break;
@@ -1123,16 +1130,16 @@ namespace ProductPlatformAnalyzer
 
                                     //Print and writes an output file showing the result of a deadlocked test
                                     if (cReportAnalysisDetailResult)
-                                        output.printCounterExample();
+                                        cOutputHandler.printCounterExample();
 
                                     if (cCreateHTMLOutput)
                                     {
-                                        output.writeCounterExample();
-                                        output.writeCounterExampleNoPost();
+                                        cOutputHandler.writeCounterExample();
+                                        cOutputHandler.writeCounterExampleNoPost();
                                     }
 
-                                    //Console.WriteLine("proof: {0}", iSolver.Proof);
-                                    //Console.WriteLine("core: ");
+                                    //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
+                                    //cOutputHandler.printMessageToConsole("core: ");
                                     if (cReportUnsatCore)
                                         cZ3Solver.ConsoleWriteUnsatCore();
                                 }
@@ -1143,19 +1150,19 @@ namespace ProductPlatformAnalyzer
                                     //Print and writes an output file showing the result of a finished test
                                     if (cReportAnalysisDetailResult)
                                     {
-                                        Console.WriteLine("Model No " + pState + ":");
+                                        cOutputHandler.printMessageToConsole("Model No " + pState + ":");
                                         if (cReportVariantsResult)
                                         {
-                                            output.printChosenVariants();
+                                            cOutputHandler.printChosenVariants();
                                         }
                                         if (cReportTransitionsResult)
-                                            output.printOperationsTransitions();
+                                            cOutputHandler.printOperationsTransitions();
                                     }
 
                                     if (cCreateHTMLOutput)
                                     {
-                                        output.writeFinished();
-                                        output.writeFinishedNoPost();
+                                        cOutputHandler.writeFinished();
+                                        cOutputHandler.writeFinishedNoPost();
                                     }
                                 }
                             //}
@@ -1198,8 +1205,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReportSolverResults");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReportSolverResults");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
         
@@ -1220,8 +1227,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertProductPlatform");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertProductPlatform");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1239,8 +1246,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertConfigurationRules");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertConfigurationRules");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -1258,8 +1265,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -1293,8 +1300,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertOperationsPrecedenceRules");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertOperationsPrecedenceRules");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1318,8 +1325,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertResourcesNOperationResourceRelations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertResourcesNOperationResourceRelations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1350,8 +1357,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertGoal");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertGoal");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1372,7 +1379,7 @@ namespace ProductPlatformAnalyzer
                     if (!pDone)
                     {
                         if (cGeneralAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
-                            Console.WriteLine("Analysis No: " + pState);
+                            cOutputHandler.printMessageToConsole("Analysis No: " + pState);
                         ////Removing unwanted code, this function was pointing to a one line function
                         ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
                         lTestResult = cZ3Solver.CheckSatisfiability(pState
@@ -1393,7 +1400,7 @@ namespace ProductPlatformAnalyzer
                         ////TODO: If the analysis is finished why should it check the satisfiablity again???????
                         ////TODO: Have to remember the reason behind this else.
 
-                        Console.WriteLine("Finished: ");
+                        cOutputHandler.printMessageToConsole("Finished: ");
                         ////Removing unwanted code, this function was pointing to a one line function
                         ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
                         lTestResult = cZ3Solver.CheckSatisfiability(pState
@@ -1414,8 +1421,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in anlyzeModel");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in anlyzeModel");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTestResult;
         }
@@ -1438,8 +1445,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFResource2Z3Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFResource2Z3Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1471,8 +1478,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFResourceAttribute2Z3Constraint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFResourceAttribute2Z3Constraint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1569,8 +1576,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFResourceOperationMapping2Z3Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFResourceOperationMapping2Z3Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1598,8 +1605,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFVariants2Z3Variants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFVariants2Z3Variants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
         }
@@ -1613,8 +1620,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFParts2Z3Parts");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFParts2Z3Parts");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
         }
@@ -1646,8 +1653,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnCurrentVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnCurrentVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -1661,14 +1668,11 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //Here we aim at the variant operation mapping table
-                //We loop over each variant operation mapping, and for each case make the needed operation instances
+                //Here we aim at the variant/part - operation mapping table
+                //We loop over each variant/part - operation mapping, and for each case make the needed operation instances
 
-
-                //Loop over variant list
-                //For each variant find the variant in variant-operation mapping table
-                //For each operation in this list make the following operation boolean variables
-                //List<part> localVariantList = cFrameworkWrapper.PartList;
+                //TODO: THIS IS A PROBLEM!!!!
+                //TODO: This loop should NOT be on the variant or on the part list but it should be as stated above!
                 if (cFrameworkWrapper.UsePartInfo)
                 {
                     foreach (part lCurrentPart in cFrameworkWrapper.PartSet)
@@ -1770,8 +1774,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFOperations2Z3Operations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFOperations2Z3Operations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1811,8 +1815,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addCurrentPartOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addCurrentPartOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1852,8 +1856,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addCurrentVariantOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addCurrentVariantOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1881,8 +1885,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addCurrentActiveVariantToActiveVariantList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addCurrentActiveVariantToActiveVariantList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1908,8 +1912,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetCurrentStateAndNewStateOperationVariables");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetCurrentStateAndNewStateOperationVariables");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1935,8 +1939,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetCurrentStateAndNewStateOperationVariables");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetCurrentStateAndNewStateOperationVariables");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1956,8 +1960,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetCurrentStateOperationVariables");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetCurrentStateOperationVariables");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1977,8 +1981,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetCurrentStateOperationVariables");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetCurrentStateOperationVariables");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1996,8 +2000,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in produceVariantGroupGCardinalityConstraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in produceVariantGroupGCardinalityConstraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2198,8 +2202,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in initializeFVariantOperation2Z3Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in initializeFVariantOperation2Z3Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2216,8 +2220,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddPrecedanceConstraintToLocalList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddPrecedanceConstraintToLocalList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
         /*public void convertFOperations2Z3Constraint(int pState)
@@ -2394,8 +2398,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertPartialOperationInstance2CompleteForm");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertPartialOperationInstance2CompleteForm");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationInstance;
         }
@@ -2452,8 +2456,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOperationPrecondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOperationPrecondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2483,8 +2487,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in preconditionSanityCheck");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in preconditionSanityCheck");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lSanityCheckResult;
         }
@@ -2552,8 +2556,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOperationPrecondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOperationPrecondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2579,8 +2583,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GetListOfVariantsFromAVariantExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GetListOfVariantsFromAVariantExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariantList;
         }
@@ -2607,8 +2611,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GetListOfPartsFromAPartExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GetListOfPartsFromAPartExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPartList;
         }
@@ -2637,8 +2641,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindRelatedParts");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in FindRelatedParts");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPartList;
         }
@@ -2666,8 +2670,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindRelatedVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in FindRelatedVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariantList;
         }
@@ -2789,8 +2793,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertIncompleteOperationInstances2CompleteOperationInstanceExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertIncompleteOperationInstances2CompleteOperationInstanceExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultBoolExpr;
         }
@@ -2811,8 +2815,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IsOperationInstanceComplete");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in IsOperationInstanceComplete");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 lResult = false;
             }
             return lResult;
@@ -2834,8 +2838,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IsOperationInstanceMissingTransitionNo");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingTransitionNo");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -2856,8 +2860,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IsOperationInstanceMissingVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -2878,8 +2882,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IsOperationInstanceMissingStatus");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingStatus");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -2930,8 +2934,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOperationPostcondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOperationPostcondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -2981,8 +2985,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOperationPostcondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOperationPostcondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -2998,8 +3002,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindExprInExprList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in FindExprInExprList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -3116,8 +3120,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in mkCondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in mkCondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -3139,8 +3143,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnCurrentVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnCurrentVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -3254,8 +3258,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFOperations2Z3ConstraintNewVersion");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFOperations2Z3ConstraintNewVersion");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3338,8 +3342,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula6");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula6");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3385,8 +3389,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula58");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula58");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }*/
 
@@ -3407,8 +3411,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula57");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula57");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3429,8 +3433,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula56");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula56");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3457,8 +3461,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula54");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula54");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3479,8 +3483,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula53");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula53");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3497,8 +3501,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula53");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula53");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3528,8 +3532,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula52");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula52");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3559,8 +3563,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateFormula51");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateFormula51");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3583,8 +3587,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationExecutingStateNItsPostcondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationExecutingStateNItsPostcondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -3609,8 +3613,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationInitialStateNItsPrecondition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationInitialStateNItsPrecondition");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -3625,8 +3629,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindingADatasBooleanVariable");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in FindingADatasBooleanVariable");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariable;
         }
@@ -3716,8 +3720,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParseExpression");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParseExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -3797,8 +3801,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParseExpression");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParseExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -3821,8 +3825,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnConstraintsString");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnConstraintsString");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lConstraintsString;
         }
@@ -3844,8 +3848,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnBoolExprOfConstraintsSet");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnBoolExprOfConstraintsSet");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lReturnBoolExpr;
         }
@@ -3859,8 +3863,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnBoolExprOfConstraint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnBoolExprOfConstraint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lReturnExpr;
         }*/
@@ -3878,8 +3882,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addStandAloneConstraint2Z3Solver");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addStandAloneConstraint2Z3Solver");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3897,8 +3901,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddExtraConstraint2Z3Constraint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddExtraConstraint2Z3Constraint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3934,8 +3938,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFConstraint2Z3Constraint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFConstraint2Z3Constraint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3952,8 +3956,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddConfigurationConstraintToLocalList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddConfigurationConstraintToLocalList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -3976,8 +3980,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addFExpression2Z3Constraint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addFExpression2Z3Constraint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -4001,8 +4005,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertComplexString2BoolExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertComplexString2BoolExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -4235,8 +4239,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createFormula7");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createFormula7");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultFormula7;
         }
@@ -4288,8 +4292,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createFormula7");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createFormula7");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultFormula7;
         }
@@ -4336,8 +4340,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createFormula8");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createFormula8");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultFormula8;
         }
@@ -4384,8 +4388,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createFormula8");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createFormula8");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultFormula8;
         }
@@ -4408,7 +4412,7 @@ namespace ProductPlatformAnalyzer
                     lStopWatch.Start();
 
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Existance Of Valid Production Path Analysis:");
+                cOutputHandler.printMessageToConsole("Existance Of Valid Production Path Analysis:");
 
                 //This variable controls if the analysis has been completed or not
                 bool lAnalysisComplete = false;
@@ -4431,19 +4435,19 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(true, true, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ///??????????????????????????
                 //Then we have to go over all variants one by one, for this we use the list we previously filled
 //                foreach (variant lCurrentVariant in lVariantList)
 //                {
-//                    Console.WriteLine("---------------------------------------------------------------------");
-//                    Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
+//                    cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+//                    cOutputHandler.printMessageToConsole("Selected Variant: " + lCurrentVariant.names);
 
                     ////Making the static part of the model
                     MakeStaticPartOfProductPlatformModel();
@@ -4452,7 +4456,7 @@ namespace ProductPlatformAnalyzer
                     {
                         cCurrentTransitionNumber = lTransitionNo;
 
-                        Console.WriteLine("--------------------Transition: " + lTransitionNo + " --------------------");
+                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
                         //For this new variant the analysis has just started, hence it is not complete
                         lAnalysisComplete = false;
 
@@ -4469,7 +4473,7 @@ namespace ProductPlatformAnalyzer
                             lStopWatch.Stop();
                             cModelCreationTime = lStopWatch.ElapsedMilliseconds;
 
-                            Console.WriteLine("Model Creation Time: " + cModelCreationTime + "ms.");
+                            cOutputHandler.printMessageToConsole("Model Creation Time: " + cModelCreationTime + "ms.");
 
                             lStopWatch.Restart();
                         }
@@ -4490,7 +4494,7 @@ namespace ProductPlatformAnalyzer
                             lStopWatch.Stop();
                             cModelAnalysisTime = lStopWatch.ElapsedMilliseconds;
 
-                            Console.WriteLine("Model Analysis Time: " + cModelAnalysisTime + "ms.");
+                            cOutputHandler.printMessageToConsole("Model Analysis Time: " + cModelAnalysisTime + "ms.");
 
                             lStopWatch.Restart();
                         }
@@ -4500,7 +4504,7 @@ namespace ProductPlatformAnalyzer
                         if (lInternalAnalysisResult.Equals(Status.SATISFIABLE))
                         {
                             //If the result is true it means we have found a deadlock!
-                            Console.WriteLine("A deadlock was found!");
+                            cOutputHandler.printMessageToConsole("A deadlock was found!");
                             ReportSolverResult(lTransitionNo + 1, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
                             break;
                         }
@@ -4521,28 +4525,28 @@ namespace ProductPlatformAnalyzer
                 else
                     lAnalysisResult = false;
 
-                Console.WriteLine("Analysis Report: ");
+                cOutputHandler.printMessageToConsole("Analysis Report: ");
 
                 if (!lAnalysisResult)
                 {
                     //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
                     ReportSolverResult(lMaxNoOfTransitions, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
-                    Console.WriteLine("NO deadlock was found!");
+                    cOutputHandler.printMessageToConsole("NO deadlock was found!");
                 }
 
                 if (cReportTimings)
                 {
                     lStopWatch.Stop();
                     cModelAnalysisReportingTime = lStopWatch.ElapsedMilliseconds;
-                    Console.WriteLine("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
+                    cOutputHandler.printMessageToConsole("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
                 }
 
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ExistanceOfDeadlockAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ExistanceOfDeadlockAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -4566,7 +4570,7 @@ namespace ProductPlatformAnalyzer
                     lStopWatch.Start();
 
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Product Manufacturing Enumeration Analysis:");
+                cOutputHandler.printMessageToConsole("Product Manufacturing Enumeration Analysis:");
 
                 //This variable controls if the analysis has been completed or not
                 bool lAnalysisComplete = false;
@@ -4588,12 +4592,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(true, true, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ////Making the static part of the model
                 MakeStaticPartOfProductPlatformModel();
@@ -4616,7 +4620,7 @@ namespace ProductPlatformAnalyzer
                     lStopWatch.Stop();
                     cModelCreationTime = lStopWatch.ElapsedMilliseconds;
 
-                    Console.WriteLine("Model Creation Time: " + cModelCreationTime + "ms.");
+                    cOutputHandler.printMessageToConsole("Model Creation Time: " + cModelCreationTime + "ms.");
 
                     lStopWatch.Restart();
                 }
@@ -4633,7 +4637,7 @@ namespace ProductPlatformAnalyzer
                     lStopWatch.Stop();
                     cModelAnalysisTime = lStopWatch.ElapsedMilliseconds;
 
-                    Console.WriteLine("Model Analysis Time: " + cModelAnalysisTime + "ms.");
+                    cOutputHandler.printMessageToConsole("Model Analysis Time: " + cModelAnalysisTime + "ms.");
 
                     lStopWatch.Restart();
                 }
@@ -4647,7 +4651,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lStopWatch.Stop();
                     cModelAnalysisReportingTime = lStopWatch.ElapsedMilliseconds;
-                    Console.WriteLine("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
+                    cOutputHandler.printMessageToConsole("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
                 }
 
                 //TODO: Do we need a stand alone constraint????????? Considering that this line comes with a stand alone constraint!!!
@@ -4663,19 +4667,19 @@ namespace ProductPlatformAnalyzer
                 else
                     lAnalysisResult = false;
 
-                Console.WriteLine("Analysis Report: ");
+                cOutputHandler.printMessageToConsole("Analysis Report: ");
 
                 if (!lAnalysisResult)
                 {
                     //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
                     ReportSolverResult(lMaxNoOfTransitions, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
-                    Console.WriteLine("NO deadlock was found!");
+                    cOutputHandler.printMessageToConsole("NO deadlock was found!");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ExistanceOfDeadlockAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ExistanceOfDeadlockAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -4695,7 +4699,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Let the user know what analysis is being done
-                Console.WriteLine("Model enumeration Analysis:");
+                cOutputHandler.printMessageToConsole("Model enumeration Analysis:");
 
                 //This variable controls if the analysis has been completed or not
                 bool lAnalysisComplete = false;
@@ -4716,12 +4720,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(false, false, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ////TODO: Added as new version
                 MakeStaticPartOfProductPlatformModel();
@@ -4743,7 +4747,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //If the product platform did not have any more models!
                         if (i > 0)
-                            Console.WriteLine("This Product Platform only had " + i + " Models.");
+                            cOutputHandler.printMessageToConsole("This Product Platform only had " + i + " Models.");
                         break;
                     }
 
@@ -4757,12 +4761,12 @@ namespace ProductPlatformAnalyzer
 
 
                 //In this analysis there was not a meaningful analysis report!
-                //Console.WriteLine("Analysis Report: ");
+                //cOutputHandler.printMessageToConsole("Analysis Report: ");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ProductModelEnumerationAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ProductModelEnumerationAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -4782,7 +4786,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Variant Selectability Analysis:");
+                cOutputHandler.printMessageToConsole("Variant Selectability Analysis:");
 
                 //This variable controls if the analysis has been completed or not
                 bool lAnalysisComplete = false;
@@ -4817,12 +4821,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(false, false, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ////As this analysis type is a static analysis we only carry t out for the first transition
                 //TODO: lTransitionNo should be removed!!
@@ -4835,8 +4839,8 @@ namespace ProductPlatformAnalyzer
                     foreach (part lCurrentPart in lPartList)
                     {
                         //This line is moved to the reporting procedure in this class.
-                        //Console.WriteLine("---------------------------------------------------------------------");
-                        //Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
+                        //cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+                        //cOutputHandler.printMessageToConsole("Selected Variant: " + lCurrentVariant.names);
 
 
                         ////TODO: Added as new version
@@ -4846,7 +4850,7 @@ namespace ProductPlatformAnalyzer
                         /////for (int lTransitionNo = 0; lTransitionNo < lMaxNoOfTransitions; lTransitionNo++)
                         /////{
 
-                        /////                        Console.WriteLine("--------------------Transition: " + lTransitionNo + " --------------------");
+                        /////                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
                         //For this new variant the analysis has just started, hence it is not complete
                         /////                        lAnalysisComplete = false;
 
@@ -4868,7 +4872,7 @@ namespace ProductPlatformAnalyzer
                             ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lCurrentPart);
 
                             //This line is moved to the reporting procedure in this class.
-                            //Console.WriteLine(lCurrentVariant.names + " is Selectable.");
+                            //cOutputHandler.printMessageToConsole(lCurrentVariant.names + " is Selectable.");
                         }
                         else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                         {
@@ -4899,8 +4903,8 @@ namespace ProductPlatformAnalyzer
                     foreach (variant lCurrentVariant in lVariantList)
                     {
                         //This line is moved to the reporting procedure in this class.
-                        //Console.WriteLine("---------------------------------------------------------------------");
-                        //Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
+                        //cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+                        //cOutputHandler.printMessageToConsole("Selected Variant: " + lCurrentVariant.names);
 
 
                         ////TODO: Added as new version
@@ -4910,7 +4914,7 @@ namespace ProductPlatformAnalyzer
                         /////for (int lTransitionNo = 0; lTransitionNo < lMaxNoOfTransitions; lTransitionNo++)
                         /////{
 
-                        /////                        Console.WriteLine("--------------------Transition: " + lTransitionNo + " --------------------");
+                        /////                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
                         //For this new variant the analysis has just started, hence it is not complete
                         /////                        lAnalysisComplete = false;
 
@@ -4932,7 +4936,7 @@ namespace ProductPlatformAnalyzer
                             ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lCurrentVariant);
 
                             //This line is moved to the reporting procedure in this class.
-                            //Console.WriteLine(lCurrentVariant.names + " is Selectable.");
+                            //cOutputHandler.printMessageToConsole(lCurrentVariant.names + " is Selectable.");
                         }
                         else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                         {
@@ -4958,17 +4962,17 @@ namespace ProductPlatformAnalyzer
 
                 }
 
-                Console.WriteLine("Analysis Report: ");
+                cOutputHandler.printMessageToConsole("Analysis Report: ");
                 if (cFrameworkWrapper.UsePartInfo)
                 {
                     if (lUnselectablePartList.Count != 0)
                     {
-                        Console.WriteLine("Parts which are not selectable are: " + ReturnPartNamesFromList(lUnselectablePartList));
+                        cOutputHandler.printMessageToConsole("Parts which are not selectable are: " + ReturnPartNamesFromList(lUnselectablePartList));
                         lAnalysisResult = false;
                     }
                     else
                     {
-                        Console.WriteLine("All Parts are selectable!");
+                        cOutputHandler.printMessageToConsole("All Parts are selectable!");
                         lAnalysisResult = true;
                     }
                 }
@@ -4976,20 +4980,20 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lUnselectableVariantList.Count != 0)
                     {
-                        Console.WriteLine("Variats which are not selectable are: " + ReturnVariantNamesFromList(lUnselectableVariantList));
+                        cOutputHandler.printMessageToConsole("Variats which are not selectable are: " + ReturnVariantNamesFromList(lUnselectableVariantList));
                         lAnalysisResult = false;
                     }
                     else
                     {
-                        Console.WriteLine("All Variats are selectable!");
+                        cOutputHandler.printMessageToConsole("All Variats are selectable!");
                         lAnalysisResult = true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in VariantSelectabilityGoal");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in VariantSelectabilityGoal");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -5009,7 +5013,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Always selected variant Analysis:");
+                cOutputHandler.printMessageToConsole("Always selected variant Analysis:");
 
                 bool lAnalysisComplete = false;
 
@@ -5039,12 +5043,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(true, true, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 //This analysis only has meaning in the first transition, as it is a static analysis
                 //TODO: lTransitionNo should be removed !!
@@ -5052,8 +5056,8 @@ namespace ProductPlatformAnalyzer
                 cCurrentTransitionNumber = lTransitionNo;
 
                 //This line is moved to the reporting procedure in this class
-                //Console.WriteLine("---------------------------------------------------------------------");
-                //Console.WriteLine("Selected Variant: " + lCurrentVariant.names);
+                //cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
+                //cOutputHandler.printMessageToConsole("Selected Variant: " + lCurrentVariant.names);
 
                 ////TODO: Added as new version
                 lAnalysisComplete = false;
@@ -5063,7 +5067,7 @@ namespace ProductPlatformAnalyzer
 
                 /////                    for (int lTransitionNo = 0; lTransitionNo < lMaxNoOfTransitions; lTransitionNo++)
                 /////                    {
-                /////                        Console.WriteLine("--------------------Transition: " + lTransitionNo + " --------------------");
+                /////                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
 
                 ////TODO: Added as new version
                 MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
@@ -5114,7 +5118,7 @@ namespace ProductPlatformAnalyzer
                         {
                             //This line is moved to the reporting procedure in this class
                             //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                            //Console.WriteLine("There DOES exist a valid configuration which does not include " + lCurrentVariant.names + ".");
+                            //cOutputHandler.printMessageToConsole("There DOES exist a valid configuration which does not include " + lCurrentVariant.names + ".");
 
                             if (!lNotAlwaysSelectedPartList.Contains(lCurrentPart))
                                 lNotAlwaysSelectedPartList.Add(lCurrentPart);
@@ -5123,7 +5127,7 @@ namespace ProductPlatformAnalyzer
                         else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                         {
                             //This line is moved to the reporting procedure in this class
-                            //Console.WriteLine("All valid configurations DO include " + lCurrentVariant.names + ".");
+                            //cOutputHandler.printMessageToConsole("All valid configurations DO include " + lCurrentVariant.names + ".");
                         }
 
                         //if it does hold we go to the next variant
@@ -5186,7 +5190,7 @@ namespace ProductPlatformAnalyzer
                         {
                             //This line is moved to the reporting procedure in this class
                             //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                            //Console.WriteLine("There DOES exist a valid configuration which does not include " + lCurrentVariant.names + ".");
+                            //cOutputHandler.printMessageToConsole("There DOES exist a valid configuration which does not include " + lCurrentVariant.names + ".");
 
                             if (!lNotAlwaysSelectedVariantList.Contains(lCurrentVariant))
                                 lNotAlwaysSelectedVariantList.Add(lCurrentVariant);
@@ -5195,7 +5199,7 @@ namespace ProductPlatformAnalyzer
                         else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                         {
                             //This line is moved to the reporting procedure in this class
-                            //Console.WriteLine("All valid configurations DO include " + lCurrentVariant.names + ".");
+                            //cOutputHandler.printMessageToConsole("All valid configurations DO include " + lCurrentVariant.names + ".");
                         }
 
                         //if it does hold we go to the next variant
@@ -5235,22 +5239,22 @@ namespace ProductPlatformAnalyzer
                 if (cFrameworkWrapper.UsePartInfo)
                 {
                     if (lNotAlwaysSelectedPartList.Count != 0)
-                        Console.WriteLine("Parts which are NOT always selected are: " + ReturnPartNamesFromList(lNotAlwaysSelectedPartList));
+                        cOutputHandler.printMessageToConsole("Parts which are NOT always selected are: " + ReturnPartNamesFromList(lNotAlwaysSelectedPartList));
                     else
-                        Console.WriteLine("All valid configurations DO include ALL of the parts!");
+                        cOutputHandler.printMessageToConsole("All valid configurations DO include ALL of the parts!");
                 }
                 else
                 {
                     if (lNotAlwaysSelectedVariantList.Count != 0)
-                        Console.WriteLine("Variats which are NOT always selected are: " + ReturnVariantNamesFromList(lNotAlwaysSelectedVariantList));
+                        cOutputHandler.printMessageToConsole("Variats which are NOT always selected are: " + ReturnVariantNamesFromList(lNotAlwaysSelectedVariantList));
                     else
-                        Console.WriteLine("All valid configurations DO include ALL of the variants!");
+                        cOutputHandler.printMessageToConsole("All valid configurations DO include ALL of the variants!");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AlwaysSelectedVariantAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AlwaysSelectedVariantAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -5269,7 +5273,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Always selected operation Analysis:");
+                cOutputHandler.printMessageToConsole("Always selected operation Analysis:");
 
                 bool lAnalysisComplete = false;
 ////                List<variant> lVariantList = lFrameworkWrapper.VariantList;
@@ -5297,12 +5301,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(true, false, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ////TODO: Added as new version
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
@@ -5365,14 +5369,14 @@ namespace ProductPlatformAnalyzer
                     {
                         //This line is moved to the reporting procedure in this class
                         //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
-                        //Console.WriteLine("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
+                        //cOutputHandler.printMessageToConsole("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
 
                         if (!lNotAlwaysSelectedOperationNameList.Contains(lOperationName))
                             lNotAlwaysSelectedOperationNameList.Add(lOperationName);
                     }
                     else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                     {
-                        //Console.WriteLine("All valid configurations DO include " + lOperationName + ".");
+                        //cOutputHandler.printMessageToConsole("All valid configurations DO include " + lOperationName + ".");
                     }
 
                     cZ3Solver.SolverPopFunction();
@@ -5437,14 +5441,14 @@ namespace ProductPlatformAnalyzer
                                 {
                                     //This line is moved to the reporting procedure in this class
                                     //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
-                                    //Console.WriteLine("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
+                                    //cOutputHandler.printMessageToConsole("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
 
                                     if (!lNotAlwaysSelectedOperationNameList.Contains(lOperationName))
                                         lNotAlwaysSelectedOperationNameList.Add(lOperationName);
                                 }
                                 else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                                 {
-                                    //Console.WriteLine("All valid configurations DO include " + lOperationName + ".");
+                                    //cOutputHandler.printMessageToConsole("All valid configurations DO include " + lOperationName + ".");
                                 }
 
                                 cZ3Solver.SolverPopFunction();
@@ -5464,15 +5468,15 @@ namespace ProductPlatformAnalyzer
                     lAnalysisResult = false;
                 
                 if (lNotAlwaysSelectedOperationNameList.Count != 0)
-                    Console.WriteLine("Operations which are NOT always selected are: "
+                    cOutputHandler.printMessageToConsole("Operations which are NOT always selected are: "
                         + ReturnOperationNamesStringFromOperationNameList(lNotAlwaysSelectedOperationNameList));
                 else
-                    Console.WriteLine("All valid configurations DO include ALL the operations!");
+                    cOutputHandler.printMessageToConsole("All valid configurations DO include ALL the operations!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AlwaysSelectedOperationAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AlwaysSelectedOperationAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -5492,7 +5496,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: Only should be done when a flag is set
-                Console.WriteLine("Operation Selectability Analysis:");
+                cOutputHandler.printMessageToConsole("Operation Selectability Analysis:");
 
                 bool lAnalysisComplete = false;
                 HashSet<string> lUnselectableOperationNameSet = new HashSet<string>();
@@ -5515,12 +5519,12 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
                     setReportType(true, false, true
                                 , true, false, false
                                 , false, true, false
-                                , true, true);
+                                , true, true, true);
 
                 ////TODO: Added as new version
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
@@ -5556,7 +5560,7 @@ namespace ProductPlatformAnalyzer
                         //if it does hold, then it is possible to select that operation and it should be removed from the list
                         {
                             //This line is moved to the reporting procedure in this class
-                            //Console.WriteLine(lFrameworkWrapper.getOperationFromOperationName(lOperationInstanceVariableName).names + " is selectable.");
+                            //cOutputHandler.printMessageToConsole(lFrameworkWrapper.getOperationFromOperationName(lOperationInstanceVariableName).names + " is selectable.");
                             ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lCurrentOperation.names);
 
                             if (lUnselectableOperationNameSet.Contains(lCurrentOperation.names))
@@ -5573,7 +5577,7 @@ namespace ProductPlatformAnalyzer
                         //This means the operation instance is inactive hence it should be mentioned
 
                         //This is when we want to report only the operation name
-                        //Console.WriteLine("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
+                        //cOutputHandler.printMessageToConsole("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
                         ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lCurrentOperation.names);
 
                         //This is when we want to report the operation instance
@@ -5600,8 +5604,8 @@ namespace ProductPlatformAnalyzer
                             if (cFrameworkWrapper.getOperationTransitionNumberFromActiveOperation(lOperationInstanceVariableName).Equals(0))
                             {
                                 //These two lines are moved to the reporting procedure in this class
-                                //Console.WriteLine("----------------------------------------------------------------");
-                                //Console.WriteLine("Analysing operation instance named: " + lOperationInstanceVariableName);
+                                //cOutputHandler.printMessageToConsole("----------------------------------------------------------------");
+                                //cOutputHandler.printMessageToConsole("Analysing operation instance named: " + lOperationInstanceVariableName);
 
                                 cZ3Solver.SolverPushFunction();
 
@@ -5616,7 +5620,7 @@ namespace ProductPlatformAnalyzer
                                 //if it does hold, then it is possible to select that operation and it should be removed from the list
                                 {
                                     //This line is moved to the reporting procedure in this class
-                                    //Console.WriteLine(lFrameworkWrapper.getOperationFromOperationName(lOperationInstanceVariableName).names + " is selectable.");
+                                    //cOutputHandler.printMessageToConsole(lFrameworkWrapper.getOperationFromOperationName(lOperationInstanceVariableName).names + " is selectable.");
                                     ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lOperationInstanceVariableName);
 
                                     string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(lOperationInstanceVariableName);
@@ -5634,7 +5638,7 @@ namespace ProductPlatformAnalyzer
                             //This means the operation instance is inactive hence it should be mentioned
 
                             //This is when we want to report only the operation name
-                            //Console.WriteLine("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
+                            //cOutputHandler.printMessageToConsole("Operation " + lFrameworkWrapper.returnOperationNameFromOperationInstance(lOperationInstanceVariableName) + " is inactive!");
                             ReportSolverResult(lTransitionNo, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, lOperationInstanceVariableName);
 
                             //This is when we want to report the operation instance
@@ -5658,12 +5662,12 @@ namespace ProductPlatformAnalyzer
                 if (cReportAnalysisResult)
                 { 
                     if (lInActiveOperationNameSet.Count != 0)
-                        Console.WriteLine("Operation " + ReturnOperationNamesStringFromOperationNameList(lInActiveOperationNameSet) + " is inactive!");
+                        cOutputHandler.printMessageToConsole("Operation " + ReturnOperationNamesStringFromOperationNameList(lInActiveOperationNameSet) + " is inactive!");
 
                     if (lUnselectableOperationNameSet.Count != 0)
-                        Console.WriteLine("Operations which are not selectable are: " + ReturnOperationNamesStringFromOperationNameList(lUnselectableOperationNameSet));
+                        cOutputHandler.printMessageToConsole("Operations which are not selectable are: " + ReturnOperationNamesStringFromOperationNameList(lUnselectableOperationNameSet));
                     else
-                        Console.WriteLine("All operations are selectable!");
+                        cOutputHandler.printMessageToConsole("All operations are selectable!");
                 }
 
                 ////TODO: when is the analysis complete??????????????
@@ -5672,8 +5676,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationSelectabilityAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationSelectabilityAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -5730,8 +5734,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -5788,8 +5792,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -5846,8 +5850,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -5904,8 +5908,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -5980,8 +5984,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationForAllVariantsORPartsInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationForAllVariantsORPartsInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -6056,8 +6060,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationForAnyVariantsORPartsInAllTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationForAnyVariantsORPartsInAllTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -6132,8 +6136,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OperationForAnyVariantsORPartsInAnyTransitions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in OperationForAnyVariantsORPartsInAnyTransitions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -6156,8 +6160,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationInstanceName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationInstanceName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationInstance;
         }
@@ -6183,8 +6187,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationInstanceVariable");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationInstanceVariable");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationInstanceVariable;
         }
@@ -6216,8 +6220,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnPartNamesFromList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnPartNamesFromList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Return the string with the name of the parts
             return lPartNames;
@@ -6250,8 +6254,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnVariantNamesFromList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnVariantNamesFromList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Return the string with the name of the variants
             return lVariantNames;
@@ -6284,8 +6288,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationNamesFromList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesFromList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Return the string with the name of the operations
             return lOperationNames;
@@ -6319,8 +6323,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationNamesFromOpertionInstanceList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesFromOpertionInstanceList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             //Return the string with the name of the operations
             return lOperationNames;
@@ -6346,8 +6350,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationNamesStringFromOperationNameList");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesStringFromOperationNameList");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationNamesString;
         }
@@ -6378,8 +6382,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in convertFindingModelGoal");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in convertFindingModelGoal");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -6442,8 +6446,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnWantedExprForEachPart");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnWantedExprForEachPart");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultWantedExpr;
         }
@@ -6460,8 +6464,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnPartsANDedExpression");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnPartsANDedExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempExpression;
         }
@@ -6482,8 +6486,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in filterOperationInstancesOfOneTransition");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in filterOperationInstancesOfOneTransition");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempOperationInstanceList;
         }
@@ -6499,8 +6503,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnTransitionNoFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnTransitionNoFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTransitionNo;
         }
@@ -6554,8 +6558,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in convertExistenceOfDeadlockGoalV2");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in convertExistenceOfDeadlockGoalV2");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -6733,8 +6737,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in convertExistenceOfDeadlockGoalV1");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in convertExistenceOfDeadlockGoalV1");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -6757,8 +6761,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addVirtualVariantOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addVirtualVariantOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -6783,8 +6787,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParseVariantExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParseVariantExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -6810,8 +6814,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParsePartExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParsePartExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -6851,8 +6855,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParsingPartExpr2OperationsMapping");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParsingPartExpr2OperationsMapping");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -6882,8 +6886,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -6934,8 +6938,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -6963,8 +6967,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CalculateAnalysisNoOfCycles");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CalculateAnalysisNoOfCycles");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultNoOfCycles;
         }
@@ -6978,9 +6982,10 @@ namespace ProductPlatformAnalyzer
         /// <param name="pInternalFileData">In case the initial data file is internal it has to be provided here</param>
         /// <returns>The result of the analysis</returns>
         public bool ProductPlatformAnalysis(string pInternalFileData = "", string pExtraConfigurationRule = ""
-                                          , int pMaxVariantGroupumber = 0, int pMaxVariantNumber = 0, int pMaxPartNumber = 0
+                                            , int pMaxVariantGroupumber = 0, int pMaxVariantNumber = 0, int pMaxPartNumber = 0
                                             , int pMaxOperationNumber = 0, int pTrueProbability = 0, int pFalseProbability = 0
-                                    , int pExpressionProbability = 0, int pMaxTraitNumber = 0, int pMaxNoOfTraitAttributes = 0, int pMaxResourceNumber = 0)
+                                            , int pExpressionProbability = 0, int pMaxTraitNumber = 0, int pMaxNoOfTraitAttributes = 0
+                                            , int pMaxResourceNumber = 0, int pMaxExpressionOperandNumber = 0)
 
         {
             bool lLoadInitialData = false;
@@ -6995,7 +7000,7 @@ namespace ProductPlatformAnalyzer
                                                         , pMaxVariantGroupumber, pMaxVariantNumber, pMaxPartNumber
                                                         , pMaxOperationNumber, pTrueProbability, pFalseProbability
                                                         , pExpressionProbability, pMaxTraitNumber, pMaxNoOfTraitAttributes
-                                                        , pMaxResourceNumber);
+                                                        , pMaxResourceNumber, pMaxExpressionOperandNumber);
 
 
 
@@ -7058,7 +7063,7 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    Console.WriteLine("Initial data incomplete! Analysis can't be done!");
+                    cOutputHandler.printMessageToConsole("Initial data incomplete! Analysis can't be done!");
                     if (cStopAEndOfAnalysis)
                         Console.ReadKey();
                 }
@@ -7066,8 +7071,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Z3Exception ex)
             {
-                Console.WriteLine("Z3 Managed Exception: " + ex.Message);
-                Console.WriteLine("Stack trace: " + ex.StackTrace);
+                cOutputHandler.printMessageToConsole("Z3 Managed Exception: " + ex.Message);
+                cOutputHandler.printMessageToConsole("Stack trace: " + ex.StackTrace);
             }
             return lTestResult;
         }
@@ -7094,13 +7099,13 @@ namespace ProductPlatformAnalyzer
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                 //          , Transitions Result, Analysis Timing, Unsat Core
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                //          , Report timings, Debug Mode (Make model file)
+                //          , Report timings, Debug Mode (Make model file), User Messages
                 lZ3SolverEngineer.setReportType(true, true, true
                                                 , false, false, true
                                                 , false, true, true
-                                                , true, true);
+                                                , true, true, false);
 
-                //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "0.0V0VG0O0C0P.xml");
+                lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "0.0V0VG0O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "0.0V0VG1O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "0.1V0VG1O0C0P.xml");
 
@@ -7125,7 +7130,7 @@ namespace ProductPlatformAnalyzer
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.3.1V1VG2O0C1P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.4.1V1VG3O0C1P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.6.1V1VG3O0C1P.xml");
-                lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.7.1V1VG5O0C4P.xml");
+                //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.7.1V1VG5O0C4P.xml");
 
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "5.0.4V2VG2O0C0P.xml");
                 //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "5.1.4V2VG2O0C0P.xml");
@@ -7168,11 +7173,12 @@ namespace ProductPlatformAnalyzer
                 int lMaxTraitNumber = 4;
                 int lMaxNoOfTraitAttributes = 3;
                 int lMaxResourceNumber = 2;
+                int lMaxExpressionOperandNumber = 3;
                 lZ3SolverEngineer.ProductPlatformAnalysis("", ""
                                                             , lMaxVariantGroupumber, lMaxVariantNumber, lMaxPartNumber
                                                             , lMaxOperationNumber, lTrueProbability, lFalseProbability
                                                             , lExpressionProbability, lMaxTraitNumber, lMaxNoOfTraitAttributes
-                                                            , lMaxResourceNumber);*/
+                                                            , lMaxResourceNumber, lMaxExpressionOperandNumber);*/
             }
             catch (Exception ex)
             {

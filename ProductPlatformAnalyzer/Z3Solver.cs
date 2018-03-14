@@ -22,9 +22,12 @@ namespace ProductPlatformAnalyzer
         private bool cIDebugMode;
         private StringBuilder cIDebugText;
         private Model cResultModel;
+        private OutputHandler cOutputHandler;
 
-        public Z3Solver()
+        public Z3Solver(OutputHandler pOutputHandler)
         {
+            cOutputHandler = pOutputHandler;
+
             cIDebugText = new StringBuilder();
             cICtx = new Context(new Dictionary<string, string>() { { "proof", "false" } });
             using (cICtx)
@@ -115,8 +118,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in getNextBooleanExpressionCounter");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in getNextBooleanExpressionCounter");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return newCounter;
         }
@@ -131,8 +134,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in getNextConstraintCounter");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in getNextConstraintCounter");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return newCounter;
         }
@@ -153,8 +156,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in ReturnStringElements");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in ReturnStringElements");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultElements;
         }
@@ -169,8 +172,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in ReturnBoolExprElementNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in ReturnBoolExprElementNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
             return lResultElementNames;
@@ -194,7 +197,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddAndOperator2Constraints" );
+                cOutputHandler.printMessageToConsole("error in AddAndOperator2Constraints" );
                 throw ex;
             }
         }
@@ -210,8 +213,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddGreaterOperator2Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddGreaterOperator2Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -226,8 +229,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddEqualOperator2Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddEqualOperator2Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -249,7 +252,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddAndOperator2Constraints");
+                cOutputHandler.printMessageToConsole("error in AddAndOperator2Constraints");
                 throw ex;
             }
         }
@@ -272,7 +275,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AndOperator");
+                cOutputHandler.printMessageToConsole("error in AndOperator");
                 throw ex;
             }
         }
@@ -295,7 +298,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AndOperator");
+                cOutputHandler.printMessageToConsole("error in AndOperator");
                 throw ex;
             }
         }
@@ -310,8 +313,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GreaterThanOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GreaterThanOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -328,8 +331,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GreaterThanOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GreaterThanOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -344,8 +347,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in LessThanOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in LessThanOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -362,8 +365,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in LessThanOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in LessThanOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -378,8 +381,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GreaterOrEqualOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GreaterOrEqualOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -396,8 +399,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in GreaterOrEqualOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in GreaterOrEqualOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -412,8 +415,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in LessOrEqualOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in LessOrEqualOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -430,8 +433,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in LessOrEqualOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in LessOrEqualOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -451,7 +454,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IffOperator, " + pOperand1 + " , " + pOperand2);
+                cOutputHandler.printMessageToConsole("error in IffOperator, " + pOperand1 + " , " + pOperand2);
                 throw ex;
             }
         }
@@ -466,7 +469,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                cOutputHandler.printMessageToConsole("error in AddImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -486,8 +489,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ImpliesOperator");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ImpliesOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -502,7 +505,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddSimpleConstraint, " + pConstraint);
+                cOutputHandler.printMessageToConsole("error in AddSimpleConstraint, " + pConstraint);
                 throw ex;
             }
         }
@@ -526,7 +529,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in TwoWayImpliesOperator, " + pOperand1 + " , " + pOperand2);
+                cOutputHandler.printMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1 + " , " + pOperand2);
                 throw ex;
             }
         }
@@ -545,7 +548,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in TwoWayImpliesOperator, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                cOutputHandler.printMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -559,8 +562,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddTwoWayImpliesOperator2Constraints");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddTwoWayImpliesOperator2Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -579,7 +582,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddTwoWayImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                cOutputHandler.printMessageToConsole("error in AddTwoWayImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -602,7 +605,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in IffOperator");
+                cOutputHandler.printMessageToConsole("error in IffOperator");
                 throw ex;
             }
         }
@@ -625,7 +628,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ImpliesOperator");
+                cOutputHandler.printMessageToConsole("error in ImpliesOperator");
                 throw ex;
             }
         }
@@ -648,7 +651,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddOrOperator2Constraints");
+                cOutputHandler.printMessageToConsole("error in AddOrOperator2Constraints");
                 throw ex;
             }
         }
@@ -671,7 +674,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddOrOperator2Constraints");
+                cOutputHandler.printMessageToConsole("error in AddOrOperator2Constraints");
                 throw ex;
             }
         }
@@ -693,7 +696,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OrOperator");
+                cOutputHandler.printMessageToConsole("error in OrOperator");
                 throw ex;
             }
         }
@@ -715,7 +718,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in OrOperator");
+                cOutputHandler.printMessageToConsole("error in OrOperator");
                 throw ex;
             }
         }
@@ -738,7 +741,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddPickOneOperator2Constraints");
+                cOutputHandler.printMessageToConsole("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
@@ -777,7 +780,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PickOneOperator");
+                cOutputHandler.printMessageToConsole("error in PickOneOperator");
                 throw ex;
             }
         }
@@ -805,7 +808,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddPickOneOperator2Constraints");
+                cOutputHandler.printMessageToConsole("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
@@ -834,7 +837,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PickOneOperator");
+                cOutputHandler.printMessageToConsole("error in PickOneOperator");
                 throw ex;
             }
         }
@@ -853,7 +856,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddNotOperator2Constraints, " + pOperand);
+                cOutputHandler.printMessageToConsole("error in AddNotOperator2Constraints, " + pOperand);
                 throw ex;
             }
         }
@@ -872,7 +875,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in NotOperator, " + pOperand);
+                cOutputHandler.printMessageToConsole("error in NotOperator, " + pOperand);
                 throw ex;
             }
         }
@@ -889,7 +892,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in NotOperator, " + pOperand.ToString());
+                cOutputHandler.printMessageToConsole("error in NotOperator, " + pOperand.ToString());
                 throw ex;
             }
         }
@@ -904,7 +907,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in MakeBoolVariable, " + pOperand);
+                cOutputHandler.printMessageToConsole("error in MakeBoolVariable, " + pOperand);
                 throw ex;
             }
         }
@@ -922,11 +925,11 @@ namespace ProductPlatformAnalyzer
 
                 if (cIDebugMode)
                     cIDebugText.Append("(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n");
-                //Console.WriteLine("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
+                //cOutputHandler.printMessageToConsole("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddConstraintToSolver, " + pConstraint.ToString());
+                cOutputHandler.printMessageToConsole("error in AddConstraintToSolver, " + pConstraint.ToString());
                 throw ex;
             }
         }
@@ -952,13 +955,13 @@ namespace ProductPlatformAnalyzer
                     }
                 }
                 if (resultExpr == null)
-                    Console.WriteLine("error in FindExprInExprList, Variable " + pExprName + " could not be found");
+                    cOutputHandler.printMessageToConsole("error in FindExprInExprList, Variable " + pExprName + " could not be found");
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindExpressionUsingName, " + pExprName);
-                Console.WriteLine(ex.Message);                
+                cOutputHandler.printMessageToConsole("error in FindExpressionUsingName, " + pExprName);
+                cOutputHandler.printMessageToConsole(ex.Message);                
             }
             return resultExpr;
         }*/
@@ -985,13 +988,13 @@ namespace ProductPlatformAnalyzer
                     }
                 }
                 if (resultExpr == null)
-                    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
+                    cOutputHandler.printMessageToConsole("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindExpressionUsingName, " + pExprName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in FindExpressionUsingName, " + pExprName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return resultExpr;
         }*/
@@ -1005,8 +1008,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in MakeBoolExprFromString");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in MakeBoolExprFromString");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -1025,11 +1028,11 @@ namespace ProductPlatformAnalyzer
                     resultExpr = lFoundExpr[0];
 
                 //if (resultExpr == null || lFoundExpr.Count.Equals(0))
-                //    Console.WriteLine("error in FindExprInExprList, Variable " + pExprName + " could not be found");
+                //    cOutputHandler.printMessageToConsole("error in FindExprInExprList, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindExprInExprList, " + pExprName);
+                cOutputHandler.printMessageToConsole("error in FindExprInExprList, " + pExprName);
                 throw ex;
             }
             return (BoolExpr)resultExpr;
@@ -1049,11 +1052,11 @@ namespace ProductPlatformAnalyzer
                     resultExpr = lFoundExpr[0];
 
                 //if (resultExpr == null)
-                //    Console.WriteLine("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
+                //    cOutputHandler.printMessageToConsole("error in FindExpressionUsingName, Variable " + pExprName + " could not be found");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in FindIntExpressionUsingName, " + pExprName);
+                cOutputHandler.printMessageToConsole("error in FindIntExpressionUsingName, " + pExprName);
                 throw ex;
             }
             return (IntExpr)resultExpr;
@@ -1074,7 +1077,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddBooleanExpressionWithIndex, " + pExprName);
+                cOutputHandler.printMessageToConsole("error in AddBooleanExpressionWithIndex, " + pExprName);
                 throw ex;
             }
         }
@@ -1094,7 +1097,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddBooleanExpression, " + pExprName);
+                cOutputHandler.printMessageToConsole("error in AddBooleanExpression, " + pExprName);
                 throw ex;
             }
         }
@@ -1108,8 +1111,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddStringExpression");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in AddStringExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
         public void AddIntegerExpression(string pExprName)
@@ -1127,7 +1130,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in AddIntegerExpression, " + pExprName);
+                cOutputHandler.printMessageToConsole("error in AddIntegerExpression, " + pExprName);
                 throw ex;
             }
         }
@@ -1162,7 +1165,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PrepareDebugDirectory");
+                cOutputHandler.printMessageToConsole("error in PrepareDebugDirectory");
                 throw ex;
             }
         }
@@ -1219,7 +1222,7 @@ namespace ProductPlatformAnalyzer
                     lSat = CheckModelSatisfiability();
                     if (lSat == Status.UNSATISFIABLE)
                     {
-                        Console.WriteLine("Neither a counterexample nor a satisfiable finished-result could be produced.");
+                        cOutputHandler.printMessageToConsole("Neither a counterexample nor a satisfiable finished-result could be produced.");
                     }
                 }
                 else
@@ -1265,7 +1268,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //Print and writes an output file showing the result of a finished test
                         if (pReportAnalysisTiming)
-                            Console.WriteLine("Time: " + stopwatch.Elapsed);
+                            cOutputHandler.printMessageToConsole("Time: " + stopwatch.Elapsed);
 
                         if (pAnalysisDetail)
                         {
@@ -1279,10 +1282,10 @@ namespace ProductPlatformAnalyzer
                     {
                         //Print and writes an output file showing the result of a deadlocked test
                         if (pReportAnalysisDetail)
-                            Console.WriteLine("Satisfiable");
+                            cOutputHandler.printMessageToConsole("Satisfiable");
 
                         if (pReportAnalysisTiming)
-                            Console.WriteLine("Time: " + stopwatch.Elapsed);
+                            cOutputHandler.printMessageToConsole("Time: " + stopwatch.Elapsed);
 
                         if (pAnalysisDetail)
                             output.printCounterExample();
@@ -1292,11 +1295,11 @@ namespace ProductPlatformAnalyzer
 //                    output.writeDebugFile();
 
                     //foreach (Expr lExpression in ExpressionList)
-                    //    Console.WriteLine(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
+                    //    cOutputHandler.printMessageToConsole(lExpression.ToString() + " = " + resultModel.Evaluate(lExpression));
 
                     ////Taken this to the reporting function in Z3SolverEngineer
                     /*if (pReportAnalysisDetail)
-                        Console.WriteLine("Satisfiable");*/
+                        cOutputHandler.printMessageToConsole("Satisfiable");*/
 
                     //Adding this model value to the assertions
                     ////AddModelItem2SolverAssertion(pWrapper, resultModel);
@@ -1308,15 +1311,15 @@ namespace ProductPlatformAnalyzer
 
                     ////Taken this to the reporting function in Z3SolverEngineer
                     /*if (pReportAnalysisDetail)
-                        Console.WriteLine("Unsatisfiable");*/
+                        cOutputHandler.printMessageToConsole("Unsatisfiable");*/
 
-/*                    //Console.WriteLine("proof: {0}", iSolver.Proof);
-                    //Console.WriteLine("core: ");
+/*                    //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
+                    //cOutputHandler.printMessageToConsole("core: ");
                     if (pReportUnsatCore)
                     {
                         foreach (Expr c in iSolver.UnsatCore)
                         {
-                            Console.WriteLine("{0}", c);
+                            cOutputHandler.printMessageToConsole("{0}", c);
                         }
                     }*/
                 }
@@ -1324,7 +1327,7 @@ namespace ProductPlatformAnalyzer
                 //TODO: in the best case all the details about the analysis including the time of the analysis 
                 //should be in one class instance which can be reached by the reporting procedure in the Z3SolverEngineer
                 if (pReportAnalysisDetail && pReportAnalysisTiming)
-                    Console.WriteLine("Time: " + stopwatch.Elapsed);
+                    cOutputHandler.printMessageToConsole("Time: " + stopwatch.Elapsed);
 
 
 /*                ReportSolverResult(pState
@@ -1339,8 +1342,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CheckSatisfiability");               
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CheckSatisfiability");               
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lSat;
         }
@@ -1360,7 +1363,7 @@ namespace ProductPlatformAnalyzer
                 {
                     Model resultModel = cISolver.Model;
 
-                    OutputHandler output = new OutputHandler(pFrameworkWrapper);
+                    cOutputHandler.setFrameworkWrapper(pFrameworkWrapper);
 
                     //adding expressions from model to outputhandler
                     foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
@@ -1370,7 +1373,7 @@ namespace ProductPlatformAnalyzer
                         if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
                         {
                             string value = "" + resultModel.Evaluate(lCurrentExpr);
-                            output.addExp(lCurrentExpr.ToString(), value, pState);
+                            cOutputHandler.addExp(lCurrentExpr.ToString(), value, pState);
                         }
                     }
 
@@ -1379,31 +1382,31 @@ namespace ProductPlatformAnalyzer
                         //Print and writes an output file showing the result of a finished test
                         if (pReportAnalysisDetail)
                         {
-                            Console.WriteLine("Model No " + pState + ":");
+                            cOutputHandler.printMessageToConsole("Model No " + pState + ":");
                             if (pReportVariants)
                             {
-                                output.printChosenVariants();
+                                cOutputHandler.printChosenVariants();
                             }
                             if (pReportTransitions)
-                                output.printOperationsTransitions();
+                                cOutputHandler.printOperationsTransitions();
                         }
-                        output.writeFinished();
-                        output.writeFinishedNoPost();
+                        cOutputHandler.writeFinished();
+                        cOutputHandler.writeFinishedNoPost();
                     }
                     else
                     {
                         //Print and writes an output file showing the result of a deadlocked test
                         if (pReportAnalysisDetail)
-                            output.printCounterExample();
-                        output.writeCounterExample();
-                        output.writeCounterExampleNoPost();
+                            cOutputHandler.printCounterExample();
+                        cOutputHandler.writeCounterExample();
+                        cOutputHandler.writeCounterExampleNoPost();
                     }
-                    output.writeDebugFile();
+                    cOutputHandler.writeDebugFile();
                 }
                 else
                 {
-                    //Console.WriteLine("proof: {0}", iSolver.Proof);
-                    //Console.WriteLine("core: ");
+                    //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
+                    //cOutputHandler.printMessageToConsole("core: ");
                     if (pReportUnsatCore)
                     {
                         foreach (Expr c in cISolver.UnsatCore)
@@ -1415,8 +1418,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReportSolverResults");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReportSolverResults");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1447,8 +1450,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PopulateOutputHandler");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in PopulateOutputHandler");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOutputHandler;
         }
@@ -1465,8 +1468,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ConsoleWriteUnsatCore");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ConsoleWriteUnsatCore");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1480,8 +1483,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in SolverPushFunction");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in SolverPushFunction");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1495,8 +1498,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in SolverPopFunction");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in SolverPopFunction");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1522,8 +1525,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CheckModelSatisfiability");               
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CheckModelSatisfiability");               
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lReturnStatus;
         }
@@ -1542,14 +1545,14 @@ namespace ProductPlatformAnalyzer
                 if (cExpressionDictionary.ContainsKey(pExprName))
                     lResultExpr = cExpressionDictionary[pExprName];
                 //else
-                //    Console.WriteLine("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
+                //    cOutputHandler.printMessageToConsole("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
                 //TODO: terminate program
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in FindExprInExprSet!");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in FindExprInExprSet!");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -1569,8 +1572,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in FindExprInExprList!");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in FindExprInExprList!");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }*/
@@ -1646,7 +1649,7 @@ namespace ProductPlatformAnalyzer
                             }
                         }
                     }
-                    //Console.WriteLine(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
+                    //cOutputHandler.printMessageToConsole(lCurrentExpr.ToString() + " = " + pResultModel.Evaluate(lCurrentExpr));
                 }
 
                 //tempExpression = iCtx.MkNot(tempExpression);
@@ -1656,8 +1659,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in AddModelItem2SolverAssertion!");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in AddModelItem2SolverAssertion!");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
         }

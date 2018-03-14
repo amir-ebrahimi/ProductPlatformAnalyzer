@@ -10,6 +10,8 @@ namespace ProductPlatformAnalyzer
 {
     public class FrameworkWrapper
     {
+        private OutputHandler cOutputHandler;
+
         //private List<variant> cVariantList;
         private HashSet<variant> cVariantSet = new HashSet<variant>();
         private Dictionary<string, variant> cVariantNameLookup = new Dictionary<string, variant>();
@@ -258,8 +260,10 @@ namespace ProductPlatformAnalyzer
             set { this.cTraitSymbolicNameLookup = value; }
         }
 
-        public FrameworkWrapper()
+        public FrameworkWrapper(OutputHandler pOutputHandler)
         {
+            cOutputHandler = pOutputHandler;
+
             cVariantSet = new HashSet<variant>();
             cVariantNameLookup = new Dictionary<string, variant>();
             cVariantIndexLookup = new Dictionary<variant, int>();
@@ -313,12 +317,12 @@ namespace ProductPlatformAnalyzer
                 if (cVariantNameLookup.ContainsKey(pVariantName))
                     lResultVariant = cVariantNameLookup[pVariantName];
                 else
-                    Console.WriteLine("Variant " + pVariantName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Variant " + pVariantName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in variantLookupByName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in variantLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -331,12 +335,12 @@ namespace ProductPlatformAnalyzer
                 if (cVariantSymbolicNameLookup.ContainsKey(pVariantSymbolicName))
                     lResultVariant = cVariantSymbolicNameLookup[pVariantSymbolicName];
                 else
-                    Console.WriteLine("Variant " + pVariantSymbolicName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Variant " + pVariantSymbolicName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in variantLookupBySymbolicName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in variantLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -350,8 +354,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in haveVariantWithName, pVariantName: " + pVariantName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in haveVariantWithName, pVariantName: " + pVariantName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempResult;
         }
@@ -364,12 +368,12 @@ namespace ProductPlatformAnalyzer
                 if (cPartNameLookup.ContainsKey(pPartName))
                     lResultPart = cPartNameLookup[pPartName];
                 else
-                    Console.WriteLine("Part " + pPartName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Part " + pPartName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in partLookupByName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in partLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -382,12 +386,12 @@ namespace ProductPlatformAnalyzer
                 if (cIndexPartLookup.ContainsKey(pPartIndex))
                     lResultPart = cIndexPartLookup[pPartIndex];
                 else
-                    Console.WriteLine("Part " + pPartIndex + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Part " + pPartIndex + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in partLookupByIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in partLookupByIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -400,12 +404,12 @@ namespace ProductPlatformAnalyzer
                 if (cPartIndexLookup.ContainsKey(pPart))
                     lResultIndex = cPartIndexLookup[pPart];
                 else
-                    Console.WriteLine("Part " + pPart.names + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Part " + pPart.names + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in indexLookupByPart");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in indexLookupByPart");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
         }
@@ -418,12 +422,12 @@ namespace ProductPlatformAnalyzer
                 if (cIndexVariantLookup.ContainsKey(pVariantIndex))
                     lResultVariant = cIndexVariantLookup[pVariantIndex];
                 else
-                    Console.WriteLine("Variant " + pVariantIndex + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Variant " + pVariantIndex + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in variantLookupByIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in variantLookupByIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -436,12 +440,12 @@ namespace ProductPlatformAnalyzer
                 if (cVariantIndexLookup.ContainsKey(pVariant))
                     lResultIndex = cVariantIndexLookup[pVariant];
                 else
-                    Console.WriteLine("Variant " + pVariant.names + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Variant " + pVariant.names + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in indexLookupByVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in indexLookupByVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
         }
@@ -455,8 +459,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in havePartWithName, pPartName: " + pPartName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in havePartWithName, pPartName: " + pPartName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempResult;
         }
@@ -469,12 +473,12 @@ namespace ProductPlatformAnalyzer
                 if (cPartSymbolicNameLookup.ContainsKey(pPartSymbolicName))
                     lResultPart = cPartSymbolicNameLookup[pPartSymbolicName];
                 else
-                    Console.WriteLine("Part " + pPartSymbolicName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Part " + pPartSymbolicName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in partLookupBySymbolicName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in partLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -487,12 +491,12 @@ namespace ProductPlatformAnalyzer
                 if (cOperationNameLookup.ContainsKey(pOperationName))
                     lResultOperation = cOperationNameLookup[pOperationName];
                 else
-                    Console.WriteLine("Operation " + pOperationName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Operation " + pOperationName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in operationLookupByName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in operationLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperation;
         }
@@ -505,12 +509,12 @@ namespace ProductPlatformAnalyzer
                 if (cOperationSymbolicNameLookup.ContainsKey(pOperationSymbolicName))
                     lResultOperation = cOperationSymbolicNameLookup[pOperationSymbolicName];
                 else
-                    Console.WriteLine("Operation " + pOperationSymbolicName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Operation " + pOperationSymbolicName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in operationLookupBySymbolicName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in operationLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperation;
         }
@@ -523,12 +527,12 @@ namespace ProductPlatformAnalyzer
                 if (cPartOperationsPartExprLookup.ContainsKey(pPartExpr))
                     lResultOperationSet = cPartOperationsPartExprLookup[pPartExpr];
                 else
-                    Console.WriteLine("Part-Operations does not contain a relation for part expression: " + pPartExpr);
+                    cOutputHandler.printMessageToConsole("Part-Operations does not contain a relation for part expression: " + pPartExpr);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in partOperationsLookupByPartExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in partOperationsLookupByPartExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationSet;
         }
@@ -541,12 +545,12 @@ namespace ProductPlatformAnalyzer
                 if (cVariantOperationsVariantExprLookup.ContainsKey(pVariantExpr))
                     lResultOperationSet = cVariantOperationsVariantExprLookup[pVariantExpr];
                 else
-                    Console.WriteLine("Variant-Operations does not contain a relation for variant expression: " + pVariantExpr);
+                    cOutputHandler.printMessageToConsole("Variant-Operations does not contain a relation for variant expression: " + pVariantExpr);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in variantOperationsLookupByVariantExpr");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in variantOperationsLookupByVariantExpr");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationSet;
         }
@@ -559,12 +563,12 @@ namespace ProductPlatformAnalyzer
                 if (cResourceNameLookup.ContainsKey(pResourceName))
                     lResultResource = cResourceNameLookup[pResourceName];
                 else
-                    Console.WriteLine("Resource " + pResourceName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Resource " + pResourceName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resourceLookupByName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resourceLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultResource;
         }
@@ -577,12 +581,12 @@ namespace ProductPlatformAnalyzer
                 if (cResourceSymbolicNameLookup.ContainsKey(pResourceSymbolicName))
                     lResultResource = cResourceSymbolicNameLookup[pResourceSymbolicName];
                 else
-                    Console.WriteLine("Resource " + pResourceSymbolicName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Resource " + pResourceSymbolicName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resourceLookupBySymbolicName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resourceLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultResource;
         }
@@ -595,12 +599,12 @@ namespace ProductPlatformAnalyzer
                 if (cTraitNameLookup.ContainsKey(pTraitName))
                     lResultTrait = cTraitNameLookup[pTraitName];
                 else
-                    Console.WriteLine("Trait " + pTraitName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Trait " + pTraitName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in traitLookupByName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in traitLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultTrait;
         }
@@ -613,12 +617,12 @@ namespace ProductPlatformAnalyzer
                 if (cTraitSymbolicNameLookup.ContainsKey(pTraitSymbolicName))
                     lResultTrait = cTraitSymbolicNameLookup[pTraitSymbolicName];
                 else
-                    Console.WriteLine("Trait " + pTraitSymbolicName + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Trait " + pTraitSymbolicName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in traitLookupBySymbolicName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in traitLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultTrait;
         }
@@ -649,8 +653,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getSetOfOperationNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getSetOfOperationNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationNames;
         }
@@ -669,8 +673,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPartExprOperations, pPartExpr: " + pPartExpr);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getPartExprOperations, pPartExpr: " + pPartExpr);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperations;
         }
@@ -689,8 +693,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVariantExprOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVariantExprOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperations;
         }
@@ -708,8 +712,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findOperationWithName, pOperationName: " + pOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findOperationWithName, pOperationName: " + pOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempResultOperation;
         }*/
@@ -724,8 +728,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPreconditionForOperation");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getPreconditionForOperation");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return con;
         }
@@ -740,8 +744,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPostconditionForOperation");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getPostconditionForOperation");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return con;
         }*/
@@ -761,8 +765,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getActiveOperationNamesSet, pState: " + pState);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getActiveOperationNamesSet, pState: " + pState);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempActiveOperationNamesSet;
         }
@@ -778,8 +782,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOperationStateFromOperationName, pOperationName: " + pOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getOperationStateFromOperationName, pOperationName: " + pOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempOperationState;
         }
@@ -796,8 +800,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVariantGroup");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVariantGroup");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVariantgroup;
         }
@@ -827,8 +831,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getvariantInstancesForOperation");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getvariantInstancesForOperation");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return instances;
         }
@@ -850,8 +854,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVariantGroup");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVariantGroup");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVariantGroup;
         }
@@ -885,8 +889,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOperationFromOperationName, pOperationName: " + pOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getOperationFromOperationName, pOperationName: " + pOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return resultOperation;
         }
@@ -904,15 +908,15 @@ namespace ProductPlatformAnalyzer
                 {
                     if (!checkOperationRequirementField(operation))
                     {
-                        Console.WriteLine(operation.names + " not executable!");
+                        cOutputHandler.printMessageToConsole(operation.names + " not executable!");
                         lPreAnalysisResult = false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in checkPreAnalysis");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in checkPreAnalysis");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lPreAnalysisResult;
         }
@@ -941,8 +945,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in checkOperationRequirementField, pOperationName: " + pOperation.names);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in checkOperationRequirementField, pOperationName: " + pOperation.names);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lCheckResult;
         }
@@ -965,8 +969,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationRequirements");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationRequirements");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationRequirement;
         }
@@ -992,8 +996,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationChosenResource");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationChosenResource");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultResources;
         }
@@ -1033,8 +1037,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in AddRelevantResourceNameToOperationRequirementAttributes");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("Error in AddRelevantResourceNameToOperationRequirementAttributes");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1051,8 +1055,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ChangeOperationRequirementField");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ChangeOperationRequirementField");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1075,8 +1079,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnRequirementMatchingResource");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnRequirementMatchingResource");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultingResource;
         }
@@ -1105,8 +1109,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CheckExistanceOfRequirementTraits");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CheckExistanceOfRequirementTraits");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lSemanticCheck;
         }
@@ -1127,8 +1131,8 @@ namespace ProductPlatformAnalyzer
             catch (Exception ex)
             {
                 lSemanticCheck = false;
-                Console.WriteLine("error in CheckValidityOfOperationRequirementsTraits");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CheckValidityOfOperationRequirementsTraits");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lSemanticCheck;
         }
@@ -1143,8 +1147,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ExtractRequirementFieldTraitNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ExtractRequirementFieldTraitNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return requirementFieldTraitNames;
         }
@@ -1174,8 +1178,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ExtractRequirementFieldTraits");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ExtractRequirementFieldTraits");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lRequirementFieldTraits;
         }
@@ -1194,8 +1198,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ExtractResourceTraitNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ExtractResourceTraitNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return resourceTraitName;
         }
@@ -1222,22 +1226,22 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             lSyntaxCheck = false;
-                            Console.WriteLine("error in CheckOperationsRequirementFieldSyntax, Operation requierment field should have the correct syntax");
+                            cOutputHandler.printMessageToConsole("error in CheckOperationsRequirementFieldSyntax, Operation requierment field should have the correct syntax");
                         }
 
                     }
                     else
                     {
                         lSyntaxCheck = false;
-                        Console.WriteLine("error in CheckOperationsRequirementFieldSyntax, Operation requierment field should contain : character");
+                        cOutputHandler.printMessageToConsole("error in CheckOperationsRequirementFieldSyntax, Operation requierment field should contain : character");
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CheckOperationsRequirementFieldSyntax");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CheckOperationsRequirementFieldSyntax");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lSyntaxCheck;
         }
@@ -1256,8 +1260,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findOperationWithName, pOperationName: " + pOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findOperationWithName, pOperationName: " + pOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempResultOperation;
         }
@@ -1296,8 +1300,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnStringElements");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnStringElements");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultElements;
         }
@@ -1332,8 +1336,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addActiveOperationInstanceName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addActiveOperationInstanceName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1347,8 +1351,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addActiveOperationName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addActiveOperationName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1361,8 +1365,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addActiveOperationName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addActiveOperationName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1375,8 +1379,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1398,8 +1402,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findResourceWithName, pStationName: " + pResourceName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findResourceWithName, pStationName: " + pResourceName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return tempResultResource;
         }*/
@@ -1445,8 +1449,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in isOperationActive");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in isOperationActive");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationActive;
         }
@@ -1467,8 +1471,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in isActiveOperation, pOperationName: " + pOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in isActiveOperation, pOperationName: " + pOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -1491,8 +1495,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in isOperationInstanceActive");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in isOperationInstanceActive");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
             return lResult;
@@ -1513,8 +1517,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in isOperationInstanceInitialState");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in isOperationInstanceInitialState");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -1534,8 +1538,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in isOperationInstanceUnusedState");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in isOperationInstanceUnusedState");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -1556,8 +1560,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnOperationNameFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnOperationNameFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationName;
         }
@@ -1582,8 +1586,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnOperationNameFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnOperationNameFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperation;
         }
@@ -1603,8 +1607,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationStatusFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationStatusFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationStatus;
         }
@@ -1622,8 +1626,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOnePartsOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOnePartsOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationSet;
         }
@@ -1641,8 +1645,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOneVariantsOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOneVariantsOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationSet;
         }
@@ -1664,8 +1668,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationPartFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationPartFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 throw;
             }
             return lResultPart;
@@ -1688,8 +1692,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationVariantFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationVariantFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 throw;
             }
             return lResultVariant;
@@ -1710,8 +1714,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnOperationTransitionFromOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnOperationTransitionFromOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 throw;
             }
             return lOperationState;
@@ -1727,8 +1731,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addInActiveOperationName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addInActiveOperationName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1748,8 +1752,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in giveNextStateActiveOperationName, pActiveOperationName: " + pActiveOperationName);                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in giveNextStateActiveOperationName, pActiveOperationName: " + pActiveOperationName);                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lNextStateActiveOperationName;
         }
@@ -1766,8 +1770,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOperationNameFromActiveOperation");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getOperationNameFromActiveOperation");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationName;
         }
@@ -1784,8 +1788,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOperationFromActiveOperation");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getOperationFromActiveOperation");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperation;
         }
@@ -1802,8 +1806,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPartFromActiveOperation");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getPartFromActiveOperation");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -1826,8 +1830,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPartIndexFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getPartIndexFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
             return lPartIndex;
@@ -1851,8 +1855,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVariantIndexFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVariantIndexFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
             return lVariantIndex;
@@ -1883,8 +1887,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOperationTransitionNumberFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getOperationTransitionNumberFromActiveOperation, pActiveOperationName: " + pActiveOperationName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOpTransNum;
         }
@@ -1903,8 +1907,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in calculatePartIndexForActiveOperation");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in calculatePartIndexForActiveOperation");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1934,8 +1938,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in calculateTransitionNumberForActiveOperation");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in calculateTransitionNumberForActiveOperation");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTransitionNo;
         }
@@ -1953,8 +1957,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in setActiveOperationMissingTransitionNumber");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in setActiveOperationMissingTransitionNumber");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1975,8 +1979,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in refactorOperationName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in refactorOperationName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -1990,8 +1994,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateOperationName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateOperationName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2016,8 +2020,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateOperationNameInPartOperationMapping");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateOperationNameInPartOperationMapping");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2046,8 +2050,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateOperationNameInPrePostConditions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateOperationNameInPrePostConditions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2062,8 +2066,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateOperationNameInLocalSet");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateOperationNameInLocalSet");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2173,7 +2177,7 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
-                System.Console.WriteLine(lDataSummary);
+                cOutputHandler.printMessageToConsole(lDataSummary);
                 System.IO.File.WriteAllText("D:/LocalImplementation/GitHub/ProductPlatformAnalyzer/ProductPlatformAnalyzer/Output/Debug/DataSummary.txt", lDataSummary);
 
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/DataSummary.txt", lDataSummary);
@@ -2181,8 +2185,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in PrintDataSummary");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in PrintDataSummary");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2208,8 +2212,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateOperationInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempOperation;
         }
@@ -2230,8 +2234,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreatePartInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreatePartInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempPart;
         }
@@ -2252,8 +2256,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateVariantInstance, pName: " + pName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateVariantInstance, pName: " + pName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempVariant;
         }
@@ -2270,8 +2274,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateVariantGroupInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateVariantGroupInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2300,8 +2304,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreatePartOperationMappingInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreatePartOperationMappingInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lPartOperations;
         }
@@ -2330,8 +2334,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreatePartOperationMappingInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreatePartOperationMappingInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2352,8 +2356,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateItemUsageRuleInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateItemUsageRuleInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2380,8 +2384,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreatePartOperationMappingInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreatePartOperationMappingInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2407,8 +2411,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateVariantOperationMappingInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateVariantOperationMappingInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2430,8 +2434,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findTraitWithName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findTraitWithName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultTrait;
         }*/
@@ -2453,8 +2457,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createTraitInstance, pName: " + pName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createTraitInstance, pName: " + pName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2473,8 +2477,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in CreateResourceInstance, pName: " + pName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in CreateResourceInstance, pName: " + pName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2501,8 +2505,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -2530,8 +2534,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualPart");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualPart");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -2560,8 +2564,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnCurrentPart");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnCurrentPart");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -2590,8 +2594,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ReturnCurrentVariant");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ReturnCurrentVariant");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -2606,8 +2610,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addVirtualPartConstaint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addVirtualPartConstaint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2620,8 +2624,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addVirtualVariantConstaint");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addVirtualVariantConstaint");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2640,8 +2644,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualPart2PartExprInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualPart2PartExprInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2660,8 +2664,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualVariant2VariantExprInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualVariant2VariantExprInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2678,8 +2682,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualPartInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualPartInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
 
@@ -2699,8 +2703,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVirtualVariantInstance");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVirtualVariantInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
 
@@ -2727,8 +2731,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addVirtualVariantToGroup");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in addVirtualVariantToGroup");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -2775,8 +2779,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getNextVariantIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getNextVariantIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return index + 1;
         }*/
@@ -2795,8 +2799,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getNextPartIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getNextPartIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
         }*/
@@ -2812,8 +2816,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVirtualVariantIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVirtualVariantIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualVariantIndex;
         }
@@ -2829,8 +2833,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getVirtualPartIndex");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getVirtualPartIndex");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualPartIndex;
         }
@@ -2850,8 +2854,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getMaxVirtualVariantNumber");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getMaxVirtualVariantNumber");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
         }
@@ -2871,8 +2875,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getMaxVirtualPartNumber");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getMaxVirtualPartNumber");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
         }
@@ -2890,8 +2894,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getNextVirtualVariantName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getNextVirtualVariantName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultName;
         }
@@ -2909,8 +2913,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getNextVirtualPartName");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getNextVirtualPartName");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultName;
         }
@@ -2929,8 +2933,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findVirtualVariantExpression");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findVirtualVariantExpression");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualVariantExpr;
         }
@@ -2949,8 +2953,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findVirtualPartExpression");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in findVirtualPartExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualPartExpr;
         }
@@ -2966,8 +2970,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getXMLNodeAttributeInnerText, node " + lNode.Name + " does not have attribute " + lAttributeName);
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in getXMLNodeAttributeInnerText, node " + lNode.Name + " does not have attribute " + lAttributeName);
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultAttributeText;
         }
@@ -3000,8 +3004,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lPartOperationsSet;
         }
@@ -3046,8 +3050,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createTraitInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createTraitInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3094,8 +3098,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createResourceInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createResourceInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3124,8 +3128,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createConstraintInstances");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createConstraintInstances");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3142,7 +3146,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain variant group information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant group information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant group information! Data not loaded.");
 
                 }
                 else
@@ -3169,7 +3173,7 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             lDataLoaded = false;
-                            Console.WriteLine("Variant group defined without any variants! Data not loaded.");
+                            cOutputHandler.printMessageToConsole("Variant group defined without any variants! Data not loaded.");
 
                         }
                     }
@@ -3177,8 +3181,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantGroupInstances");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariantGroupInstances");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3195,7 +3199,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain variant information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
@@ -3221,8 +3225,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantInstances");                
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariantInstances");                
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3240,25 +3244,13 @@ namespace ProductPlatformAnalyzer
                     cUsePartInfo = false;
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain part information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
                 {
                     foreach (XmlNode lNode in nodeList)
                     {
-                        /*List<string> lVariantManufacturingOperations = new List<string>();
-
-                        XmlNodeList variantManufacturingOperationsNodeList = lNode["variantManufacturingOps"].ChildNodes;
-                        foreach (XmlNode lManufacturingOp in variantManufacturingOperationsNodeList)
-                        {
-                            lVariantManufacturingOperations.Add(lManufacturingOp.InnerText);
-                        }
-
-                        CreateVariantInstance(getXMLNodeAttributeInnerText(lNode, "variantName")
-                                                , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
-                                                , getXMLNodeAttributeInnerText(lNode, "variantDisplayName")
-                                                , lVariantManufacturingOperations);*/
                         CreatePartInstance(getXMLNodeAttributeInnerText(lNode, "partName"));
                     }
                     lDataLoaded = true;
@@ -3266,8 +3258,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3283,7 +3275,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain item usage rule information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
@@ -3309,7 +3301,7 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             lDataLoaded = false;
-                            Console.WriteLine("Item usage rules defined without any parts! Data not loaded.");
+                            cOutputHandler.printMessageToConsole("Item usage rules defined without any parts! Data not loaded.");
 
                         }
                     }
@@ -3319,8 +3311,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createItemUsageRulesInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createItemUsageRulesInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3335,7 +3327,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain part - operation information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
@@ -3358,7 +3350,7 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             lDataLoaded = false;
-                            Console.WriteLine("Part-operations mapping defined without any operations! Data not loaded.");
+                            cOutputHandler.printMessageToConsole("Part-operations mapping defined without any operations! Data not loaded.");
 
                         }
                     }
@@ -3367,8 +3359,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartOperationsInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartOperationsInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3384,7 +3376,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain variant - operation information! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain variant information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
 
                 }
                 else
@@ -3407,7 +3399,7 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             lDataLoaded = false;
-                            Console.WriteLine("Variant-operations mapping defined without any operations! Data not loaded.");
+                            cOutputHandler.printMessageToConsole("Variant-operations mapping defined without any operations! Data not loaded.");
 
                         }
                     }
@@ -3416,8 +3408,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantOperationsInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariantOperationsInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -3434,7 +3426,7 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     throw new InitialDataIncompleteException("Initial data did not contain operation infor! Data not loaded.");
-                    ////Console.WriteLine("Initial data did not contain operation infor! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain operation infor! Data not loaded.");
                 }
                 else
                 {
@@ -3483,8 +3475,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createOperationInstances");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createOperationInstances");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }

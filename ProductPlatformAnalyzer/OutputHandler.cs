@@ -100,12 +100,32 @@ namespace ProductPlatformAnalyzer
     {
         private List<OutputExp> outputResult;
         private string path = "../../Output/";
-        private FrameworkWrapper fwrapper;
+        private FrameworkWrapper cFrameworkWrapper;
+        private bool cEnableUserMessages;
 
-        public OutputHandler(FrameworkWrapper wrapper)
+        public FrameworkWrapper getFrameworkWrapper()
+        {
+            return cFrameworkWrapper;
+        }
+
+        public void setFrameworkWrapper(FrameworkWrapper pFrameworkWrapper)
+        {
+            cFrameworkWrapper = pFrameworkWrapper;
+        }
+
+        public bool getEnableUserMessages()
+        {
+            return cEnableUserMessages;
+        }
+
+        public void setEnableUserMessages(bool pEnableUserMessages)
+        {
+            cEnableUserMessages = pEnableUserMessages;
+        }
+
+        public OutputHandler()
         {
             outputResult = new List<OutputExp>();
-            fwrapper = wrapper;
         }
 
         public void addExp(string name, string value, int pState)
@@ -120,8 +140,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in addExp in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in addExp in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -136,8 +156,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in sortAfterState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in sortAfterState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -153,8 +173,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in sortAfterValue in outputHander");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in sortAfterValue in outputHander");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -167,13 +187,13 @@ namespace ProductPlatformAnalyzer
             try
             {
                 SortAfterState();
-                Console.WriteLine("\nOperations in order: ");
+                printMessageToConsole("\nOperations in order: ");
                 printOpTransformations();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printOperationTransitions");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printOperationTransitions");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -185,13 +205,13 @@ namespace ProductPlatformAnalyzer
             try
             {
                 SortAfterValue();
-                Console.WriteLine("\nVariants: ");
+                printMessageToConsole("\nVariants: ");
                 printVariants();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printChosenVariants");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printChosenVariants");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -235,8 +255,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeFinished");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeFinished");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -283,8 +303,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeFinishedNoPost");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeFinishedNoPost");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -304,8 +324,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeInputFile");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeInputFile");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -352,8 +372,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeInput");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeInput");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -400,8 +420,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeInputNoPost");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeInputNoPost");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -413,24 +433,24 @@ namespace ProductPlatformAnalyzer
                 int lastState = getLastState();
 
                 SortAfterValue();
-                Console.WriteLine("\nVariants:");
+                printMessageToConsole("\nVariants:");
                 printVariants();
 
-                Console.WriteLine("\nOperation in last state:");
+                printMessageToConsole("\nOperation in last state:");
                 printOpState(lastState);
 
                 SortAfterState();
-                Console.WriteLine("\nOperations in order: ");
+                printMessageToConsole("\nOperations in order: ");
                 printOpTransformations(lastState);
 
-                Console.WriteLine("\nFalse pre/post-conditions:");
+                printMessageToConsole("\nFalse pre/post-conditions:");
                 printConditionsState(lastState);
             }
 
             catch (Exception ex)
             {
-                Console.WriteLine("error in printCounterExample");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printCounterExample");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -476,8 +496,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeCounterExample");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeCounterExample");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -523,8 +543,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeModel");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeModel");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -570,8 +590,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeCounterExampleNoPost");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeCounterExampleNoPost");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -617,8 +637,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeModelNoPost");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeModelNoPost");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -643,8 +663,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in writeDebugFile");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in writeDebugFile");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -656,13 +676,13 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    Console.WriteLine(exp.ToString());
+                    printMessageToConsole(exp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in Print in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in Print in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -674,13 +694,13 @@ namespace ProductPlatformAnalyzer
                 foreach (OutputExp exp in outputResult)
                 {
                     if (exp.value == "true")
-                        Console.WriteLine(exp.ToString());
+                        printMessageToConsole(exp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printTrue in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printTrue in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -695,16 +715,16 @@ namespace ProductPlatformAnalyzer
                     if (exp.state == -1)
                     {
                         var = exp.ToString();
-                        vg = fwrapper.getVariantGroup(var.Split(' ')[0]);
+                        vg = cFrameworkWrapper.getVariantGroup(var.Split(' ')[0]);
                         if (! vg.Contains("Virtual-VG"))
-                            Console.WriteLine(vg + "." + var);
+                            printMessageToConsole(vg + "." + var);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printVariants");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printVariants");
+                printMessageToConsole(ex.Message);
             }
 
         }
@@ -818,8 +838,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getChosenVariants in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getChosenVariants in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return vars;
 
@@ -840,7 +860,7 @@ namespace ProductPlatformAnalyzer
                     {
 
                         var = exp.name;
-                        vg = fwrapper.getVariantGroup(var);
+                        vg = cFrameworkWrapper.getVariantGroup(var);
                         if (!String.Equals(vg, "Virtual-VG"))
                         {
                             list = new string[2] { vg, var };
@@ -851,8 +871,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getChosenVariantsWithGroup in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getChosenVariantsWithGroup in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return vars;
         }
@@ -872,7 +892,7 @@ namespace ProductPlatformAnalyzer
                     {
 
                         var = exp.name;
-                        vg = fwrapper.getVariantGroup(var);
+                        vg = cFrameworkWrapper.getVariantGroup(var);
                         if (!String.Equals(vg, "Virtual-VG") && !vars.Contains(vg))
                         {
                             vars.Add(vg);
@@ -882,8 +902,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getChosenVariantGroups in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getChosenVariantGroups in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return vars;
         }
@@ -898,13 +918,13 @@ namespace ProductPlatformAnalyzer
                     OutputExp nextOp = findNextOp(exp);
                     if (nextOp != null)
                         if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                            Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
+                            printMessageToConsole(exp.ToString() + " -> " + nextOp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printOpTransformations in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printOpTransformations in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -983,8 +1003,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getPossibleResources in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getPossibleResources in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
             return poss;
@@ -1060,7 +1080,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeVariants(HtmlTextWriter writer)
         {
-            HashSet<variantGroup> variants = fwrapper.getVariantGroupSet();
+            HashSet<variantGroup> variants = cFrameworkWrapper.getVariantGroupSet();
 
 
             writer.WriteBeginTag("table style=\"margin-left:40px\"");
@@ -1114,7 +1134,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeConstraints(HtmlTextWriter writer)
         {
-            HashSet<string> constraints = new HashSet<string>(fwrapper.getConstraintSet());
+            HashSet<string> constraints = new HashSet<string>(cFrameworkWrapper.getConstraintSet());
 
             if (constraints.Count != 0)
             {
@@ -1163,7 +1183,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
         {
-            HashSet<operation> operations = new HashSet<operation>(fwrapper.OperationSet);
+            HashSet<operation> operations = new HashSet<operation>(cFrameworkWrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1302,7 +1322,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPreCon(HtmlTextWriter writer)
         {
-            HashSet<operation> operations = new HashSet<operation>(fwrapper.OperationSet);
+            HashSet<operation> operations = new HashSet<operation>(cFrameworkWrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1410,7 +1430,7 @@ namespace ProductPlatformAnalyzer
 
         private void writePartOperationMappings(HtmlTextWriter writer)
         {
-            HashSet<partOperations> lPartOperationsList = new HashSet<partOperations>(fwrapper.getPartsOperationsSet());
+            HashSet<partOperations> lPartOperationsList = new HashSet<partOperations>(cFrameworkWrapper.getPartsOperationsSet());
 
             writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1487,7 +1507,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
-            HashSet<variantOperations> lVariantOperationsList = new HashSet<variantOperations>(fwrapper.getVariantsOperationsSet());
+            HashSet<variantOperations> lVariantOperationsList = new HashSet<variantOperations>(cFrameworkWrapper.getVariantsOperationsSet());
 
             writer.WriteBeginTag("p id=\"inM\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1595,7 +1615,7 @@ namespace ProductPlatformAnalyzer
         private void writeTraits(HtmlTextWriter writer)
         {
 
-            HashSet<trait> traits = new HashSet<trait>(fwrapper.TraitSet);
+            HashSet<trait> traits = new HashSet<trait>(cFrameworkWrapper.TraitSet);
 
             if (traits.Count != 0)
             {
@@ -1699,7 +1719,7 @@ namespace ProductPlatformAnalyzer
         private void writeResources(HtmlTextWriter writer)
         {
 
-            HashSet<resource> resources = new HashSet<resource>(fwrapper.ResourceSet);
+            HashSet<resource> resources = new HashSet<resource>(cFrameworkWrapper.ResourceSet);
 
             if (resources.Count != 0)
             {
@@ -2368,8 +2388,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOpTransformations in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getOpTransformations in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
             return transforms;
@@ -2409,8 +2429,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in TransitionStateAt in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in TransitionStateAt in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return currentState;
         }
@@ -2446,8 +2466,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOpTransformations in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getOpTransformations in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
             return transforms;
@@ -2463,13 +2483,13 @@ namespace ProductPlatformAnalyzer
                     OutputExp nextOp = findNextOp(exp);
                     if (nextOp != null && nextOp.state <= max)
                         if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                            Console.WriteLine(exp.ToString() + " -> " + nextOp.ToString());
+                            printMessageToConsole(exp.ToString() + " -> " + nextOp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printOpTransformations in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printOpTransformations in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -2486,8 +2506,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in goalState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in goalState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return false;
 
@@ -2521,8 +2541,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in findNextOp in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in findNextOp in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return next;
         }
@@ -2553,13 +2573,13 @@ namespace ProductPlatformAnalyzer
                         (String.Equals(exp.opState, "PostCondition") ||
                         (String.Equals(exp.opState, "PreCondition"))) &&
                         String.Equals(exp.value, "false"))
-                        Console.WriteLine(exp.ToString());
+                        printMessageToConsole(exp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printConditionState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printConditionState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -2581,8 +2601,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getConditionState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getConditionState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return con;
         }
@@ -2606,7 +2626,7 @@ namespace ProductPlatformAnalyzer
                         /*if (String.Equals(exp.opState, "PostCondition"))
                             conValue = fwrapper.getPostconditionForOperation(exp.operation);
                         else*/
-                            conValue = fwrapper.getPreconditionForOperation(exp.operation);
+                            conValue = cFrameworkWrapper.getPreconditionForOperation(exp.operation);
                             list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
                         conditions.Add(list);
                     }
@@ -2614,8 +2634,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getConditionStateWithValues in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getConditionStateWithValues in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return conditions;
         }
@@ -2632,14 +2652,14 @@ namespace ProductPlatformAnalyzer
                        !String.Equals(exp.opState, "PostCondition") &&
                        !String.Equals(exp.opState, "PreCondition"))
                     {
-                        Console.WriteLine(exp.ToString());
+                        printMessageToConsole(exp.ToString());
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printOpState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in printOpState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
         }
 
@@ -2669,8 +2689,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getOpState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getOpState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return ops;
         }
@@ -2695,8 +2715,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in conToString in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in conToString in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
             return exp;
@@ -2723,8 +2743,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getActiveOps in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getActiveOps in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return ops;
         }
@@ -2751,8 +2771,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getActiveOps in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getActiveOps in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return ops;
         }
@@ -2774,8 +2794,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in getLastState in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in getLastState in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return lastState - 1;
         }
@@ -2795,7 +2815,7 @@ namespace ProductPlatformAnalyzer
                         newP = newP + var.names + "<br>";
                     }
                      */
-                    string virtualVariantExpression = fwrapper.findVirtualVariantExpression(p);
+                    string virtualVariantExpression = cFrameworkWrapper.findVirtualVariantExpression(p);
                     newP = virtualVariantExpression + "<br>";
                     return newP;
                 }
@@ -2804,8 +2824,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in replaceVirtual in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in replaceVirtual in outputHandler");
+                printMessageToConsole(ex.Message);
             }
             return p;
 
@@ -2832,8 +2852,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in modCondition in outputHandler");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in modCondition in outputHandler");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
 
             return newInfixExpr;
@@ -2857,8 +2877,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in checkCondition in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in checkCondition in outputHandler");
+                printMessageToConsole(ex.Message);
             }
 
             return true;
@@ -2935,8 +2955,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in ParseExpression in outputHandler");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in ParseExpression in outputHandler");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 throw ex;
             }
 
@@ -2988,8 +3008,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in replaceVirtual in outputHandler");
-                Console.WriteLine(ex.Message);
+                printMessageToConsole("error in replaceVirtual in outputHandler");
+                printMessageToConsole(ex.Message);
 
                 throw ex;
             }
@@ -3020,10 +3040,24 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in printStatus in outputHandler");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in printStatus in outputHandler");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return null;
         }*/
+
+        public void printMessageToConsole(string pMessage)
+        {
+            try
+            {
+                if (cEnableUserMessages)               
+                    Console.WriteLine(pMessage);
+            }
+            catch (Exception ex)
+            {
+                printMessageToConsole("error in printMessageToConsole");
+                printMessageToConsole(ex.Message);
+            }
+        }
     }
 }

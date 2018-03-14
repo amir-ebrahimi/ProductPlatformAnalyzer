@@ -9,18 +9,16 @@ namespace ProductPlatformAnalyzer
     class RandomTestCreator
     {
         public int cMaxVariantGroupNumber { get; set; }
-        public List<int> cVariantGroupList { get; set; }
         public int cMaxVariantNumber { get; set; }
-        public List<int> cVariantList { get; set; }
         public int cMaxPartNumber { get; set; }
         public int cMaxOperationNumber { get; set; }
-        public List<int> cOperationList { get; set; }
         public int cTrueProbability { get; set; }
         public int cFalseProbability { get; set; }
         public int cExpressionProbability { get; set; }
         public int cMaxTraitNumber { get; set; }
         public int cMaxNoOfTraitAttributes { get; set; }
         public int cMaxResourceNumber { get; set; }
+        public int cMaxExpressionOperandNumber { get; set; }
         public Dictionary<int, operation> cOperationCodeLookup { get; set; }
         public Dictionary<int, part> cPartCodeLookup { get; set; }
         public Dictionary<int, variant> cVariantCodeLookup { get; set; }
@@ -28,11 +26,15 @@ namespace ProductPlatformAnalyzer
         public List<int> cOverallFreeVariantCodes { get; set; }
         public List<int> cOverallChosenOperationCodes { get; set; }
         public List<int> cOverallFreeOperationCodes { get; set; }
+        public string[] cExpressionOperators = new string[] { "and", "or", "not" };
 
         private Random cMyRandom;
         private FrameworkWrapper cFrameworkWrapper;
-        public RandomTestCreator()
+        private OutputHandler cOutputHandler;
+        public RandomTestCreator(OutputHandler pOutputHandler)
         {
+            cOutputHandler = pOutputHandler;
+
             cMaxVariantGroupNumber = 1;
             cMaxVariantNumber = 1;
             cMaxPartNumber = 0;
@@ -43,6 +45,7 @@ namespace ProductPlatformAnalyzer
             cMaxTraitNumber = 0;
             cMaxResourceNumber = 0;
             cMaxNoOfTraitAttributes = 0;
+            cMaxExpressionOperandNumber = 3;
 
             cMyRandom = new Random();
 
@@ -50,7 +53,6 @@ namespace ProductPlatformAnalyzer
             cPartCodeLookup = new Dictionary<int, part>();
             cVariantCodeLookup = new Dictionary<int, variant>();
 
-            cVariantGroupList = new List<int>();
             cOverallChosenVariantCodes = new List<int>();
             cOverallFreeVariantCodes = new List<int>();
             cOverallChosenOperationCodes = new List<int>();
@@ -65,12 +67,12 @@ namespace ProductPlatformAnalyzer
                 if (cOperationCodeLookup.ContainsKey(pOperationCode))
                     lResultOperation = cOperationCodeLookup[pOperationCode];
                 else
-                    Console.WriteLine("Operation " + pOperationCode + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Operation " + pOperationCode + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in operationLookupByCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in operationLookupByCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperation;
         }
@@ -83,12 +85,12 @@ namespace ProductPlatformAnalyzer
                 if (cPartCodeLookup.ContainsKey(pPartCode))
                     lResultPart = cPartCodeLookup[pPartCode];
                 else
-                    Console.WriteLine("Part " + pPartCode + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Part " + pPartCode + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in partLookupByCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in partLookupByCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
         }
@@ -101,12 +103,12 @@ namespace ProductPlatformAnalyzer
                 if (cVariantCodeLookup.ContainsKey(pVariantCode))
                     lResultVariant = cVariantCodeLookup[pVariantCode];
                 else
-                    Console.WriteLine("Variant " + pVariantCode + " not found in Dictionary!");
+                    cOutputHandler.printMessageToConsole("Variant " + pVariantCode + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in variantLookupByCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in variantLookupByCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
         }
@@ -121,6 +123,7 @@ namespace ProductPlatformAnalyzer
                                     , int pMaxTraitNumber
                                     , int pMaxNoOfTraitAttributes
                                     , int pMaxResourceNumber
+                                    , int pMaxExpressionOperandNumber
                                     , FrameworkWrapper pFrameworkWrapper)
         {
             bool lResult = false;
@@ -153,6 +156,8 @@ namespace ProductPlatformAnalyzer
                     cMaxNoOfTraitAttributes = pMaxNoOfTraitAttributes;
                 if (pMaxResourceNumber != 0)
                     cMaxResourceNumber = pMaxResourceNumber;
+                if (pMaxExpressionOperandNumber != 0)
+                    cMaxExpressionOperandNumber = pMaxExpressionOperandNumber;
                 if (pFrameworkWrapper != null)
                     cFrameworkWrapper = pFrameworkWrapper;
 
@@ -176,11 +181,44 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createRandomData");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createRandomData");
+                cOutputHandler.printMessageToConsole(ex.Message);
                 
             }
             return lResult;
+        }
+
+        private string pickRandomOperator()
+        {
+            string lResultOperatorName = "";
+            try
+            {
+                //pick random operator
+                int lRandomOperatorIndex = cMyRandom.Next(cExpressionOperators.Count());
+                lResultOperatorName = cExpressionOperators[lRandomOperatorIndex];
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in pickRandomOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperatorName;
+        }
+
+        private void makeRandomExpression()
+        {
+            try
+            {
+                //First we pick a random operator
+                string lRandomOperatorName = pickRandomOperator();
+                //Now we pick random operands
+
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in makeRandomExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
         }
 
         private void createTraits()
@@ -200,8 +238,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createTraits");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createTraits");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -220,8 +258,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in makeRandomSetOfTraitAttributes");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in makeRandomSetOfTraitAttributes");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTraitAttributes;
         }
@@ -234,8 +272,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createResources");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createResources");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -248,8 +286,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOverallFreeVariantCodes");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOverallFreeVariantCodes");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -264,8 +302,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in resetOverallFreeOperationCodes");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in resetOverallFreeOperationCodes");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -282,8 +320,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartOperationMapping");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartOperationMapping");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -300,8 +338,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createPartOperationMapping");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createPartOperationMapping");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -321,8 +359,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createItemUsageRules");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createItemUsageRules");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -337,8 +375,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariantGroups");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariantGroups");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -358,8 +396,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in makeItemListToBeChosenFrom");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in makeItemListToBeChosenFrom");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultList;
         }
@@ -384,8 +422,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomOperationNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomOperationNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenOperations;
         }
@@ -410,8 +448,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenOperations;
         }
@@ -432,8 +470,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenVariants;
         }
@@ -454,8 +492,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenParts;
         }
@@ -476,8 +514,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomOperationCodes");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomOperationCodes");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenOperationCodes;
         }*/
@@ -497,8 +535,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenOperations;
         }*/
@@ -519,8 +557,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickRandomOperationCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickRandomOperationCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultOperationCode;
         }*/
@@ -537,8 +575,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnOperationNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnOperationNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultList;
         }
@@ -575,8 +613,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickASeriesOfRandomVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickASeriesOfRandomVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lChosenVariants;
         }
@@ -593,8 +631,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnVariantNames");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnVariantNames");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultList;
         }
@@ -609,8 +647,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnRandomVariantCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnRandomVariantCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariantCode;
         }
@@ -624,8 +662,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateChosenVariantCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateChosenVariantCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -643,8 +681,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in pickRandomGroupCardinality");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in pickRandomGroupCardinality");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultGroupCardinality;
         }
@@ -663,8 +701,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -682,8 +720,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createVariants");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createVariants");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -711,8 +749,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in createOperations");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in createOperations");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -726,8 +764,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in returnOperationCode");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in returnOperationCode");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOperationCode;
         }
@@ -748,8 +786,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error in updateOperationPrePostConditions");
-                Console.WriteLine(ex.Message);
+                cOutputHandler.printMessageToConsole("error in updateOperationPrePostConditions");
+                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
     }
