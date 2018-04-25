@@ -137,93 +137,114 @@
   <operations>
     <operation>
       <operationName>Clamp-Frontlid-A</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
     </operation>
     <operation>
       <operationName>Spot-weld-Frontlid-A</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Clamp-Frontlid-A</operationName>
+        <operationRef>Clamp-Frontlid-A</operationRef>
+        <operationRef>AR41-Switch-Tool-To-SpotWeld</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Unclamp-Frontlid-A</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Spot-weld-Frontlid-A</operationName>
+        <operationRef>Spot-weld-Frontlid-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Unclamp-Frontlid-A</operationName>
+        <operationRef>Unclamp-Frontlid-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Glue-Frontlid-A</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
+        <operationRef>Move-Frontlid-A-to-Glue-Station</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Clamp-Frontlid-B</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
     </operation>
     <operation>
       <operationName>Move-Frontlid-A-to-Fixture-2</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Clamp-Frontlid-B</operationName>
+        <operationRef>Clamp-Frontlid-B</operationRef>
+        <operationRef>Glue-Frontlid-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Merge-Frontlid-A-and-B</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Move-Frontlid-A-to-Fixture-2</operationName>
+        <operationRef>Move-Frontlid-A-to-Fixture-2</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Unclamp-Frontlid</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Merge-Frontlid-A-and-B</operationName>
+        <operationRef>Merge-Frontlid-A-and-B</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Move-Frontlid-to-TurnTable</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Unclamp-Frontlid</operationName>
+        <operationRef>Unclamp-Frontlid</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Clamp-Turn-Table</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Move-Frontlid-to-TurnTable</operationName>
+        <operationRef>Move-Frontlid-to-TurnTable</operationRef>
       </operationPrecondition>
+      <operationPostcondition></operationPostcondition>
     </operation>
     <operation>
       <operationName>Rabbet-Side-A</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Clamp-Turn-Table</operationName>
+        <operationRef>Clamp-Turn-Table</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Rotate-TurnTable</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Rabbet-Side-A</operationName>
+        <operationRef>Rabbet-Side-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Rabbet-Side-B</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Rotate-TurnTable</operationName>
+        <operationRef>Rotate-TurnTable</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Move-Frontlid-to-Output-Buffer</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
       <operationPrecondition>
-        <operationName>Rabbet-Side-B</operationName>
+        <operationRef>Rabbet-Side-B</operationRef>
+        <operationRef>AR41-Switch-Tool-To-Grippe</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>AR41-Switch-Tool-to-Gripper</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
     </operation>
     <operation>
       <operationName>AR41-Switch-Tool-to-SpotWeld</operationName>
+      <trigger>Frontlid-A-N-Frontlid-B</trigger>
     </operation>
   </operations>
   <resources>

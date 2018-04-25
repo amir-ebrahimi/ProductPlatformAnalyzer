@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0"?>
+<!--File Name: 4.1.1V1VG2O0C1P.xml-->
 <!-- Simple 1 Variant 2 Operations one with precondition
 Analysis should be able to complete. -->
 
 <!-- Operations: 
         O1
-				O2
-        O3
-          Precondition: O1
-          Precondition: O2-->
+				O2 
+          Precondition: O1-->
 
 <!-- Variants: V1-->
 
@@ -19,8 +18,7 @@ Analysis should be able to complete. -->
 <!-- Variant-Operation mapping:
       Variant: V1
       Operations: O1
-                  O2
-                  O3
+                  O2 
 -->
 <!--Analysis Expected Results:
       Data not loaded as variant group has no variants defined!
@@ -32,14 +30,13 @@ Analysis should be able to complete. -->
   <operations>
     <operation>
       <operationName>O1</operationName>
+      <trigger>V1</trigger>
     </operation>
     <operation>
       <operationName>O2</operationName>
-    </operation>
-    <operation>
-      <operationName>O3</operationName>
+      <trigger>V1</trigger>
       <operationPrecondition>
-        <operationRef>O1 OR O2</operationRef>
+        <operationRef>O1</operationRef>
       </operationPrecondition>
     </operation>
   </operations>
@@ -59,16 +56,4 @@ Analysis should be able to complete. -->
   </variantGroups>
   <constraints>
   </constraints>
-  <variantOperationMappings>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V1</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-        <operationRef>O3</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-  </variantOperationMappings>
 </testData>

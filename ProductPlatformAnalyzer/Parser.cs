@@ -68,6 +68,112 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
+        public Tuple<Node<string>, string> MakeChildNode(Node<string> pParent, string pData)
+        {
+            Node<string> lResultNode = null;
+            string lUpdatedExp = "";
+            Tuple<Node<string>, string> lReturnedResult = null;
+
+            if (pParent == null)
+            {
+                //if no node has been entered in then first a dumy node named root will be entered
+                Node<string> newNode = new Node<string>("root");
+                lResultNode = newNode;
+                //pParent.AddChildNode(newNode);
+            }
+
+            /*
+             function MakeBinaryTree(expr):
+                element = next element in expr
+                if element is a number:
+                    return a leaf node of that number
+                else: // element is an operator
+                    left = MakeBinaryTree(expr)
+                    right = MakeBinaryTree(expr)
+                    return a binary tree with subtrees left and right and with operator element
+             */
+            string[] lElements = new string[2];
+
+            lElements = FindFirstInstance(pData, ' ');
+
+            //If the first element does not contain a space
+            if (!pData.Contains(' '))
+            {
+                //termination condition
+                //the input does not contain any spaces hence it is just one operand
+                Node<string> newNode = new Node<string>(pData);
+                lResultNode = newNode;
+                //pParent.AddChildNode(newNode);
+            }
+            else // first element is an operator
+            {
+                string lOperator = lElements[0];
+                string lRemainderExp = lElements[1];
+                lUpdatedExp = lRemainderExp;
+
+                Node<string> lNewOperatorNode = new Node<string>(lOperator);
+
+                switch (lOperator)
+                {
+                    case "or":
+                    case "and":
+                    case "->":
+                    case "<=":
+                    case ">=":
+                    case "<":
+                    case ">":
+                    case "==":
+                        {
+                            //return a binary tree with subtrees left and right and with operator element
+                            Node<string> lNewLeftNode = null;
+                            Node<string> lNewRightNode = null;
+
+                            //lElements = FindFirstInstance(pData, ' ');
+                            //string lOperand1 = lElements[0].ToLower();
+                            //string lRemainderExp1 = lElements[1];
+                            lReturnedResult = MakeChildNode(pParent, lUpdatedExp);
+                            lNewLeftNode = lReturnedResult.Item1;
+                            lUpdatedExp = lReturnedResult.Item2;
+
+                            //lElements = FindFirstInstance(pData, ' ');
+                            //string lOperand2 = lElements[0].ToLower();
+                            //string lRemainderExp2 = lElements[1];
+                            lReturnedResult = MakeChildNode(pParent, lUpdatedExp);
+                            lNewRightNode = lReturnedResult.Item1;
+                            lUpdatedExp = lReturnedResult.Item2;
+
+                            lNewOperatorNode.AddChildNode(lNewLeftNode);
+                            lNewOperatorNode.AddChildNode(lNewRightNode);
+                            lResultNode = lNewOperatorNode;
+                            break;
+                        }
+                    case "not":
+                        {
+                            Node<string> lNewOperandNode = null;
+                            lReturnedResult = MakeChildNode(pParent, lUpdatedExp);
+                            lNewOperandNode = lReturnedResult.Item1;
+                            lUpdatedExp = lReturnedResult.Item2;
+                            lNewOperatorNode.AddChildNode(lNewOperandNode);
+                            lResultNode = lNewOperatorNode;
+                            break;
+                        }
+                    default:
+                        {
+                            //The next item is a operand
+                            //lElements = FindFirstInstance(pData, ' ');
+                            //string lOperand = lElements[0].ToLower();
+                            Node<string> lNewNode = new Node<string>(lOperator);
+                            lResultNode = lNewNode;
+                            break;
+
+                        }
+                }
+
+            }
+            return new Tuple<Node<string>,string>(lResultNode, lUpdatedExp);
+
+        }
+
         //The version which Knut gave the algorithm
         public void AddChild(Node<string> pParent, string pData)
         {
@@ -111,11 +217,14 @@ namespace ProductPlatformAnalyzer
                             lResult = FindFirstInstance(lRemainderString, ' ');
                             lOperand1 = lResult[0];
                             lRemainderString = lResult[1];
+
                             lResult = FindFirstInstance(lRemainderString, ' ');
                             lOperand2 = lResult[0];
                             lRemainderString = lResult[1];
+
                             AddChild(newNode, lOperand1);
-                            AddChild(newNode, lOperand2);
+                            AddChild(newNode, lOperand2); 
+                            //AddChild(newNode, lRemainderString);
                             break;
                         }
                     case "not":

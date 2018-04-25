@@ -29,7 +29,7 @@ public partial class variantGroup {
     
     private string gCardinalityField;
     
-    private HashSet<variant> variantField;
+    private List<variant> variantField;
     
     /// <remarks/>
     public string names {
@@ -53,7 +53,7 @@ public partial class variantGroup {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("variant")]
-    public HashSet<variant> variants {
+    public List<variant> variants {
         get {
             return this.variantField;
         }
@@ -271,7 +271,7 @@ public partial class operation
 public partial class partOperations
 {
     private string PartExpr;
-    private HashSet<operation> Operations;
+    private List<operation> Operations;
 
     public string getPartExpr()
     {
@@ -283,12 +283,12 @@ public partial class partOperations
         PartExpr = pPartExpr;
     }
 
-    public HashSet<operation> getOperations()
+    public List<operation> getOperations()
     {
         return Operations;
     }
 
-    public void setOperations(HashSet<operation> pOperations)
+    public void setOperations(List<operation> pOperations)
     {
         Operations = pOperations;
     }

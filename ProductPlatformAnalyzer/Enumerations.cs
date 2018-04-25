@@ -22,6 +22,20 @@ namespace ProductPlatformAnalyzer
             AML
         }
 
+        public enum OperationInstanceState
+        {
+            Initial,
+            Executing,
+            Finished,
+            Unused
+        }
+
+        public enum OperationStatus
+        {
+            Active,
+            Inactive
+        }
+
         public enum GeneralAnalysisType
         {
             Static,

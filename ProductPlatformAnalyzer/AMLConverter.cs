@@ -25,21 +25,24 @@ namespace ProductPlatformAnalyzer
         private HashSet<string> constraints = new HashSet<string>();
         private HashSet<resource> resources = new HashSet<resource>();
         private HashSet<trait> traits = new HashSet<trait>();
-        private HashSet<operation> operations = new HashSet<operation>();
+        private HashSet<Operation> operations = new HashSet<Operation>();
         private HashSet<partOperations> variantOperations = new HashSet<partOperations>();
+
+        private Z3Solver cZ3Solver;
 
         // auxiliary data structures
         private Dictionary<string, variant> id2VariantMappings
             = new Dictionary<string, variant>();
-        private Dictionary<string, operation> id2OperationMappings
-            = new Dictionary<string, operation>();
+        private Dictionary<string, Operation> id2OperationMappings
+            = new Dictionary<string, Operation>();
         private Dictionary<string, trait> id2TraitMappings
             = new Dictionary<string, trait>();
 
         // constructor
-        public AMLConverter(CAEXDocument caex_document) {
+        public AMLConverter(CAEXDocument caex_document, Z3Solver pZ3Solver) {
             document = caex_document;
             tables = document.Tables;
+            cZ3Solver = pZ3Solver;
         }
 
         public void PopulateFrameworkWrapper(FrameworkWrapper pFrameworkWrapper)
@@ -48,7 +51,7 @@ namespace ProductPlatformAnalyzer
             pFrameworkWrapper.VariantGroupSet = variantGroups;
             pFrameworkWrapper.ConstraintSet = constraints;
             pFrameworkWrapper.OperationSet = operations;
-            pFrameworkWrapper.PartsOperationsSet = variantOperations;
+            //pFrameworkWrapper.PartsOperationsSet = variantOperations;
             pFrameworkWrapper.ResourceSet = resources;
             pFrameworkWrapper.TraitSet = traits;
         }
@@ -115,7 +118,7 @@ namespace ProductPlatformAnalyzer
                     var cardinality = ie.GetAttributeValue("groupCardinality");
                     List<CAEXObject> elements = new List<CAEXObject>();
                     ie.GetInternalElementsAndExternalInterfaces(elements);
-                    HashSet<variant> variants = new HashSet<variant>();
+                    List<variant> variants = new List<variant>();
                     foreach (InternalElementType e in elements)
                     {
                         if(!e.Name().Equals(parent.Name()))
@@ -147,20 +150,25 @@ namespace ProductPlatformAnalyzer
                     var ie = parent as InternalElementType;
                     var pre  = ie.GetAttributeValue("precondition");
                     var pos = ie.GetAttributeValue("postcondition");
-                    var req  = ie.GetAttributeValue("requirements").Split(reqSeparator);
+                    //var req  = ie.GetAttributeValue("requirements").Split(reqSeparator);
+                    var req = ie.GetAttributeValue("requirements");
+                    var trigger = ie.GetAttributeValue("trigger");
                     // create an operation and set fields
 
-                    operation tempOperation = new operation();
+                    Operation tempOperation = new Operation(parent.Name()
+                                                            , trigger
+                                                            , req
+                                                            , new List<string>(new string[] { pre }));
                     
-                    tempOperation.names = parent.Name();
+                    /*tempOperation.Name = parent.Name();
                     //tempOperation.displayName = parent.Name();
                     if (pre.ToString() != "")
-                        tempOperation.precondition = new HashSet<string>(new string[] { pre });
-                    /*if (pos.ToString() != "")
-                        tempOperation.postcondition = new HashSet<string>(new string[] { pos });*/
+                        tempOperation.Precondition = new List<string>(new string[] { pre });
+                    if (pos.ToString() != "")
+                        tempOperation.postcondition = new HashSet<string>(new string[] { pos });
                     if (req.Count() > 0)
                         if (req[0] != "")
-                            tempOperation.requirements = new HashSet<string>(req);
+                            tempOperation.Requirement = req;*/
 
                     operations.Add(tempOperation);
                     // store ID and operation
@@ -169,7 +177,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void PopulateOperationGroup(string role, RoleClassType type)
+        /*public void PopulateOperationGroup(string role, RoleClassType type)
         {
             foreach (var roleRef in tables.RegisteredReferences(type))
             {
@@ -180,7 +188,7 @@ namespace ProductPlatformAnalyzer
                     var elements = new List<CAEXObject>();
                     var ie = parent as InternalElementType;
                     ie.GetInternalElementsAndExternalInterfaces(elements);
-                    HashSet<operation> operations = new HashSet<operation>();
+                    List<Operation> operations = new List<Operation>();
                     foreach (InternalElementType e in elements)
                     {
                         if (!e.Name().Equals(parent.Name()))
@@ -196,7 +204,7 @@ namespace ProductPlatformAnalyzer
                     variantOperations.Add(tempVariantOperations);
                 }
             }
-        }
+        }*/
 
         public void PopulateConstraint(string role, RoleClassType type)
         {

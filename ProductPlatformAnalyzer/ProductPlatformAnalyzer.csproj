@@ -65,6 +65,8 @@
     <Compile Include="GeneralUtilities.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="Operation.cs" />
+    <Compile Include="OperationInstance.cs" />
     <Compile Include="OutputHandler.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,18 +76,18 @@
     <Compile Include="Z3SolverEngineer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Test\3.0.2V1VG2O1C0P.xml" />
-    <Content Include="Test\3.1.2V1VG2O2C0P.xml" />
-    <Content Include="Test\3.2.2V1VG2O1C0P.xml" />
-    <Content Include="Test\3.3.2V1VG2O1C0P.xml" />
-    <Content Include="Test\3.4.2V1VG2O1C0P.xml" />
-    <Content Include="Test\3.5.2V1VG2O1C0P.xml" />
-    <Content Include="Test\4.4.1V1VG3O0C1P.xml" />
-    <Content Include="Test\4.5.1V1VG3O0C1P.xml" />
-    <Content Include="Test\4.6.1V1VG3O0C1P.xml">
+    <Content Include="Test\3.0.xml" />
+    <Content Include="Test\3.1.xml" />
+    <Content Include="Test\3.2.xml" />
+    <Content Include="Test\3.3.xml" />
+    <Content Include="Test\3.4.xml" />
+    <Content Include="Test\3.5.xml" />
+    <Content Include="Test\4.4.xml" />
+    <Content Include="Test\4.5.xml" />
+    <Content Include="Test\4.6.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Test\4.7.1V1VG5O0C4P.xml" />
+    <Content Include="Test\4.7.xml" />
     <Content Include="Test\Volvo_CAB.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -97,11 +99,11 @@
     </Content>
     <Content Include="Test\Volvo_CAB_V4.xml" />
     <None Include="App.config" />
-    <Content Include="Test\4.1.1V1VG2O0C1P.xml" />
-    <Content Include="Test\4.2.1V1VG2O0C1P.xml">
+    <Content Include="Test\4.1.xml" />
+    <Content Include="Test\4.2.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Test\4.3.1V1VG2O0C1P.xml" />
+    <Content Include="Test\4.3.xml" />
     <Content Include="Test\9.2.2V1VG2O0C1P.xml" />
     <None Include="packages.config" />
     <None Include="Test\demo_variant.aml">
@@ -114,21 +116,21 @@
     <Content Include="Debug\Debug2.txt" />
     <Content Include="Debug\Debug3.txt" />
     <Content Include="Debug\Debug4.txt" />
-    <Content Include="Test\0.0.0V0VG0O0C0P.xml" />
-    <Content Include="Test\0.1.0V0VG1O0C0P.xml" />
-    <Content Include="Test\0.2.1V0VG1O0C0P.xml" />
+    <Content Include="Test\0.0.xml" />
+    <Content Include="Test\0.1.xml" />
+    <Content Include="Test\0.2.xml" />
     <Content Include="Test\10.2V1VG2O0C1P.xml" />
     <Content Include="Test\11.2V1VG2O0C1P.xml" />
     <Content Include="Test\12.2V1VG2O0C2P.xml" />
     <Content Include="Test\13.2V1VG2O0C2P.xml" />
     <Content Include="Test\14.2V1VG2O0C2P.xml" />
-    <Content Include="Test\1.1.2V1VG2O0C0P.xml">
+    <Content Include="Test\1.1.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Test\2.1.3V1VG2O0C0P.xml" />
-    <Content Include="Test\2.2.3V1VG2O0C0P.xml" />
-    <Content Include="Test\2.0.3V1VG2O0C0P.xml" />
-    <Content Include="Test\4.0.1V1VG2O0C1P.xml">
+    <Content Include="Test\2.1.xml" />
+    <Content Include="Test\2.2.xml" />
+    <Content Include="Test\2.0.xml" />
+    <Content Include="Test\4.0.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\Case3DemoV2.xml">
@@ -148,7 +150,7 @@
     <Content Include="Test\9.1.2V1VG2O0C1P.xml" />
     <Content Include="Test\9.3.2V1VG2O0C1P.xml" />
     <Content Include="Test\Old3.2V1VG2O1C1PNoTransitions.xml" />
-    <Content Include="Test\1.2.3V1VG2O0C0P.xml" />
+    <Content Include="Test\1.2.xml" />
     <Content Include="Test\6.2V1VG2O0C0P.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -176,7 +178,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\TestData11.xml" />
-    <Content Include="Test\1.0.1V1VG2O0C0P.xml">
+    <Content Include="Test\1.0.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\SpecialCase.2Variant2Operation1Precondition.xml" />

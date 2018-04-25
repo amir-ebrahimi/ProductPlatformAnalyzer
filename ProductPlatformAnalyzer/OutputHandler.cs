@@ -95,6 +95,7 @@ namespace ProductPlatformAnalyzer
 
     }
 
+
     //Class for storing and writing results
     public class OutputHandler
     {
@@ -113,6 +114,11 @@ namespace ProductPlatformAnalyzer
             cFrameworkWrapper = pFrameworkWrapper;
         }
 
+        public void setOutputResult(List<OutputExp> pOutputExp)
+        {
+            outputResult = pOutputExp;
+        }
+
         public bool getEnableUserMessages()
         {
             return cEnableUserMessages;
@@ -124,6 +130,11 @@ namespace ProductPlatformAnalyzer
         }
 
         public OutputHandler()
+        {
+            ResetOutputResult();
+        }
+
+        public void ResetOutputResult()
         {
             outputResult = new List<OutputExp>();
         }
@@ -367,8 +378,8 @@ namespace ProductPlatformAnalyzer
                 writeResourcesAndTraits(writer);
 
                 writeOperationsWithPrePostCon(writer);
-                writeVariantOperationMappings(writer);
-                writePartOperationMappings(writer);
+                //writeVariantOperationMappings(writer);
+                //writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
@@ -416,7 +427,7 @@ namespace ProductPlatformAnalyzer
                 writeResourcesAndTraits(writer);
 
                 writeOperationsWithPreCon(writer);
-                writePartOperationMappings(writer);
+                //writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
@@ -1183,7 +1194,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
         {
-            HashSet<operation> operations = new HashSet<operation>(cFrameworkWrapper.OperationSet);
+            List<Operation> operations = new List<Operation>(cFrameworkWrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1233,7 +1244,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteEndTag("th");
 
-            foreach (operation op in operations)
+            foreach (Operation op in operations)
             {
                 
 
@@ -1243,7 +1254,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(op.names);
+                writer.Write(op.Name);
 
                 writer.WriteEndTag("td");
 
@@ -1254,9 +1265,9 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.precondition != null)
+                if (op.Precondition != null)
                 {
-                    foreach (string pre in op.precondition)
+                    foreach (string pre in op.Precondition)
                     {
                         if (!pre.Contains("Possible"))
                         {
@@ -1297,15 +1308,12 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.requirements != null)
+                if (op.Requirement != null)
                 {
-                    foreach (string req in op.requirements)
-                    {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(GeneralUtilities.parseExpression(req, "infix"));
-                        writer.WriteEndTag("li");
-                    }
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(GeneralUtilities.parseExpression(op.Requirement, "infix"));
+                    writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
 
@@ -1322,7 +1330,7 @@ namespace ProductPlatformAnalyzer
 
         private void writeOperationsWithPreCon(HtmlTextWriter writer)
         {
-            HashSet<operation> operations = new HashSet<operation>(cFrameworkWrapper.OperationSet);
+            List<Operation> operations = new List<Operation>(cFrameworkWrapper.OperationSet);
 
             writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
             writer.Write(HtmlTextWriter.TagRightChar);
@@ -1364,7 +1372,7 @@ namespace ProductPlatformAnalyzer
 
             writer.WriteEndTag("th");
 
-            foreach (operation op in operations)
+            foreach (Operation op in operations)
             {
 
                 writer.WriteBeginTag("tr");
@@ -1373,7 +1381,7 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("td");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(op.names);
+                writer.Write(op.Name);
 
                 writer.WriteEndTag("td");
 
@@ -1384,9 +1392,9 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.precondition != null)
+                if (op.Precondition != null)
                 {
-                    foreach (string pre in op.precondition)
+                    foreach (string pre in op.Precondition)
                     {
                         writer.WriteBeginTag("li");
                         writer.Write(HtmlTextWriter.TagRightChar);
@@ -1405,15 +1413,12 @@ namespace ProductPlatformAnalyzer
                 writer.WriteBeginTag("ul style=\"list-style-type:none\"");
                 writer.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.requirements != null)
+                if (op.Requirement != null)
                 {
-                    foreach (string req in op.requirements)
-                    {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(req);
-                        writer.WriteEndTag("li");
-                    }
+                    writer.WriteBeginTag("li");
+                    writer.Write(HtmlTextWriter.TagRightChar);
+                    writer.Write(op.Requirement);
+                    writer.WriteEndTag("li");
                 }
                 writer.WriteEndTag("ul");
 
@@ -1428,7 +1433,7 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        private void writePartOperationMappings(HtmlTextWriter writer)
+        /*private void writePartOperationMappings(HtmlTextWriter writer)
         {
             HashSet<partOperations> lPartOperationsList = new HashSet<partOperations>(cFrameworkWrapper.getPartsOperationsSet());
 
@@ -1503,9 +1508,9 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("table");
             writer.WriteEndTag("div");
 
-        }
+        }*/
 
-        private void writeVariantOperationMappings(HtmlTextWriter writer)
+        /*private void writeVariantOperationMappings(HtmlTextWriter writer)
         {
             HashSet<variantOperations> lVariantOperationsList = new HashSet<variantOperations>(cFrameworkWrapper.getVariantsOperationsSet());
 
@@ -1580,7 +1585,7 @@ namespace ProductPlatformAnalyzer
             writer.WriteEndTag("table");
             writer.WriteEndTag("div");
 
-        }
+        }*/
 
         private void writeResourcesAndTraits(HtmlTextWriter writer)
         {
@@ -2611,7 +2616,7 @@ namespace ProductPlatformAnalyzer
         private HashSet<String[]> getConditionsStateWithValues(int lstate)
         {
             HashSet<String[]> conditions = new HashSet<String[]>();
-            HashSet<String> conValue = new HashSet<String>();
+            List<string> conValue = new List<string>();
             string[] list;
 
             try
@@ -2695,7 +2700,7 @@ namespace ProductPlatformAnalyzer
             return ops;
         }
 
-        private string consToString(HashSet<string> pcons)
+        private string consToString(List<string> pcons)
         {
             string exp = "";
 
@@ -2800,7 +2805,7 @@ namespace ProductPlatformAnalyzer
             return lastState - 1;
         }
 
-        private string replaceVirtual(string p)
+        /*private string replaceVirtual(string p)
         {
             string newP = "";
 
@@ -2808,13 +2813,13 @@ namespace ProductPlatformAnalyzer
             {
                 if (p.StartsWith("Virtual"))
                 {
-                    /* RUNA code
-                    virtualConnection con = fwrapper.findVirtualConnectionWithName(p);
-                    foreach (variant var in con.getVariants())
-                    {
-                        newP = newP + var.names + "<br>";
-                    }
-                     */
+                    // RUNA code
+                    //virtualConnection con = fwrapper.findVirtualConnectionWithName(p);
+                    //foreach (variant var in con.getVariants())
+                    //{
+                    //    newP = newP + var.names + "<br>";
+                    //}
+                     
                     string virtualVariantExpression = cFrameworkWrapper.findVirtualVariantExpression(p);
                     newP = virtualVariantExpression + "<br>";
                     return newP;
@@ -2829,7 +2834,7 @@ namespace ProductPlatformAnalyzer
             }
             return p;
 
-        }
+        }*/
 
 
         /*private string parseInfix(string pPrefixExpr)

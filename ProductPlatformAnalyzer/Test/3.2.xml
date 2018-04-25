@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0"?>
+<!--File Name: 3.2.2V1VG2O1C0P.xml-->
 <!-- Simple 1 Variant 2 Operations one with pre and post condition
 Analysis should be able to complete. -->
 
@@ -26,7 +27,7 @@ Analysis should be able to complete. -->
                   O2
 -->
 <!-- Constraint:
-      V1 and not V2 
+      (not V1) and V2
 -->
 <!--Analysis Expected Results:
       Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1, V3), (V2, V3), (V1, V4), (V2, V4)}
@@ -37,9 +38,11 @@ Analysis should be able to complete. -->
   <operations>
     <operation>
       <operationName>O1</operationName>
+      <trigger>or V1 V2</trigger>
     </operation>
     <operation>
       <operationName>O2</operationName>
+      <trigger>or V1 V2</trigger>
     </operation>
   </operations>
   <variants>
@@ -62,27 +65,7 @@ Analysis should be able to complete. -->
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and V1 (not V2)</logic>
+      <logic>and not V1 V2</logic>
     </constraint>
   </constraints>
-  <variantOperationMappings>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V1</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V2</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-  </variantOperationMappings>
 </testData>

@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
+<!--File Name: 1.0.1V1VG2O0C0P.xml-->
 <!-- Simple 1 Variant 2 Operations one with pre and post condition
 Analysis should be able to complete. -->
 
 <!-- Operations: 
         O1
-				O2 -->
+          trigger: V1
+				O2 
+          trigger: V1
+        -->
 
 <!-- Variants: V1	-->
 
@@ -13,10 +17,6 @@ Analysis should be able to complete. -->
         choose exactly one
         Variants: V1 -->
 
-<!-- Variant-Operation mapping:
-      Variant: V1
-      Operations: O1
-                  O2 -->
 <!--Analysis Expected Results:
       Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1)}
       Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2)}
@@ -26,9 +26,11 @@ Analysis should be able to complete. -->
 <operations>
 	<operation>
 		<operationName>O1</operationName>
+    <trigger>V1</trigger>
 	</operation>
 	<operation>
 		<operationName>O2</operationName>
+    <trigger>V1</trigger>
 	</operation>
 </operations>
 <variants>
@@ -47,15 +49,4 @@ Analysis should be able to complete. -->
 </variantGroups>
 <constraints>
 </constraints>
-<variantOperationMappings>
-	<variantOperationMapping>
-		<variantRefs>
-			<variantExpr>V1</variantExpr>
-		</variantRefs>
-		<operationRefs>
-			<operationExpr>O1</operationExpr>
-			<operationExpr>O2</operationExpr>
-		</operationRefs>
-	</variantOperationMapping>
-</variantOperationMappings>
 </testData>

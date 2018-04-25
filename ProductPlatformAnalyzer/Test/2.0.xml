@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0"?>
+<!--File Name: 2.0.3V1VG2O0C0P.xml-->
 <!-- Simple 1 Variant 2 Operations one with pre and post condition
 Analysis should be able to complete. -->
 
@@ -12,7 +13,7 @@ Analysis should be able to complete. -->
 
 <!-- VariantGroups: 
       VG1
-        choose all
+        choose exactly one
         Variants: V1 
                   V2
                   V3-->
@@ -28,17 +29,19 @@ Analysis should be able to complete. -->
       Operations: O1
       O2-->
 <!--Analysis Expected Results:
-      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1, V2, V3)}
-      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2 V2 -> O1, O2 V3 -> O1, O2)}
-      Always Selected Variant: There DOES NOT exists a valid configuration in which not all variants are included. {}
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1), (V2), (V3)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2), (V2 -> O1, O2), (V3 -> O1, O2)}
+      Always Selected Variant: There exists a valid configuration in which not all variants are included. {(V1), (V2), (V3)}
       Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}-->
-<testData>
+      <testData>
   <operations>
     <operation>
       <operationName>O1</operationName>
+      <trigger>or V1 or V2 V3</trigger>
     </operation>
     <operation>
       <operationName>O2</operationName>
+      <trigger>or V1 or V2 V3</trigger>
     </operation>
   </operations>
   <variants>
@@ -55,7 +58,7 @@ Analysis should be able to complete. -->
   <variantGroups>
     <variantGroup>
       <variantGroupName>VG1</variantGroupName>
-      <groupCardinality>choose all</groupCardinality>
+      <groupCardinality>choose exactly one</groupCardinality>
       <variantRefs>
         <variantRef>V1</variantRef>
         <variantRef>V2</variantRef>
@@ -65,33 +68,4 @@ Analysis should be able to complete. -->
   </variantGroups>
   <constraints>
   </constraints>
-  <variantOperationMappings>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V1</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V2</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>V3</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>O1</operationRef>
-        <operationRef>O2</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-  </variantOperationMappings>
 </testData>

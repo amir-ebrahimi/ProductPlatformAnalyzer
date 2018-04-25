@@ -32,26 +32,16 @@ namespace ProductPlatformAnalyzer
         private HashSet<string> cConstraintSet;
 
         //private List<operation> cOperationList;
-        private HashSet<operation> cOperationSet;
-        private Dictionary<string, operation> cOperationNameLookup = new Dictionary<string, operation>();
-        private Dictionary<string, operation> cOperationSymbolicNameLookup = new Dictionary<string, operation>();
+        private HashSet<Operation> cOperationSet;
+        private Dictionary<string, Operation> cOperationNameLookup = new Dictionary<string, Operation>();
+        private Dictionary<string, Operation> cOperationSymbolicNameLookup = new Dictionary<string, Operation>();
+
+        private HashSet<OperationInstance> cOperationInstanceSet = new HashSet<OperationInstance>();
+        private Dictionary<Tuple<string, int>, OperationInstance> cOperationInstanceDictionary = new Dictionary<Tuple<string, int>, OperationInstance>();
+        //private List<KeyValuePair<string, OperationInstance>> cOperationInstanceNameLookup = new List<KeyValuePair<string, OperationInstance>>();
+        //private Dictionary<string, OperationInstance> cOperationInstanceSymbolicNameLookup = new Dictionary<string, OperationInstance>();
 
         private HashSet<itemUsageRule> cItemUsageRuleSet;
-
-        private HashSet<partOperations> cPartsOperationsSet;
-        private Dictionary<string, HashSet<operation>> cPartOperationsPartExprLookup = new Dictionary<string, HashSet<operation>>();
-        
-        private HashSet<variantOperations> cVariantsOperationsSet;
-        private Dictionary<string, HashSet<operation>> cVariantOperationsVariantExprLookup = new Dictionary<string, HashSet<operation>>();
-
-        private HashSet<string> cActiveOperationInstanceNamesSet;
-
-        private HashSet<virtualPart2PartExpr> cVirtualPart2PartExprSet;
-        private HashSet<virtualVariant2VariantExpr> cVirtualVariant2VariantExprSet;
-
-        private HashSet<operation> cActiveOperationSet;
-        private HashSet<string> cInActiveOperationNamesSet;
-        private HashSet<string> cOperationInstanceSet;
 
         private HashSet<resource> cResourceSet;
         private Dictionary<string, resource> cResourceNameLookup = new Dictionary<string, resource>();
@@ -60,9 +50,6 @@ namespace ProductPlatformAnalyzer
         private HashSet<trait> cTraitSet;
         private Dictionary<string, trait> cTraitNameLookup = new Dictionary<string, trait>();
         private Dictionary<string, trait> cTraitSymbolicNameLookup = new Dictionary<string, trait>();
-
-        private int cVirtualVariantCounter;
-        private int cVirtualPartCounter;
 
         public HashSet<variant> VariantSet
         {
@@ -136,23 +123,47 @@ namespace ProductPlatformAnalyzer
             set { this.cPartSymbolicNameLookup = value; }
         }
 
-        public HashSet<operation> OperationSet
+        public HashSet<Operation> OperationSet
         {
             get { return this.cOperationSet; }
             set { this.cOperationSet = value; }
         }
 
-        public Dictionary<string, operation> OperationNameLookup
+        public Dictionary<string, Operation> OperationNameLookup
         {
             get { return this.cOperationNameLookup; }
             set { this.cOperationNameLookup = value; }
         }
 
-        public Dictionary<string, operation> OperationSymbolicNameLookup
+        public Dictionary<string, Operation> OperationSymbolicNameLookup
         {
             get { return this.cOperationSymbolicNameLookup; }
             set { this.cOperationSymbolicNameLookup = value; }
         }
+
+        public Dictionary<Tuple<string, int>, OperationInstance> OperationInstanceDictionary
+        {
+            get { return this.cOperationInstanceDictionary; }
+            set { this.OperationInstanceDictionary = value; }
+        }
+
+        public HashSet<OperationInstance> OperationInstanceSet
+        {
+            get { return this.cOperationInstanceSet; }
+            set { this.cOperationInstanceSet = value; }
+        }
+
+        /*public List<KeyValuePair<string, OperationInstance>> OperationInstanceNameLookup
+        {
+            get { return this.cOperationInstanceNameLookup; }
+            set { this.cOperationInstanceNameLookup = value; }
+        }*/
+
+        /*public Dictionary<string, OperationInstance> OperationInstanceSymbolicNameLookup
+        {
+            get { return this.cOperationInstanceSymbolicNameLookup; }
+            set { this.cOperationInstanceSymbolicNameLookup = value; }
+        }*/
 
         public HashSet<itemUsageRule> ItemUsageRuleSet
         {
@@ -160,68 +171,10 @@ namespace ProductPlatformAnalyzer
             set { this.ItemUsageRuleSet = value; }
         }
 
-        private int getNextVirtualVariantIndex()
-        {
-            return cVirtualVariantCounter++;
-        }
-
-        private int getNextVirtualPartIndex()
-        {
-            return cVirtualPartCounter++;
-        }
-
         public HashSet<string> ConstraintSet
         {
             get { return this.cConstraintSet; }
             set { this.cConstraintSet = value; }
-        }
-
-        public HashSet<partOperations> PartsOperationsSet
-        {
-            get { return this.cPartsOperationsSet; }
-            set { this.cPartsOperationsSet = value; }
-        }
-
-        public Dictionary<string, HashSet<operation>> PartOperationsPartExprLookup
-        {
-            get { return this.cPartOperationsPartExprLookup; }
-            set { this.cPartOperationsPartExprLookup = value; }
-        }
-
-        public HashSet<variantOperations> VariantsOperationsSet
-        {
-            get { return this.cVariantsOperationsSet; }
-            set { this.cVariantsOperationsSet = value; }
-        }
-
-        public Dictionary<string, HashSet<operation>> VariantOperationsVariantExprLookup
-        {
-            get { return this.cVariantOperationsVariantExprLookup; }
-            set { this.cVariantOperationsVariantExprLookup = value; }
-        }
-
-        public HashSet<operation> ActiveOperationSet
-        {
-            get { return this.cActiveOperationSet; }
-            set { this.cActiveOperationSet = value; }
-        }
-
-        public HashSet<string> ActiveOperationInstanceNamesSet
-        {
-            get { return this.cActiveOperationInstanceNamesSet; }
-            set { this.cActiveOperationInstanceNamesSet = value; }
-        }
-
-        public HashSet<string> InActiveOperationNamesSet
-        {
-            get { return this.cInActiveOperationNamesSet; }
-            set { this.cInActiveOperationNamesSet = value; }
-        }
-
-        public HashSet<string> OperationInstanceSet
-        {
-            get { return this.cOperationInstanceSet; }
-            set { this.cOperationInstanceSet = value; }
         }
 
         public HashSet<resource> ResourceSet
@@ -279,21 +232,16 @@ namespace ProductPlatformAnalyzer
             cIndexPartLookup = new Dictionary<int, part>();
             cPartSymbolicNameLookup = new Dictionary<string, part>();
 
-            cOperationSet = new HashSet<operation>();
-            cOperationNameLookup = new Dictionary<string, operation>();
-            cOperationSymbolicNameLookup = new Dictionary<string, operation>();
+            cOperationSet = new HashSet<Operation>();
+            cOperationNameLookup = new Dictionary<string, Operation>();
+            cOperationSymbolicNameLookup = new Dictionary<string, Operation>();
+
+            //cOperationInstanceNameLookup = new List<KeyValuePair<string, OperationInstance>>();
+            //cOperationInstanceSymbolicNameLookup = new Dictionary<string, OperationInstance>();
 
             cConstraintSet = new HashSet<string>();
-            cActiveOperationInstanceNamesSet = new HashSet<string>();
-            cActiveOperationSet = new HashSet<operation>();
-            cInActiveOperationNamesSet = new HashSet<string>();
-            cOperationInstanceSet = new HashSet<string>();
 
             cItemUsageRuleSet = new HashSet<itemUsageRule>();
-            cPartsOperationsSet = new HashSet<partOperations>();
-            cPartOperationsPartExprLookup = new Dictionary<string, HashSet<operation>>();
-            cVariantsOperationsSet = new HashSet<variantOperations>();
-            cVariantOperationsVariantExprLookup = new Dictionary<string, HashSet<operation>>();
 
             cResourceSet = new HashSet<resource>();
             cResourceNameLookup = new Dictionary<string, resource>();
@@ -302,11 +250,6 @@ namespace ProductPlatformAnalyzer
             cTraitSet = new HashSet<trait>();
             cTraitNameLookup = new Dictionary<string, trait>();
             cTraitSymbolicNameLookup = new Dictionary<string, trait>();
-
-            cVirtualPart2PartExprSet = new HashSet<virtualPart2PartExpr>();
-            cVirtualVariant2VariantExprSet = new HashSet<virtualVariant2VariantExpr>();
-            cVirtualVariantCounter = 0;
-            cVirtualPartCounter = 0;
         }
 
         public variant variantLookupByName(string pVariantName)
@@ -483,9 +426,9 @@ namespace ProductPlatformAnalyzer
             return lResultPart;
         }
 
-        public operation operationLookupByName(string pOperationName)
+        public Operation operationLookupByName(string pOperationName)
         {
-            operation lResultOperation = null;
+            Operation lResultOperation = null;
             try
             {
                 if (cOperationNameLookup.ContainsKey(pOperationName))
@@ -501,9 +444,9 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public operation operationLookupBySymbolicName(string pOperationSymbolicName)
+        public Operation operationLookupBySymbolicName(string pOperationSymbolicName)
         {
-            operation lResultOperation = null;
+            Operation lResultOperation = null;
             try
             {
                 if (cOperationSymbolicNameLookup.ContainsKey(pOperationSymbolicName))
@@ -519,41 +462,87 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public HashSet<operation> partOperationsLookupByPartExpr(string pPartExpr)
+        public OperationInstance operationInstanceLookup(string pOperationName, int pTransitionNumber)
         {
-            HashSet<operation> lResultOperationSet = null;
+            OperationInstance lResultOperationInstance = null;
             try
             {
-                if (cPartOperationsPartExprLookup.ContainsKey(pPartExpr))
-                    lResultOperationSet = cPartOperationsPartExprLookup[pPartExpr];
-                else
-                    cOutputHandler.printMessageToConsole("Part-Operations does not contain a relation for part expression: " + pPartExpr);
+                Tuple<string, int> lKeyTuple = new Tuple<string,int>(pOperationName, pTransitionNumber);
+
+                if (cOperationInstanceDictionary.ContainsKey(lKeyTuple))
+                    lResultOperationInstance = cOperationInstanceDictionary[lKeyTuple];
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in partOperationsLookupByPartExpr");
+                cOutputHandler.printMessageToConsole("error in operationInstanceLookup");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-            return lResultOperationSet;
+            return lResultOperationInstance;
         }
 
-        public HashSet<operation> variantOperationsLookupByVariantExpr(string pVariantExpr)
+        public HashSet<OperationInstance> getOperationInstancesInOneTransition(int pTransitionNumber)
         {
-            HashSet<operation> lResultOperationSet = null;
+            HashSet<OperationInstance> lResultList = new HashSet<OperationInstance>();
             try
             {
-                if (cVariantOperationsVariantExprLookup.ContainsKey(pVariantExpr))
-                    lResultOperationSet = cVariantOperationsVariantExprLookup[pVariantExpr];
-                else
-                    cOutputHandler.printMessageToConsole("Variant-Operations does not contain a relation for variant expression: " + pVariantExpr);
+                foreach (var lOperationInstance in cOperationInstanceSet)
+                {
+                    if (lOperationInstance.TransitionNumber.Equals(pTransitionNumber))
+                        lResultList.Add(lOperationInstance);
+                }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in variantOperationsLookupByVariantExpr");
+                cOutputHandler.printMessageToConsole("error in getOperationInstancesInOneTransition");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-            return lResultOperationSet;
+            return lResultList;
         }
+
+        /*public List<OperationInstance> operationInstanceLookupByName(string pOperationInstanceName)
+        {
+            List<OperationInstance> lResultOperationInstance = new List<OperationInstance>();
+            try
+            {
+                var result = cOperationInstanceNameLookup.Where(kvp => kvp.Key == pOperationInstanceName);
+
+                if (result.Any())
+                {
+                    foreach (var kvp in result)
+                    {
+                        lResultOperationInstance.Add(new OperationInstance(kvp.Value.AbstractOperation
+                                                                            , kvp.Value.TransitionNumber));
+                    }
+                }
+                else
+                    cOutputHandler.printMessageToConsole("Operation Instance " + pOperationInstanceName + " not found in Dictionary!");
+
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in operationInstanceLookupByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperationInstance;
+        }
+
+        public OperationInstance operationInstanceLookupBySymbolicName(string pOperationInstanceSymbolicName)
+        {
+            OperationInstance lResultOperationInstance = null;
+            try
+            {
+                if (cOperationInstanceSymbolicNameLookup.ContainsKey(pOperationInstanceSymbolicName))
+                    lResultOperationInstance = cOperationInstanceSymbolicNameLookup[pOperationInstanceSymbolicName];
+                else
+                    cOutputHandler.printMessageToConsole("Operation Instance " + pOperationInstanceSymbolicName + " not found in Dictionary!");
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in operationInstanceLookupBySymbolicName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperationInstance;
+        }*/
 
         public resource resourceLookupByName(string pResourceName)
         {
@@ -628,15 +617,6 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// Returns the number of operations which are active, meaning they are related to a variant
-        /// </summary>
-        /// <returns>Number of active operations</returns>
-        public int getNumberOfActiveOperations()
-        {
-            return cActiveOperationSet.Count();
-        }
-
-        /// <summary>
         /// This function returns a list of operation names
         /// </summary>
         /// <returns>List of operation names</returns>
@@ -645,10 +625,10 @@ namespace ProductPlatformAnalyzer
             HashSet<string> lOperationNames = new HashSet<string>();
             try
             {
-                foreach (operation lOperation in cOperationSet)
+                foreach (Operation lOperation in cOperationSet)
                 {
-                    if (!lOperationNames.Contains(lOperation.names))
-                        lOperationNames.Add(lOperation.names);
+                    if (!lOperationNames.Contains(lOperation.Name))
+                        lOperationNames.Add(lOperation.Name);
                 }
             }
             catch (Exception ex)
@@ -659,116 +639,20 @@ namespace ProductPlatformAnalyzer
             return lOperationNames;
         }
 
-        /// <summary>
-        /// Returns the list of part operations corresponding to a specific part
-        /// </summary>
-        /// <param name="pVariantExpr">The part which we want to return its part operations</param>
-        /// <returns>The list of part operations corresponding to that part</returns>
-        public HashSet<operation> getPartExprOperations(string pPartExpr)
+        public List<string> getPreconditionForOperation(string opName)
         {
-            HashSet<operation> lResultOperations = null;
+            List<string> lCondition = new List<string>();
             try
             {
-                lResultOperations = partOperationsLookupByPartExpr(pPartExpr);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in getPartExprOperations, pPartExpr: " + pPartExpr);
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperations;
-        }
-
-        /// <summary>
-        /// Returns the list of variant operations corresponding to a specific variant
-        /// </summary>
-        /// <param name="pVariantExpr">The variant which we want to return its variant operations</param>
-        /// <returns>The list of variant operations corresponding to that variant</returns>
-        public HashSet<operation> getVariantExprOperations(string pVariantExpr)
-        {
-            HashSet<operation> lResultOperations = null;
-            try
-            {
-                lResultOperations = variantOperationsLookupByVariantExpr(pVariantExpr);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in getVariantExprOperations");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperations;
-        }
-
-        /*public operation findOperationWithName(String pOperationName)
-        {
-            operation tempResultOperation = null;
-            try
-            {
-                foreach (operation lOperation in OperationList)
-                {
-                    if (lOperation.names.Equals(pOperationName))
-                        tempResultOperation = lOperation;
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in findOperationWithName, pOperationName: " + pOperationName);
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return tempResultOperation;
-        }*/
-
-        public HashSet<string> getPreconditionForOperation(string opName)
-        {
-            HashSet<string> con = null;
-            try
-            {
-                operation op = operationLookupByName(opName);
-                con = new HashSet<string>(op.precondition);
+                Operation op = operationLookupByName(opName);
+                lCondition = op.Precondition;
             }
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in getPreconditionForOperation");                
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-            return con;
-        }
-
-        /*public HashSet<string> getPostconditionForOperation(string opName)
-        {
-            HashSet<string> con = null;
-            try
-            {
-                operation op = operationLookupByName(opName);
-                con = new HashSet<string>(op.postcondition);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in getPostconditionForOperation");                
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return con;
-        }*/
-
-        public HashSet<String> getActiveOperationNamesSet(int pState, string pOperationStateToFilter = "")
-        {
-            //TODO: Optimize
-            HashSet<String> tempActiveOperationNamesSet = new HashSet<string>();
-            try
-            {
-                foreach (String operationName in ActiveOperationInstanceNamesSet)
-                {
-                    if (getOperationStateFromOperationName(operationName).Equals(pState.ToString()))
-                        if (pOperationStateToFilter!="" && operationName.Contains("_"+ pOperationStateToFilter + "_"))
-                            tempActiveOperationNamesSet.Add(operationName);
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in getActiveOperationNamesSet, pState: " + pState);
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return tempActiveOperationNamesSet;
+            return lCondition;
         }
 
         public String getOperationStateFromOperationName(String pOperationName)
@@ -816,7 +700,7 @@ namespace ProductPlatformAnalyzer
             return ConstraintSet;
         }
 
-        public HashSet<string> getvariantInstancesForOperation(string op)
+        /*public HashSet<string> getvariantInstancesForOperation(string op)
         {
             HashSet<string> instances = new HashSet<string>();
             try
@@ -835,7 +719,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return instances;
-        }
+        }*/
 
         public variantGroup getVariantGroup(variant var)
         {
@@ -860,20 +744,9 @@ namespace ProductPlatformAnalyzer
             return lVariantGroup;
         }
 
-        public void setActiveOperationInstanceNamesSet(HashSet<String> pActiveOperationInstanceNamesSet)
+        public Operation getOperationFromOperationName(string pOperationName)
         {
-            ActiveOperationInstanceNamesSet = pActiveOperationInstanceNamesSet;
-        }
-
-        public void setInActiveOperationNamesSet(HashSet<String> pInActiveOperationNamesSet)
-        {
-            InActiveOperationNamesSet = pInActiveOperationNamesSet;
-        }
-
-
-        public operation getOperationFromOperationName(string pOperationName)
-        {
-            operation resultOperation = null;
+            Operation resultOperation = null;
             try
             {
                 string tempOperationName = "";
@@ -908,7 +781,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (!checkOperationRequirementField(operation))
                     {
-                        cOutputHandler.printMessageToConsole(operation.names + " not executable!");
+                        cOutputHandler.printMessageToConsole(operation.Name + " not executable!");
                         lPreAnalysisResult = false;
                     }
                 }
@@ -921,21 +794,21 @@ namespace ProductPlatformAnalyzer
             return lPreAnalysisResult;
         }
 
-        public bool checkOperationRequirementField(operation pOperation)
+        public bool checkOperationRequirementField(Operation pOperation)
         {
             bool lCheckResult = false;
             try
             {
-                if (pOperation.requirements != null)
+                if (pOperation.Requirement != null && pOperation.Requirement!="")
                 {
                     //Check syntax of Requirement field
-                    lCheckResult = CheckOperationsRequirementFieldSyntax(pOperation.requirements);
+                    lCheckResult = CheckOperationsRequirementFieldSyntax(pOperation.Requirement);
 
                     //for each part of (Trait)+ check that the traits are existing objects
-                    lCheckResult = CheckExistanceOfRequirementTraits(pOperation.requirements);
+                    lCheckResult = CheckExistanceOfRequirementTraits(pOperation.Requirement);
 
                     //Check to find resource which inheritance field matches the  (Trait)+ part of the requirement field
-                    lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.requirements);
+                    lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.Requirement);
 
                     //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
                     AddRelevantResourceNameToOperationRequirementAttributes(pOperation);
@@ -945,20 +818,22 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in checkOperationRequirementField, pOperationName: " + pOperation.names);
+                cOutputHandler.printMessageToConsole("error in checkOperationRequirementField, pOperationName: " + pOperation.Name);
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lCheckResult;
         }
 
+        //This function is no longer needed as it is assumed that there is only one requirement expression per operation
+        /*
         public string ReturnOperationRequirements(string pOperationName)
         {
             string lResultOperationRequirement = "";
             try
             {
-                operation lResultingOperation = getOperationFromOperationName(pOperationName);
+                Operation lResultingOperation = getOperationFromOperationName(pOperationName);
 
-                foreach (string lRequirement in lResultingOperation.requirements)
+                foreach (string lRequirement in lResultingOperation.Requirement)
                 {
                     if (lResultOperationRequirement != "")
                         lResultOperationRequirement += " && " + lRequirement;
@@ -974,6 +849,7 @@ namespace ProductPlatformAnalyzer
             }
             return lResultOperationRequirement;
         }
+        */
 
         public HashSet<resource> ReturnOperationChosenResource(string pOperationName)
         {
@@ -983,16 +859,17 @@ namespace ProductPlatformAnalyzer
                 //IMPORTANT: Here we have assumed that the operation requirement part is in the Prefix format
                 //Also remember that the traits have been replaced
                 //The operation has the format "operand operator1 resource_name.attribute"
-                operation lOperation = operationLookupByName(pOperationName);
+                Operation lOperation = operationLookupByName(pOperationName);
 
-                foreach (string lRequirement in lOperation.requirements)
-	            {
+                string lRequirement = lOperation.Requirement;
+                //foreach (string lRequirement in lOperation.requirements)
+	            //{
                     int lLastSpaceIndex = lRequirement.LastIndexOf(' ');
                     string lLastOperand = lRequirement.Substring(lLastSpaceIndex + 1);
                     string[] lLastOperandParts = lLastOperand.Split('_');
                     string lResourceName = lLastOperandParts[0];
                     lResultResources.Add(resourceLookupByName(lResourceName));
-	            }
+	            //}
             }
             catch (Exception ex)
             {
@@ -1002,17 +879,18 @@ namespace ProductPlatformAnalyzer
             return lResultResources;
         }
 
-        private void AddRelevantResourceNameToOperationRequirementAttributes(operation pOperation)
+        private void AddRelevantResourceNameToOperationRequirementAttributes(Operation pOperation)
         {
             try
             {
                 //IMPORTANT: We have the premise that the input is in the prefix format!!!
-                HashSet<string> lRequirementField = pOperation.requirements;
+                string lRequirementField = pOperation.Requirement;
 
                 HashSet<Tuple<string, string>> lChangeRequirementSet = new HashSet<Tuple<string, string>>();
 
-                foreach (string lRequirement in lRequirementField)
-                {
+                string lRequirement = lRequirementField;
+                //foreach (string lRequirement in lRequirementField)
+                //{
                     //Here for each requirement we look at its traits and see which resource can match them
                     resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
 
@@ -1027,7 +905,7 @@ namespace ProductPlatformAnalyzer
 //                    lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
 
                     lChangeRequirementSet.Add(new Tuple<string, string>(lRequirement, lAttributePart));
-                }
+                //}
 
                 foreach (Tuple<string,string> lChangeRequirement in lChangeRequirementSet)
                 {
@@ -1042,15 +920,20 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void ChangeOperationRequirementField(operation pOperation, string pOldRequirement, string pNewRequirement)
+        private void ChangeOperationRequirementField(Operation pOperation, string pOldRequirement, string pNewRequirement)
         {
             try
             {
-                operation lOperation = operationLookupByName(pOperation.names);
+                Operation lOperation = operationLookupByName(pOperation.Name);
                 
+                //Before the requirements was a list so it was replaced like this
+                /*
                 lOperation.requirements.Remove(pOldRequirement);
 
                 lOperation.requirements.Add(pNewRequirement);
+                 */
+                //Now it is only one field hence this is how it is replaced
+                lOperation.Requirement = pNewRequirement;
 
             }
             catch (Exception ex)
@@ -1085,13 +968,14 @@ namespace ProductPlatformAnalyzer
             return lResultingResource;
         }
 
-        private bool CheckExistanceOfRequirementTraits(HashSet<string> pRequirementField)
+        private bool CheckExistanceOfRequirementTraits(string pRequirementField)
         {
             bool lSemanticCheck = true;
             try
             {
-                foreach (var lRequirment in pRequirementField)
-                {
+                var lRequirment = pRequirementField;
+                //foreach (var lRequirment in pRequirementField)
+                //{
 
                     string lTraitNamesStr = ExtractRequirementFieldTraitNames(lRequirment);
 
@@ -1105,7 +989,7 @@ namespace ProductPlatformAnalyzer
                             lSemanticCheck = lSemanticCheck && true;
                     }
 
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -1115,18 +999,19 @@ namespace ProductPlatformAnalyzer
             return lSemanticCheck;
         }
 
-        private bool CheckValidityOfOperationRequirementsTraits(HashSet<string> pRequirementField)
+        private bool CheckValidityOfOperationRequirementsTraits(string pRequirementField)
         {
             bool lSemanticCheck = true;
             try
             {
-                foreach (var lRequirment in pRequirementField)
-                {
+                var lRequirment = pRequirementField;
+                //foreach (var lRequirment in pRequirementField)
+                //{
                     resource lResultingResource = ReturnRequirementMatchingResource(lRequirment);
 
                     if (lResultingResource != null)
                         lSemanticCheck = lSemanticCheck && true;
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -1204,13 +1089,14 @@ namespace ProductPlatformAnalyzer
             return resourceTraitName;
         }
 
-        private bool CheckOperationsRequirementFieldSyntax(HashSet<string> pRequirementField)
+        private bool CheckOperationsRequirementFieldSyntax(string pRequirementField)
         {
             bool lSyntaxCheck = true;
             try
             {
-                foreach (var lRequirment in pRequirementField)
-                {
+                string lRequirment = pRequirementField;
+                //foreach (var lRequirment in pRequirementField)
+                //{
                     
                     string lTraitPart = "";
                     string lExpressionPart = "";
@@ -1235,7 +1121,7 @@ namespace ProductPlatformAnalyzer
                         lSyntaxCheck = false;
                         cOutputHandler.printMessageToConsole("error in CheckOperationsRequirementFieldSyntax, Operation requierment field should contain : character");
                     }
-                }
+                //}
 
             }
             catch (Exception ex)
@@ -1266,26 +1152,6 @@ namespace ProductPlatformAnalyzer
             return tempResultOperation;
         }
         */
-
-        public HashSet<partOperations> getPartsOperationsSet()
-        {
-            return PartsOperationsSet;
-        }
-
-        public void setPartsOperationsSet(HashSet<partOperations> pPartsOperationsSet)
-        {
-            PartsOperationsSet = pPartsOperationsSet;
-        }
-
-        public HashSet<variantOperations> getVariantsOperationsSet()
-        {
-            return VariantsOperationsSet;
-        }
-
-        public void setVariantsOperationsSet(HashSet<variantOperations> pVariantsOperationsSet)
-        {
-            VariantsOperationsSet = pVariantsOperationsSet;
-        }
 
         public string ReturnStringElements(HashSet<String> pSet)
         {
@@ -1326,64 +1192,6 @@ namespace ProductPlatformAnalyzer
             ConstraintSet.Add(pConstraint);
         }
 
-        public void addActiveOperationInstanceName(String pOperationInstanceName)
-        {
-            try
-            {
-                //TODO: for now just to be simple we will make the ActiveOperationNamesSet just the names of the operations
-                if (!ActiveOperationInstanceNamesSet.Contains(pOperationInstanceName))
-                    ActiveOperationInstanceNamesSet.Add(pOperationInstanceName);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in addActiveOperationInstanceName");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
-        public void addActiveOperation(string pOperationName)
-        {
-            try
-            {
-                operation lTempOperation = operationLookupByName(pOperationName);
-                if (!ActiveOperationSet.Contains(lTempOperation))
-                    ActiveOperationSet.Add(lTempOperation);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in addActiveOperationName");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
-        public void addActiveOperation(operation pOperation)
-        {
-            try
-            {
-                if (!ActiveOperationSet.Contains(pOperation))
-                    ActiveOperationSet.Add(pOperation);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in addActiveOperationName");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
-        public void addOperationInstance(string pOperationInstance)
-        {
-            try
-            {
-                if (!cOperationInstanceSet.Contains(pOperationInstance))
-                    cOperationInstanceSet.Add(pOperationInstance);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in addOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
         public void addResource(resource pResource)
         {
             ResourceSet.Add(pResource);
@@ -1411,329 +1219,6 @@ namespace ProductPlatformAnalyzer
         public void addTrait(trait pTrait)
         {
             TraitSet.Add(pTrait);
-        }
-
-        //TODO: Either this function or the next function is not needed
-        /// <summary>
-        /// Takes a specific operation and looks in the list of variant operations to see if this operation is part of any variant operation list
-        /// </summary>
-        /// <param name="pOperation">The operation we want to check if it is active</param>
-        /// <returns>If an operation is active or not</returns>
-        public bool isOperationActive(operation pOperation)
-        {
-            bool lOperationActive = false;
-            try
-            {
-                if (cUsePartInfo)
-                {
-                    foreach (partOperations lPartOperations in PartsOperationsSet)
-                    {
-                        foreach (operation lOperation in lPartOperations.getOperations())
-                        {
-                            if (lOperation.Equals(pOperation))
-                                lOperationActive = true;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (variantOperations lVariantOperations in VariantsOperationsSet)
-                    {
-                        foreach (operation lOperation in lVariantOperations.getOperations())
-                        {
-                            if (lOperation.Equals(pOperation))
-                                lOperationActive = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in isOperationActive");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lOperationActive;
-        }
-
-        //TODO: Either this function or the previous function is not needed
-        /// <summary>
-        /// In this function we have an operation name which we want to know if it is an active operation or not?
-        /// </summary>
-        /// <param name="pOperationName">Operation name which we want to check</param>
-        /// <returns>If the operation is active or not</returns>
-        public bool isActiveOperation(string pOperationName)
-        {
-            bool lResult = false;
-            try
-            {
-                operation lTempOperation = operationLookupByName(pOperationName);
-                lResult = ActiveOperationSet.Contains(lTempOperation);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in isActiveOperation, pOperationName: " + pOperationName);
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResult;
-        }
-
-        /// <summary>
-        /// this function takes an operation instance variable name and looks at the variant code 
-        /// if the variant code is 0 this means the operation instance is inactive hence the function will return false, otherwise it will return true
-        /// </summary>
-        /// <param name="pOperationInstanceVariableName">operation instance variable name</param>
-        /// <returns>if the operation instance is active</returns>
-        public bool isOperationInstanceActive(string pOperationInstanceVariableName)
-        {
-            bool lResult = false;
-
-            try
-            {
-                string[] lOperationInstanceParts = pOperationInstanceVariableName.Split('_');
-                if (!lOperationInstanceParts[2].Equals("0"))
-                    lResult = true;
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in isOperationInstanceActive");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-
-            return lResult;
-        }
-
-        /// <summary>
-        /// This function takes an instace variable of an operation and checks if it is in the initial state or not
-        /// </summary>
-        /// <param name="pOperationInstanceVariableName">Operaton instance variable name</param>
-        /// <returns>If the operation instance variable is in the intial state or not</returns>
-        public bool isOperationInstanceInitialState(string pOperationInstanceVariableName)
-        {
-            bool lResult = false;
-            try
-            {
-                if (pOperationInstanceVariableName.Contains("_I_"))
-                    lResult = true;
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in isOperationInstanceInitialState");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResult;
-        }
-
-        /// <summary>
-        /// This function takes an instace variable of an operation and checks if it is in the unused state or not
-        /// </summary>
-        /// <param name="pOperationInstanceVariableName">Operaton instance variable name</param>
-        /// <returns>If the operation instance variable is in the unused state or not</returns>
-        public bool isOperationInstanceUnusedState(string pOperationInstanceVariableName)
-        {
-            bool lResult = false;
-            try
-            {
-                if (pOperationInstanceVariableName.Contains("_U_"))
-                    lResult = true;
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in isOperationInstanceUnusedState");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResult;
-        }
-
-        /// <summary>
-        /// This funcion takes an operation instance and returns the operation name
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public string ReturnOperationNameFromOperationInstance(string pOperationInstance)
-        {
-            string lOperationName = "";
-            try
-            {
-                string[] lOperationInstanceParts = pOperationInstance.Split('_');
-
-                lOperationName = lOperationInstanceParts[0];
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in returnOperationNameFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lOperationName;
-        }
-
-        /// <summary>
-        /// This funcion takes an operation instance and returns the operation
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public operation ReturnOperationFromOperationInstance(string pOperationInstance)
-        {
-            operation lResultOperation = null;
-            try
-            {
-                string lOperationName = "";
-
-                string[] lOperationInstanceParts = pOperationInstance.Split('_');
-
-                lOperationName = lOperationInstanceParts[0];
-
-                lResultOperation = operationLookupByName(lOperationName);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in returnOperationNameFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperation;
-        }
-
-        /// <summary>
-        /// This function takes an operation instance and returns the operation Status from that operation instance
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public string ReturnOperationStatusFromOperationInstance(string pOperationInstance)
-        {
-            string lOperationStatus = "";
-            try
-            {
-                string[] lOperationInstanceParts = pOperationInstance.Split('_');
-                lOperationStatus = lOperationInstanceParts[1];
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationStatusFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lOperationStatus;
-        }
-
-        public HashSet<operation> ReturnOnePartsOperations(part pPart)
-        {
-            HashSet<operation> lResultOperationSet = new HashSet<operation>();
-            try
-            {
-                foreach (var lPartOperations in cPartsOperationsSet)
-                {
-                    if (lPartOperations.getPartExpr().Equals(pPart.names))
-                        lResultOperationSet = lPartOperations.getOperations();
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOnePartsOperations");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperationSet;
-        }
-
-        public HashSet<operation> ReturnOneVariantsOperations(variant pVariant)
-        {
-            HashSet<operation> lResultOperationSet = new HashSet<operation>();
-            try
-            {
-                foreach (var lVariantOperations in cVariantsOperationsSet)
-                {
-                    if (lVariantOperations.getVariantExpr().Equals(pVariant.names))
-                        lResultOperationSet = lVariantOperations.getOperations();
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOneVariantsOperations");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperationSet;
-        }
-
-        /// <summary>
-        /// This function takes an operation instance and returns the operation part from that operation instance
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public part ReturnOperationPartFromOperationInstance(string pOperationInstance)
-        {
-            part lResultPart;
-            try
-            {
-                int lOperationPartIndex;
-                string[] lOperationInstanceParts = pOperationInstance.Split('_');
-                lOperationPartIndex = int.Parse(lOperationInstanceParts[2]);
-                lResultPart = partLookupByIndex(lOperationPartIndex);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationPartFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-                throw;
-            }
-            return lResultPart;
-        }
-
-        /// <summary>
-        /// This function takes an operation instance and returns the operation variant from that operation instance
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public variant ReturnOperationVariantFromOperationInstance(string pOperationInstance)
-        {
-            variant lResultVariant;
-            try
-            {
-                int lOperationVariantIndex;
-                string[] lOperationInstanceVariants = pOperationInstance.Split('_');
-                lOperationVariantIndex = int.Parse(lOperationInstanceVariants[2]);
-                lResultVariant = variantLookupByIndex(lOperationVariantIndex);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationVariantFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-                throw;
-            }
-            return lResultVariant;
-        }
-
-        /// <summary>
-        /// This function takes an operation instance and returns the operation transition from that operation instance
-        /// </summary>
-        /// <param name="pOperationInstance"></param>
-        /// <returns></returns>
-        public string ReturnOperationTransitionFromOperationInstance(string pOperationInstance)
-        {
-            string lOperationState = "";
-            try
-            {
-                string[] lOperationInstanceParts = pOperationInstance.Split('_');
-                lOperationState = lOperationInstanceParts[3];
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationTransitionFromOperationInstance");
-                cOutputHandler.printMessageToConsole(ex.Message);
-                throw;
-            }
-            return lOperationState;
-        }
-
-        public void addInActiveOperationName(String pOperationName)
-        {
-            try
-            {
-                //TODO: for now just to be simple we will make the ActiveOperationNamesSet just the names of the operations
-                if (!InActiveOperationNamesSet.Contains(pOperationName))
-                    InActiveOperationNamesSet.Add(pOperationName);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in addInActiveOperationName");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
         }
 
         public String giveNextStateActiveOperationName(String pActiveOperationName)
@@ -1776,9 +1261,9 @@ namespace ProductPlatformAnalyzer
             return lResultOperationName;
         }
 
-        public operation getOperationFromActiveOperation(string pActiveOperationName)
+        public Operation getOperationFromActiveOperation(string pActiveOperationName)
         {
-            operation lResultOperation = null;
+            Operation lResultOperation = null;
             try
             {
                 string[] parts = pActiveOperationName.Split('_');
@@ -1867,7 +1352,8 @@ namespace ProductPlatformAnalyzer
             int lOpTransNum = 0;
             try
             {
-                if (!pActiveOperationName.Contains("Possible") && !pActiveOperationName.Contains("Use"))
+                //TODO: To be corrected in the resource implementation
+                /*if (!pActiveOperationName.Contains("Possible") && !pActiveOperationName.Contains("Use"))
                 {
                     String[] parts = pActiveOperationName.Split('_');
                     //ActiveOperationInstance: OperationName_State_Part_Transition
@@ -1882,7 +1368,7 @@ namespace ProductPlatformAnalyzer
                         lOpTransNum = calculateTransitionNumberForActiveOperation(pActiveOperationName);
                         setActiveOperationMissingTransitionNumber(pActiveOperationName, lOpTransNum);
                     }
-                }
+                }*/
 
             }
             catch (Exception ex)
@@ -1891,57 +1377,6 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lOpTransNum;
-        }
-
-        private void calculatePartIndexForActiveOperation(string pActiveOperationName)
-        {
-            try
-            {
-                part lActivePart = getPartFromActiveOperationName(pActiveOperationName);
-                operation lActiveOperation = getOperationFromActiveOperation(pActiveOperationName);
-                //Here we have to find any variantOperations which ourActive Operation is part of
-                foreach (partOperations lPartOperations in PartsOperationsSet)
-                {
-
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in calculatePartIndexForActiveOperation");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
-        private int calculateTransitionNumberForActiveOperation(string pActiveOperationName)
-        {
-            int lTransitionNo = 0;
-            try
-            {
-                part lActivePart = getPartFromActiveOperationName(pActiveOperationName);
-                operation lActiveOperation = getOperationFromActiveOperation(pActiveOperationName);
-                //Here we have to find any variantOperations which ourActive Operation is part of
-                foreach (partOperations lPartOperations in PartsOperationsSet)
-                {
-                    string lPartExpression = lPartOperations.getPartExpr();
-
-                    if (lPartExpression.Contains(lActivePart.names))
-                    {
-                        lTransitionNo = 0;
-                        foreach (operation lOperation in lPartOperations.getOperations())
-                        {
-                            lTransitionNo += 2;
-                            if (lOperation.Equals(lActiveOperation))
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in calculateTransitionNumberForActiveOperation");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lTransitionNo;
         }
 
         private void setActiveOperationMissingTransitionNumber(string pActiveOperationName, int pCalculatedTransitionNumber)
@@ -1974,7 +1409,7 @@ namespace ProductPlatformAnalyzer
                 updateOperationNameInPrePostConditions(pOldOperationName, pNewOperationName);
 
                 //3. Third in the variant-operation mappings
-                updateOperationNameInPartOperationMapping(pOldOperationName, pNewOperationName);
+                //updateOperationNameInPartOperationMapping(pOldOperationName, pNewOperationName);
 
             }
             catch (Exception ex)
@@ -1988,9 +1423,9 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                operation lFoundOperation = cOperationNameLookup[pOldOperationName];
+                Operation lFoundOperation = cOperationNameLookup[pOldOperationName];
                 if (lFoundOperation != null)
-                    lFoundOperation.names = pNewOperationName;
+                    lFoundOperation.Name = pNewOperationName;
             }
             catch (Exception ex)
             {
@@ -1999,7 +1434,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void updateOperationNameInPartOperationMapping(string pOldOperationName, string pNewOperationName)
+        /*private void updateOperationNameInPartOperationMapping(string pOldOperationName, string pNewOperationName)
         {
             try
             {
@@ -2023,7 +1458,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in updateOperationNameInPartOperationMapping");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
         private void updateOperationNameInPrePostConditions(string pOldOperationName, string pNewOperationName)
         {
@@ -2031,13 +1466,12 @@ namespace ProductPlatformAnalyzer
             {
                 
                 //In this function the name of one of the operations in the local list has changed so we want to update the pre/post condition of any operation that references this operation
-                foreach (operation lOperation in cOperationSet)
+                foreach (Operation lOperation in cOperationSet)
                 {
                     var lPrecondition = operationLookupByName(pOldOperationName);
                     if (lPrecondition != null)
                     {
-                        lOperation.precondition.Remove(pOldOperationName);
-                        lOperation.precondition.Add(pNewOperationName);
+                        lOperation.Precondition.Add(pNewOperationName);
                     }
 
                     /*var lPostCondition = operationLookupByName(pOldOperationName);
@@ -2060,20 +1494,15 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //In this function the name of one of the operations in the local list has changed so we want to update the local operation list
-                operation lOperationToChangeName = cOperationNameLookup[pOldOperationName];
+                Operation lOperationToChangeName = cOperationNameLookup[pOldOperationName];
                 if (lOperationToChangeName != null)
-                    lOperationToChangeName.names = pNewOperationName;
+                    lOperationToChangeName.Name = pNewOperationName;
             }
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in updateOperationNameInLocalSet");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
-
-        public void addPartsOperations(partOperations pPartOperations)
-        {
-            PartsOperationsSet.Add(pPartOperations);
         }
 
         public void PrintDataSummary()
@@ -2087,11 +1516,10 @@ namespace ProductPlatformAnalyzer
                 if (cOperationSet.Count > 0)
                 {
                     lDataSummary += "Operations:" + System.Environment.NewLine;
-                    foreach (operation lOperation in OperationSet)
+                    foreach (Operation lOperation in OperationSet)
                     {
-                        lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
-                        foreach (string lPreconditionOperationName in lOperation.precondition)
-                            lDataSummary += "Operation Precondition: " + lPreconditionOperationName + System.Environment.NewLine;
+                        lDataSummary += "Operation Name: " + lOperation.Name + System.Environment.NewLine;
+                        lDataSummary += "Operation Precondition: " + lOperation.Precondition + System.Environment.NewLine;
 
                         /*foreach (string lPostconditionOperationName in lOperation.postcondition)
                             lDataSummary += "Operation Postcondition: " + lPostconditionOperationName + System.Environment.NewLine;*/
@@ -2131,7 +1559,7 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
-                if (VariantsOperationsSet.Count > 0)
+                /*if (VariantsOperationsSet.Count > 0)
                 {
                     //VariantOperationMappings
                     lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
@@ -2144,9 +1572,9 @@ namespace ProductPlatformAnalyzer
                             lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
                         }
                     }
-                }
+                }*/
 
-                if (PartsOperationsSet.Count > 0)
+                /*if (PartsOperationsSet.Count > 0)
                 {
                     //PartOperationMappings
                     lDataSummary += "Part Operation Mappings:" + System.Environment.NewLine;
@@ -2159,7 +1587,7 @@ namespace ProductPlatformAnalyzer
                             lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
                         }
                     }
-                }
+                }*/
 
                 //Traits
                 if (cTraitSet.Count > 0)
@@ -2190,20 +1618,16 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public operation CreateOperationInstance(string pName
-                                            , HashSet<string> pRequirements
-                                            , HashSet<string> pPreconditions
-                                            , HashSet<string> pPostconditions)
+        public Operation CreateOperationInstance(string pName
+                                            , string pTriggers
+                                            , string pRequirements
+                                            , List<string> pPreconditions)
         {
-            operation lTempOperation = new operation();
+            Operation lTempOperation = null;
             try
             {
 
-                lTempOperation.names = pName;
-                lTempOperation.requirements = pRequirements;
-                lTempOperation.precondition = pPreconditions;
-                //lTempOperation.postcondition = pPostconditions;
-                //addOperation(lTempOperation);
+                lTempOperation = new Operation(pName, pTriggers, pRequirements, pPreconditions);
 
                 cOperationSet.Add(lTempOperation);
                 cOperationNameLookup.Add(pName, lTempOperation);
@@ -2216,6 +1640,47 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lTempOperation;
+        }
+
+        public void CreateOperationInstances4AllTransitions(Operation pOperation)
+        {
+            try
+            {
+                var lMaxTransitionNumber = OperationSet.Count *2;
+                for (int lTransitionNumber = 0; lTransitionNumber < lMaxTransitionNumber; lTransitionNumber++)
+                {
+                    OperationInstance lTempOperationInstance = addOperationInstance(pOperation, lTransitionNumber);
+
+                    //Placeholder to add any additional dictionaries on operation instances
+                    var lKeyTuple = new Tuple<string, int>(pOperation.Name, lTransitionNumber);
+                    if (!OperationInstanceDictionary.ContainsKey(lKeyTuple))
+                    {
+                        OperationInstanceDictionary.Add(lKeyTuple, lTempOperationInstance);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in CreateOperationInstanceInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+        }
+
+        public OperationInstance addOperationInstance(Operation pOperation, int pTransitionNo)
+        {
+            OperationInstance lResultOperationInstance = null;
+            try
+            {
+                lResultOperationInstance = new OperationInstance(pOperation, pTransitionNo);
+                cOperationInstanceSet.Add(lResultOperationInstance);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in addOperationInstance");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperationInstance;
         }
 
         public part CreatePartInstance(string pName)
@@ -2262,7 +1727,7 @@ namespace ProductPlatformAnalyzer
             return lTempVariant;
         }
 
-        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, HashSet<variant> pVariantSet)
+        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, List<variant> pVariantSet)
         {
             try
             {
@@ -2279,7 +1744,8 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public partOperations CreatePartOperationMappingTemporaryInstance(string pPartName, HashSet<string> pOperationSet)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public partOperations CreatePartOperationMappingTemporaryInstance(string pPartName, List<string> pOperationSet)
         {
             partOperations lPartOperations = new partOperations();
             try
@@ -2308,9 +1774,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lPartOperations;
-        }
+        }*/
 
-        public void CreatePartOperationMappingInstance(string pPartName, HashSet<string> pOperationSet)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public void CreatePartOperationMappingInstance(string pPartName, HashSet<string> pOperationSet)
         {
             try
             {
@@ -2337,7 +1804,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in CreatePartOperationMappingInstance");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
         public void CreateItemUsageRuleInstance(variant pVariant, HashSet<part> pPartSet)
         {
@@ -2366,7 +1833,8 @@ namespace ProductPlatformAnalyzer
             ItemUsageRuleSet.Add(pItemUsageRule);
         }
 
-        public void CreatePartOperationMappingInstance(string pPartExpr, HashSet<operation> pOperationSet)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public void CreatePartOperationMappingInstance(string pPartExpr, HashSet<operation> pOperationSet)
         {
             try
             {
@@ -2387,9 +1855,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in CreatePartOperationMappingInstance");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
-        public void CreateVariantOperationMappingInstance(string pVariantExpr, HashSet<operation> pOperationSet)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public void CreateVariantOperationMappingInstance(string pVariantExpr, HashSet<operation> pOperationSet)
         {
             try
             {
@@ -2414,12 +1883,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in CreateVariantOperationMappingInstance");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
-
-        public void addVarantOperations(variantOperations pVariantOperations)
-        {
-            VariantsOperationsSet.Add(pVariantOperations);
-        }
+        }*/
 
         /*private trait findTraitWithName(string pTraitName)
         {
@@ -2482,7 +1946,8 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public variant createVirtualVariant(string lVariantExpr)
+        //Virtual variants are no longer needed
+        /*public variant createVirtualVariant(string lVariantExpr)
         {
             variant lResultVariant = new variant();
             try
@@ -2509,9 +1974,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
-        }
+        }*/
 
-        public part createVirtualPart(string lPartExpr)
+        //Virtual parts are no longer needed
+        /*public part createVirtualPart(string lPartExpr)
         {
             part lResultPart = new part();
             try
@@ -2538,10 +2004,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
-        }
+        }*/
 
-        //TODO: Do we need this anymore?
-        public part ReturnCurrentPart(partOperations pPartOperations)
+        //Part operations are not used anymore
+        /*public part ReturnCurrentPart(partOperations pPartOperations)
         {
             part lResultPart = null;
             try
@@ -2568,10 +2034,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultPart;
-        }
+        }*/
 
-        //TODO: Do we need this anymore?
-        public variant ReturnCurrentVariant(variantOperations pVariantOperations)
+        //Variant operations are not used anymore
+        /*public variant ReturnCurrentVariant(variantOperations pVariantOperations)
         {
             variant lResultVariant = null;
             try
@@ -2598,7 +2064,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultVariant;
-        }
+        }*/
 
 
         public void addVirtualPartConstaint(part pVirtualPart, string pPartExpr)
@@ -2629,7 +2095,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void createVirtualPart2PartExprInstance(part pVirtualPart, string pPartExpr)
+        /*public void createVirtualPart2PartExprInstance(part pVirtualPart, string pPartExpr)
         {
             try
             {
@@ -2647,9 +2113,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in createVirtualPart2PartExprInstance");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
-        public void createVirtualVariant2VariantExprInstance(variant pVirtualVariant, string pVariantExpr)
+        /*public void createVirtualVariant2VariantExprInstance(variant pVirtualVariant, string pVariantExpr)
         {
             try
             {
@@ -2667,9 +2133,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in createVirtualVariant2VariantExprInstance");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
-        public part createVirtualPartInstance()
+        /*public part createVirtualPartInstance()
         {
             part lVirtualPart = new part();
             try
@@ -2688,9 +2154,9 @@ namespace ProductPlatformAnalyzer
 
 
             return lVirtualPart;
-        }
+        }*/
 
-        public variant createVirtualVariantInstance()
+        /*public variant createVirtualVariantInstance()
         {
             variant lVirtualVariant = new variant();
             try
@@ -2709,9 +2175,10 @@ namespace ProductPlatformAnalyzer
 
 
             return lVirtualVariant;
-        }
+        }*/
 
-        public void addVirtualVariantToGroup(variant pVariant)
+        //Virtual variants are no longer needed
+        /*public void addVirtualVariantToGroup(variant pVariant)
         {
             try
             {
@@ -2734,7 +2201,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in addVirtualVariantToGroup");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-        }
+        }*/
 
 
         /*private void addVirtualConstraint(virtualConnection connection)
@@ -2839,7 +2306,7 @@ namespace ProductPlatformAnalyzer
             return lVirtualPartIndex;
         }
 
-        private int getMaxVirtualVariantNumber()
+        /*private int getMaxVirtualVariantNumber()
         {
             int lResultIndex = 0; 
             try
@@ -2858,9 +2325,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
-        }
+        }*/
 
-        private int getMaxVirtualPartNumber()
+        /*private int getMaxVirtualPartNumber()
         {
             int lResultIndex = 0;
             try
@@ -2879,9 +2346,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultIndex;
-        }
+        }*/
 
-        private string getNextVirtualVariantName()
+        /*private string getNextVirtualVariantName()
         {
             string lResultName = "";
             try
@@ -2898,9 +2365,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultName;
-        }
+        }*/
 
-        private string getNextVirtualPartName()
+        /*private string getNextVirtualPartName()
         {
             string lResultName = "";
             try
@@ -2917,9 +2384,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultName;
-        }
+        }*/
 
-        public string findVirtualVariantExpression(string lVirtualVariant)
+        /*public string findVirtualVariantExpression(string lVirtualVariant)
         {
             string lVirtualVariantExpr = "";
             try
@@ -2937,9 +2404,9 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualVariantExpr;
-        }
+        }*/
 
-        public string findVirtualPartExpression(string lVirtualPart)
+        /*public string findVirtualPartExpression(string lVirtualPart)
         {
             string lVirtualPartExpr = "";
             try
@@ -2957,7 +2424,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lVirtualPartExpr;
-        }
+        }*/
 
 
         public String getXMLNodeAttributeInnerText(XmlNode lNode, String lAttributeName)
@@ -2976,8 +2443,8 @@ namespace ProductPlatformAnalyzer
             return lResultAttributeText;
         }
 
-        //TODO: rename this function to show that you are loading from input
-        public HashSet<partOperations> createPartOperationTemporaryInstances(XmlDocument pXDoc)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public HashSet<partOperations> createPartOperationTemporaryInstances(XmlDocument pXDoc)
         {
             HashSet<partOperations> lPartOperationsSet = new HashSet<partOperations>();
             try
@@ -3008,7 +2475,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lPartOperationsSet;
-        }
+        }*/
 
         //TODO: rename this function to show that you are loading from input
         public bool createTraitInstances(XmlDocument pXDoc)
@@ -3145,15 +2612,15 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain variant group information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant group information! Data not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain variant group information! Variant groups not loaded.");
+                    cOutputHandler.printMessageToConsole("Initial data did not contain variant group information! Variant groups not loaded.");
 
                 }
                 else
                 {
                     foreach (XmlNode lNode in nodeList)
                     {
-                        HashSet<variant> lVariantGroupVariants = new HashSet<variant>();
+                        List<variant> lVariantGroupVariants = new List<variant>();
 
                         XmlNodeList variantGroupVariantNamesNodeList = lNode["variantRefs"].ChildNodes;
                         if (variantGroupVariantNamesNodeList.Count > 0)
@@ -3198,8 +2665,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain variant information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain variant information! Variants not loaded.");
+                    cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Variants not loaded.");
 
                 }
                 else
@@ -3243,8 +2710,8 @@ namespace ProductPlatformAnalyzer
                 {
                     cUsePartInfo = false;
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain part information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain part information! Parts not loaded.");
+                    cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Parts not loaded.");
 
                 }
                 else
@@ -3274,8 +2741,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain item usage rule information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain item usage rule information! Item usage rules not loaded.");
+                    cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Item usage rules not loaded.");
 
                 }
                 else
@@ -3316,7 +2783,9 @@ namespace ProductPlatformAnalyzer
             }
             return lDataLoaded;
         }
-        public bool createPartOperationsInstances(XmlDocument pXDoc)
+
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public bool createPartOperationsInstances(XmlDocument pXDoc)
         {
             bool lDataLoaded = false;
             try
@@ -3363,9 +2832,10 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
-        }
+        }*/
 
-        public bool createVariantOperationsInstances(XmlDocument pXDoc)
+        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        /*public bool createVariantOperationsInstances(XmlDocument pXDoc)
         {
             bool lDataLoaded = false;
             try
@@ -3412,6 +2882,94 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lDataLoaded;
+        }*/
+
+        /// <summary>
+        /// This function is used when you have the name of an operation instance (ONLY in the case of operation precondition)
+        /// And this function will return the operation status which corresponds to this opertion instance name
+        /// </summary>
+        /// <param name="pOperationInstanceName"></param>
+        /// <returns></returns>
+        public Enumerations.OperationInstanceState ReturnOperationStateFromOperationInstanceName(string pOperationInstanceName)
+        {
+            Enumerations.OperationInstanceState lResultOperationState = Enumerations.OperationInstanceState.Unused;
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstanceName.Split('_');
+
+                if (lOperationInstanceParts.Length > 0)
+                {
+                    switch (lOperationInstanceParts[1])
+                    {
+                        case "I":
+                            lResultOperationState = Enumerations.OperationInstanceState.Initial;
+                            break;
+                        case "E":
+                            lResultOperationState = Enumerations.OperationInstanceState.Executing;
+                            break;
+                        case "F":
+                            lResultOperationState = Enumerations.OperationInstanceState.Finished;
+                            break;
+                        default:
+                            lResultOperationState = Enumerations.OperationInstanceState.Unused;
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in ReturnOperationStatusFromOperationInstanceName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperationState;
+        }
+
+        /// <summary>
+        /// This function is used when you have the name of an operation instance (ONLY in the case of operation precondition)
+        /// And this function will return the operation which corresponds to this opertion instance name
+        /// </summary>
+        /// <param name="pOperationInstanceName"></param>
+        /// <returns></returns>
+        public Operation ReturnOperationFromOperationInstanceName(string pOperationInstanceName)
+        {
+            Operation lResultOperation = null;
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstanceName.Split('_');
+
+                if (lOperationInstanceParts.Length > 0)
+                    lResultOperation = operationLookupByName(lOperationInstanceParts[0]);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in ReturnOperationFromOperationInstanceName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperation;
+        }
+
+        /// <summary>
+        /// This function is used when you have the name of an operation instance (ONLY in the case of operation precondition)
+        /// And this function will return the operation name which corresponds to this opertion instance name
+        /// </summary>
+        /// <param name="pOperationInstanceName"></param>
+        /// <returns></returns>
+        public string ReturnOperationNameFromOperationInstanceName(string pOperationInstanceName)
+        {
+            string lResultOperationName = "";
+            try
+            {
+                string[] lOperationInstanceParts = pOperationInstanceName.Split('_');
+
+                if (lOperationInstanceParts.Length > 0)
+                    lResultOperationName = lOperationInstanceParts[0];
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in ReturnOperationNameFromOperationInstanceName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperationName;
         }
 
         //TODO: rename this function to show that you are loading from input
@@ -3425,52 +2983,50 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain operation infor! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain operation infor! Data not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain operation infor! Operations not loaded.");
+                    cOutputHandler.printMessageToConsole("Initial data did not contain operation infor! Operations not loaded.");
                 }
                 else
                 {
                     foreach (XmlNode lNode in nodeList)
                     {
-                        HashSet<string> lOperationPrecondition = new HashSet<string>();
-                        HashSet<string> lOperationPostcondition = new HashSet<string>();
-                        HashSet<string> lOperationRequirement = new HashSet<string>();
+                        string lTriggers = "";
+                        List<string> lOperationPrecondition = new List<string>();
+                        string lOperationRequirement = "";
 
-                        if (lNode["requirements"] != null)
+                        if (lNode["trigger"] != null)
                         {
-                            XmlNodeList opRequirementsList = lNode["requirements"].ChildNodes;
-                            foreach (XmlNode lOpRequirement in opRequirementsList)
-                            {
-                                lOperationRequirement.Add(lOpRequirement.InnerText);
-                            }
+                            XmlNodeList opTriggersList = lNode["trigger"].ChildNodes;
+                            lTriggers = opTriggersList[0].InnerText;
                         }
 
-                        if (lNode["operationPrecondition"] != null)
+                        if (lNode["requirement"] != null)
                         {
-                            XmlNodeList opPreconditionNodeList = lNode["operationPrecondition"].ChildNodes;
-                            foreach (XmlNode lOpPrecondition in opPreconditionNodeList)
-                            {
-                                lOperationPrecondition.Add(lOpPrecondition.InnerText);
-                            }
+                            XmlNodeList opRequirementsList = lNode["requirement"].ChildNodes;
+                            lOperationRequirement = opRequirementsList[0].InnerText;
                         }
 
-                        if (lNode["operationPostcondition"] != null)
+                        if (lNode["preconditions"] != null)
                         {
-                            XmlNodeList opPostconditionNodeList = lNode["operationPostcondition"].ChildNodes;
-                            foreach (XmlNode lOpPostcondition in opPostconditionNodeList)
-                            {
-                                lOperationPostcondition.Add(lOpPostcondition.InnerText);
-                            }
-
+                            XmlNodeList opPreconditionNodeList = lNode["preconditions"].ChildNodes;
+                            lOperationPrecondition.Add(opPreconditionNodeList[0].InnerText);
                         }
 
-                        CreateOperationInstance(getXMLNodeAttributeInnerText(lNode, "operationName")
-                                                , lOperationRequirement
-                                                , lOperationPrecondition
-                                                , lOperationPostcondition);
-                        lDataLoaded = true;
+                        var lOperationName = getXMLNodeAttributeInnerText(lNode, "operationName");
+                        
+                        var lOperation  = CreateOperationInstance(lOperationName
+                                                                , lTriggers
+                                                                , lOperationRequirement
+                                                                , lOperationPrecondition);
+
                     }
 
+                    foreach (var lOperation in OperationSet)
+                    {
+                        CreateOperationInstances4AllTransitions(lOperation);
+                    }
+
+                    lDataLoaded = true;
                 }
             }
             catch (Exception ex)

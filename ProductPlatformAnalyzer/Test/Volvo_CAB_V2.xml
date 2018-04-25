@@ -106,13 +106,9 @@
   <variants>
     <variant>
       <variantName>Frontlid-A-N-Frontlid-B</variantName>
-      <variantIndex>1</variantIndex>
-      <variantDisplayName>Frontlid-A-N-Frontlid-B</variantDisplayName>
     </variant>
     <variant>
       <variantName>Frontlid-A</variantName>
-      <variantIndex>2</variantIndex>
-      <variantDisplayName>Frontlid-A</variantDisplayName>
     </variant>
   </variants>
   <variantGroups>
@@ -133,34 +129,35 @@
   <operations>
     <operation>
       <operationName>Clamp-Frontlid-A</operationName>
-      <displayName>Clamp-Frontlid-A</displayName>
+      <trigger>Frontlid-A</trigger>
     </operation>
     <operation>
       <operationName>Spot-weld-Frontlid-A</operationName>
-      <displayName>Spot-weld-Frontlid-A</displayName>
+      <trigger>Frontlid-A</trigger>
       <operationPrecondition>
-        <operationName>Clamp-Frontlid-A</operationName>
+        <operationRef>Clamp-Frontlid-A</operationRef>
+        <operationRef>AR41-Switch-Tool-To-SpotWeld</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Unclamp-Frontlid-A</operationName>
-      <displayName>Unclamp-Frontlid-A</displayName>
+      <trigger>Frontlid-A</trigger>
       <operationPrecondition>
-        <operationName>Spot-weld-Frontlid-A</operationName>
+        <operationRef>Spot-weld-Frontlid-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
-      <displayName>Move-Frontlid-A-to-Glue-Station</displayName>
+      <trigger>Frontlid-A</trigger>
       <operationPrecondition>
-        <operationName>Unclamp-Frontlid-A</operationName>
+        <operationRef>Unclamp-Frontlid-A</operationRef>
       </operationPrecondition>
     </operation>
     <operation>
       <operationName>Glue-Frontlid-A</operationName>
-      <displayName>Glue-Frontlid-A</displayName>
+      <trigger>Frontlid-A</trigger>
       <operationPrecondition>
-        <operationName>Move-Frontlid-A-to-Glue-Station</operationName>
+        <operationRef>Move-Frontlid-A-to-Glue-Station</operationRef>
       </operationPrecondition>
     </operation>
   </operations>
@@ -191,18 +188,4 @@
       <attributes></attributes>
     </resource>
   </resources>
-  <variantOperationMappings>
-    <variantOperationMapping>
-      <variantRefs>
-        <variantRef>Frontlid-A</variantRef>
-      </variantRefs>
-      <operationRefs>
-        <operationRef>Clamp-Frontlid-A</operationRef>
-        <operationRef>Spot-weld-Frontlid-A</operationRef>
-        <operationRef>Unclamp-Frontlid-A</operationRef>
-        <operationRef>Move-Frontlid-A-to-Glue-Station</operationRef>
-        <operationRef>Glue-Frontlid-A</operationRef>
-      </operationRefs>
-    </variantOperationMapping>
-  </variantOperationMappings>
 </testData>
