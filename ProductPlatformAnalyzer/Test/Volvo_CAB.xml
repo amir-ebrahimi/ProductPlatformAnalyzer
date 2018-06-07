@@ -13,59 +13,76 @@
           Frontlid_A
           
       Constraints:
-        None
+        and Frontlid-A not Frontlid-A-N-Frontlid-B
       
       Operation:
       Clamp_Frontlid_A
         Pre:
+        Trigger: Frontlid_A
       
       Spot_weld_Frontlid_A
         Pre: Clamp_Frontlid_A AND AR41_Switch_Tool_To_SpotWeld
+        Trigger: Frontlid_A
       
       Unclamp_Frontlid_A
         Pre: Spot_weld_Frontlid_A
+        Trigger: Frontlid_A
       
       Move_Frontlid_A_to_Glue_Station
         Pre: Unclamp_Frontlid_A
+        Trigger: Frontlid_A
       
       Glue_Frontlid_A
         Pre: Move_Frontlid_A_to_Glue_Station
+        Trigger: Frontlid_A
       
       Clamp_Frontlid_B
         Pre:
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Move_Frontlid_A_to_Fixture_2
         Pre: Clamp_Frontlid_B AND Glue_Frontlid_A
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Merge_Frontlid_A_and_B
         Pre: Move_Frontlid_A_to_Fixture_2
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Unclamp_Frontlid
         Pre: Merge_Frontlid_A_and_B
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Move_Frontlid_to_TurnTable
         Pre: Unclamp_Frontlid
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Clamp_Turn_Table
         Pre: Move_Frontlid_to_TurnTable
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Rabbet_Side_A
         Pre: Clamp_Turn_Table
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Rotate_TurnTable
         Pre: Rabbet_Side_A
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Rabbet_Side_B
         Pre: Rotate_TurnTable
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Move_Frontlid_to_Output_Buffer
         Pre: Rabbet_Side_B AND AR41_Switch_Tool_To_Grippe
+        Trigger: Frontlid_A_N_Frontlid_B
       
       AR41_Switch_Tool_to_Gripper
         Pre:
+        Trigger: Frontlid_A_N_Frontlid_B
       
       AR41_Switch_Tool_to_SpotWeld
         Pre:
+        Trigger: Frontlid_A_N_Frontlid_B
       
       Traits:
         sensor
@@ -82,25 +99,6 @@
         
         TurnTable
         
-      Variant Operation Mapping
-        Frontlid_A_N_Frontlid_B -> Clamp_Frontlid_B
-                                  , Move_Frontlid_A_to_Fixture_2
-                                  , Merge_Frontlid_A_and_B
-                                  , Unclamp_Frontlid
-                                  , Move_Frontlid_to_TurnTable
-                                  , Clamp_Turn_Table
-                                  , Rabbet_Side_A
-                                  , Rotate_TurnTable
-                                  , Rabbet_Side_B
-                                  , Move_Frontlid_to_Output_Buffer
-                                  , AR41_Switch_Tool_to_Gripper
-                                  , AR41_Switch_Tool_to_SpotWeld
-        Frontlid_A -> Clamp_Frontlid_A
-                    , Spot_weld_Frontlid_A
-                    , Unclamp_Frontlid_A
-                    , Move_Frontlid_A_to_Glue_Station
-                    , Glue_Frontlid_A
-
 -->
 <testData>
   <variants>
@@ -123,7 +121,7 @@
   </variantGroups>
   <constraints>
     <constraint>
-      <logic>and Frontlid-A (not Frontlid-A-N-Frontlid-B)</logic>
+      <logic>and Frontlid-A not Frontlid-A-N-Frontlid-B</logic>
     </constraint>
   </constraints>
   <operations>

@@ -11,6 +11,7 @@ namespace ProductPlatformAnalyzer
         private Enumerations.OperationStatus _status;
         private Operation _abstractOperation;
         private int _transitionNumber;
+        private int _index;
         private string _initialVariableName;
         private string _executingVariableName;
         private string _finishedVariableName;
@@ -34,6 +35,12 @@ namespace ProductPlatformAnalyzer
         {
             get { return _transitionNumber; }
             set { _transitionNumber = value; }
+        }
+
+        public int Index
+        {
+            get { return _index; }
+            set { _index = value; }
         }
 
         public string InitialVariableName
@@ -62,10 +69,13 @@ namespace ProductPlatformAnalyzer
         }
         #endregion
 
-        public OperationInstance(Operation pOperation, int pTransitionNumber)
+        public OperationInstance(Operation pOperation
+                                , int pTransitionNumber
+                                , int pIndex)
         {
             _abstractOperation = pOperation;
             _transitionNumber = pTransitionNumber;
+            _index = pIndex;
             _status = Enumerations.OperationStatus.Inactive;
             CreateOperationInstanceVariableNames();
         }

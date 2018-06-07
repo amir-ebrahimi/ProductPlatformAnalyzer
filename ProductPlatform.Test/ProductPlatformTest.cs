@@ -137,6 +137,7 @@ namespace ProductPlatform.Test
                         //             , Build P Constraints, Number Of Models Required
                         lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
                                                             , lTestData.lAnalysisType
+                                                            , false
                                                             , lTestData.lNoOfModelsRequired);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -191,6 +192,7 @@ namespace ProductPlatform.Test
                         //             , Build P Constraints, Number Of Models Required
                         lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
                                                             , lTestData.lAnalysisType
+                                                            , false
                                                             , lTestData.lNoOfModelsRequired);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -202,7 +204,7 @@ namespace ProductPlatform.Test
                                                         , false, false, true
                                                         , true, true, false);
 
-                        lAnalysisResult = lZ3SolverEngineer.AlwaysSelectedVariantAnalysis(false, true);
+                        lAnalysisResult = lZ3SolverEngineer.NeverSelectedVariantAnalysis(false, true);
 
                         Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSelectedVariantExpectedResult);
                     }
@@ -245,6 +247,7 @@ namespace ProductPlatform.Test
                         //             , Build P Constraints, Number Of Models Required
                         lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
                                                             , lTestData.lAnalysisType
+                                                            , false
                                                             , lTestData.lNoOfModelsRequired);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -299,6 +302,7 @@ namespace ProductPlatform.Test
                         //             , Build P Constraints, Number Of Models Required
                         lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
                                                             , lTestData.lAnalysisType
+                                                            , false
                                                             , lTestData.lNoOfModelsRequired);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -310,7 +314,7 @@ namespace ProductPlatform.Test
                                                         , false, false, true
                                                         , true, true, false);
 
-                        lAnalysisResult = lZ3SolverEngineer.AlwaysSelectedOperationAnalysis(false, true);
+                        lAnalysisResult = lZ3SolverEngineer.NeverSelectedOperationAnalysis(false, true);
 
                         Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSlectedOperationExpectedResult);
                     }

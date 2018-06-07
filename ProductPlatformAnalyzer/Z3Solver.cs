@@ -779,45 +779,6 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public BoolExpr PickOneOperator(string[] pOperandSet)
-        {
-            try
-            {
-                BoolExpr lResultExpression = null;
-                int lCounter = 1;
-                foreach (string lOperand in pOperandSet)
-                {
-                    if (lResultExpression == null)
-                        lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
-                    else
-                    {
-                        AddBooleanExpression("Xor-helper" + lCounter);
-
-                        BoolExpr lTempImplies;
-                        BoolExpr lHelperBoolExpr;
-
-                        if (lCounter.Equals(1))
-                            lTempImplies = ImpliesOperator(new List<BoolExpr>() { lResultExpression, (BoolExpr)FindExprInExprSet(lOperand) });
-                        else
-                            lTempImplies = ImpliesOperator(new List<BoolExpr>() { (BoolExpr)FindExprInExprSet("Xor-helper" + (lCounter - 1)), (BoolExpr)FindExprInExprSet(lOperand) });
-
-                        lHelperBoolExpr = ImpliesOperator(new List<BoolExpr>() { (BoolExpr)FindExprInExprSet("Xor-helper" + lCounter), lTempImplies });
-                        AddConstraintToSolver(lHelperBoolExpr, "Building Xor Operator");
-
-                        AddConstraintToSolver((BoolExpr)FindExprInExprSet("Xor-helper" + lCounter), "Building Xor Operator");
-
-                        lCounter++;
-                    }
-                }
-                return lResultExpression;
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in PickOneOperator");
-                throw ex;
-            }
-        }
-
         public BoolExpr PickOneOperator(List<string> pOperandNameSet)
         {
             try
@@ -1670,19 +1631,19 @@ namespace ProductPlatformAnalyzer
                             if (!cResultModel.Evaluate(lCurrentExpr).IsTrue && !cResultModel.Evaluate(lCurrentExpr).IsFalse)
                             {
                                 //If the value of the variable is neither true nor false (it is don't care, meaning both true and false values for this variable will satisfy the model)
-                                tempExpression = cICtx.MkAnd(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
-                                lLocalDebugText = "(and " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " ))";
+                                tempExpression = cICtx.MkOr(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lLocalDebugText = "(or " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " ))";
                             }
                             //else if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
                             else if (cResultModel.Evaluate(lCurrentExpr).IsTrue)
                             {
-                                tempExpression = cICtx.MkAnd(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
-                                lLocalDebugText = "(and " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " )) ";
+                                tempExpression = cICtx.MkOr(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lLocalDebugText = "(or " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " )) ";
                             }
                             else
                             { 
-                                tempExpression = cICtx.MkAnd(tempExpression, (BoolExpr)lCurrentExpr);
-                                lLocalDebugText = "(and " + lLocalDebugText + " " + lCurrentExpr.ToString() + " ) ";
+                                tempExpression = cICtx.MkOr(tempExpression, (BoolExpr)lCurrentExpr);
+                                lLocalDebugText = "(or " + lLocalDebugText + " " + lCurrentExpr.ToString() + " ) ";
                             }
                         }
                     }

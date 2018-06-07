@@ -53,7 +53,7 @@ namespace ProductPlatformAnalyzer
                             operation = operation + str + " ";
                         }
                         opState = "possible";
-                        variant = -1;
+                        //variant = -1;
                         state = -1;
                     }
                     else if(string.Equals(lOperationNameParts[0],"Use"))
@@ -65,22 +65,31 @@ namespace ProductPlatformAnalyzer
                             operation = operation + str + " ";
                         }
                         opState = "use";
-                        variant = -1;
                         state = -1;
+                    }
+                    else if (string.Equals(lOperationNameParts[1],"Trigger"))
+                    {
+                        operation = lOperationNameParts[0];
+                        opState = "trigger";
+                        state = -1;
+                    }
+                    else if(string.Equals(lOperationNameParts[1],"Precondition"))
+                    {
+                        operation = lOperationNameParts[0];
+                        opState = "precondition";
+                        state = Convert.ToInt32(lOperationNameParts[2]);
                     }
                     else
                     {
                         operation = lOperationNameParts[0];
                         opState = lOperationNameParts[1];
-                        variant = Convert.ToInt32(lOperationNameParts[2]);
-                        state = Convert.ToInt32(lOperationNameParts[3]);
+                        state = Convert.ToInt32(lOperationNameParts[2]);
                     }
                 }
                 else
                 {
                     operation = null;
                     opState = null;
-                    variant = -1;
                     state = -1;
                 }
 
@@ -723,12 +732,22 @@ namespace ProductPlatformAnalyzer
                 string var, vg;
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1)
+                    //if (exp.state == -1)
+                    if (exp.opState == null)
                     {
                         var = exp.ToString();
                         vg = cFrameworkWrapper.getVariantGroup(var.Split(' ')[0]);
-                        if (! vg.Contains("Virtual-VG"))
-                            printMessageToConsole(vg + "." + var);
+                        if (vg != "")
+                        {
+                            //Meaning var was a variant
+                            if (!vg.Contains("Virtual-VG"))
+                                printMessageToConsole(vg + "." + var);
+                        }
+                        else
+                        {
+                            //Meaning var was a part
+                            printMessageToConsole(var);
+                        }
                     }
                 }
             }
@@ -867,7 +886,13 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
+                    if (exp.opState == null 
+                        && String.Equals(exp.value, "true") 
+                        && !String.Equals(exp.opState, "possible") 
+                        && !String.Equals(exp.opState, "use")
+                        && !String.Equals(exp.opState, "precondition")
+                        && !String.Equals(exp.opState, "trigger")
+                        )
                     {
 
                         var = exp.name;
@@ -899,7 +924,13 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
+                    if (exp.opState == null 
+                        && String.Equals(exp.value, "true") 
+                        && !String.Equals(exp.opState, "possible") 
+                        && !String.Equals(exp.opState, "use")
+                        && !String.Equals(exp.opState, "precondition")
+                        && !String.Equals(exp.opState, "trigger")
+                        )
                     {
 
                         var = exp.name;
@@ -1168,8 +1199,8 @@ namespace ProductPlatformAnalyzer
 
                 foreach (String con in constraints)
                 {
-                    if (checkCondition(con))
-                    {
+                    //if (checkCondition(con))
+                    //{
                         writer.WriteBeginTag("tr");
                         writer.Write(HtmlTextWriter.TagRightChar);
                         writer.WriteBeginTag("td");
@@ -1177,7 +1208,7 @@ namespace ProductPlatformAnalyzer
                         writer.Write(GeneralUtilities.parseExpression(con, "infix"));
                         writer.WriteEndTag("td");
                         writer.WriteEndTag("tr");
-                    }
+                    //}
                 }
                 writer.WriteEndTag("table");
             }

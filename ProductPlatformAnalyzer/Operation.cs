@@ -55,15 +55,26 @@ namespace ProductPlatformAnalyzer
             set { _z3Solver = value; }
         }*/
 
-        public Operation(string pOperationName, string pTrigger, string pRequirement, List<string> pPrecondition)
+        public Operation(string pOperationName, string pTrigger, string pRequirement, string pPrecondition)
         {
             _name = pOperationName;
             _trigger = pTrigger;
             _requirement = pRequirement;
-            _precondition = pPrecondition;
+            _precondition = new List<string>();
+
+            if (pPrecondition != null)
+                if (pPrecondition != "")
+                    _precondition.Add(pPrecondition);
+
             //_z3Solver = pZ3Solver;
             createOperationVariableNames();
             //createOperationVariables();
+        }
+
+        public void AddPrecondition(string pPrecondition)
+        {
+            if (pPrecondition != null)
+                _precondition.Add(pPrecondition);
         }
 
         private void createOperationVariableNames()

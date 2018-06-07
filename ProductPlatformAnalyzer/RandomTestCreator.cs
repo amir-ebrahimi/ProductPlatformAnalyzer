@@ -12,6 +12,7 @@ namespace ProductPlatformAnalyzer
         public int cMaxVariantNumber { get; set; }
         public int cMaxPartNumber { get; set; }
         public int cMaxOperationNumber { get; set; }
+        public int cMaxNoOfConfigurationRules { get; set; }
         public int cTrueProbability { get; set; }
         public int cFalseProbability { get; set; }
         public int cExpressionProbability { get; set; }
@@ -26,7 +27,7 @@ namespace ProductPlatformAnalyzer
         public List<int> cOverallFreeVariantCodes { get; set; }
         public List<int> cOverallChosenOperationCodes { get; set; }
         public List<int> cOverallFreeOperationCodes { get; set; }
-        public string[] cExpressionOperators = new string[] { "and", "or", "not" };
+        public string[] cExpressionOperators = new string[] { "and", "or" };
 
         private Random cMyRandom;
         private FrameworkWrapper cFrameworkWrapper;
@@ -39,6 +40,7 @@ namespace ProductPlatformAnalyzer
             cMaxVariantNumber = 1;
             cMaxPartNumber = 0;
             cMaxOperationNumber = 1;
+            cMaxNoOfConfigurationRules = 1;
             cTrueProbability = 100;
             cFalseProbability = 0;
             cExpressionProbability = 0;
@@ -124,6 +126,7 @@ namespace ProductPlatformAnalyzer
                                     , int pMaxNoOfTraitAttributes
                                     , int pMaxResourceNumber
                                     , int pMaxExpressionOperandNumber
+                                    , int pMaxNoOfConfigurationRules
                                     , FrameworkWrapper pFrameworkWrapper)
         {
             bool lResult = false;
@@ -158,6 +161,8 @@ namespace ProductPlatformAnalyzer
                     cMaxResourceNumber = pMaxResourceNumber;
                 if (pMaxExpressionOperandNumber != 0)
                     cMaxExpressionOperandNumber = pMaxExpressionOperandNumber;
+                if (pMaxNoOfConfigurationRules != 0)
+                    cMaxNoOfConfigurationRules = pMaxNoOfConfigurationRules;
                 if (pFrameworkWrapper != null)
                     cFrameworkWrapper = pFrameworkWrapper;
 
@@ -168,14 +173,18 @@ namespace ProductPlatformAnalyzer
 
                 createOperations();
                 updateOperationPrePostConditions();
+                updateOperationTriggerConditions();
 
-                //createVariantOperationMapping();
-                //createPartOperationMapping();
                 createItemUsageRules();
+
+                createConfigurationRules();
 
                 //createTraits();
                 //createResources();
+                Console.WriteLine("Random data summary: ");
+                Console.WriteLine("---------------------------------------------------------------------------");
                 cFrameworkWrapper.PrintDataSummary();
+
 
                 lResult = true;
             }
@@ -188,35 +197,32 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
-        private string pickRandomOperator()
-        {
-            string lResultOperatorName = "";
-            try
-            {
-                //pick random operator
-                int lRandomOperatorIndex = cMyRandom.Next(cExpressionOperators.Count());
-                lResultOperatorName = cExpressionOperators[lRandomOperatorIndex];
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in pickRandomOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultOperatorName;
-        }
-
-        private void makeRandomExpression()
+        private void createConfigurationRules()
         {
             try
             {
-                //First we pick a random operator
-                string lRandomOperatorName = pickRandomOperator();
-                //Now we pick random operands
+                //First build the maximum number of operands
+                List<string> lOperands = new List<string>();
+                foreach (var lPart in cFrameworkWrapper.PartSet)
+                {
+                    lOperands.Add(lPart.names);
+                }
+                foreach (var lVariant in cFrameworkWrapper.VariantSet)
+                {
+                    lOperands.Add(lVariant.names);
+                }
 
+
+                for (int i = 0; i < cMaxNoOfConfigurationRules; i++)
+                {
+                    string lRandomConfigurationRule = buildRandomExpFromOperands(lOperands);
+
+                    cFrameworkWrapper.ConstraintSet.Add(lRandomConfigurationRule);
+                }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in makeRandomExpression");
+                cOutputHandler.printMessageToConsole("error in createConfigurationRules");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
@@ -306,42 +312,6 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
-
-        /*private void createVariantOperationMapping()
-        {
-            try
-            {
-                foreach (variant lVariant in cFrameworkWrapper.VariantSet)
-                {
-                    resetOverallFreeOperationCodes();
-                    HashSet<operation> lRandomOperations = pickASeriesOfRandomOperations(true);
-                    cFrameworkWrapper.CreateVariantOperationMappingInstance(lVariant.names, lRandomOperations);
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in createPartOperationMapping");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }*/
-
-        /*private void createPartOperationMapping()
-        {
-            try
-            {
-                foreach (part lPart in cFrameworkWrapper.PartSet)
-                {
-                    resetOverallFreeOperationCodes();
-                    HashSet<operation> lRandomOperations = pickASeriesOfRandomOperations(true);
-                    cFrameworkWrapper.CreatePartOperationMappingInstance(lPart.names, lRandomOperations);
-                }
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in createPartOperationMapping");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }*/
 
         private void createItemUsageRules()
         {
@@ -486,7 +456,7 @@ namespace ProductPlatformAnalyzer
                 int lRandomPartCode = 0;
                 for (int i = 0; i < lNoOfParts; i++)
                 {
-                    lRandomPartCode = cMyRandom.Next(1, cPartCodeLookup.Count);
+                    lRandomPartCode = cMyRandom.Next(0, cPartCodeLookup.Count);
                     lChosenParts.Add(partLookupByCode(lRandomPartCode));
                 }
             }
@@ -586,30 +556,33 @@ namespace ProductPlatformAnalyzer
             List<variant> lChosenVariants = new List<variant>();
             try
             {
-                //This function returns a series of randomly piched variants which will be bound to a specific variantgroup
-                int lNoOfVariants = cMyRandom.Next(1, cOverallFreeVariantCodes.Count);
-                List<int> lChosenVariantCodes = new List<int>();
-                int lChosenVariantCode;
-
-                for (int i = 0; i < lNoOfVariants; i++)
+                if (cOverallFreeVariantCodes.Count > 0)
                 {
+                    //This function returns a series of randomly piched variants which will be bound to a specific variantgroup
+                    int lNoOfVariants = cMyRandom.Next(1, cOverallFreeVariantCodes.Count);
+                    List<int> lChosenVariantCodes = new List<int>();
+                    int lChosenVariantCode;
 
-                    lChosenVariantCode = returnRandomVariantCode();
-
-                    //We don't want a group to have zero variants
-                    if (!cOverallChosenVariantCodes.Contains(lChosenVariantCode))
+                    for (int i = 0; i < lNoOfVariants; i++)
                     {
-                        updateChosenVariantCode(lChosenVariantCode);
-                        lChosenVariantCodes.Add(lChosenVariantCode);
+
+                        lChosenVariantCode = returnRandomVariantCode();
+
+                        //We don't want a group to have zero variants
+                        if (!cOverallChosenVariantCodes.Contains(lChosenVariantCode))
+                        {
+                            updateChosenVariantCode(lChosenVariantCode);
+                            lChosenVariantCodes.Add(lChosenVariantCode);
+                        }
+                    }
+
+                    List<string> lVariantNames = returnVariantNames(lChosenVariantCodes);
+
+                    foreach (string lVariantName in lVariantNames)
+                    {
+                        lChosenVariants.Add(cFrameworkWrapper.variantLookupByName(lVariantName));
                     }
                 }
-
-                List<string> lVariantNames = returnVariantNames(lChosenVariantCodes);
-
-                foreach (string lVariantName in lVariantNames)
-	            {
-                    lChosenVariants.Add(cFrameworkWrapper.variantLookupByName(lVariantName));		 
-	            }
             }
             catch (Exception ex)
             {
@@ -730,7 +703,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //TODO: we have to also make two random list fir preconditions and postconditions
-                List<string> lOperationPrecondition = new List<string>();
+                string lOperationPrecondition = "";
                 //List<string> lOperationPostcondition = new List<string>();
                 string lOperationTrigger = "";
                 string lOperationRequiremnt = "";
@@ -746,6 +719,11 @@ namespace ProductPlatformAnalyzer
                     //Creating a list for operation lookup by code, ONLY for use with in this class
                     cOperationCodeLookup.Add(i, lTempOperation);
 
+                }
+
+                foreach (var lOperation in cFrameworkWrapper.OperationSet)
+                {
+                    cFrameworkWrapper.CreateOperationInstances4AllTransitions(lOperation);
                 }
             }
             catch (Exception ex)
@@ -771,6 +749,150 @@ namespace ProductPlatformAnalyzer
             return lOperationCode;
         }
 
+        private string returnRandomExpression(List<string> pOperands)
+        {
+            string lResultRandomExpression = "";
+            try
+            {
+                List<string> lRandomNegatedOperands = new List<string>();
+                foreach (var lOperand in pOperands)
+                {
+                    var lRandomNegatedOperand = randomNotOperator(lOperand);
+                    lRandomNegatedOperands.Add(lRandomNegatedOperand);
+                }
+
+                //what ever number of operands we have we have to pick one less random operator for them to make the random expression
+                int lNeededNumberOfOperators = pOperands.Count - 1;
+                List<string> lRandomOperators = new List<string>();
+                for (int i = 0; i < lNeededNumberOfOperators; i++)
+                {
+                    lRandomOperators.Add(randomOperator());
+                }
+
+                //Now making the overall random expression in preorder format
+                foreach (var lOperator in lRandomOperators)
+                {
+                    lResultRandomExpression += lOperator + " ";
+                }
+
+                foreach (var lRandomNegatedOperand in lRandomNegatedOperands)
+                {
+                    lResultRandomExpression += lRandomNegatedOperand + " ";
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in returnRandomExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultRandomExpression;
+        }
+
+        private string randomOperator()
+        {
+            string lResultRandomOperator = "";
+            try
+            {
+                int lRandomOperatorIndex = cMyRandom.Next(0, cExpressionOperators.Count());
+
+                lResultRandomOperator = cExpressionOperators[lRandomOperatorIndex];
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in randomOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultRandomOperator;
+        }
+
+        private string randomNotOperator(string pOperand)
+        {
+            string lResultOperand = "";
+            try
+            {
+                var lRandomOperatorIndex = cMyRandom.Next(0, 2);
+                if (lRandomOperatorIndex.Equals(0))
+                    lResultOperand = "not " + pOperand;
+                else
+                    lResultOperand = pOperand;
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in randomNotOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultOperand;
+        }
+
+        private string buildRandomExpFromOperands(List<string> pOperands)
+        {
+            string lResultRandomExp = "";
+            try
+            {
+                //Then pick a random number of operands
+                List<string> lRandomOperands = new List<string>();
+                for (int i = 0; i < cMaxExpressionOperandNumber; i++)
+                {
+                    lRandomOperands.Add(pickRandomStringFromList(pOperands));
+                }
+
+                lResultRandomExp = returnRandomExpression(lRandomOperands);
+
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in buildRandomExpFromOperands");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultRandomExp;
+        }
+
+        private void updateOperationTriggerConditions()
+        {
+            try
+            {
+                //First build the maximum number of operands
+                List<string> lOperands = new List<string>();
+                foreach (var lPart in cFrameworkWrapper.PartSet)
+                {
+                    lOperands.Add(lPart.names);
+                }
+                foreach (var lVariant in cFrameworkWrapper.VariantSet)
+                {
+                    lOperands.Add(lVariant.names);
+                }
+
+
+                //the trigger is defined as an expression over parts and variants
+                buildRandomExpFromOperands(lOperands);
+                foreach (Operation lCurrentOperation in cFrameworkWrapper.OperationSet)
+                {
+                    lCurrentOperation.Trigger = buildRandomExpFromOperands(lOperands);
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in updateOperationTriggerConditions");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+        }
+
+        private string pickRandomStringFromList(List<string> pStrings)
+        {
+            string lResultRandomString = "";
+            try
+            {
+                var lIndex = cMyRandom.Next(0, pStrings.Count);
+                lResultRandomString = pStrings.ElementAt<string>(lIndex);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in pickRandomStringFromList");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultRandomString;
+        }
+
         private void updateOperationPrePostConditions()
         {
             try
@@ -782,7 +904,10 @@ namespace ProductPlatformAnalyzer
                     //This is because an operation can't be part of its own pre or post condition
                     cOverallFreeOperationCodes.Remove(returnOperationCode(lCurrentOperation.Name));
 
-                    lCurrentOperation.Precondition = pickASeriesOfRandomOperationNames(false);
+                    List<string> lOperands = pickASeriesOfRandomOperationNames(false);
+                    string lPrecondition = buildRandomExpFromOperands(lOperands);
+                    //lCurrentOperation.Precondition.Clear();
+                    lCurrentOperation.AddPrecondition(lPrecondition);
                 }
             }
             catch (Exception ex)

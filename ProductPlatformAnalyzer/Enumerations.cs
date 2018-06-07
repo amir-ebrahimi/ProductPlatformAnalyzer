@@ -48,8 +48,13 @@ namespace ProductPlatformAnalyzer
             ProductManufacturingModelEnumerationAnalysis,
             VariantSelectabilityAnalysis,
             AlwaysSelectedVariantAnalysis,
+            NeverSelectedVariantAnalysis,
+            PartSelectabilityAnalysis,
+            AlwaysSelectedPartAnalysis,
+            NeverSelectedPartAnalysis,
             OperationSelectabilityAnalysis,
             AlwaysSelectedOperationAnalysis,
+            NeverSelectedOperationAnalysis,
             ExistanceOfDeadlockAnalysis,
             AlwaysDeadlockAnalysis,
             CompleteAnalysis

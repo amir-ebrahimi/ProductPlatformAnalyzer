@@ -29,6 +29,8 @@ namespace ProductPlatformAnalyzer
         private Dictionary<int, part> cIndexPartLookup = new Dictionary<int, part>();
         private Dictionary<string, part> cPartSymbolicNameLookup = new Dictionary<string, part>();
 
+        private HashSet<itemUsageRule> cItemUsageRuleSet;
+
         private HashSet<string> cConstraintSet;
 
         //private List<operation> cOperationList;
@@ -41,8 +43,6 @@ namespace ProductPlatformAnalyzer
         //private List<KeyValuePair<string, OperationInstance>> cOperationInstanceNameLookup = new List<KeyValuePair<string, OperationInstance>>();
         //private Dictionary<string, OperationInstance> cOperationInstanceSymbolicNameLookup = new Dictionary<string, OperationInstance>();
 
-        private HashSet<itemUsageRule> cItemUsageRuleSet;
-
         private HashSet<resource> cResourceSet;
         private Dictionary<string, resource> cResourceNameLookup = new Dictionary<string, resource>();
         private Dictionary<string, resource> cResourceSymbolicNameLookup = new Dictionary<string, resource>();
@@ -51,6 +51,7 @@ namespace ProductPlatformAnalyzer
         private Dictionary<string, trait> cTraitNameLookup = new Dictionary<string, trait>();
         private Dictionary<string, trait> cTraitSymbolicNameLookup = new Dictionary<string, trait>();
 
+        #region Getter-Setters
         public HashSet<variant> VariantSet
         {
             get { return this.cVariantSet; }
@@ -167,8 +168,8 @@ namespace ProductPlatformAnalyzer
 
         public HashSet<itemUsageRule> ItemUsageRuleSet
         {
-            get { return this.ItemUsageRuleSet; }
-            set { this.ItemUsageRuleSet = value; }
+            get { return this.cItemUsageRuleSet; }
+            set { this.cItemUsageRuleSet = value; }
         }
 
         public HashSet<string> ConstraintSet
@@ -212,6 +213,7 @@ namespace ProductPlatformAnalyzer
             get { return this.cTraitSymbolicNameLookup; }
             set { this.cTraitSymbolicNameLookup = value; }
         }
+        #endregion
 
         public FrameworkWrapper(OutputHandler pOutputHandler)
         {
@@ -303,7 +305,7 @@ namespace ProductPlatformAnalyzer
             return tempResult;
         }
 
-        public part partLookupByName(string pPartName)
+        public part partLookupByName(string pPartName, bool pWithUserMsg = true)
         {
             part lResultPart = null;
             try
@@ -311,7 +313,8 @@ namespace ProductPlatformAnalyzer
                 if (cPartNameLookup.ContainsKey(pPartName))
                     lResultPart = cPartNameLookup[pPartName];
                 else
-                    cOutputHandler.printMessageToConsole("Part " + pPartName + " not found in Dictionary!");
+                    if (pWithUserMsg)
+                        cOutputHandler.printMessageToConsole("Part " + pPartName + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
@@ -398,7 +401,7 @@ namespace ProductPlatformAnalyzer
             bool tempResult = false;
             try
             {
-                cPartNameLookup.ContainsKey(pPartName);
+                tempResult = cPartNameLookup.ContainsKey(pPartName);
             }
             catch (Exception ex)
             {
@@ -1519,7 +1522,9 @@ namespace ProductPlatformAnalyzer
                     foreach (Operation lOperation in OperationSet)
                     {
                         lDataSummary += "Operation Name: " + lOperation.Name + System.Environment.NewLine;
-                        lDataSummary += "Operation Precondition: " + lOperation.Precondition + System.Environment.NewLine;
+                        string lOperationPreconditions = GetOperationPreconditionsString(lOperation.Precondition);
+                        lDataSummary += "Operation Precondition: " + lOperationPreconditions + System.Environment.NewLine;
+                        lDataSummary += "Operation Trigger: " + lOperation.Trigger + System.Environment.NewLine;
 
                         /*foreach (string lPostconditionOperationName in lOperation.postcondition)
                             lDataSummary += "Operation Postcondition: " + lPostconditionOperationName + System.Environment.NewLine;*/
@@ -1559,35 +1564,17 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
-                /*if (VariantsOperationsSet.Count > 0)
+                //Configuration Rules
+                if (cConstraintSet.Count > 0)
                 {
-                    //VariantOperationMappings
-                    lDataSummary += "Variant Operation Mappings:" + System.Environment.NewLine;
-                    foreach (variantOperations lVariantOperations in VariantsOperationsSet)
+                    lDataSummary += "Configuration Rules:" + System.Environment.NewLine;
+                    foreach (var lConfgurationRule in cConstraintSet)
                     {
-                        lDataSummary += "Variant Name: " + lVariantOperations.getVariantExpr() + System.Environment.NewLine;
-                        lDataSummary += "Operations: " + System.Environment.NewLine;
-                        foreach (operation lOperation in lVariantOperations.getOperations())
-                        {
-                            lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
-                        }
+                        lDataSummary += "Configuration Rule: " + lConfgurationRule + System.Environment.NewLine;
+                        
                     }
-                }*/
 
-                /*if (PartsOperationsSet.Count > 0)
-                {
-                    //PartOperationMappings
-                    lDataSummary += "Part Operation Mappings:" + System.Environment.NewLine;
-                    foreach (partOperations lPartOperations in PartsOperationsSet)
-                    {
-                        lDataSummary += "Part Name: " + lPartOperations.getPartExpr() + System.Environment.NewLine;
-                        lDataSummary += "Operations: " + System.Environment.NewLine;
-                        foreach (operation lOperation in lPartOperations.getOperations())
-                        {
-                            lDataSummary += "Operation Name: " + lOperation.names + System.Environment.NewLine;
-                        }
-                    }
-                }*/
+                }
 
                 //Traits
                 if (cTraitSet.Count > 0)
@@ -1618,16 +1605,37 @@ namespace ProductPlatformAnalyzer
             }
         }
 
+        public string GetOperationPreconditionsString(List<string> pPreconditions)
+        {
+            string lResultPreconditionStr = "";
+            try
+            {
+
+                foreach (var lPrecondition in pPreconditions)
+                {
+                    if (lResultPreconditionStr != "")
+                        lResultPreconditionStr += " and ";
+                    lResultPreconditionStr += lPrecondition;
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in GetOperationPreconditionsString");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultPreconditionStr;
+        }
+
         public Operation CreateOperationInstance(string pName
                                             , string pTriggers
                                             , string pRequirements
-                                            , List<string> pPreconditions)
+                                            , string pPrecondition)
         {
             Operation lTempOperation = null;
             try
             {
 
-                lTempOperation = new Operation(pName, pTriggers, pRequirements, pPreconditions);
+                lTempOperation = new Operation(pName, pTriggers, pRequirements, pPrecondition);
 
                 cOperationSet.Add(lTempOperation);
                 cOperationNameLookup.Add(pName, lTempOperation);
@@ -1672,7 +1680,7 @@ namespace ProductPlatformAnalyzer
             OperationInstance lResultOperationInstance = null;
             try
             {
-                lResultOperationInstance = new OperationInstance(pOperation, pTransitionNo);
+                lResultOperationInstance = new OperationInstance(pOperation, pTransitionNo, cOperationInstanceSet.Count + 1);
                 cOperationInstanceSet.Add(lResultOperationInstance);
             }
             catch (Exception ex)
@@ -1690,12 +1698,15 @@ namespace ProductPlatformAnalyzer
             {
                 lTempPart.names = pName;
                 //addPart(lTempPart);
-
-                cPartSet.Add(lTempPart);
-                cPartNameLookup.Add(pName, lTempPart);
-                cIndexPartLookup.Add(cPartIndexLookup.Count + 1, lTempPart);
-                cPartIndexLookup.Add(lTempPart, cPartIndexLookup.Count + 1);
-                cPartSymbolicNameLookup.Add("P" + cPartSymbolicNameLookup.Count + 1, lTempPart);
+                part lFoundPart = partLookupByName(pName, false);
+                if (lFoundPart == null)
+                {
+                    cPartSet.Add(lTempPart);
+                    cPartNameLookup.Add(pName, lTempPart);
+                    cIndexPartLookup.Add(cPartIndexLookup.Count + 1, lTempPart);
+                    cPartIndexLookup.Add(lTempPart, cPartIndexLookup.Count + 1);
+                    cPartSymbolicNameLookup.Add("P" + cPartSymbolicNameLookup.Count + 1, lTempPart);
+                }
             }
             catch (Exception ex)
             {
@@ -2759,7 +2770,7 @@ namespace ProductPlatformAnalyzer
                                 lParts.Add(partLookupByName(lItemUsageRuleItem.InnerText));
                             }
 
-                            variant lTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRefs"));
+                            variant lTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRef"));
                             CreateItemUsageRuleInstance(lTempVariant
                                                     , lParts);
 
@@ -2991,7 +3002,7 @@ namespace ProductPlatformAnalyzer
                     foreach (XmlNode lNode in nodeList)
                     {
                         string lTriggers = "";
-                        List<string> lOperationPrecondition = new List<string>();
+                        string lOperationPrecondition = "";
                         string lOperationRequirement = "";
 
                         if (lNode["trigger"] != null)
@@ -3009,7 +3020,7 @@ namespace ProductPlatformAnalyzer
                         if (lNode["preconditions"] != null)
                         {
                             XmlNodeList opPreconditionNodeList = lNode["preconditions"].ChildNodes;
-                            lOperationPrecondition.Add(opPreconditionNodeList[0].InnerText);
+                            lOperationPrecondition=opPreconditionNodeList[0].InnerText;
                         }
 
                         var lOperationName = getXMLNodeAttributeInnerText(lNode, "operationName");
