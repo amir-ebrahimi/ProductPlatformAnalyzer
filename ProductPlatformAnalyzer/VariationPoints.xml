@@ -45,6 +45,10 @@
     <value>5</value>
   </variationPoint>
   <variationPoint>
+    <name>OperationWaiting</name>
+    <value>False</value>
+  </variationPoint>
+  <variationPoint>
     <name>OperationMutualExecution</name>
     <value>False</value>
   </variationPoint>
@@ -86,22 +90,22 @@
   </variationPoint>
   <variationPoint>
     <name>RandomMaxNoOfConfigurationRules</name>
-    <value>10</value>
+    <value>2</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxOperationNumber</name>
-    <value>10</value>
+    <value>30</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxPartNumber</name>
-    <value>10</value>
+    <value>2</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxVariantNumber</name>
-    <value>10</value>
+    <value>2</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxVariantGroupumber</name>
-    <value>10</value>
+    <value>1</value>
   </variationPoint>
 </variationPoints>

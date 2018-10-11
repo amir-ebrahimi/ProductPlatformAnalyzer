@@ -117,7 +117,7 @@ namespace ProductPlatformAnalyzer
                 {
                     case "or":
                     case "and":
-                    case "->":
+                    case "=>":
                     case "<=":
                     case ">=":
                     case "<":

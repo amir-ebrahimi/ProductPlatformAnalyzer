@@ -15,7 +15,9 @@ namespace ProductPlatformAnalyzer
         private Dictionary<string, Expr> cExpressionDictionary;
         private BoolExpr cConstraints;
         private ArrayList cConstraintList;
-        private Solver cISolver; 
+        private Solver cISolver;
+        private Optimize cIOptimize;
+
         private Context cICtx;
         private int cConstraintCounter;
         private int cBooleanExpressionCounter;
@@ -33,6 +35,8 @@ namespace ProductPlatformAnalyzer
             using (cICtx)
             {
                 this.cISolver = cICtx.MkSolver("QF_FD");
+                this.cIOptimize = cICtx.MkOptimize();
+
                 this.cExpressionDictionary = new Dictionary<string, Expr>();
                 this.cConstraintList = new ArrayList();
             }
@@ -179,7 +183,7 @@ namespace ProductPlatformAnalyzer
             return lResultElementNames;
         }
 
-        public void AddAndOperator2Constraints(List<string> pOperandSet, string pConstraintSource)
+        public void AddAndOperator2Constraints(List<string> pOperandSet, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -194,6 +198,8 @@ namespace ProductPlatformAnalyzer
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
@@ -218,7 +224,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddEqualOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource)
+        public void AddEqualOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -226,6 +232,8 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lConstraint = cICtx.MkEq((ArithExpr)pOperand1, cICtx.MkInt(pOperand2));
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
@@ -332,6 +340,57 @@ namespace ProductPlatformAnalyzer
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in GreaterThanOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr EqualOperator(Expr pOperand0, IntExpr pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = cICtx.MkEq(pOperand0, pOperand1);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in EqualOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public int MaximizeExpression(Expr pArithExpr)
+        {
+            int lResultExpr = 0;
+            try
+            {
+                var lExpX = cIOptimize.MkMaximize((ArithExpr)pArithExpr);
+                cIOptimize.Check();
+
+                Model lResultModel = cIOptimize.Model;
+                lResultExpr = int.Parse(lResultModel.Evaluate(pArithExpr).ToString());
+
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in MaximizeExpression");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultExpr;
+        }
+
+        public BoolExpr EqualOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = cICtx.MkEq(pOperand0, cICtx.MkInt(pOperand1));
+                
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in EqualOperator");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
             return lResultExpression;
@@ -459,13 +518,15 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource)
+        public void AddImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
                 BoolExpr Constraint = cICtx.MkImplies(pOperand1, pOperand2);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
@@ -548,7 +609,7 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: Should be replaced with a function which takes a list of operands!!
-        public void AddTwoWayImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource)
+        public void AddTwoWayImpliesOperator2Constraints(BoolExpr pOperand1, BoolExpr pOperand2, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -560,6 +621,8 @@ namespace ProductPlatformAnalyzer
                 BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
 
                 AddConstraintToSolver(Expression, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(Expression, pConstraintSource);
             }
             catch (Exception ex)
             {
@@ -660,7 +723,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddOrOperator2Constraints(List<string> pOperandSet, string pConstraintSource)
+        public void AddOrOperator2Constraints(List<string> pOperandSet, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -675,6 +738,9 @@ namespace ProductPlatformAnalyzer
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
+
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
@@ -727,7 +793,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddPickOneOperator2Constraints(List<string> pOperandSet, string pConstraintSource)
+        public void AddPickOneOperator2Constraints(List<string> pOperandSet, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -742,13 +808,66 @@ namespace ProductPlatformAnalyzer
 
                 }*/
                 lConstraint = PickOneOperator(pOperandSet);
+
                 AddConstraintToSolver(lConstraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
+        }
+
+        public void AddPickZeroOrOneOperator2Constraints(List<string> pOperandSet, string pConstraintSource, bool pOptimizer = false)
+        {
+            try
+            {
+                BoolExpr lConstraint = null;
+                BoolExpr lZeroConstraint = null;
+                BoolExpr lOneConstraint = null;
+
+                //This is for the zero part
+                lZeroConstraint = PickZeroOperand(pOperandSet);
+
+                //This is for the one part
+                lOneConstraint = PickOneOperator(pOperandSet);
+
+                lConstraint = OrOperator(new List<BoolExpr> { lZeroConstraint, lOneConstraint });
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in AddPickZeroOrOneOperator2Constraints");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+        }
+
+        public BoolExpr PickZeroOperand(List<string> pOperandNameList)
+        {
+            BoolExpr lResultConstraint = null;
+            try
+            {
+                foreach (var lOperandName in pOperandNameList)
+                {
+                    BoolExpr lOperand = (BoolExpr)FindExprInExprSet(lOperandName);
+                    BoolExpr lNegatedOperand = NotOperator(lOperand);
+                    if (lResultConstraint == null)
+                        lResultConstraint = lNegatedOperand;
+                    else
+                        lResultConstraint = AndOperator(new List<BoolExpr>{ lResultConstraint, lNegatedOperand});
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in PickZeroOperand");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultConstraint;
         }
 
         public void AddPickOneOperator2Constraints(List<BoolExpr> pOperandSet, string pConstraintSource)
@@ -837,7 +956,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddNotOperator2Constraints(string pOperand, string pConstraintSource)
+        public void AddNotOperator2Constraints(string pOperand, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -846,14 +965,36 @@ namespace ProductPlatformAnalyzer
                 Expr lOperand = FindExprInExprSet(pOperand);
 
                 BoolExpr Constraint = cICtx.MkNot((BoolExpr)lOperand);
-
+                
                 AddConstraintToSolver(Constraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in AddNotOperator2Constraints, " + pOperand);
                 throw ex;
             }
+        }
+
+        public IntExpr AddOperator(List<IntExpr> pOperands)
+        {
+            IntExpr lResultNum = null;
+            try
+            {
+                List<ArithExpr> lConvertedList = new List<ArithExpr>();
+                foreach(IntExpr lCurrentOperand in pOperands)
+                {
+                    lConvertedList.Add((ArithExpr)lCurrentOperand);
+                }
+                lResultNum = (IntExpr)cICtx.MkAdd(lConvertedList);
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in AddOperator");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultNum;
         }
 
         public BoolExpr NotOperator(string pOperand)
@@ -907,7 +1048,26 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddConstraintToSolver(BoolExpr pConstraint, string pConstraintSource)
+        public void AddConstraintToOptimizer(BoolExpr pConstraint, string pConstraintSource)
+        {
+            try
+            {
+                //Here we have to add this constraint to the solver which is previously defined
+                //Also using the solver.AssertAndTrack function which requires to use another named
+                //Boolean expression to track this constraint
+                cIOptimize.Assert(pConstraint);
+
+                if (cIDebugMode)
+                    cIDebugText.Append("(assert " + pConstraint.ToString() + "); Optimizer - " + pConstraintSource + "\r\n");
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in AddConstraintToOptimizer");
+                throw ex;
+            }
+        }
+
+        public void AddConstraintToSolver(BoolExpr pConstraint, string pConstraintSource, bool pOptimizer = false)
         {
             try
             {
@@ -916,8 +1076,11 @@ namespace ProductPlatformAnalyzer
                 //Boolean expression to track this constraint
                 int lConstraintIndex = getNextConstraintCounter();
                 BoolExpr ConstraintTracker = cICtx.MkBoolConst("Constraint" + lConstraintIndex);
-                cISolver.AssertAndTrack(pConstraint, ConstraintTracker);
 
+                cISolver.AssertAndTrack(pConstraint, ConstraintTracker);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(pConstraint, pConstraintSource);
+                
                 if (cIDebugMode)
                     cIDebugText.Append("(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n");
                 //cOutputHandler.printMessageToConsole("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
@@ -1110,14 +1273,16 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
-        public void AddIntegerExpression(string pExprName)
+        public IntExpr AddIntegerExpression(string pExprName)
         {
+            IntExpr lReturnedVariable = null;
             try
             {
-                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
-                if (!cExpressionDictionary.ContainsKey(tempExpr.ToString()))
+                //Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
+                lReturnedVariable = (IntExpr)cICtx.MkIntConst(pExprName);
+                if (!cExpressionDictionary.ContainsKey(lReturnedVariable.ToString()))
                 {
-                    cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
+                    cExpressionDictionary.Add(lReturnedVariable.ToString(), lReturnedVariable);
 
                     if (cIDebugMode)
                         cIDebugText.Append("(declare-const " + pExprName + " Int)" + "\r\n");
@@ -1128,6 +1293,7 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("error in AddIntegerExpression, " + pExprName);
                 throw ex;
             }
+            return lReturnedVariable;
         }
 
         public void PrepareDebugDirectory()
@@ -1436,7 +1602,9 @@ namespace ProductPlatformAnalyzer
                 {
                     //Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
                     Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
-                    if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
+                    if (lCurrentExpr != null 
+                        && !lCurrentExpr.GetType().Name.Equals("IntExpr")
+                        )
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
                         lOutputHandler.addExp(lCurrentExpr.ToString(), value, pState);
@@ -1510,6 +1678,8 @@ namespace ProductPlatformAnalyzer
             {
                 if (pStrExprToCheck == "")
                     lReturnStatus = cISolver.Check();
+                    
+                    
                 else
                 {
                     Expr lExprToCheck = FindExprInExprSet(pStrExprToCheck);

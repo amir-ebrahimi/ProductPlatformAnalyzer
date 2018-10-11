@@ -384,27 +384,27 @@ public partial class variantOperations
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
 public partial class itemUsageRule
 {
-    private variant Variant;
-    private HashSet<part> Parts;
+    private string VariantExp;
+    private part Part;
 
-    public variant getVariant()
+    public string getVariantExp()
     {
-        return Variant;
+        return VariantExp;
     }
 
-    public void setVariant(variant pVariant)
+    public void setVariantExp(string pVariantExp)
     {
-        Variant = pVariant;
+        VariantExp = pVariantExp;
     }
 
-    public HashSet<part> getParts()
+    public part getPart()
     {
-        return Parts;
+        return Part;
     }
 
-    public void setParts(HashSet<part> pParts)
+    public void setPart(part pPart)
     {
-        Parts = pParts;
+        Part = pPart;
     }
 
     // override object.Equals
@@ -423,13 +423,13 @@ public partial class itemUsageRule
         }
 
         itemUsageRule lItemUsageRule = (itemUsageRule)obj;
-        return (this.Variant == lItemUsageRule.Variant && this.Parts == lItemUsageRule.Parts);
+        return (this.VariantExp == lItemUsageRule.VariantExp && this.Part == lItemUsageRule.Part);
     }
 
     // override object.GetHashCode
     public override int GetHashCode()
     {
-        return (this.Variant.GetHashCode() * 8 + this.Parts.GetHashCode());
+        return (this.VariantExp.GetHashCode() * 8 + this.Part.GetHashCode());
     }
 }
 

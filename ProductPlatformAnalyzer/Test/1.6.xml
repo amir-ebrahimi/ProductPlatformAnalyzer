@@ -1,0 +1,109 @@
+﻿<?xml version="1.0"?>
+<!--File Name: 1.2.3V1VG2O0C0P.xml-->
+<!-- Simple 3 Variant 2 Operations
+Analysis should be able to complete. -->
+
+<!-- Operations: 
+        O1
+          trigger: V1 or V2 or V3
+          precondition: O3
+				O2 
+          trigger: V1 or V2 or V3
+        O3
+          trigger: V1 and V2
+        -->
+
+<!-- Variants: V1	
+                V2
+                V3-->
+
+<!-- VariantGroups: 
+      VG1
+        choose exactly one
+        Variants: V1 
+                  V2
+                  V3-->
+
+<!--Analysis Expected Results:
+      Variant Selectability Analysis: There is a valid configuration which contains each of the variants. {(V1), (V2), (V3)}
+      Operation Slectability Analysis: There is a valid configuration which contains each of the operations. {(V1 -> O1, O2), (V2 -> O1, O2), (V3 -> O1, O2)}
+      Always Selected Variant: There exists a valid configuration in which not all variants are included. {(V1), (V2), (V3)}
+      Always Selected Operation: There DOES NOT exists a valid configuration in which not all operations are included. {}-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O3</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O4</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O5</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O6</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O7</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O8</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+    </operation>
+    <operation>
+      <operationName>O9</operationName>
+      <trigger>or V1 or V2 V3</trigger>
+      <operationPrecondition>
+        <operationRef>O11</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>O10</operationName>
+      <trigger>and V1 V2</trigger>
+      <operationPrecondition>
+        <operationRef>O11</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>O11</operationName>
+      <trigger>and V1 V2</trigger>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+    <variant>
+      <variantName>V2</variantName>
+    </variant>
+    <variant>
+      <variantName>V3</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+        <variantRef>V2</variantRef>
+        <variantRef>V3</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+</testData>

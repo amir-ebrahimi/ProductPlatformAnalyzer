@@ -27,14 +27,24 @@ namespace ProductPlatformAnalyzer
         public List<int> cOverallFreeVariantCodes { get; set; }
         public List<int> cOverallChosenOperationCodes { get; set; }
         public List<int> cOverallFreeOperationCodes { get; set; }
-        public string[] cExpressionOperators = new string[] { "and", "or" };
+        public string[] cExpressionOperators = new string[] { "or" };
 
         private Random cMyRandom;
         private FrameworkWrapper cFrameworkWrapper;
         private OutputHandler cOutputHandler;
-        public RandomTestCreator(OutputHandler pOutputHandler)
+        private Z3SolverEngineer cZ3SolverEngineer;
+        private Z3Solver cZ3Solver;
+
+        public RandomTestCreator(OutputHandler pOutputHandler
+                                , Z3SolverEngineer pZ3SolverEngineer
+                                , FrameworkWrapper pFrameworkWrapper
+                                , Z3Solver pZ3Solver)
         {
             cOutputHandler = pOutputHandler;
+            cZ3SolverEngineer = pZ3SolverEngineer;
+            cFrameworkWrapper = pFrameworkWrapper;
+            cZ3Solver = pZ3Solver;
+            
 
             cMaxVariantGroupNumber = 1;
             cMaxVariantNumber = 1;
@@ -126,8 +136,7 @@ namespace ProductPlatformAnalyzer
                                     , int pMaxNoOfTraitAttributes
                                     , int pMaxResourceNumber
                                     , int pMaxExpressionOperandNumber
-                                    , int pMaxNoOfConfigurationRules
-                                    , FrameworkWrapper pFrameworkWrapper)
+                                    , int pMaxNoOfConfigurationRules)
         {
             bool lResult = false;
             try
@@ -163,28 +172,36 @@ namespace ProductPlatformAnalyzer
                     cMaxExpressionOperandNumber = pMaxExpressionOperandNumber;
                 if (pMaxNoOfConfigurationRules != 0)
                     cMaxNoOfConfigurationRules = pMaxNoOfConfigurationRules;
-                if (pFrameworkWrapper != null)
-                    cFrameworkWrapper = pFrameworkWrapper;
+                /*if (pFrameworkWrapper != null)
+                    cFrameworkWrapper = pFrameworkWrapper;*/
 
 
                 createVariants();
+                cZ3SolverEngineer.convertFVariants2Z3Variants();
                 createVariantGroups();
+                cZ3SolverEngineer.produceVariantGroupGCardinalityConstraints();
+
                 createParts();
+                cZ3SolverEngineer.convertFParts2Z3Parts();
+
+                createItemUsageRules();
+                cZ3SolverEngineer.convertItemUsageRulesConstraints();
+
+                createConfigurationRules();
+                //cZ3SolverEngineer.convertFConstraint2Z3Constraint();
+
 
                 createOperations();
                 updateOperationPrePostConditions();
                 updateOperationTriggerConditions();
-
-                createItemUsageRules();
-
-                createConfigurationRules();
+                //cZ3SolverEngineer.convertFOperations2Z3Operations(1);
+                //cZ3SolverEngineer.convertOperationsPrecedenceRules(0);
 
                 //createTraits();
                 //createResources();
                 Console.WriteLine("Random data summary: ");
                 Console.WriteLine("---------------------------------------------------------------------------");
                 cFrameworkWrapper.PrintDataSummary();
-
 
                 lResult = true;
             }
@@ -201,6 +218,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
+                List<string> lSatisfiableConfigurationRules = new List<string>();
+
                 //First build the maximum number of operands
                 List<string> lOperands = new List<string>();
                 foreach (var lPart in cFrameworkWrapper.PartSet)
@@ -212,12 +231,44 @@ namespace ProductPlatformAnalyzer
                     lOperands.Add(lVariant.names);
                 }
 
+                string lRandomConfigurationRule = "";
 
+                cZ3Solver.SolverPushFunction();
                 for (int i = 0; i < cMaxNoOfConfigurationRules; i++)
                 {
-                    string lRandomConfigurationRule = buildRandomExpFromOperands(lOperands);
+                    lRandomConfigurationRule = buildRandomExpFromOperands(lOperands);
+                    
+                    Microsoft.Z3.BoolExpr lBoolExpr = cZ3SolverEngineer.convertComplexString2BoolExpr(lRandomConfigurationRule);
+                    cZ3Solver.AddConstraintToSolver(lBoolExpr, "RandomConfigRule");
+                    //We add a random constraint rule if it is satisfiable we keep it otherwise we remove it
+                    
+                    //This line checks if the constraints in the model have any conflicts with each other
+                    int lTransitionNo = 0;
+                    Microsoft.Z3.Status lAnalysisResult = cZ3SolverEngineer.AnalyzeModelConstraints(lTransitionNo);
 
-                    cFrameworkWrapper.ConstraintSet.Add(lRandomConfigurationRule);
+                    if (lAnalysisResult.Equals(Microsoft.Z3.Status.SATISFIABLE))
+                    {
+                        lSatisfiableConfigurationRules.Add(lRandomConfigurationRule);
+                    }
+                    else
+                    {
+                        cZ3Solver.SolverPopFunction();
+                        i--;
+                        cZ3Solver.SolverPushFunction();
+                    }
+
+
+                    
+                }
+                cZ3Solver.SolverPopFunction();
+
+                //Adding the satisfied set of configuration rules to the model
+                if (lSatisfiableConfigurationRules.Count > 0)
+                {
+                    foreach (var lConfigRule in lSatisfiableConfigurationRules)
+                    {
+                        cFrameworkWrapper.ConstraintSet.Add(lRandomConfigurationRule);
+                    }
                 }
             }
             catch (Exception ex)
@@ -319,12 +370,24 @@ namespace ProductPlatformAnalyzer
             {
                 if (cMaxPartNumber > 0)
                 {
+                    List<string> lOperands = new List<string>();
                     foreach (variant lVariant in cFrameworkWrapper.VariantSet)
+	                {
+		                 lOperands.Add(lVariant.names);
+	                }
+
+                    foreach (part lPart in cFrameworkWrapper.PartSet)
                     {
-                        resetOverallFreeOperationCodes();
-                        HashSet<part> lRandomParts = pickASeriesOfRandomParts(true);
-                        cFrameworkWrapper.CreateItemUsageRuleInstance(lVariant, lRandomParts);
+                        string lTempVariantExpr = buildRandomExpFromOperands(lOperands);
+                        cFrameworkWrapper.CreateItemUsageRuleInstance(lPart,lTempVariantExpr);
                     }
+                    ////Previous version: when it was variant -> parts
+                    //foreach (variant lVariant in cFrameworkWrapper.VariantSet)
+                    //{
+                    //    resetOverallFreeOperationCodes();
+                    //    HashSet<part> lRandomParts = pickASeriesOfRandomParts(true);
+                    //    cFrameworkWrapper.CreateItemUsageRuleInstance(lVariant, lRandomParts);
+                    //}
                 }
             }
             catch (Exception ex)
@@ -339,9 +402,10 @@ namespace ProductPlatformAnalyzer
             try
             {
                 for (int i = 0; i < cMaxVariantGroupNumber; i++)
-                    cFrameworkWrapper.CreateVariantGroupInstance("VG-" + i
-                                                                    , pickRandomGroupCardinality()
-                                                                    , pickASeriesOfRandomVariants());
+                    if (cOverallFreeVariantCodes.Count > 0)
+                        cFrameworkWrapper.CreateVariantGroupInstance("VG-" + i
+                                                                        , pickRandomGroupCardinality()
+                                                                        , pickASeriesOfRandomVariants());
             }
             catch (Exception ex)
             {

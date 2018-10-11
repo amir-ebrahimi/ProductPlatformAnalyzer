@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Process should finish -->
+<!-- First example of including resources -->
+<!--  Variant:
+        Medium-cab
+        Large-cab
+        No-cab
+        Short-frame
+        Long-frame
+        Combustion
+        Hybrid
+        Electric
+        Manual
+        Semi-automatic
+        Autonomous
+        Medium-battery
+        Large-battery
+        No-battery
+        Manual-gearbox
+        Automatic-gearbox
+        No-gearbox
+        Adaptive-cruise-control
+        Lane-keeping-support
+        Autopilot
+        
+      VariantGroup
+        Cab
+        Choose exactly one
+        Variants:
+          Medium-cab
+          Large-cab
+          No-cab
+        Chassis
+        Choose exactly one
+        Variants:
+          Short-frame
+          Long-frame
+        Propultion
+        Choose exactly one
+        Variants:
+          Combustion
+          Hybrid
+          Electric
+        Drive-mode
+        Choose exactly one
+        Variants:
+          Manual
+          Semi-automatic
+          Autonomous
+        Battery
+        Choose exactly one
+        Variants:
+          Medium-battery
+          Large-battery
+          No-battery
+        Gearbox
+        Choose exactly one
+        Variants:
+          Manual-gearbox
+          Automatic-gearbox
+          No-gearbox
+        Drive-support-systems
+        Choose zero or more
+        Variants:
+          Adaptive-cruise-control
+          Lane-keeping-support
+          Autopilot
+
+      Part:
+        Medium-cab
+        Large-cab
+        Short-frame
+        Long-frame
+        Combustion
+        Hybrid
+        Electric
+        Medium-battery
+        Large-battery
+        Manual-gearbox
+        Automatic-gearbox
+        Radar
+        Camera
+        GPS
+        Wheels
+        Axles
+        Side-indicator
+        Main-beam
+        Dipped-beam
+        Position-light
+        Auxiliary-lamps
+          
+      Item-Usage rules
+        Part: Medium-cab
+        Variants:  Medium-cab
+        
+        Part: Large-cab
+        Variants: Large-cab
+        
+        Part: Short-frame
+        Variants: Short-frame
+        
+        Part: Long-frame
+        Variants: Long-frame
+        
+        Part: Combustion
+        Variants: Combustion
+        
+        Part: Hybrid
+        Variants: Hybrid
+        
+        Part: Electric
+        Variants: Electric
+        
+        Part: Medium-battery
+        Variants: Medium-battery
+        
+        Part: Large-battery
+        Variants: Large-battery
+        
+        Part: Manual-gearbox 
+        Variants: Manual-gearbox
+        
+        Part: Automatic-gearbox
+        Variants: Automatic-gearbox
+        
+        Part: Radar
+        Variants: or Adaptive-cruise-control Autopilot
+        
+        Part: Camera
+        Variants: Autopilot
+        
+        Part: GPS
+        Variants: Autopilot
+        
+        Part: Wheels
+        Variants: or Short-frame Long-frame
+        
+        Part: Axles
+        Variants: or Short-frame Long-frame
+        
+        Part: Side-indicator
+        Variants: or Medium-cab Large-cab
+        
+        Part: Main-beam
+        Variants: or Medium-cab Large-cab
+        
+        Part: Dipped-beam
+        Variants: Large-cab
+        
+        Part: Position-light
+        Variants: Large-cab
+        
+        Part: Auxiliary-lamps
+        Variants: OR Medium-cab Large-cab
+
+      Constraints:
+        => Hybrid OR Medium-Battery Large-Battery
+        => Electric Large-Battery
+        => OR Manual Semi-Automatic OR Madium-Cab Large-Cab
+        => Large-Battery OR Manual-Gearbox Automatic-Gearbox
+        => Large-Cab Medium-Battery
+        => Large-Cab OR Combustion Hybrid
+        => Autonomous AND No-Cab Electric
+      
+      Operation:
+      Drop-short-frame-on-AGV
+        Pre:
+        Trigger: Short-frame
+      
+      Drop-long-frame-on-AGV
+        Pre: 
+        Trigger: Long-frame
+      
+      Mount-Gearbox
+        Pre: or Drop-short-frame-on-AGV Drop-long-frame-on-AGV
+        Trigger: or Manual-gearbox Automatic-gearbox
+      
+      Mount-Combustion-Engine
+        Pre: Mount-Gearbox
+        Trigger: Combustion
+      
+      Mount-Hybrid-Engine
+        Pre: Mount-Gearbox
+        Trigger: Hybrid
+      
+      Mount-Electric-Engine
+        Pre: Mount-Gearbox
+        Trigger: Electric
+      
+      Mount-Battery
+        Pre: or Drop-short-frame-on-AGV Drop-long-frame-on-AGV
+        Trigger: or Medium-battery Large-battery
+      
+      Mount-Medium-Cab-on-short-frame
+        Pre: or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery
+        Trigger: Medium-cab
+      
+      Mount-Medium-Cab-on-long-frame
+        Pre: or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery
+        Trigger: Medium-cab
+      
+      Mount-Large-Cab-on-short-frame
+        Pre: or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery
+        Trigger: Large-cab
+      
+      Mount-Large-Cab-on-long-frame
+        Pre: or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery
+        Trigger: Large-cab
+      
+      Mount-Radar
+        Pre: or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame
+        Trigger: or Adaptive-cruise-control Autopilot
+      
+      Mount-Camera
+        Pre: or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame
+        Trigger: Autopilot
+      
+      Install-Autopilot
+        Pre: and Mount-Radar Mount-Camera
+        Trigger: Autopilot
+      
+      Mount-Wheels
+        Pre: or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame
+        Trigger: Wheels
+      
+      Final-testing
+        Pre: Mount-Wheels
+        Trigger: 
+      
+-->
+<testData>
+  <variants>
+    <variant>
+      <variantName>Medium-cab</variantName>
+    </variant>
+    <variant>
+      <variantName>Large-cab</variantName>
+    </variant>
+    <variant>
+      <variantName>No-cab</variantName>
+    </variant>
+    <variant>
+      <variantName>Short-frame</variantName>
+    </variant>
+    <variant>
+      <variantName>Long-frame</variantName>
+    </variant>
+    <variant>
+      <variantName>Combustion</variantName>
+    </variant>
+    <variant>
+      <variantName>Hybrid</variantName>
+    </variant>
+    <variant>
+      <variantName>Electric</variantName>
+    </variant>
+    <variant>
+      <variantName>Manual</variantName>
+    </variant>
+    <variant>
+      <variantName>Semi-automatic</variantName>
+    </variant>
+    <variant>
+      <variantName>Autonomous</variantName>
+    </variant>
+    <variant>
+      <variantName>Medium-battery</variantName>
+    </variant>
+    <variant>
+      <variantName>Large-battery</variantName>
+    </variant>
+    <variant>
+      <variantName>No-battery</variantName>
+    </variant>
+    <variant>
+      <variantName>Manual-gearbox</variantName>
+    </variant>
+    <variant>
+      <variantName>Automatic-gearbox</variantName>
+    </variant>
+    <variant>
+      <variantName>No-gearbox</variantName>
+    </variant>
+    <variant>
+      <variantName>Adaptive-cruise-control</variantName>
+    </variant>
+    <variant>
+      <variantName>Lane-keeping-support</variantName>
+    </variant>
+    <variant>
+      <variantName>Autopilot</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>Cab</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Medium-cab</variantRef>
+        <variantRef>Large-cab</variantRef>
+        <variantRef>No-cab</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Chassis</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Short-frame</variantRef>
+        <variantRef>Long-frame</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Propultion</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Combustion</variantRef>
+        <variantRef>Hybrid</variantRef>
+        <variantRef>Electric</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Drive-mode</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Manual</variantRef>
+        <variantRef>Semi-automatic</variantRef>
+        <variantRef>Autonomous</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Battery</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Medium-battery</variantRef>
+        <variantRef>Large-battery</variantRef>
+        <variantRef>No-battery</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Gearbox</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>Manual-gearbox</variantRef>
+        <variantRef>Automatic-gearbox</variantRef>
+        <variantRef>No-gearbox</variantRef>
+      </variantRefs>
+    </variantGroup>
+    <variantGroup>
+      <variantGroupName>Drive-support-systems</variantGroupName>
+      <groupCardinality>choose zero or more</groupCardinality>
+      <variantRefs>
+        <variantRef>Adaptive-cruise-control</variantRef>
+        <variantRef>Lane-keeping-support</variantRef>
+        <variantRef>Autopilot</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <parts>
+    <part>
+      <partName>Medium-cab</partName>
+    </part>
+    <part>
+      <partName>Large-cab</partName>
+    </part>
+    <part>
+      <partName>Short-frame</partName>
+    </part>
+    <part>
+      <partName>Long-frame</partName>
+    </part>
+    <part>
+      <partName>Combustion</partName>
+    </part>
+    <part>
+      <partName>Hybrid</partName>
+    </part>
+    <part>
+      <partName>Electric</partName>
+    </part>
+    <part>
+      <partName>Medium-battery</partName>
+    </part>
+    <part>
+      <partName>Large-battery</partName>
+    </part>
+    <part>
+      <partName>Manual-gearbox</partName>
+    </part>
+    <part>
+      <partName>Automatic-gearbox</partName>
+    </part>
+    <part>
+      <partName>Radar</partName>
+    </part>
+    <part>
+      <partName>Camera</partName>
+    </part>
+    <part>
+      <partName>GPS</partName>
+    </part>
+    <part>
+      <partName>Wheels</partName>
+    </part>
+    <part>
+      <partName>Axles</partName>
+    </part>
+    <part>
+      <partName>Side-indicator</partName>
+    </part>
+    <part>
+      <partName>Main-beam</partName>
+    </part>
+    <part>
+      <partName>Dipped-beam</partName>
+    </part>
+    <part>
+      <partName>Position-light</partName>
+    </part>
+    <part>
+      <partName>Auxiliary-lamps</partName>
+    </part>
+  </parts>
+  <itemusagerules>
+    <itemusagerule>
+      <partRef>Medium-cab</partRef>
+      <variantRef>Medium-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Large-cab</partRef>
+      <variantRef>Large-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Short-frame</partRef>
+      <variantRef>Short-frame</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Long-frame</partRef>
+      <variantRef>Long-frame</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Combustion</partRef>
+      <variantRef>Combustion</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Hybrid</partRef>
+      <variantRef>Hybrid</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Electric</partRef>
+      <variantRef>Electric</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Medium-battery</partRef>
+      <variantRef>Medium-battery</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Large-battery</partRef>
+      <variantRef>Large-battery</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Manual-gearbox</partRef>
+      <variantRef>Manual-gearbox</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Automatic-gearbox</partRef>
+      <variantRef>Automatic-gearbox</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Radar</partRef>
+      <variantRef>or Adaptive-cruise-control Autopilot</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Camera</partRef>
+      <variantRef>Autopilot</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>GPS</partRef>
+      <variantRef>Autopilot</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Wheels</partRef>
+      <variantRef>or Short-frame Long-frame</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Axles</partRef>
+      <variantRef>or Short-frame Long-frame</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Side-indicator</partRef>
+      <variantRef>or Medium-cab Large-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Main-beam</partRef>
+      <variantRef>or Medium-cab Large-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Dipped-beam</partRef>
+      <variantRef>Large-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Position-light</partRef>
+      <variantRef>Large-cab</variantRef>
+    </itemusagerule>
+    <itemusagerule>
+      <partRef>Auxiliary-lamps</partRef>
+      <variantRef>or Medium-cab Large-cab</variantRef>
+    </itemusagerule>
+  </itemusagerules>
+  <constraints>
+    <constraint>
+      <logic>=> Hybrid or Medium-battery Large-battery</logic>
+    </constraint>
+    <constraint>
+      <logic>=> Electric Large-battery</logic>
+    </constraint>
+    <constraint>
+      <logic>=> or Manual Semi-automatic or Medium-cab Large-cab</logic>
+    </constraint>
+    <constraint>
+      <logic>=> Large-battery or Manual-gearbox Automatic-gearbox</logic>
+    </constraint>
+    <constraint>
+      <logic>=> Large-cab Medium-battery</logic>
+    </constraint>
+    <constraint>
+      <logic>=> Large-cab or Combustion Hybrid</logic>
+    </constraint>
+    <constraint>
+      <logic>=> Autonomous and No-cab Electric</logic>
+    </constraint>
+  </constraints>
+  <operations>
+    <operation>
+      <operationName>Drop-short-frame-on-AGV</operationName>
+      <trigger>Short-frame</trigger>
+    </operation>
+    <operation>
+      <operationName>Drop-long-frame-on-AGV</operationName>
+      <trigger>Long-frame</trigger>
+    </operation>
+    <operation>
+      <operationName>Mount-Gearbox</operationName>
+      <trigger>or Manual-gearbox Automatic-gearbox</trigger>
+      <operationPrecondition>
+        <operationRef>or Drop-short-frame-on-AGV Drop-long-frame-on-AGV</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Combustion-Engine</operationName>
+      <trigger>Combustion</trigger>
+      <operationPrecondition>
+        <operationRef>Mount-Gearbox</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Hybrid-Engine</operationName>
+      <trigger>Hybrid</trigger>
+      <operationPrecondition>
+        <operationRef>Mount-Gearbox</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Electric-Engine</operationName>
+      <trigger>Electric</trigger>
+      <operationPrecondition>
+        <operationRef>Mount-Gearbox</operationRef>
+    </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Battery</operationName>
+      <trigger>or Medium-battery Large-battery</trigger>
+      <operationPrecondition>
+        <operationRef>or Drop-short-frame-on-AGV Drop-long-frame-on-AGV</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Medium-Cab-on-short-frame</operationName>
+      <trigger>Medium-cab</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Medium-Cab-on-long-frame</operationName>
+      <trigger>Medium-cab</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Large-Cab-on-short-frame</operationName>
+      <trigger>Large-cab</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Large-Cab-on-long-frame</operationName>
+      <trigger>Large-cab</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Combustion-Engine Mount-Hybrid-Engine Mount-Electric-Engine Mount-Battery</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Radar</operationName>
+      <trigger>or Adaptive-cruise-control Autopilot</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame</operationRef>
+    </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Camera</operationName>
+      <trigger>Autopilot</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Install-Autopilot</operationName>
+      <trigger>Autopilot</trigger>
+      <operationPrecondition>
+        <operationRef>and Mount-Radar Mount-Camera</operationRef>
+    </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Mount-Wheels</operationName>
+      <trigger>Wheels</trigger>
+      <operationPrecondition>
+        <operationRef>or or or Mount-Medium-Cab-on-short-frame Mount-Medium-Cab-on-long-frame Mount-Large-Cab-on-short-frame Mount-Large-Cab-on-long-frame</operationRef>
+      </operationPrecondition>
+    </operation>
+    <operation>
+      <operationName>Final-testing</operationName>
+      <trigger>Wheels</trigger>
+      <operationPrecondition>
+        <operationRef>Mount-Wheels</operationRef>
+      </operationPrecondition>
+    </operation>
+  </operations>
+</testData>

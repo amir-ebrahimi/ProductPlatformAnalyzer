@@ -226,7 +226,7 @@ namespace ProductPlatformAnalyzer
             {
                 SortAfterValue();
                 printMessageToConsole("\nVariants: ");
-                printVariants();
+                printVariantsNParts();
             }
             catch (Exception ex)
             {
@@ -454,7 +454,7 @@ namespace ProductPlatformAnalyzer
 
                 SortAfterValue();
                 printMessageToConsole("\nVariants:");
-                printVariants();
+                printVariantsNParts();
 
                 printMessageToConsole("\nOperation in last state:");
                 printOpState(lastState);
@@ -724,29 +724,34 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        //Print all variants
-        public void printVariants()
+        //Print all chosen variants or parts
+        public void printVariantsNParts()
         {
             try
             {
-                string var, vg;
+                string lVariantName, lPartName, vg;
                 foreach (OutputExp exp in outputResult)
                 {
                     //if (exp.state == -1)
                     if (exp.opState == null)
                     {
-                        var = exp.ToString();
-                        vg = cFrameworkWrapper.getVariantGroup(var.Split(' ')[0]);
-                        if (vg != "")
+                        //First we have to check if the chosen item is a variant or a part
+                        if (cFrameworkWrapper.existVariantByName(exp.ToString()))
                         {
-                            //Meaning var was a variant
-                            if (!vg.Contains("Virtual-VG"))
-                                printMessageToConsole(vg + "." + var);
+                            lVariantName = exp.ToString();
+                            vg = cFrameworkWrapper.getVariantGroup(lVariantName.Split(' ')[0]);
+                            if (vg != "")
+                            {
+                                //Meaning var was a variant
+                                if (!vg.Contains("Virtual-VG"))
+                                    printMessageToConsole(vg + "." + lVariantName);
+                            }
                         }
                         else
                         {
                             //Meaning var was a part
-                            printMessageToConsole(var);
+                            lPartName = exp.ToString();
+                            printMessageToConsole(lPartName);
                         }
                     }
                 }
@@ -2537,6 +2542,8 @@ namespace ProductPlatformAnalyzer
                 for (int i = 0; i <= pState; i++)
                 {
                     if (String.Equals(name, ("P" + i)))
+                        return true;
+                    else if (String.Equals(name, ("F" + i)))
                         return true;
                 }
             }

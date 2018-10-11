@@ -102,6 +102,7 @@ namespace ProductPlatform.Test
                     lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     Assert.AreEqual(lDataLoaded, lTestData.lLoadDataExpectedResult);
+                    
                 }
 
             }

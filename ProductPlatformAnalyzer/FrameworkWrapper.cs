@@ -254,6 +254,22 @@ namespace ProductPlatformAnalyzer
             cTraitSymbolicNameLookup = new Dictionary<string, trait>();
         }
 
+        public bool existVariantByName(string pVariantName)
+        {
+            bool lResult = false;
+            try
+            {
+                if (cVariantNameLookup.ContainsKey(pVariantName))
+                    lResult = true;
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in existVariantByName");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResult;
+        }
+
         public variant variantLookupByName(string pVariantName)
         {
             variant lResultVariant = null;
@@ -1654,7 +1670,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                var lMaxTransitionNumber = OperationSet.Count *2;
+                var lMaxTransitionNumber = (OperationSet.Count * 2) + 1;
                 for (int lTransitionNumber = 0; lTransitionNumber < lMaxTransitionNumber; lTransitionNumber++)
                 {
                     OperationInstance lTempOperationInstance = addOperationInstance(pOperation, lTransitionNumber);
@@ -1817,7 +1833,7 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        public void CreateItemUsageRuleInstance(variant pVariant, HashSet<part> pPartSet)
+        public void CreateItemUsageRuleInstance(part pPart, string pVariantExp)
         {
             try
             {
@@ -1826,8 +1842,8 @@ namespace ProductPlatformAnalyzer
                 itemUsageRule lItemUsageRule = new itemUsageRule();
 
                 //lVariantOperations.setVariantExpr(variantLookupByName(pVariantName));
-                lItemUsageRule.setVariant(pVariant);
-                lItemUsageRule.setParts(pPartSet);
+                lItemUsageRule.setVariantExp(pVariantExp);
+                lItemUsageRule.setPart(pPart);
 
 
                 addItemUsageRule(lItemUsageRule);
@@ -2760,28 +2776,37 @@ namespace ProductPlatformAnalyzer
                 {
                     foreach (XmlNode lNode in nodeList)
                     {
-                        HashSet<part> lParts = new HashSet<part>();
+                        part lTempPart = partLookupByName(getXMLNodeAttributeInnerText(lNode, "partRef"));
 
-                        XmlNodeList itemUsageRulePartsNodeList = lNode["partRefs"].ChildNodes;
-                        if (itemUsageRulePartsNodeList.Count > 0)
-                        {
-                            foreach (XmlNode lItemUsageRuleItem in itemUsageRulePartsNodeList)
-                            {
-                                lParts.Add(partLookupByName(lItemUsageRuleItem.InnerText));
-                            }
+                        string lTempVariantExp = getXMLNodeAttributeInnerText(lNode, "variantRef");
 
-                            variant lTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRef"));
-                            CreateItemUsageRuleInstance(lTempVariant
-                                                    , lParts);
+                        CreateItemUsageRuleInstance(lTempPart
+                                                , lTempVariantExp);
 
-                            lDataLoaded = true;
-                        }
-                        else
-                        {
-                            lDataLoaded = false;
-                            cOutputHandler.printMessageToConsole("Item usage rules defined without any parts! Data not loaded.");
+                        lDataLoaded = true;
 
-                        }
+                        //HashSet<part> lParts = new HashSet<part>();
+
+                        //XmlNodeList itemUsageRulePartsNodeList = lNode["partRefs"].ChildNodes;
+                        //if (itemUsageRulePartsNodeList.Count > 0)
+                        //{
+                        //    foreach (XmlNode lItemUsageRuleItem in itemUsageRulePartsNodeList)
+                        //    {
+                        //        lParts.Add(partLookupByName(lItemUsageRuleItem.InnerText));
+                        //    }
+
+                        //    variant lTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRef"));
+                        //    CreateItemUsageRuleInstance(lTempVariant
+                        //                            , lParts);
+
+                        //    lDataLoaded = true;
+                        //}
+                        //else
+                        //{
+                        //    lDataLoaded = false;
+                        //    cOutputHandler.printMessageToConsole("Item usage rules defined without any parts! Data not loaded.");
+
+                        //}
                     }
                 }
 

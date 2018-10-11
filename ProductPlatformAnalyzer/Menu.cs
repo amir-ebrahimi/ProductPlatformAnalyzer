@@ -407,6 +407,9 @@ namespace ProductPlatformAnalyzer
                             case "NoOfModelsRequired":
                                 lXmlNode["value"].InnerText = cZ3SolverEngineer.NoOfModelsRequired.ToString();
                                 break;
+                            case "OperationWaiting":
+                                lXmlNode["value"].InnerText = cZ3SolverEngineer.OperationWaiting.ToString();
+                                break;
                             case "OperationMutualExecution":
                                 lXmlNode["value"].InnerText = cZ3SolverEngineer.OperationMutualExecution.ToString();
                                 break;
@@ -534,6 +537,9 @@ namespace ProductPlatformAnalyzer
                             case "NoOfModelsRequired":
                                 cZ3SolverEngineer.NoOfModelsRequired = int.Parse(lXmlNode["value"].InnerText);
                                 break;
+                            case "OperationWaiting":
+                                cZ3SolverEngineer.OperationWaiting = bool.Parse(lXmlNode["value"].InnerText);
+                                break;
                             case "OperationMutualExecution":
                                 cZ3SolverEngineer.OperationMutualExecution = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
@@ -618,7 +624,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine("8. Is there any part(s) which will not be possible to choose for any configuration?");
                 Console.WriteLine("9. Is there any operation(s) that are ALWAYS selected for a configuration?");
                 Console.WriteLine("10. Is there any operation(s) that are NEVER selected for a configuration?");
-                Console.WriteLine("11. Is there any operation(s) which will not be possible to choose for any configuration?");
+                Console.WriteLine("11. Is there any operation(s) which is possible to choose for a configuration?");
                 Console.WriteLine("12. Existence of deadlock analysis");
                 //Console.WriteLine("0. Choose another file to analyze.");
                 Console.WriteLine("Which analysis do you want to perform: ");
