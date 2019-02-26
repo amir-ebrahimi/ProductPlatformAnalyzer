@@ -518,6 +518,27 @@ namespace ProductPlatformAnalyzer
             return lResultList;
         }
 
+        public HashSet<OperationInstance> getOperationInstancesForOneOperationInOneTrasition(Operation pOperation, int pTransitionNumber=-1)
+        {
+            HashSet<OperationInstance> lResultList = new HashSet<OperationInstance>();
+            try
+            {
+                foreach (var lOperationnstance in cOperationInstanceSet)
+                {
+                    if (lOperationnstance.AbstractOperation.Equals(pOperation))
+                        if (pTransitionNumber!=-1 && lOperationnstance.TransitionNumber.Equals(pTransitionNumber))
+                            lResultList.Add(lOperationnstance);
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in getOperationInstancesForOneOperationInOneTrasition");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultList;
+
+        }
+
         /*public List<OperationInstance> operationInstanceLookupByName(string pOperationInstanceName)
         {
             List<OperationInstance> lResultOperationInstance = new List<OperationInstance>();
@@ -1541,6 +1562,8 @@ namespace ProductPlatformAnalyzer
                         string lOperationPreconditions = GetOperationPreconditionsString(lOperation.Precondition);
                         lDataSummary += "Operation Precondition: " + lOperationPreconditions + System.Environment.NewLine;
                         lDataSummary += "Operation Trigger: " + lOperation.Trigger + System.Environment.NewLine;
+                        string lOperationPostconditions = GetOperationPreconditionsString(lOperation.Postcondition);
+                        lDataSummary += "Operation Postcondition: " + lOperationPostconditions + System.Environment.NewLine;
 
                         /*foreach (string lPostconditionOperationName in lOperation.postcondition)
                             lDataSummary += "Operation Postcondition: " + lPostconditionOperationName + System.Environment.NewLine;*/
@@ -1621,7 +1644,7 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public string GetOperationPreconditionsString(List<string> pPreconditions)
+        public string GetOperationPreconditionsString(List<string> pPreconditions, bool pPrefix = false)
         {
             string lResultPreconditionStr = "";
             try
@@ -1629,10 +1652,21 @@ namespace ProductPlatformAnalyzer
 
                 foreach (var lPrecondition in pPreconditions)
                 {
-                    if (lResultPreconditionStr != "")
-                        lResultPreconditionStr += " and ";
-                    lResultPreconditionStr += lPrecondition;
+                    if (lResultPreconditionStr == "")
+                        lResultPreconditionStr += lPrecondition;
+                    else
+                    {
+                        if (!pPrefix)
+                            lResultPreconditionStr += " and ";
+                        else
+                            lResultPreconditionStr = "and " + lResultPreconditionStr;
+
+                        lResultPreconditionStr = lResultPreconditionStr + " " + lPrecondition;
+                    }
+                    
                 }
+
+                lResultPreconditionStr = lResultPreconditionStr.Trim();
             }
             catch (Exception ex)
             {
@@ -1642,16 +1676,38 @@ namespace ProductPlatformAnalyzer
             return lResultPreconditionStr;
         }
 
+        public string GetOperationPostconditionsString(List<string> pPostconditions)
+        {
+            string lResultPostconditionStr = "";
+            try
+            {
+
+                foreach (var lPostcondition in pPostconditions)
+                {
+                    if (lResultPostconditionStr != "")
+                        lResultPostconditionStr += " and ";
+                    lResultPostconditionStr += lPostcondition;
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in GetOperationPostconditionsString");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lResultPostconditionStr;
+        }
+
         public Operation CreateOperationInstance(string pName
                                             , string pTriggers
                                             , string pRequirements
-                                            , string pPrecondition)
+                                            , string pPrecondition
+                                            , string pPostcondition)
         {
             Operation lTempOperation = null;
             try
             {
 
-                lTempOperation = new Operation(pName, pTriggers, pRequirements, pPrecondition);
+                lTempOperation = new Operation(pName, pTriggers, pRequirements, pPrecondition,pPostcondition);
 
                 cOperationSet.Add(lTempOperation);
                 cOperationNameLookup.Add(pName, lTempOperation);
@@ -3029,6 +3085,7 @@ namespace ProductPlatformAnalyzer
                         string lTriggers = "";
                         string lOperationPrecondition = "";
                         string lOperationRequirement = "";
+                        string lOperationPostcondition = "";
 
                         if (lNode["trigger"] != null)
                         {
@@ -3048,19 +3105,27 @@ namespace ProductPlatformAnalyzer
                             lOperationPrecondition=opPreconditionNodeList[0].InnerText;
                         }
 
+                        if (lNode["postconditions"] != null)
+                        {
+                            XmlNodeList opPostconditionNodeList = lNode["postconditions"].ChildNodes;
+                            lOperationPostcondition = opPostconditionNodeList[0].InnerText;
+                        }
+
                         var lOperationName = getXMLNodeAttributeInnerText(lNode, "operationName");
                         
                         var lOperation  = CreateOperationInstance(lOperationName
                                                                 , lTriggers
                                                                 , lOperationRequirement
-                                                                , lOperationPrecondition);
+                                                                , lOperationPrecondition
+                                                                , lOperationPostcondition);
 
                     }
-
-                    foreach (var lOperation in OperationSet)
-                    {
-                        CreateOperationInstances4AllTransitions(lOperation);
-                    }
+                    
+                    ///This should be done as late as possible and not when reading the XML files
+                    //foreach (var lOperation in OperationSet)
+                    //{
+                    //    CreateOperationInstances4AllTransitions(lOperation);
+                    //}
 
                     lDataLoaded = true;
                 }

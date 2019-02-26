@@ -86,7 +86,7 @@ namespace ProductPlatform.Test
             lTestDataList.Add(new TestData("14.2V1VG2O0C2P.xml", true, true, true, false, false));
             */
         }
-        
+
         [TestMethod]
         public void LoadInitialData_Test()
         {
@@ -102,7 +102,7 @@ namespace ProductPlatform.Test
                     lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     Assert.AreEqual(lDataLoaded, lTestData.lLoadDataExpectedResult);
-                    
+
                 }
 
             }
@@ -114,223 +114,245 @@ namespace ProductPlatform.Test
             }
         }
 
-        [TestMethod]
-        public void VariantSelectabilityAnalysis_Test()
-        {
-            try
-            {
-                foreach (TestData lTestData in lTestDataList)
-                {
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+        //[TestMethod]
+        //public void VariantSelectabilityAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        foreach (TestData lTestData in lTestDataList)
+        //        {
+        //            Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
-                    bool lDataLoaded = false;
+        //            bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+        //            lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("VariantSelectabilityAnalysis on : " + lTestData.lTestFile);
+        //            if (lDataLoaded)
+        //            {
+        //                Console.WriteLine("VariantSelectabilityAnalysis on : " + lTestData.lTestFile);
 
-                        bool lAnalysisResult = false;
+        //                bool lAnalysisResult = false;
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
-                                                            , lTestData.lAnalysisType
-                                                            , false
-                                                            , lTestData.lNoOfModelsRequired);
+        //                //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+        //                //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+        //                //             , Build P Constraints, Number Of Models Required
+        //                lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
+        //                                                    , lTestData.lAnalysisType);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
+        //                //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+        //                //          , Transitions Result, Analysis Timing, Unsat Core
+        //                //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+        //                //          , Report timings, Debug Mode (Make model file), User Messages
+        //                lZ3SolverEngineer.setReportType(true, false, false
+        //                                                , false, false, false
+        //                                                , false, false, true
+        //                                                , true, true, false);
 
-                        lAnalysisResult = lZ3SolverEngineer.VariantSelectabilityAnalysis(false, true);
+        //                lAnalysisResult = lZ3SolverEngineer.VariantSelectabilityAnalysis(false, true);
 
-                        Assert.AreEqual(lAnalysisResult, lTestData.lVariantSelectabilityExpectedResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Initial data was not loaded!");
-                        Assert.AreEqual(false, lTestData.lVariantSelectabilityExpectedResult);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Variant Selectability Analysis failed!");
-                Console.WriteLine(ex.Message);
-                Assert.Fail();
-            }
-        }
+        //                Assert.AreEqual(lAnalysisResult, lTestData.lVariantSelectabilityExpectedResult);
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Initial data was not loaded!");
+        //                Assert.AreEqual(false, lTestData.lVariantSelectabilityExpectedResult);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Variant Selectability Analysis failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
 
-        [TestMethod]
-        public void AlwaysSelectedVariantAnalysis_Test()
-        {
-            try
-            {
-                foreach (TestData lTestData in lTestDataList)
-                {
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+        //[TestMethod]
+        //public void AlwaysSelectedVariantAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        foreach (TestData lTestData in lTestDataList)
+        //        {
+        //            Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
-                    bool lDataLoaded = false;
+        //            bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+        //            lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("AlwaysSelectedVariant Analysis on : " + lTestData.lTestFile);
+        //            if (lDataLoaded)
+        //            {
+        //                Console.WriteLine("AlwaysSelectedVariant Analysis on : " + lTestData.lTestFile);
 
-                        bool lAnalysisResult = false;
+        //                bool lAnalysisResult = false;
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
-                                                            , lTestData.lAnalysisType
-                                                            , false
-                                                            , lTestData.lNoOfModelsRequired);
+        //                //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+        //                //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+        //                //             , Build P Constraints, Number Of Models Required
+        //                lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
+        //                                                    , lTestData.lAnalysisType);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
+        //                //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+        //                //          , Transitions Result, Analysis Timing, Unsat Core
+        //                //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+        //                //          , Report timings, Debug Mode (Make model file), User Messages
+        //                lZ3SolverEngineer.setReportType(true, false, false
+        //                                                , false, false, false
+        //                                                , false, false, true
+        //                                                , true, true, false);
 
-                        lAnalysisResult = lZ3SolverEngineer.NeverSelectedVariantAnalysis(false, true);
+        //                lAnalysisResult = lZ3SolverEngineer.NeverSelectedVariantAnalysis(false, true);
 
-                        Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSelectedVariantExpectedResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Initial data was not loaded!");
-                        Assert.AreEqual(false, lTestData.lAlwaysSelectedVariantExpectedResult);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Always Selected Variant Analysis failed!");
-                Console.WriteLine(ex.Message);
-                Assert.Fail();
-            }
-        }
+        //                Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSelectedVariantExpectedResult);
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Initial data was not loaded!");
+        //                Assert.AreEqual(false, lTestData.lAlwaysSelectedVariantExpectedResult);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Always Selected Variant Analysis failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
 
-        [TestMethod]
-        public void OperationSelectabilityAnalysis_Test()
-        {
-            try
-            {
-                foreach (TestData lTestData in lTestDataList)
-                {
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+        //[TestMethod]
+        //public void OperationSelectabilityAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        foreach (TestData lTestData in lTestDataList)
+        //        {
+        //            Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
-                    bool lDataLoaded = false;
+        //            bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+        //            lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("OperationSelectabilityAnalysis on : " + lTestData.lTestFile);
+        //            if (lDataLoaded)
+        //            {
+        //                Console.WriteLine("OperationSelectabilityAnalysis on : " + lTestData.lTestFile);
 
-                        bool lAnalysisResult = false;
+        //                bool lAnalysisResult = false;
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
-                                                            , lTestData.lAnalysisType
-                                                            , false
-                                                            , lTestData.lNoOfModelsRequired);
+        //                //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+        //                //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+        //                //             , Build P Constraints, Number Of Models Required
+        //                lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
+        //                                                    , lTestData.lAnalysisType);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
+        //                //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+        //                //          , Transitions Result, Analysis Timing, Unsat Core
+        //                //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+        //                //          , Report timings, Debug Mode (Make model file), User Messages
+        //                lZ3SolverEngineer.setReportType(true, false, false
+        //                                                , false, false, false
+        //                                                , false, false, true
+        //                                                , true, true, false);
 
-                        lAnalysisResult = lZ3SolverEngineer.OperationSelectabilityAnalysis(false, true);
+        //                lAnalysisResult = lZ3SolverEngineer.OperationSelectabilityAnalysis(false, true);
 
-                        Assert.AreEqual(lAnalysisResult, lTestData.lOperationSelectabilityExpectedResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Initial data was not loaded!");
-                        Assert.AreEqual(false, lTestData.lOperationSelectabilityExpectedResult);
-                    }
+        //                Assert.AreEqual(lAnalysisResult, lTestData.lOperationSelectabilityExpectedResult);
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Initial data was not loaded!");
+        //                Assert.AreEqual(false, lTestData.lOperationSelectabilityExpectedResult);
+        //            }
                     
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Operation Selectability Analysis failed!");
-                Console.WriteLine(ex.Message);
-                Assert.Fail();
-            }
-        }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Operation Selectability Analysis failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
+
+        //[TestMethod]
+        //public void AlwaysSelectedOperationAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        foreach (TestData lTestData in lTestDataList)
+        //        {
+        //            Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+
+        //            bool lDataLoaded = false;
+
+        //            lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+
+        //            if (lDataLoaded)
+        //            {
+        //                Console.WriteLine("AlwaysSelectedOperationAnalysis on : " + lTestData.lTestFile);
+        //                bool lAnalysisResult = false;
+
+        //                //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+        //                //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+        //                //             , Build P Constraints, Number Of Models Required
+        //                lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
+        //                                                    , lTestData.lAnalysisType);
+
+        //                //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+        //                //          , Transitions Result, Analysis Timing, Unsat Core
+        //                //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+        //                //          , Report timings, Debug Mode (Make model file), User Messages
+        //                lZ3SolverEngineer.setReportType(true, false, false
+        //                                                , false, false, false
+        //                                                , false, false, true
+        //                                                , true, true, false);
+
+        //                lAnalysisResult = lZ3SolverEngineer.NeverSelectedOperationAnalysis(false, true);
+
+        //                Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSlectedOperationExpectedResult);
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Initial data was not loaded!");
+        //                Assert.AreEqual(false, lTestData.lAlwaysSlectedOperationExpectedResult);
+        //            }
+                    
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Always Selected Operation Analysis failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
 
         [TestMethod]
-        public void AlwaysSelectedOperationAnalysis_Test()
+        public void OperationDependencyAnalysis_Test()
         {
             try
             {
-                foreach (TestData lTestData in lTestDataList)
-                {
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+                OutputHandler lOutputHandler = new OutputHandler();
+                FrameworkWrapper lFrameworkWrapper = new FrameworkWrapper(lOutputHandler);
+                Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer(lFrameworkWrapper);
 
-                    bool lDataLoaded = false;
+                Operation lOperation1 = new Operation("O1", "", "", "true", "true");
+                Operation lOperation2 = new Operation("O2", "", "", "true", "true");
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+                lFrameworkWrapper.OperationSet.Add(lOperation1);
+                lFrameworkWrapper.OperationSet.Add(lOperation2);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("AlwaysSelectedOperationAnalysis on : " + lTestData.lTestFile);
-                        bool lAnalysisResult = false;
+                
+                lZ3SolverEngineer.OperationDependencyAnalysis();
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(lTestData.lGeneralAnalysisType
-                                                            , lTestData.lAnalysisType
-                                                            , false
-                                                            , lTestData.lNoOfModelsRequired);
+                Assert.AreEqual(lZ3SolverEngineer.DependentActionsList.Count, 0);
 
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
-
-                        lAnalysisResult = lZ3SolverEngineer.NeverSelectedOperationAnalysis(false, true);
-
-                        Assert.AreEqual(lAnalysisResult, lTestData.lAlwaysSlectedOperationExpectedResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Initial data was not loaded!");
-                        Assert.AreEqual(false, lTestData.lAlwaysSlectedOperationExpectedResult);
-                    }
-                    
-                }
-
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Always Selected Operation Analysis failed!");
+                Console.WriteLine("OperationDependencyAnalysis Test failed!");
                 Console.WriteLine(ex.Message);
                 Assert.Fail();
             }

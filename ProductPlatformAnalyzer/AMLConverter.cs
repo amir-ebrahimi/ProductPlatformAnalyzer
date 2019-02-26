@@ -158,7 +158,8 @@ namespace ProductPlatformAnalyzer
                     Operation tempOperation = new Operation(parent.Name()
                                                             , trigger
                                                             , req
-                                                            , pre);
+                                                            , pre
+                                                            , pos);
                     
                     /*tempOperation.Name = parent.Name();
                     //tempOperation.displayName = parent.Name();

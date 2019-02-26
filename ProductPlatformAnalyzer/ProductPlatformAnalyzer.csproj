@@ -62,7 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
     <Compile Include="AMLConverter.cs" />
+    <Compile Include="DependentOperations.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="FrameworkWrapper.cs" />
     <Compile Include="GeneralUtilities.cs" />
@@ -102,6 +104,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\4.7.xml" />
+    <Content Include="Test\ActionDependency1.xml" />
+    <Content Include="Test\ActionDependency2.xml" />
+    <Content Include="Test\ActionDependency_TestCase1.xml" />
     <Content Include="Test\ProductPlatform.xml">
       <SubType>Designer</SubType>
     </Content>

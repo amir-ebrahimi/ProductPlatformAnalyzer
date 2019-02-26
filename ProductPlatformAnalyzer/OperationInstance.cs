@@ -8,85 +8,56 @@ namespace ProductPlatformAnalyzer
 {
     public class OperationInstance
     {
-        private Enumerations.OperationStatus _status;
-        private Operation _abstractOperation;
-        private int _transitionNumber;
-        private int _index;
-        private string _initialVariableName;
-        private string _executingVariableName;
-        private string _finishedVariableName;
-        private string _unusedVariableName;
-        private string _operationPreconditionVariableName;
-
         #region 
-        public Enumerations.OperationStatus Status
-        {
-            get { return _status; }
-            set { _status = value; }
-        }
+        public Enumerations.OperationStatus Status { get; set; }
+        public Operation AbstractOperation { get; set; }
+        public int TransitionNumber { get; set; }
+        public int Index { get; set; }
+        public string InitialVariableName { get; private set; }
+        public string ExecutingVariableName { get; private set; }
+        public string FinishedVariableName { get; private set; }
+        public string UnusedVariableName { get; private set; }
+        public Action Action_I2E { get; set; }
+        public string Action_I2E_VariableName { get; private set; }
+        public Action Action_E2F { get; set; }
+        public string Action_E2F_VariableName { get; private set; }
+        public string OperationPreconditionVariableName { get; private set; }
+        public string OperationPostconditionVariableName { get; private set; }
 
-        public Operation AbstractOperation
-        {
-            get { return _abstractOperation; }
-            set { _abstractOperation = value; }
-        }
-
-        public int TransitionNumber
-        {
-            get { return _transitionNumber; }
-            set { _transitionNumber = value; }
-        }
-
-        public int Index
-        {
-            get { return _index; }
-            set { _index = value; }
-        }
-
-        public string InitialVariableName
-        {
-            get { return _initialVariableName; }
-        }
-
-        public string ExecutingVariableName
-        {
-            get { return _executingVariableName; }
-        }
-
-        public string FinishedVariableName
-        {
-            get { return _finishedVariableName; }
-        }
-
-        public string UnusedVariableName
-        {
-            get { return _unusedVariableName; }
-        }
-
-        public string OperationPreconditionVariableName
-        {
-            get { return _operationPreconditionVariableName; }
-        }
         #endregion
 
         public OperationInstance(Operation pOperation
                                 , int pTransitionNumber
                                 , int pIndex)
         {
-            _abstractOperation = pOperation;
-            _transitionNumber = pTransitionNumber;
-            _index = pIndex;
-            _status = Enumerations.OperationStatus.Inactive;
-            CreateOperationInstanceVariableNames();
-        }
+            AbstractOperation = pOperation;
+            TransitionNumber = pTransitionNumber;
+            Index = pIndex;
+            Status = Enumerations.OperationStatus.Inactive;
 
-        private void CreateOperationInstanceVariableNames()
-        {
-            _initialVariableName = String.Join("_", new String[] { _abstractOperation.Name, "I", _transitionNumber.ToString() });
-            _executingVariableName = String.Join("_", new String[] { _abstractOperation.Name, "E", _transitionNumber.ToString() });
-            _finishedVariableName = String.Join("_", new String[] { _abstractOperation.Name, "F", _transitionNumber.ToString() });
-            _unusedVariableName = String.Join("_", new String[] { _abstractOperation.Name, "U", _transitionNumber.ToString() });
-            _operationPreconditionVariableName = String.Join("_", new String[] { _abstractOperation.Name, "PreCondition", _transitionNumber.ToString() });
+            InitialVariableName = String.Join("_", new String[] { AbstractOperation.Name, "I", TransitionNumber.ToString() });
+            ExecutingVariableName = String.Join("_", new String[] { AbstractOperation.Name, "E", TransitionNumber.ToString() });
+            FinishedVariableName = String.Join("_", new String[] { AbstractOperation.Name, "F", TransitionNumber.ToString() });
+            UnusedVariableName = String.Join("_", new String[] { AbstractOperation.Name, "U", TransitionNumber.ToString() });
+
+            //Here we have to create the two Action objects Action_I2E and Action_E2F
+
+            //AbstractOperation_I_TransitionNumber should be part of the precondition
+            pOperation.Precondition.Add(InitialVariableName);
+
+            Action lAction_I2E = new Action(AbstractOperation.Name + "_I2E", pOperation.Precondition, "and not " + InitialVariableName + " " + ExecutingVariableName);
+            Action_I2E = lAction_I2E;
+
+            //AbstractOperation_E_TransitionNumber should be part of the postcondition
+            pOperation.Postcondition.Add(ExecutingVariableName);
+
+            Action lAction_E2F = new Action(AbstractOperation.Name + "_E2F", pOperation.Postcondition, "and not " + ExecutingVariableName + " " + FinishedVariableName);
+            Action_E2F = lAction_E2F;
+
+            Action_I2E_VariableName = String.Join("_", new String[] { Action_I2E.Name, TransitionNumber.ToString() });
+            Action_E2F_VariableName = String.Join("_", new String[] { Action_E2F.Name, TransitionNumber.ToString() });
+            OperationPreconditionVariableName = String.Join("_", new String[] { AbstractOperation.Name, "PreCondition", TransitionNumber.ToString() });
+            OperationPostconditionVariableName = String.Join("_", new String[] { AbstractOperation.Name, "PostCondition", TransitionNumber.ToString() });
         }
     }
 }

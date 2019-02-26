@@ -35,6 +35,13 @@ namespace ProductPlatformAnalyzer
             set { _precondition = value; }
         }
 
+        private List<string> _postcondition;
+        public List<string> Postcondition
+        {
+            get { return _postcondition; }
+            set { _postcondition = value; }
+        }
+
         private string _requirement;
         public string Requirement
         {
@@ -55,16 +62,21 @@ namespace ProductPlatformAnalyzer
             set { _z3Solver = value; }
         }*/
 
-        public Operation(string pOperationName, string pTrigger, string pRequirement, string pPrecondition)
+        public Operation(string pOperationName, string pTrigger, string pRequirement, string pPrecondition, string pPostcondition)
         {
             _name = pOperationName;
             _trigger = pTrigger;
             _requirement = pRequirement;
             _precondition = new List<string>();
+            _postcondition = new List<string>();
 
             if (pPrecondition != null)
                 if (pPrecondition != "")
                     _precondition.Add(pPrecondition);
+
+            if (pPostcondition != null)
+                if (pPostcondition != "")
+                    _postcondition.Add(pPostcondition);
 
             //_z3Solver = pZ3Solver;
             createOperationVariableNames();
@@ -75,6 +87,12 @@ namespace ProductPlatformAnalyzer
         {
             if (pPrecondition != null)
                 _precondition.Add(pPrecondition);
+        }
+
+        public void AddPostcondition(string pPostcondition)
+        {
+            if (pPostcondition != null)
+                _postcondition.Add(pPostcondition);
         }
 
         private void createOperationVariableNames()

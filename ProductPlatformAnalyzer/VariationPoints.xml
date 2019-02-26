@@ -62,7 +62,7 @@
   </variationPoint>
   <variationPoint>
     <name>RandomMaxExpressionOperandNumber</name>
-    <value>3</value>
+    <value>2</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxResourceNumber</name>
@@ -94,7 +94,7 @@
   </variationPoint>
   <variationPoint>
     <name>RandomMaxOperationNumber</name>
-    <value>30</value>
+    <value>2</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxPartNumber</name>

@@ -82,8 +82,16 @@ namespace ProductPlatformAnalyzer
                     else
                     {
                         operation = lOperationNameParts[0];
-                        opState = lOperationNameParts[1];
-                        state = Convert.ToInt32(lOperationNameParts[2]);
+                        if (lOperationNameParts[1] != "E2F" && lOperationNameParts[1] != "I2E")
+                        {
+                            opState = lOperationNameParts[1];
+                            state = Convert.ToInt32(lOperationNameParts[2]);
+                        }
+                        else
+                        {
+                            opState = null;
+                            state = -1;
+                        }
                     }
                 }
                 else

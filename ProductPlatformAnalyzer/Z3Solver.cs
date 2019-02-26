@@ -1240,8 +1240,9 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddBooleanExpression(string pExprName)
+        public BoolExpr AddBooleanExpression(string pExprName)
         {
+            BoolExpr lResult = null;
             try
             {
                 Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
@@ -1252,12 +1253,14 @@ namespace ProductPlatformAnalyzer
                     if (cIDebugMode)
                         cIDebugText.Append("(declare-const " + pExprName + " Bool)" + "\r\n");
                 }
+                lResult = (BoolExpr)tempExpr;
             }
             catch (Exception ex)
             {
                 cOutputHandler.printMessageToConsole("error in AddBooleanExpression, " + pExprName);
                 throw ex;
             }
+            return lResult;
         }
 
         public void AddStringExpression(string pExprName)
@@ -1336,17 +1339,23 @@ namespace ProductPlatformAnalyzer
         /// This function is usd to output the previously filled DebugText to a external file with the name Debug indexed by the transition number which it was in
         /// </summary>
         /// <param name="pState">Transition number</param>
-        public void WriteDebugFile(int pState, int pModelIndex)
+        public void WriteDebugFile(int pState, int pModelIndex, string pCustomFileName = "")
         {
             try
             {
                 string exePath = Directory.GetCurrentDirectory();
                 string endPath = null;
 
-                if (pState != -1)
-                    endPath = "Output/Debug/Transition" + pState + ".txt";
+                if (pCustomFileName != "")
+                    endPath = "Output/Debug/" + pCustomFileName + ".txt";
                 else
-                    endPath = "Output/Debug/Model" + pModelIndex + ".txt";
+                {
+                    if (pState != -1)
+                        endPath = "Output/Debug/Transition" + pState + ".txt";
+                    else
+                        endPath = "Output/Debug/Model" + pModelIndex + ".txt";
+                }
+
 
                 System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugText.ToString());
                 //System.IO.File.WriteAllText("C:/Users/amir/Desktop/Output/Debug/Debug" + pState + ".txt",iDebugText);
@@ -1601,7 +1610,7 @@ namespace ProductPlatformAnalyzer
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
                 {
                     //Expr lCurrentExpr = FindExprInExprListWithNull(lFunctionDecleration.Name.ToString());
-                    Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
+                    Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString(), true);
                     if (lCurrentExpr != null 
                         && !lCurrentExpr.GetType().Name.Equals("IntExpr")
                         )
@@ -1696,7 +1705,7 @@ namespace ProductPlatformAnalyzer
             return lReturnStatus;
         }
 
-        public Expr FindExprInExprSet(string pExprName)
+        public Expr FindExprInExprSet(string pExprName, bool pJustFind = false)
         {
             Expr lResultExpr = null;
             try
@@ -1709,7 +1718,11 @@ namespace ProductPlatformAnalyzer
                     lResultExpr = lFoundExpr[0];*/
                 if (cExpressionDictionary.ContainsKey(pExprName))
                     lResultExpr = cExpressionDictionary[pExprName];
-                //else
+                else
+                {
+                    if (!pJustFind)
+                        lResultExpr = AddBooleanExpression(pExprName);
+                }
                 //    cOutputHandler.printMessageToConsole("Error in FindExprInExprList: " + pExprName + " not found in expression list!");                
                 //TODO: terminate program
 
@@ -1830,21 +1843,38 @@ namespace ProductPlatformAnalyzer
                 cOutputHandler.printMessageToConsole("Error in AddModelItem2SolverAssertion!");
                 cOutputHandler.printMessageToConsole(ex.Message);
             }
-
         }
 
-        public BoolExpr MakeTrueNFalseExpr(bool pTrue)
+        public BoolExpr MakeTrueExpr()
         {
             BoolExpr lResultExpr;
-            Expr l1 = cICtx.MkNumeral(1, cICtx.MkIntSort());
-            Expr l2 = cICtx.MkNumeral(2, cICtx.MkIntSort());
-            if (pTrue)
-                lResultExpr = cICtx.MkEq(l1, l1);
-            else
-                lResultExpr = cICtx.MkEq(l1, l2);
+            //Expr l1 = cICtx.MkNumeral(1, cICtx.MkIntSort());
+            //Expr l2 = cICtx.MkNumeral(2, cICtx.MkIntSort());
+            //if (pTrue)
+            //    lResultExpr = cICtx.MkEq(l1, l1);
+            //else
+            //    lResultExpr = cICtx.MkEq(l1, l2);
+
+            lResultExpr = cICtx.MkTrue();
 
             return lResultExpr;
         }
+
+        public BoolExpr MakeFalseExpr()
+        {
+            BoolExpr lResultExpr;
+            //Expr l1 = cICtx.MkNumeral(1, cICtx.MkIntSort());
+            //Expr l2 = cICtx.MkNumeral(2, cICtx.MkIntSort());
+            //if (pTrue)
+            //    lResultExpr = cICtx.MkEq(l1, l1);
+            //else
+            //    lResultExpr = cICtx.MkEq(l1, l2);
+
+            lResultExpr = cICtx.MkFalse();
+
+            return lResultExpr;
+        }
+
         /// <summary>
         /// First piece of code to get used to Z3 API
         /// </summary>

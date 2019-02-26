@@ -1,0 +1,57 @@
+﻿<?xml version="1.0"?>
+<!--File Name: 1.0.1V1VG2O0C0P.xml-->
+<!-- Simple 1 Variant 2 Operations with no stated pre and post conditions but simple pre and post conditions will be added. But the actions of the two operations will remain independent
+Analysis should be able to complete. -->
+
+<!-- Operations: 
+        O1
+          Pre: true
+          trigger: V1
+          Post:
+				O2 
+          Pre: true
+          trigger: V1
+          Post:
+        -->
+
+<!-- Variants: V1	-->
+
+<!-- VariantGroups: 
+      VG1
+        choose exactly one
+        Variants: V1 -->
+
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>true</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>true</operationRef>
+      </preconditions>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+</testData>

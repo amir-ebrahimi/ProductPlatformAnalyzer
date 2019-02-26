@@ -768,7 +768,7 @@ namespace ProductPlatformAnalyzer
             {
                 //TODO: we have to also make two random list fir preconditions and postconditions
                 string lOperationPrecondition = "";
-                //List<string> lOperationPostcondition = new List<string>();
+                string lOperationPostcondition = "";
                 string lOperationTrigger = "";
                 string lOperationRequiremnt = "";
 
@@ -779,16 +779,17 @@ namespace ProductPlatformAnalyzer
                     lTempOperation = cFrameworkWrapper.CreateOperationInstance("O-" + i
                                                                             , lOperationTrigger
                                                                             , lOperationRequiremnt
-                                                                            , lOperationPrecondition);
+                                                                            , lOperationPrecondition
+                                                                            , lOperationPostcondition);
                     //Creating a list for operation lookup by code, ONLY for use with in this class
                     cOperationCodeLookup.Add(i, lTempOperation);
 
                 }
 
-                foreach (var lOperation in cFrameworkWrapper.OperationSet)
-                {
-                    cFrameworkWrapper.CreateOperationInstances4AllTransitions(lOperation);
-                }
+                //foreach (var lOperation in cFrameworkWrapper.OperationSet)
+                //{
+                //    cFrameworkWrapper.CreateOperationInstances4AllTransitions(lOperation);
+                //}
             }
             catch (Exception ex)
             {
@@ -911,6 +912,59 @@ namespace ProductPlatformAnalyzer
             return lResultRandomExp;
         }
 
+        private string pickRandomOperationState()
+        {
+            Enumerations.OperationInstanceState lResultOperationState = Enumerations.OperationInstanceState.Finished;
+            string lReturnedOperationState = "F";
+            try
+            {
+                int lRandomNumber = cMyRandom.Next(0, 3);
+
+                switch (lRandomNumber)
+                {
+                    case 0:
+                        lResultOperationState = Enumerations.OperationInstanceState.Initial;
+                        break;
+                    case 1:
+                        lResultOperationState = Enumerations.OperationInstanceState.Executing;
+                        break;
+                    case 2:
+                        lResultOperationState = Enumerations.OperationInstanceState.Finished;
+                        break;
+                    case 3:
+                        lResultOperationState = Enumerations.OperationInstanceState.Unused;
+                        break;
+                    default:
+                        lResultOperationState = Enumerations.OperationInstanceState.Finished;
+                        break;
+                }
+
+                switch (lResultOperationState)
+                {
+                    case Enumerations.OperationInstanceState.Initial:
+                        lReturnedOperationState = "I";
+                        break;
+                    case Enumerations.OperationInstanceState.Executing:
+                        lReturnedOperationState = "E";
+                        break;
+                    case Enumerations.OperationInstanceState.Finished:
+                        lReturnedOperationState = "F";
+                        break;
+                    case Enumerations.OperationInstanceState.Unused:
+                        lReturnedOperationState = "U";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                cOutputHandler.printMessageToConsole("error in pickRandomOperationState");
+                cOutputHandler.printMessageToConsole(ex.Message);
+            }
+            return lReturnedOperationState;
+        }
+
         private void updateOperationTriggerConditions()
         {
             try
@@ -947,7 +1001,10 @@ namespace ProductPlatformAnalyzer
             try
             {
                 var lIndex = cMyRandom.Next(0, pStrings.Count);
-                lResultRandomString = pStrings.ElementAt<string>(lIndex);
+                string lTempString = pStrings.ElementAt<string>(lIndex);
+                if (lTempString.StartsWith("O"))
+                    lTempString = lTempString + "_" + pickRandomOperationState();
+                lResultRandomString = lTempString;
             }
             catch (Exception ex)
             {
@@ -968,10 +1025,16 @@ namespace ProductPlatformAnalyzer
                     //This is because an operation can't be part of its own pre or post condition
                     cOverallFreeOperationCodes.Remove(returnOperationCode(lCurrentOperation.Name));
 
-                    List<string> lOperands = pickASeriesOfRandomOperationNames(false);
-                    string lPrecondition = buildRandomExpFromOperands(lOperands);
-                    //lCurrentOperation.Precondition.Clear();
-                    lCurrentOperation.AddPrecondition(lPrecondition);
+                    if (cOverallFreeOperationCodes.Count > 0)
+                    {
+                        List<string> lOperands = pickASeriesOfRandomOperationNames(false);
+                        string lPrecondition = buildRandomExpFromOperands(lOperands);
+                        //lCurrentOperation.Precondition.Clear();
+                        lCurrentOperation.AddPrecondition(lPrecondition);
+
+                        string lPostcondition = buildRandomExpFromOperands(lOperands);
+                        lCurrentOperation.AddPostcondition(lPostcondition);
+                    }
                 }
             }
             catch (Exception ex)

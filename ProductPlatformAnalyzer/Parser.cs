@@ -60,7 +60,7 @@ namespace ProductPlatformAnalyzer
                     lRemainderString = pData.Substring(lCharacterIndex + 1);
 
                     if (lRemainderString.StartsWith(pCharacter.ToString()))
-                        lResult[1] = lRemainderString.Substring(0, 1);
+                        lResult[1] = lRemainderString.Substring(1);
                     else
                         lResult[1] = lRemainderString;
                 }

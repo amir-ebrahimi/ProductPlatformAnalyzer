@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<!--File Name: 1.0.1V1VG2O0C0P.xml-->
+<!-- Simple 1 Variant 2 Operations with two simple stated cOutputHandler.printMessageToConsole( which will make their actions dependent
+Analysis should be able to complete. -->
+
+<!-- Operations: 
+        O1
+          Pre: not O2_I
+          trigger: V1
+          Post:
+				O2 
+          Pre: O1_I
+          trigger: V1
+          Post:
+        -->
+
+<!-- Variants: V1	-->
+
+<!-- VariantGroups: 
+      VG1
+        choose exactly one
+        Variants: V1 -->
+
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O2_I</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+</testData>
