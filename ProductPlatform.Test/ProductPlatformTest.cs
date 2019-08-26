@@ -1,10 +1,24 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProductPlatformAnalyzer;
 using System.Collections.Generic;
+using NUnit.Framework;
+using System.IO;
 
 namespace ProductPlatform.Test
 {
+    public class TestOperationsData
+    {
+        public string lTestFile;
+        public bool lOperationDependencyResult;
+
+        public TestOperationsData(string pTestFile, bool pOperationDependencyResult)
+        {
+            lTestFile = pTestFile;
+            lOperationDependencyResult = pOperationDependencyResult;
+        }
+    }
+
     public class TestData
     {
         public string lTestFile;
@@ -17,6 +31,7 @@ namespace ProductPlatform.Test
         public bool lAlwaysSelectedVariantExpectedResult;
         public bool lAlwaysSlectedOperationExpectedResult;
         public bool lDeadlockDetectionExpectedResult;
+        public int lAnalysisNoOfCycles;
 
         public TestData(string pTestFile
                         , bool pLoadDataExpectedResult
@@ -25,6 +40,7 @@ namespace ProductPlatform.Test
                         , bool pAlwaysSelectedVariantExpectedResult
                         , bool pAlwaysSlectedOperationExpectedResult
                         , bool pDeadlockDetectionExpectedResult
+                        , int pAnalysisNoOfCycles
                         , int pNoOfModelsRequired = 4)
         {
             lTestFile = pTestFile;
@@ -35,22 +51,39 @@ namespace ProductPlatform.Test
             lAlwaysSelectedVariantExpectedResult = pAlwaysSelectedVariantExpectedResult;
             lAlwaysSlectedOperationExpectedResult = pAlwaysSlectedOperationExpectedResult;
             lDeadlockDetectionExpectedResult = pDeadlockDetectionExpectedResult;
+            lAnalysisNoOfCycles = pAnalysisNoOfCycles;
         }
     }
 
-    [TestClass]
+    [TestFixture]
     public class ProductPlatformTest
     {
+
         private List<TestData> lTestDataList = new List<TestData>();
+        private List<TestOperationsData> lTestOperationList = new List<TestOperationsData>();
+
+        [OneTimeSetUp]
+        public void RunBeforeAnyTests()
+        {
+            //var dir = Path.GetDirectoryName(typeof(MySetUpClass).Assembly.Location);
+            //Environment.CurrentDirectory = dir;
+            var dir = TestContext.CurrentContext.TestDirectory;
+            // or
+            Directory.SetCurrentDirectory(dir);
+        }
 
         public ProductPlatformTest()
         {
+
             //Parameter list: Data file name, load data result, Variant Selectability Result, Operation Selectability Result
             //              , Always Selected Variant Result, Always Selected Operation Result, Deadlock Detection Result
+            var lFileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
 
-            lTestDataList.Add(new TestData("0.0.0V0VG0O0C0P.xml", false, false, false, false, false, false));
-            lTestDataList.Add(new TestData("0.1.0V0VG1O0C0P.xml", false, false, false, false, false, false));
-            lTestDataList.Add(new TestData("0.2.1V0VG1O0C0P.xml", false, false, false, false, false, false));
+            lTestOperationList.Add(new TestOperationsData(lFileDirectory + "OperationDependencyAnalysisTest1.xml", false));
+
+            //lTestDataList.Add(new TestData(lFileDirectory + "0.0.xml", false, false, false, false, false, false));
+            //lTestDataList.Add(new TestData(lFileDirectory + "0.1.xml", false, false, false, false, false, false));
+            //lTestDataList.Add(new TestData(lFileDirectory + "0.2.xml", false, false, false, false, false, false));
             /*
             lTestDataList.Add(new TestData("1.0.1V1VG2O0C0P.xml", true, true, true, false, false, false));
             lTestDataList.Add(new TestData("1.1.2V1VG2O0C0P.xml", true, true, true, true, false, false));
@@ -85,9 +118,20 @@ namespace ProductPlatform.Test
             lTestDataList.Add(new TestData("13.2V1VG2O0C2P.xml", true, true, true, true, true));
             lTestDataList.Add(new TestData("14.2V1VG2O0C2P.xml", true, true, true, false, false));
             */
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 1
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Three operations in sequence
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsDeadlock.xml", true, false, false, false, false, true, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock3.xml", true, false, false, false, false, false, 4)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesDeadlock.xml", true, false, false, false, false, true, 4)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "ParallelOperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsAllUnusedNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "ParallelOperationsSameResourceNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock3.xml", true, false, false, false, false, false, 40)); //Three operations in sequence
         }
 
-        [TestMethod]
+        [Test]
         public void LoadInitialData_Test()
         {
             try
@@ -96,23 +140,310 @@ namespace ProductPlatform.Test
                 {
                     Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
+                    OutputHandler lOutputHandler = new OutputHandler();
+                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
+                    //LoadVariationPointsFromXMLFile();
+
                     bool lDataLoaded = false;
 
                     Console.WriteLine("LoadInitialData Test on : " + lTestData.lTestFile);
+
                     lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
 
                     Assert.AreEqual(lDataLoaded, lTestData.lLoadDataExpectedResult);
 
                 }
 
+                //NUnit.Framework.Assert.IsTrue(true);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Initial data was not loaded!");
                 Console.WriteLine(ex.Message);
+                NUnit.Framework.Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void CalculateAnalysisNoOfCycles_Test()
+        {
+            try
+            {
+                foreach (TestData lTestData in lTestDataList)
+                {
+                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+
+                    OutputHandler lOutputHandler = new OutputHandler();
+                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
+                    //LoadVariationPointsFromXMLFile();
+
+                    bool lDataLoaded = false;
+
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+
+                    if (lDataLoaded)
+                    {
+                        Console.WriteLine("Calculate Analysis No Of Cycles on : " + lTestData.lTestFile);
+                        int lAnalysisResult = 0;
+
+                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Build P Constraints, Number Of Models Required
+                        lZ3SolverEngineer.setVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                                                            , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
+
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file), User Messages
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true, false);
+
+                        lAnalysisResult = lZ3SolverEngineer.CalculateAnalysisNoOfCycles();
+
+                        Assert.AreEqual(lAnalysisResult, lTestData.lAnalysisNoOfCycles);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Calculate Analysis No Of Cycles failed!");
+                Console.WriteLine(ex.Message);
                 Assert.Fail();
             }
         }
+        ///// <summary>
+        ///// This function reads the variation points values from the external file
+        ///// </summary>
+        //public void LoadVariationPointsFromXMLFile()
+        //{
+        //    try
+        //    {
+        //        string lFileName = "..\\..\\VariationPoints.xml";
+        //        //new instance of xdoc
+        //        XmlDocument xDoc = new XmlDocument();
+
+        //        //First load the XML file from the file path
+        //        xDoc.Load(lFileName);
+
+        //        XmlNodeList nodeList = xDoc.DocumentElement.SelectNodes("//variationPoint");
+
+        //        if (nodeList.Count > 0)
+        //        {
+        //            foreach (XmlNode lXmlNode in nodeList)
+        //            {
+        //                string lVariationPointName = lXmlNode["name"].InnerText;
+        //                switch (lVariationPointName)
+        //                {
+        //                    case "ReportAnalysisResult":
+        //                        cZ3SolverEngineer.ReportAnalysisResult = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportAnalysisDetailResult":
+        //                        cZ3SolverEngineer.ReportAnalysisDetailResult = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportVariantsResult":
+        //                        cZ3SolverEngineer.ReportVariantsResult = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportTransitionsResult":
+        //                        cZ3SolverEngineer.ReportTransitionsResult = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportAnalysisTiming":
+        //                        cZ3SolverEngineer.ReportAnalysisTiming = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportUnsatCore":
+        //                        cZ3SolverEngineer.ReportUnsatCore = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "StopBetweenEachTransition":
+        //                        cZ3SolverEngineer.StopBetweenEachTransition = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "StopAEndOfAnalysis":
+        //                        cZ3SolverEngineer.StopAEndOfAnalysis = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "CreateHTMLOutput":
+        //                        cZ3SolverEngineer.CreateHTMLOutput = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "ReportTimings":
+        //                        cZ3SolverEngineer.ReportTimings = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "NoOfModelsRequired":
+        //                        cZ3SolverEngineer.NoOfModelsRequired = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "OperationWaiting":
+        //                        cZ3SolverEngineer.OperationWaiting = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "OperationMutualExecution":
+        //                        cZ3SolverEngineer.OperationMutualExecution = bool.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    case "DebugMode":
+        //                        cZ3SolverEngineer.setDebugMode(bool.Parse(lXmlNode["value"].InnerText));
+        //                        break;
+        //                    case "UserMessages":
+        //                        cOutputHandler.setEnableUserMessages(bool.Parse(lXmlNode["value"].InnerText));
+        //                        break;
+        //                    case "RandomMaxNoOfConfigurationRules":
+        //                        cZ3SolverEngineer.RandomMaxNoOfConfigurationRules = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //1.RandomMaxVariantGroupumber
+        //                    case "RandomMaxVariantGroupumber":
+        //                        cZ3SolverEngineer.RandomMaxVariantGroupumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //2.RandomMaxVariantNumber
+        //                    case "RandomMaxVariantNumber":
+        //                        cZ3SolverEngineer.RandomMaxVariantNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //3.RandomMaxPartNumber
+        //                    case "RandomMaxPartNumber":
+        //                        cZ3SolverEngineer.RandomMaxPartNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //4.RandomMaxOperationNumber
+        //                    case "RandomMaxOperationNumber":
+        //                        cZ3SolverEngineer.RandomMaxOperationNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //5.RandomTrueProbability
+        //                    case "RandomTrueProbability":
+        //                        cZ3SolverEngineer.RandomTrueProbability = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //6.RandomFalseProbability
+        //                    case "RandomFalseProbability":
+        //                        cZ3SolverEngineer.RandomFalseProbability = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //7.RandomExpressionProbability
+        //                    case "RandomExpressionProbability":
+        //                        cZ3SolverEngineer.RandomExpressionProbability = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //8.RandomMaxTraitNumber
+        //                    case "RandomMaxTraitNumber":
+        //                        cZ3SolverEngineer.RandomMaxTraitNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //9.RandomMaxNoOfTraitAttributes
+        //                    case "RandomMaxNoOfTraitAttributes":
+        //                        cZ3SolverEngineer.RandomMaxNoOfTraitAttributes = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //10.RandomMaxResourceNumber
+        //                    case "RandomMaxResourceNumber":
+        //                        cZ3SolverEngineer.RandomMaxResourceNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    //11.RandomMaxExpressionOperandNumber
+        //                    case "RandomMaxExpressionOperandNumber":
+        //                        cZ3SolverEngineer.RandomMaxExpressionOperandNumber = int.Parse(lXmlNode["value"].InnerText);
+        //                        break;
+        //                    default:
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cOutputHandler.printMessageToConsole("error in LoadVariationPointsFromXMLFile");
+        //        cOutputHandler.printMessageToConsole(ex.Message);
+        //    }
+        //}
+
+
+        [Test]
+        public void ExistanceOfDeadlockAnalysis_Test()
+        {
+            try
+            {
+                foreach (TestData lTestData in lTestDataList)
+                {
+                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+
+                    OutputHandler lOutputHandler = new OutputHandler();
+                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
+                    //LoadVariationPointsFromXMLFile();
+
+                    bool lDataLoaded = false;
+
+                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+
+                    if (lDataLoaded)
+                    {
+                        Console.WriteLine("Existance of deadlock analysis on : " + lTestData.lTestFile);
+                        bool lAnalysisResult = false;
+
+                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Build P Constraints, Number Of Models Required
+                        lZ3SolverEngineer.setVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                                                            , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
+
+                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                        //          , Transitions Result, Analysis Timing, Unsat Core
+                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                        //          , Report timings, Debug Mode (Make model file), User Messages
+                        lZ3SolverEngineer.setReportType(true, false, false
+                                                        , false, false, false
+                                                        , false, false, true
+                                                        , true, true, false);
+
+                        lAnalysisResult = lZ3SolverEngineer.ExistanceOfDeadlockAnalysis(true, true);
+
+                        Assert.AreEqual(lAnalysisResult, lTestData.lDeadlockDetectionExpectedResult);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Existance Of Deadlock Analysis failed!");
+                Console.WriteLine(ex.Message);
+                Assert.Fail();
+            }
+        }
+
+        //[Test]
+        //public void OperationDependencyAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        foreach (TestOperationsData lTestOperation in lTestOperationList)
+        //        {
+        //            Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+
+        //            OutputHandler lOutputHandler = new OutputHandler();
+        //            lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
+        //            //LoadVariationPointsFromXMLFile();
+
+        //            bool lDataLoaded = false;
+
+        //            lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestOperation.lTestFile);
+
+        //            if (lDataLoaded)
+        //            {
+        //                Console.WriteLine("Operation Dependency Analysis on : " + lTestOperation.lTestFile);
+        //                bool lAnalysisResult = false;
+
+        //                //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+        //                //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+        //                //             , Build P Constraints, Number Of Models Required
+        //                lZ3SolverEngineer.setVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+        //                                                    , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
+
+        //                //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+        //                //          , Transitions Result, Analysis Timing, Unsat Core
+        //                //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+        //                //          , Report timings, Debug Mode (Make model file), User Messages
+        //                lZ3SolverEngineer.setReportType(true, false, false
+        //                                                , false, false, false
+        //                                                , false, false, true
+        //                                                , true, true, false);
+
+        //                lAnalysisResult = lZ3SolverEngineer.OperationDependencyAnalysis();
+
+        //                Assert.AreEqual(lAnalysisResult, lTestOperation.lOperationDependencyResult);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Existance Of Deadlock Analysis failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
 
         //[TestMethod]
         //public void VariantSelectabilityAnalysis_Test()
@@ -328,34 +659,34 @@ namespace ProductPlatform.Test
         //    }
         //}
 
-        [TestMethod]
-        public void OperationDependencyAnalysis_Test()
-        {
-            try
-            {
-                OutputHandler lOutputHandler = new OutputHandler();
-                FrameworkWrapper lFrameworkWrapper = new FrameworkWrapper(lOutputHandler);
-                Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer(lFrameworkWrapper);
+        //[TestMethod]
+        //public void OperationDependencyAnalysis_Test()
+        //{
+        //    try
+        //    {
+        //        OutputHandler lOutputHandler = new OutputHandler();
+        //        FrameworkWrapper lFrameworkWrapper = new FrameworkWrapper(lOutputHandler);
+        //        Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer(lFrameworkWrapper);
 
-                Operation lOperation1 = new Operation("O1", "", "", "true", "true");
-                Operation lOperation2 = new Operation("O2", "", "", "true", "true");
+        //        Operation lOperation1 = new Operation("O1", "", "", "true", "true");
+        //        Operation lOperation2 = new Operation("O2", "", "", "true", "true");
 
-                lFrameworkWrapper.OperationSet.Add(lOperation1);
-                lFrameworkWrapper.OperationSet.Add(lOperation2);
-
-                
-                lZ3SolverEngineer.OperationDependencyAnalysis();
-
-                Assert.AreEqual(lZ3SolverEngineer.DependentActionsList.Count, 0);
+        //        lFrameworkWrapper.OperationSet.Add(lOperation1);
+        //        lFrameworkWrapper.OperationSet.Add(lOperation2);
 
                 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("OperationDependencyAnalysis Test failed!");
-                Console.WriteLine(ex.Message);
-                Assert.Fail();
-            }
-        }
+        //        lZ3SolverEngineer.OperationDependencyAnalysis();
+
+        //        Assert.AreEqual(lZ3SolverEngineer.DependentActionsList.Count, 0);
+
+                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("OperationDependencyAnalysis Test failed!");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
     }
 }

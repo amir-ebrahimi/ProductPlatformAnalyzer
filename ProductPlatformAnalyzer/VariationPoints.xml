@@ -34,7 +34,7 @@
   </variationPoint>
   <variationPoint>
     <name>CreateHTMLOutput</name>
-    <value>False</value>
+    <value>True</value>
   </variationPoint>
   <variationPoint>
     <name>ReportTimings</name>
@@ -42,7 +42,7 @@
   </variationPoint>
   <variationPoint>
     <name>NoOfModelsRequired</name>
-    <value>5</value>
+    <value>1</value>
   </variationPoint>
   <variationPoint>
     <name>OperationWaiting</name>
@@ -62,7 +62,7 @@
   </variationPoint>
   <variationPoint>
     <name>RandomMaxExpressionOperandNumber</name>
-    <value>2</value>
+    <value>3</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxResourceNumber</name>
@@ -94,7 +94,7 @@
   </variationPoint>
   <variationPoint>
     <name>RandomMaxOperationNumber</name>
-    <value>2</value>
+    <value>10</value>
   </variationPoint>
   <variationPoint>
     <name>RandomMaxPartNumber</name>

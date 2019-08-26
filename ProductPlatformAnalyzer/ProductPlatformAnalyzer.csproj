@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -35,6 +35,44 @@
   <PropertyGroup>
     <StartupObject>ProductPlatformAnalyzer.Menu</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Altova, Version=1.0.5997.24845, Culture=neutral, PublicKeyToken=994749c2bff1fea2, processorArchitecture=MSIL">
       <HintPath>..\packages\AMLEngine.3.6.1\lib\net40\Altova.dll</HintPath>
@@ -50,7 +88,7 @@
     </Reference>
     <Reference Include="Microsoft.Z3, Version=4.5.0.0, Culture=neutral, PublicKeyToken=9c8d792caae602a2, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\w64\Microsoft.Z3.dll</HintPath>
+      <HintPath>..\..\..\z3-4.5.0-x86-win\bin\Microsoft.Z3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,6 +115,8 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomTestCreator.cs" />
+    <Compile Include="Resource.cs" />
+    <Compile Include="ResourceInstance.cs" />
     <Compile Include="xsd\xmlfile.cs" />
     <Compile Include="Z3Solver.cs" />
     <Compile Include="Z3SolverEngineer.cs" />
@@ -104,9 +144,30 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\4.7.xml" />
-    <Content Include="Test\ActionDependency1.xml" />
-    <Content Include="Test\ActionDependency2.xml" />
+    <Content Include="Test\ActionDependency1.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\ActionDependency2.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Test\ActionDependency_TestCase1.xml" />
+    <Content Include="Test\ft06.xml" />
+    <Content Include="Test\ft10.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\OperationsAllUnusedNoDeadlock.xml" />
+    <Content Include="Test\OperationsDeadlock.xml" />
+    <Content Include="Test\OperationsNoDeadlock.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Test\OperationsNoDeadlock2.xml" />
+    <Content Include="Test\OperationsNoDeadlock3.xml" />
+    <Content Include="Test\ParallelOperationsSameResourceNoDeadlock2.xml" />
+    <Content Include="Test\OperationsNResourcesNoDeadlock2.xml" />
+    <Content Include="Test\OperationsNResourcesNoDeadlock.xml" />
+    <Content Include="Test\OperationsNResourcesNoDeadlock3.xml" />
+    <Content Include="Test\ParallelOperationsNoDeadlock.xml" />
+    <Content Include="Test\ParallelOperationsSameResourceNoDeadlock.xml" />
     <Content Include="Test\ProductPlatform.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -117,6 +178,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\Volvo_CAB_V4.xml" />
+    <Content Include="Test\OperationsNResourcesDeadlock.xml" />
+    <Content Include="Test\OperationDependencyAnalysisTest1.xml" />
     <Content Include="VariationPoints.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -191,7 +254,9 @@
     <Content Include="Test\SpecialCase.2V1VG1O1C0P-NOTConstraint.xml" />
     <Content Include="Test\Old4.2V1VG3O1C1PNoTransition.xml" />
     <Content Include="Test\Old5.2V1VG2O1C1PNoTransition.xml" />
-    <Content Include="Test\brakeTest_volvo.xml" />
+    <Content Include="Test\brakeTest_volvo.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Test\Case1Demo.xml">
       <SubType>Designer</SubType>
     </Content>

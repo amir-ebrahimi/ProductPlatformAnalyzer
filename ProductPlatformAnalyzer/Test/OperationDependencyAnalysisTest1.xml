@@ -1,0 +1,51 @@
+﻿<?xml version="1.0"?>
+<!-- Operations: 
+        O1
+          Trig: V1
+				O2 
+          Trig: V1
+        -->
+
+<!-- Variants: V1	
+-->
+
+<!-- VariantGroups: 
+      VG1
+        choose at least one
+        Variants: V1 
+-->
+
+<!-- Constraint:
+      V1
+-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>V1</logic>
+    </constraint>
+  </constraints>
+</testData>

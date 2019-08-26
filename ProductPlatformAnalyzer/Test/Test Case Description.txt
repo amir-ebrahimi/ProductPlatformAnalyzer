@@ -1,0 +1,27 @@
+Test cases:
+
+1. OperationsNoDeadlock, (No Deadlock)
+	3 Opes, Traingle Model
+2. OperationsNoDeadlock2, (No Deadlock)
+	3 Ops, Line Model
+3. OperationsDeadlock, (Deadlock)
+	3 Ops, Should run in parallel
+4. OperationsNResourcesNoDeadlock, (No Deadlock)
+	3 Ops, Triangle Model, Seperate Resources
+5. OperationsNResourcesNoDeadlock2, (No Deadlock)
+	3 Ops, Triangle Model, Operations 2 and 3 use same resource
+6. OperationsNResourcesNoDeadlock3, (No Deadlock)
+	2 Ops, Each with post condition of the other in the executing state, use seperate resource
+7. OperationsNResourcesDeadlock, (Deadlock)
+	2 Ops, Each with post condition of the other in the executing state, use SAME resource
+8. ParallelOperationsNoDeadlock, (No Deadlock)
+	3 Ops, Should run in parallel
+9. OperationsAllUnusedNoDeadlock, (No Deadlock)
+	3 Ops, All remain unused
+10. ParallelOperationsSameResourceNoDeadlock, (No Deadlock)
+	3 Ops, All use the SAME resource
+11. OperationsNoDeadlock3, (No Deadlock)
+	3 Ops, Line Model
+12. ParallelOperationsSameResourceNoDeadlock2, (No Deadlock)
+	20 Ops, All use the SAME resource
+	

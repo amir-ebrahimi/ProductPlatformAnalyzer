@@ -1,0 +1,85 @@
+﻿<?xml version="1.0"?>
+<!--File Name: Operations1.xml-->
+<!-- Simple 3 Operations which refer to each other in a circular manner
+Hence there sould always be a deadlock -->
+
+<!-- Operations: 
+        O1
+          Trig: V1
+          Pre: O3_F
+          Res: R1
+				O2 
+          Trig: V1
+          Pre: and O1_F O3_F
+          Res: R1
+        O3
+          Trig: V1
+          Res: R3
+        -->
+
+<!-- Variants: V1	
+-->
+
+<!-- VariantGroups: 
+      VG1
+        choose at least one
+        Variants: V1 
+-->
+<!-- Constraint:
+      V1
+-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+      <resourceRef>R1</resourceRef>
+      <preconditions>
+        <operationRef>O3_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+      <resourceRef>R1</resourceRef>
+      <preconditions>
+        <operationRef>and O1_F O3_F</operationRef>
+      </preconditions>
+  </operation>
+    <operation>
+      <operationName>O3</operationName>
+      <trigger>V1</trigger>
+      <resourceRef>R3</resourceRef>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>V1</logic>
+    </constraint>
+  </constraints>
+  <resources>
+    <resource>
+      <resourceName>R1</resourceName>
+    </resource>
+    <resource>
+      <resourceName>R2</resourceName>
+    </resource>
+    <resource>
+      <resourceName>R3</resourceName>
+    </resource>
+  </resources>
+</testData>

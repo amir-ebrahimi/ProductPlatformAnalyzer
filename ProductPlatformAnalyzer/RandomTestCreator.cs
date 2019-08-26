@@ -141,36 +141,36 @@ namespace ProductPlatformAnalyzer
             bool lResult = false;
             try
             {
-                if (pMaxVariantGroupNumber != 0)
+                if (pMaxVariantGroupNumber != -1)
                     cMaxVariantGroupNumber = pMaxVariantGroupNumber;
-                if (pMaxVariantNumber != 0)
+                if (pMaxVariantNumber != -1)
                 {
                     cMaxVariantNumber = pMaxVariantNumber;
                     resetOverallFreeVariantCodes();
                 }
-                if (pMaxPartNumber != 0)
+                if (pMaxPartNumber != -1)
                     cMaxPartNumber = pMaxPartNumber;
 
-                if (pMaxOperationNumber != 0)
+                if (pMaxOperationNumber != -1)
                 {
                     cMaxOperationNumber = pMaxOperationNumber;
                     resetOverallFreeOperationCodes();
                 }
-                if (pTrueProbability != 0)
+                if (pTrueProbability != -1)
                     cTrueProbability = pTrueProbability;
-                if (pFalseProbability != 0)
+                if (pFalseProbability != -1)
                     cFalseProbability = pFalseProbability;
-                if (pExpressionProbability != 0)
+                if (pExpressionProbability != -1)
                     cExpressionProbability = pExpressionProbability;
-                if (pMaxTraitNumber != 0)
+                if (pMaxTraitNumber != -1)
                     cMaxTraitNumber = pMaxTraitNumber;
-                if (pMaxNoOfTraitAttributes != 0)
+                if (pMaxNoOfTraitAttributes != -1)
                     cMaxNoOfTraitAttributes = pMaxNoOfTraitAttributes;
-                if (pMaxResourceNumber != 0)
+                if (pMaxResourceNumber != -1)
                     cMaxResourceNumber = pMaxResourceNumber;
-                if (pMaxExpressionOperandNumber != 0)
+                if (pMaxExpressionOperandNumber != -1)
                     cMaxExpressionOperandNumber = pMaxExpressionOperandNumber;
-                if (pMaxNoOfConfigurationRules != 0)
+                if (pMaxNoOfConfigurationRules != -1)
                     cMaxNoOfConfigurationRules = pMaxNoOfConfigurationRules;
                 /*if (pFrameworkWrapper != null)
                     cFrameworkWrapper = pFrameworkWrapper;*/
@@ -253,8 +253,16 @@ namespace ProductPlatformAnalyzer
                     else
                     {
                         cZ3Solver.SolverPopFunction();
+
                         i--;
                         cZ3Solver.SolverPushFunction();
+                        foreach (string lRandomConfigRule in lSatisfiableConfigurationRules)
+                        {
+                            Microsoft.Z3.BoolExpr lBoolExpr1 = cZ3SolverEngineer.convertComplexString2BoolExpr(lRandomConfigurationRule);
+                            cZ3Solver.AddConstraintToSolver(lBoolExpr1, "RandomConfigRule");
+                        }
+
+
                     }
 
 
@@ -267,7 +275,7 @@ namespace ProductPlatformAnalyzer
                 {
                     foreach (var lConfigRule in lSatisfiableConfigurationRules)
                     {
-                        cFrameworkWrapper.ConstraintSet.Add(lRandomConfigurationRule);
+                        cFrameworkWrapper.ConstraintSet.Add(lConfigRule);
                     }
                 }
             }
@@ -771,6 +779,7 @@ namespace ProductPlatformAnalyzer
                 string lOperationPostcondition = "";
                 string lOperationTrigger = "";
                 string lOperationRequiremnt = "";
+                string lResource = "";
 
                 Operation lTempOperation = null;
                 for (int i = 0; i < cMaxOperationNumber; i++)
@@ -780,7 +789,8 @@ namespace ProductPlatformAnalyzer
                                                                             , lOperationTrigger
                                                                             , lOperationRequiremnt
                                                                             , lOperationPrecondition
-                                                                            , lOperationPostcondition);
+                                                                            , lOperationPostcondition
+                                                                            , lResource);
                     //Creating a list for operation lookup by code, ONLY for use with in this class
                     cOperationCodeLookup.Add(i, lTempOperation);
 

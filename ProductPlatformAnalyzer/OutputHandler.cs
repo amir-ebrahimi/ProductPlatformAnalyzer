@@ -30,7 +30,7 @@ namespace ProductPlatformAnalyzer
 
         public string opState { get; set; }
 
-        public int variant { get; set; }
+        public string variant { get; set; }
 
         public override string ToString()
         {
@@ -94,6 +94,13 @@ namespace ProductPlatformAnalyzer
                         }
                     }
                 }
+                else if (name.StartsWith("V"))
+                {
+                    variant = name;
+                    operation = null;
+                    opState = null;
+                    state = -1;
+                }
                 else
                 {
                     operation = null;
@@ -156,7 +163,7 @@ namespace ProductPlatformAnalyzer
             outputResult = new List<OutputExp>();
         }
 
-        public void addExp(string name, string value, int pState)
+        public void addExp(string name, string value, string pState)
         {
             try
             {
@@ -721,7 +728,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.value == "true")
+                    if (exp.value.Equals("true"))
                         printMessageToConsole(exp.ToString());
                 }
             }
@@ -899,13 +906,14 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.opState == null 
-                        && String.Equals(exp.value, "true") 
-                        && !String.Equals(exp.opState, "possible") 
-                        && !String.Equals(exp.opState, "use")
-                        && !String.Equals(exp.opState, "precondition")
-                        && !String.Equals(exp.opState, "trigger")
-                        )
+                    //if (exp.opState == null 
+                    //    && String.Equals(exp.value, "true") 
+                    //    && !String.Equals(exp.opState, "possible") 
+                    //    && !String.Equals(exp.opState, "use")
+                    //    && !String.Equals(exp.opState, "precondition")
+                    //    && !String.Equals(exp.opState, "trigger")
+                    //    )
+                    if (exp.variant != null)
                     {
 
                         var = exp.name;
@@ -937,13 +945,14 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (OutputExp exp in outputResult)
                 {
-                    if (exp.opState == null 
-                        && String.Equals(exp.value, "true") 
-                        && !String.Equals(exp.opState, "possible") 
-                        && !String.Equals(exp.opState, "use")
-                        && !String.Equals(exp.opState, "precondition")
-                        && !String.Equals(exp.opState, "trigger")
-                        )
+                    //if (exp.opState == null 
+                    //    && String.Equals(exp.value, "true") 
+                    //    && !String.Equals(exp.opState, "possible") 
+                    //    && !String.Equals(exp.opState, "use")
+                    //    && !String.Equals(exp.opState, "precondition")
+                    //    && !String.Equals(exp.opState, "trigger")
+                    //    )
+                    if (exp.variant != null)
                     {
 
                         var = exp.name;
@@ -2411,39 +2420,6 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        //Returns all operation transformations
-        private List<String[]> getOpTransformations()
-        {
-            List<String[]> transforms = new List<String[]>();
-            String[] item = new String[4];
-            int lastState = getLastState();
-
-            try
-            {
-                foreach (OutputExp exp in outputResult)
-                {
-                    OutputExp nextOp = findNextOp(exp);
-                    if (nextOp != null)
-                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                        {
-                            item = new String[4];
-                            item[0] = exp.operation; //Name of operation
-                            item[1] = nextOp.state.ToString(); //State after finished transition
-                            item[2] = nextOp.opState; //Operation status (I/E/F) after transition
-                            item[3] = nextOp.variant.ToString(); //Operation variant
-                            transforms.Add(item);
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                printMessageToConsole("error in getOpTransformations in outputHandler");
-                printMessageToConsole(ex.Message);
-            }
-
-            return transforms;
-        }
-
 
         private string TransitionStateAt(List<String[]> transformations, int state, OutputExp exp)
         {
@@ -2486,6 +2462,40 @@ namespace ProductPlatformAnalyzer
 
 
         //Returns all operation transformations
+        //This function has an overload which follows
+        private List<String[]> getOpTransformations()
+        {
+            List<String[]> transforms = new List<String[]>();
+            String[] item = new String[4];
+            int lastState = getLastState();
+
+            try
+            {
+                foreach (OutputExp exp in outputResult)
+                {
+                    OutputExp nextOp = findNextOp(exp);
+                    if (nextOp != null)
+                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                        {
+                            item = new String[4];
+                            item[0] = exp.operation; //Name of operation
+                            item[1] = nextOp.state.ToString(); //State after finished transition
+                            item[2] = nextOp.opState; //Operation status (I/E/F) after transition
+                            item[3] = nextOp.variant.ToString(); //Operation variant
+                            transforms.Add(item);
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                printMessageToConsole("error in getOpTransformations in outputHandler");
+                printMessageToConsole(ex.Message);
+            }
+
+            return transforms;
+        }
+
+        //Returns all operation transformations
         private List<String[]> getOpTransformations(OutputExp operation)
         {
             List<String[]> transforms = new List<String[]>();
@@ -2507,7 +2517,9 @@ namespace ProductPlatformAnalyzer
                                 item[0] = exp.operation; //Name of operation
                                 item[1] = nextOp.state.ToString(); //State after finished transition
                                 item[2] = nextOp.opState; //Operation status (I/E/F) after transition
-                                item[3] = nextOp.variant.ToString(); //Operation variant
+                                if (nextOp.variant != null)
+                                    item[3] = nextOp.variant.ToString(); //Operation variant
+
                                 transforms.Add(item);
                             }
                     }
@@ -2543,11 +2555,11 @@ namespace ProductPlatformAnalyzer
         }
 
         //Returns true is name is representing a goal selection varable
-        private bool goalState(string name, int pState)
+        private bool goalState(string name, string pState)
         {
             try
             {
-                for (int i = 0; i <= pState; i++)
+                for (int i = 0; i <= int.Parse(pState); i++)
                 {
                     if (String.Equals(name, ("P" + i)))
                         return true;

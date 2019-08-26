@@ -1,0 +1,749 @@
+<testData>
+   <operations>
+       <operation>
+           <operationName>O-0</operationName>
+           <trigger>or P-4 not P-19 </trigger>
+           <preconditions>
+               <operationRef>or O-1_F not O-1_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-1_F O-1_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-1</operationName>
+           <trigger>or not P-19 P-79 </trigger>
+           <preconditions>
+               <operationRef>or not O-1_F O-1_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F O-1_F </operationRef>
+           </postconditions>
+       </operation>
+   </operations>
+   <variants>
+       <variant>
+           <variantName>V-0</variantName>
+       </variant>
+       <variant>
+           <variantName>V-1</variantName>
+       </variant>
+   </variants>
+   <variantGroups>
+       <variantGroup>
+           <variantGroupName>VG-0</variantGroupName>
+           <groupCardinality>choose exactly one</groupCardinality>
+               <variantRefs>
+                   <variantRef>V-0</variantRef>
+               </variantRefs>
+       </variantGroup>
+   </variantGroups>
+   <parts>
+       <part>
+           <partName>P-0</partName>
+       </part>
+       <part>
+           <partName>P-1</partName>
+       </part>
+       <part>
+           <partName>P-2</partName>
+       </part>
+       <part>
+           <partName>P-3</partName>
+       </part>
+       <part>
+           <partName>P-4</partName>
+       </part>
+       <part>
+           <partName>P-5</partName>
+       </part>
+       <part>
+           <partName>P-6</partName>
+       </part>
+       <part>
+           <partName>P-7</partName>
+       </part>
+       <part>
+           <partName>P-8</partName>
+       </part>
+       <part>
+           <partName>P-9</partName>
+       </part>
+       <part>
+           <partName>P-10</partName>
+       </part>
+       <part>
+           <partName>P-11</partName>
+       </part>
+       <part>
+           <partName>P-12</partName>
+       </part>
+       <part>
+           <partName>P-13</partName>
+       </part>
+       <part>
+           <partName>P-14</partName>
+       </part>
+       <part>
+           <partName>P-15</partName>
+       </part>
+       <part>
+           <partName>P-16</partName>
+       </part>
+       <part>
+           <partName>P-17</partName>
+       </part>
+       <part>
+           <partName>P-18</partName>
+       </part>
+       <part>
+           <partName>P-19</partName>
+       </part>
+       <part>
+           <partName>P-20</partName>
+       </part>
+       <part>
+           <partName>P-21</partName>
+       </part>
+       <part>
+           <partName>P-22</partName>
+       </part>
+       <part>
+           <partName>P-23</partName>
+       </part>
+       <part>
+           <partName>P-24</partName>
+       </part>
+       <part>
+           <partName>P-25</partName>
+       </part>
+       <part>
+           <partName>P-26</partName>
+       </part>
+       <part>
+           <partName>P-27</partName>
+       </part>
+       <part>
+           <partName>P-28</partName>
+       </part>
+       <part>
+           <partName>P-29</partName>
+       </part>
+       <part>
+           <partName>P-30</partName>
+       </part>
+       <part>
+           <partName>P-31</partName>
+       </part>
+       <part>
+           <partName>P-32</partName>
+       </part>
+       <part>
+           <partName>P-33</partName>
+       </part>
+       <part>
+           <partName>P-34</partName>
+       </part>
+       <part>
+           <partName>P-35</partName>
+       </part>
+       <part>
+           <partName>P-36</partName>
+       </part>
+       <part>
+           <partName>P-37</partName>
+       </part>
+       <part>
+           <partName>P-38</partName>
+       </part>
+       <part>
+           <partName>P-39</partName>
+       </part>
+       <part>
+           <partName>P-40</partName>
+       </part>
+       <part>
+           <partName>P-41</partName>
+       </part>
+       <part>
+           <partName>P-42</partName>
+       </part>
+       <part>
+           <partName>P-43</partName>
+       </part>
+       <part>
+           <partName>P-44</partName>
+       </part>
+       <part>
+           <partName>P-45</partName>
+       </part>
+       <part>
+           <partName>P-46</partName>
+       </part>
+       <part>
+           <partName>P-47</partName>
+       </part>
+       <part>
+           <partName>P-48</partName>
+       </part>
+       <part>
+           <partName>P-49</partName>
+       </part>
+       <part>
+           <partName>P-50</partName>
+       </part>
+       <part>
+           <partName>P-51</partName>
+       </part>
+       <part>
+           <partName>P-52</partName>
+       </part>
+       <part>
+           <partName>P-53</partName>
+       </part>
+       <part>
+           <partName>P-54</partName>
+       </part>
+       <part>
+           <partName>P-55</partName>
+       </part>
+       <part>
+           <partName>P-56</partName>
+       </part>
+       <part>
+           <partName>P-57</partName>
+       </part>
+       <part>
+           <partName>P-58</partName>
+       </part>
+       <part>
+           <partName>P-59</partName>
+       </part>
+       <part>
+           <partName>P-60</partName>
+       </part>
+       <part>
+           <partName>P-61</partName>
+       </part>
+       <part>
+           <partName>P-62</partName>
+       </part>
+       <part>
+           <partName>P-63</partName>
+       </part>
+       <part>
+           <partName>P-64</partName>
+       </part>
+       <part>
+           <partName>P-65</partName>
+       </part>
+       <part>
+           <partName>P-66</partName>
+       </part>
+       <part>
+           <partName>P-67</partName>
+       </part>
+       <part>
+           <partName>P-68</partName>
+       </part>
+       <part>
+           <partName>P-69</partName>
+       </part>
+       <part>
+           <partName>P-70</partName>
+       </part>
+       <part>
+           <partName>P-71</partName>
+       </part>
+       <part>
+           <partName>P-72</partName>
+       </part>
+       <part>
+           <partName>P-73</partName>
+       </part>
+       <part>
+           <partName>P-74</partName>
+       </part>
+       <part>
+           <partName>P-75</partName>
+       </part>
+       <part>
+           <partName>P-76</partName>
+       </part>
+       <part>
+           <partName>P-77</partName>
+       </part>
+       <part>
+           <partName>P-78</partName>
+       </part>
+       <part>
+           <partName>P-79</partName>
+       </part>
+       <part>
+           <partName>P-80</partName>
+       </part>
+       <part>
+           <partName>P-81</partName>
+       </part>
+       <part>
+           <partName>P-82</partName>
+       </part>
+       <part>
+           <partName>P-83</partName>
+       </part>
+       <part>
+           <partName>P-84</partName>
+       </part>
+       <part>
+           <partName>P-85</partName>
+       </part>
+       <part>
+           <partName>P-86</partName>
+       </part>
+       <part>
+           <partName>P-87</partName>
+       </part>
+       <part>
+           <partName>P-88</partName>
+       </part>
+       <part>
+           <partName>P-89</partName>
+       </part>
+       <part>
+           <partName>P-90</partName>
+       </part>
+       <part>
+           <partName>P-91</partName>
+       </part>
+       <part>
+           <partName>P-92</partName>
+       </part>
+       <part>
+           <partName>P-93</partName>
+       </part>
+       <part>
+           <partName>P-94</partName>
+       </part>
+       <part>
+           <partName>P-95</partName>
+       </part>
+       <part>
+           <partName>P-96</partName>
+       </part>
+       <part>
+           <partName>P-97</partName>
+       </part>
+       <part>
+           <partName>P-98</partName>
+       </part>
+       <part>
+           <partName>P-99</partName>
+       </part>
+   </parts>
+   <itemusagerules>
+       <itemusagerule>
+           <partRef>P-0</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-1</partRef>
+           <variantRef>or not V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-2</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-3</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-4</partRef>
+           <variantRef>or not V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-5</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-6</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-7</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-8</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-9</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-10</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-11</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-12</partRef>
+           <variantRef>or not V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-13</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-14</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-15</partRef>
+           <variantRef>or V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-16</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-17</partRef>
+           <variantRef>or not V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-18</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-19</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-20</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-21</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-22</partRef>
+           <variantRef>or V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-23</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-24</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-25</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-26</partRef>
+           <variantRef>or V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-27</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-28</partRef>
+           <variantRef>or V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-29</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-30</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-31</partRef>
+           <variantRef>or V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-32</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-33</partRef>
+           <variantRef>or not V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-34</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-35</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-36</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-37</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-38</partRef>
+           <variantRef>or V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-39</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-40</partRef>
+           <variantRef>or not V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-41</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-42</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-43</partRef>
+           <variantRef>or not V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-44</partRef>
+           <variantRef>or not V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-45</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-46</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-47</partRef>
+           <variantRef>or V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-48</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-49</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-50</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-51</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-52</partRef>
+           <variantRef>or V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-53</partRef>
+           <variantRef>or V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-54</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-55</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-56</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-57</partRef>
+           <variantRef>or not V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-58</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-59</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-60</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-61</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-62</partRef>
+           <variantRef>or V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-63</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-64</partRef>
+           <variantRef>or not V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-65</partRef>
+           <variantRef>or not V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-66</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-67</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-68</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-69</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-70</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-71</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-72</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-73</partRef>
+           <variantRef>or not V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-74</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-75</partRef>
+           <variantRef>or not V-0 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-76</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-77</partRef>
+           <variantRef>or V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-78</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-79</partRef>
+           <variantRef>or V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-80</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-81</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-82</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-83</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-84</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-85</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-86</partRef>
+           <variantRef>or V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-87</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-88</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-89</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-90</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-91</partRef>
+           <variantRef>or V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-92</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-93</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-94</partRef>
+           <variantRef>or not V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-95</partRef>
+           <variantRef>or not V-1 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-96</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-97</partRef>
+           <variantRef>or V-1 V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-98</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-99</partRef>
+           <variantRef>or V-0 V-1 </variantRef>
+       </itemusagerule>
+   </itemusagerules>
+   <constraints>
+       <logic>or P-40 not P-26 </logic>
+       <logic>or P-89 not P-2 </logic>
+   </constraints>
+</testData>

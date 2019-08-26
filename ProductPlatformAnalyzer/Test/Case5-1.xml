@@ -1,0 +1,93 @@
+<testData>
+   <operations>
+       <operation>
+           <operationName>O-0</operationName>
+           <trigger>or V-6 not V-7 </trigger>
+           <preconditions>
+               <operationRef>or not O-1_F not O-1_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F O-1_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-1</operationName>
+           <trigger>or V-4 not V-9 </trigger>
+           <preconditions>
+               <operationRef>or O-1_F not O-1_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_I O-1_I </operationRef>
+           </postconditions>
+       </operation>
+   </operations>
+   <variants>
+       <variant>
+           <variantName>V-0</variantName>
+       </variant>
+       <variant>
+           <variantName>V-1</variantName>
+       </variant>
+       <variant>
+           <variantName>V-2</variantName>
+       </variant>
+       <variant>
+           <variantName>V-3</variantName>
+       </variant>
+       <variant>
+           <variantName>V-4</variantName>
+       </variant>
+       <variant>
+           <variantName>V-5</variantName>
+       </variant>
+       <variant>
+           <variantName>V-6</variantName>
+       </variant>
+       <variant>
+           <variantName>V-7</variantName>
+       </variant>
+       <variant>
+           <variantName>V-8</variantName>
+       </variant>
+       <variant>
+           <variantName>V-9</variantName>
+       </variant>
+   </variants>
+   <variantGroups>
+       <variantGroup>
+           <variantGroupName>VG-0</variantGroupName>
+           <groupCardinality>choose exactly one</groupCardinality>
+               <variantRefs>
+                   <variantRef>V-6</variantRef>
+                   <variantRef>V-5</variantRef>
+                   <variantRef>V-0</variantRef>
+                   <variantRef>V-2</variantRef>
+                   <variantRef>V-3</variantRef>
+                   <variantRef>V-7</variantRef>
+                   <variantRef>V-1</variantRef>
+               </variantRefs>
+       </variantGroup>
+   </variantGroups>
+   <parts>
+       <part>
+           <partName>P-0</partName>
+       </part>
+       <part>
+           <partName>P-1</partName>
+       </part>
+   </parts>
+   <itemusagerules>
+       <itemusagerule>
+           <partRef>P-0</partRef>
+           <variantRef>or not V-1 not V-9 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-1</partRef>
+           <variantRef>or not V-4 not V-5 </variantRef>
+       </itemusagerule>
+   </itemusagerules>
+   <constraints>
+       <logic>or P-1 not V-3 </logic>
+       <logic>or V-2 not P-1 </logic>
+   </constraints>
+</testData>

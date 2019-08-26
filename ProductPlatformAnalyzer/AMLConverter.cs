@@ -153,13 +153,15 @@ namespace ProductPlatformAnalyzer
                     //var req  = ie.GetAttributeValue("requirements").Split(reqSeparator);
                     var req = ie.GetAttributeValue("requirements");
                     var trigger = ie.GetAttributeValue("trigger");
+                    var resource = ie.GetAttributeValue("resource");
                     // create an operation and set fields
 
                     Operation tempOperation = new Operation(parent.Name()
                                                             , trigger
                                                             , req
                                                             , pre
-                                                            , pos);
+                                                            , pos
+                                                            , resource);
                     
                     /*tempOperation.Name = parent.Name();
                     //tempOperation.displayName = parent.Name();

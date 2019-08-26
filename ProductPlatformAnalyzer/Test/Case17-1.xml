@@ -1,0 +1,1043 @@
+<testData>
+   <operations>
+       <operation>
+           <operationName>O-0</operationName>
+           <trigger>or P-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-77_E not O-30_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-77_I O-13_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-1</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-2_E O-68_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-98_I not O-23_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-2</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-22_E not O-86_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-20_F O-43_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-3</operationName>
+           <trigger>or not V-1 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-24_F not O-69_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-90_F O-81_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-4</operationName>
+           <trigger>or P-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-47_I O-64_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-95_F O-6_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-5</operationName>
+           <trigger>or not P-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-26_F O-21_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-47_E not O-14_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-6</operationName>
+           <trigger>or not V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-53_I O-30_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-79_E O-89_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-7</operationName>
+           <trigger>or not P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-26_E O-42_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-85_E not O-8_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-8</operationName>
+           <trigger>or not V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-36_F not O-56_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-53_I not O-56_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-9</operationName>
+           <trigger>or V-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-35_F not O-35_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-35_E not O-35_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-10</operationName>
+           <trigger>or not V-0 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-75_E not O-93_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-80_E O-23_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-11</operationName>
+           <trigger>or not P-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-90_E O-90_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-10_I O-10_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-12</operationName>
+           <trigger>or P-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-56_E not O-33_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-92_F O-34_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-13</operationName>
+           <trigger>or not P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-66_F not O-27_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-45_E not O-6_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-14</operationName>
+           <trigger>or not P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-55_E O-55_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-97_I O-48_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-15</operationName>
+           <trigger>or V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-29_I not O-96_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-37_F not O-89_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-16</operationName>
+           <trigger>or V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-29_F O-17_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-17_F not O-11_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-17</operationName>
+           <trigger>or V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-10_E not O-77_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-57_F not O-48_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-18</operationName>
+           <trigger>or not V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-36_E O-39_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-11_F O-79_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-19</operationName>
+           <trigger>or P-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-71_E not O-46_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-21_F not O-22_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-20</operationName>
+           <trigger>or P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-15_E O-76_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-29_I not O-74_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-21</operationName>
+           <trigger>or P-1 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-45_E O-42_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-93_F not O-42_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-22</operationName>
+           <trigger>or P-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-42_E O-12_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-79_E O-59_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-23</operationName>
+           <trigger>or P-1 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-23_E not O-45_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-18_E not O-90_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-24</operationName>
+           <trigger>or not P-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-45_F not O-45_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-45_F O-95_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-25</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-15_F O-60_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-41_E O-48_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-26</operationName>
+           <trigger>or not P-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-79_F not O-49_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-15_I O-93_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-27</operationName>
+           <trigger>or P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-95_F O-81_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F O-9_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-28</operationName>
+           <trigger>or not V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-1_I O-21_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-49_I O-83_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-29</operationName>
+           <trigger>or not V-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-83_I not O-8_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-91_E not O-11_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-30</operationName>
+           <trigger>or V-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-81_E O-40_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-4_E not O-40_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-31</operationName>
+           <trigger>or V-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-76_F not O-51_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-80_I not O-12_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-32</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-30_E not O-90_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-48_E O-88_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-33</operationName>
+           <trigger>or V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-51_E not O-19_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-7_F not O-48_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-34</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-18_F not O-30_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-12_E not O-46_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-35</operationName>
+           <trigger>or P-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-62_I not O-18_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-37_F O-28_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-36</operationName>
+           <trigger>or P-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-26_E O-78_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-23_I O-52_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-37</operationName>
+           <trigger>or not V-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-70_I O-57_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-45_E not O-89_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-38</operationName>
+           <trigger>or V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-21_E not O-21_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-81_I not O-1_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-39</operationName>
+           <trigger>or not V-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-79_E not O-20_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-45_I not O-27_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-40</operationName>
+           <trigger>or not P-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-3_E not O-1_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-35_F not O-97_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-41</operationName>
+           <trigger>or V-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-83_F O-78_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-18_I not O-9_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-42</operationName>
+           <trigger>or not P-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-69_I O-3_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-59_I O-2_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-43</operationName>
+           <trigger>or P-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-19_E not O-26_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-6_E O-83_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-44</operationName>
+           <trigger>or not P-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-4_I O-95_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-66_E O-15_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-45</operationName>
+           <trigger>or V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-16_F not O-15_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-50_I not O-77_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-46</operationName>
+           <trigger>or P-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-98_F not O-94_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-85_I O-28_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-47</operationName>
+           <trigger>or not P-1 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-49_E not O-90_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-49_I O-64_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-48</operationName>
+           <trigger>or P-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-65_F O-23_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-3_E not O-10_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-49</operationName>
+           <trigger>or not P-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-10_E not O-2_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-43_F not O-48_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-50</operationName>
+           <trigger>or P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-4_I O-95_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-34_F not O-36_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-51</operationName>
+           <trigger>or P-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-74_F not O-74_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-21_E O-21_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-52</operationName>
+           <trigger>or not P-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-80_I O-56_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-47_I O-46_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-53</operationName>
+           <trigger>or V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-51_I O-7_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-84_E not O-36_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-54</operationName>
+           <trigger>or not V-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-37_F not O-2_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-42_I not O-22_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-55</operationName>
+           <trigger>or V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-36_F not O-16_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-64_E not O-76_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-56</operationName>
+           <trigger>or not P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-15_E not O-57_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-33_E not O-54_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-57</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-88_I not O-99_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-73_E O-27_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-58</operationName>
+           <trigger>or not P-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-66_F not O-18_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-22_I O-82_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-59</operationName>
+           <trigger>or not P-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-84_I O-60_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-70_I O-84_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-60</operationName>
+           <trigger>or not V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-44_I O-82_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-61_E not O-80_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-61</operationName>
+           <trigger>or not P-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-53_E O-52_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-59_I O-10_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-62</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-31_I not O-48_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-20_I O-19_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-63</operationName>
+           <trigger>or V-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-41_E not O-41_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-93_F not O-36_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-64</operationName>
+           <trigger>or not P-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-98_E not O-71_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-97_I not O-97_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-65</operationName>
+           <trigger>or V-1 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-23_E not O-60_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F O-40_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-66</operationName>
+           <trigger>or not P-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-19_I not O-66_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-1_I not O-86_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-67</operationName>
+           <trigger>or not V-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-95_E not O-60_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-60_E not O-96_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-68</operationName>
+           <trigger>or V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-63_F O-91_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-85_E not O-25_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-69</operationName>
+           <trigger>or not P-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-58_I not O-42_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-87_E not O-51_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-70</operationName>
+           <trigger>or V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-59_I not O-8_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-32_E O-46_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-71</operationName>
+           <trigger>or V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-39_E not O-92_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-87_I not O-56_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-72</operationName>
+           <trigger>or not V-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-32_E not O-75_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-54_E not O-76_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-73</operationName>
+           <trigger>or P-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-58_E not O-43_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-52_F not O-56_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-74</operationName>
+           <trigger>or not P-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-68_F not O-71_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-28_E not O-4_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-75</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-31_F not O-96_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-84_F O-84_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-76</operationName>
+           <trigger>or not P-1 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-12_I not O-19_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-73_F O-88_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-77</operationName>
+           <trigger>or V-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-94_E O-65_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-82_I O-21_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-78</operationName>
+           <trigger>or not V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-48_I not O-71_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-82_I O-34_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-79</operationName>
+           <trigger>or V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-90_E O-94_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-83_F O-83_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-80</operationName>
+           <trigger>or P-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-47_I O-89_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-92_F not O-62_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-81</operationName>
+           <trigger>or P-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-14_E not O-71_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-14_F O-71_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-82</operationName>
+           <trigger>or P-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-87_I not O-69_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-87_E O-14_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-83</operationName>
+           <trigger>or V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-75_I O-29_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F O-78_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-84</operationName>
+           <trigger>or V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-45_E not O-45_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-11_I O-85_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-85</operationName>
+           <trigger>or V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-75_I O-77_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-68_F O-32_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-86</operationName>
+           <trigger>or V-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-7_E not O-58_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-10_F O-3_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-87</operationName>
+           <trigger>or V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-40_F O-56_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-40_I not O-59_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-88</operationName>
+           <trigger>or P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-26_E not O-49_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-8_E not O-18_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-89</operationName>
+           <trigger>or not V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-99_F not O-13_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-53_F O-84_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-90</operationName>
+           <trigger>or V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-86_F not O-40_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-40_E O-30_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-91</operationName>
+           <trigger>or not V-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-90_F O-87_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-96_I not O-30_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-92</operationName>
+           <trigger>or not V-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-4_F not O-49_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-94_E O-94_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-93</operationName>
+           <trigger>or not P-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-31_E O-57_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-7_E O-90_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-94</operationName>
+           <trigger>or P-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-16_F O-27_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-24_I O-11_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-95</operationName>
+           <trigger>or P-1 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-52_F O-15_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-9_E O-56_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-96</operationName>
+           <trigger>or not P-1 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-1_I O-95_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-43_F O-95_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-97</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-19_F not O-17_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-17_E not O-58_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-98</operationName>
+           <trigger>or not V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-31_E O-68_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-79_I not O-52_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-99</operationName>
+           <trigger>or not V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-65_E O-58_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-21_F O-83_I </operationRef>
+           </postconditions>
+       </operation>
+   </operations>
+   <variants>
+       <variant>
+           <variantName>V-0</variantName>
+       </variant>
+       <variant>
+           <variantName>V-1</variantName>
+       </variant>
+   </variants>
+   <variantGroups>
+       <variantGroup>
+           <variantGroupName>VG-0</variantGroupName>
+           <groupCardinality>choose exactly one</groupCardinality>
+               <variantRefs>
+                   <variantRef>V-1</variantRef>
+               </variantRefs>
+       </variantGroup>
+   </variantGroups>
+   <parts>
+       <part>
+           <partName>P-0</partName>
+       </part>
+       <part>
+           <partName>P-1</partName>
+       </part>
+   </parts>
+   <itemusagerules>
+       <itemusagerule>
+           <partRef>P-0</partRef>
+           <variantRef>or not V-0 not V-0 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-1</partRef>
+           <variantRef>or V-1 V-1 </variantRef>
+       </itemusagerule>
+   </itemusagerules>
+   <constraints>
+       <logic>or V-0 P-1 </logic>
+       <logic>or P-0 not P-0 </logic>
+   </constraints>
+</testData>

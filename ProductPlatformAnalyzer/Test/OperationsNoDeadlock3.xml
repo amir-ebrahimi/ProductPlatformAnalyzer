@@ -1,0 +1,234 @@
+﻿<?xml version="1.0"?>
+<!-- Operations: 
+        O1
+          Trig: V1
+				O2 
+          Trig: V1
+          Pre: O1_F
+        O3
+          Trig: V1
+          Pre: O2_F
+        O4
+          Trig: V1
+          Pre: O3_F
+				O5 
+          Trig: V1
+          Pre: O4_F
+        O6
+          Trig: V1
+          Pre: O5_F
+        O7
+          Trig: V1
+          Pre: O6_F
+				O8 
+          Trig: V1
+          Pre: O7_F
+        O9
+          Trig: V1
+          Pre: O8_F
+        O10
+          Trig: V1
+          Pre: O9_F
+        O11
+          Trig: V1
+          Pre: O10_F
+				O12 
+          Trig: V1
+          Pre: O11_F
+        O13
+          Trig: V1
+          Pre: O12_F
+        O14
+          Trig: V1
+          Pre: O13_F
+				O15 
+          Trig: V1
+          Pre: O14_F
+        O16
+          Trig: V1
+          Pre: O15_F
+        O17
+          Trig: V1
+          Pre: O16_F
+				O18 
+          Trig: V1
+          Pre: O17_F
+        O19
+          Trig: V1
+          Pre: O18_F
+        O20
+          Trig: V1
+          Pre: O19_F
+        -->
+
+<!-- Variants: V1	
+-->
+
+<!-- VariantGroups: 
+      VG1
+        choose at least one
+        Variants: V1 
+-->
+<!-- Constraint:
+      V1
+-->
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O1_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O3</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O2_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O4</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O3_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O5</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O4_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O6</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O5_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O7</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O6_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O8</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O7_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O9</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O8_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O10</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O9_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O11</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O10_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O12</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O11_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O13</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O12_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O14</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O13_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O15</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O14_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O16</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O15_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O17</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O16_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O18</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O17_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O19</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O18_F</operationRef>
+      </preconditions>
+    </operation>
+    <operation>
+      <operationName>O20</operationName>
+      <trigger>V1</trigger>
+      <preconditions>
+        <operationRef>O19_F</operationRef>
+      </preconditions>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose at least one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>V1</logic>
+    </constraint>
+  </constraints>
+</testData>

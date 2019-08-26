@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -174,79 +175,136 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        //The version which Knut gave the algorithm
         public void AddChild(Node<string> pParent, string pData)
         {
-            if (pParent == null)
+            try
             {
-                //if no node has been entered in then first a dumy node named root will be entered
-                Node<string> newNode = new Node<string>("root");
-                pParent.AddChildNode(newNode);
-            }
-
-            if (pData.Contains(' '))
-            {
-                string lOperator = "";
-                string lOperand1 = "";
-                string lOperand2 = "";
-
-                string lSubString = "";
-                string lRemainderString = "";
-
-                string[] lResult = new string[2];
-
-                lResult = FindFirstInstance(pData, ' ');
-                lSubString = lResult[0];
-                lRemainderString = lResult[1];
-
-                lOperator = lSubString;
-                Node<string> newNode = new Node<string>(lOperator);
-                pParent.AddChildNode(newNode);
-
-                switch (lOperator)
+                if (pParent == null)
                 {
-                    case "or":
-                    case "and":
-                    case "->":
-                    case "<=":
-                    case ">=":
-                    case "<":
-                    case ">":
-                    case "==":
-                        {
-                            lResult = FindFirstInstance(lRemainderString, ' ');
-                            lOperand1 = lResult[0];
-                            lRemainderString = lResult[1];
-
-                            lResult = FindFirstInstance(lRemainderString, ' ');
-                            lOperand2 = lResult[0];
-                            lRemainderString = lResult[1];
-
-                            AddChild(newNode, lOperand1);
-                            AddChild(newNode, lOperand2); 
-                            //AddChild(newNode, lRemainderString);
-                            break;
-                        }
-                    case "not":
-                        {
-                            lResult = FindFirstInstance(lRemainderString, ' ');
-                            lOperand1 = lResult[0];
-                            lRemainderString = lResult[1];
-                            AddChild(newNode, lOperand1);
-                            break;
-                        }
-                    default:
-                        break;
+                    //if no node has been entered in then first a dumy node named root will be entered
+                    Node<string> newNode = new Node<string>("root");
+                    pParent.AddChildNode(newNode);
                 }
+                Stack lExpressionParts = new Stack();
+
+                string[] lInputParts = pData.Split(' ');
+
+                Array.Reverse(lInputParts);
+
+                foreach (string lPart in lInputParts)
+                {
+                    Node<string> newNode = new Node<string>(lPart);
+                    //pParent.AddChildNode(newNode);
+
+                    if (lPart.Equals("or")
+                        || lPart.Equals("and")
+                        || lPart.Equals("->")
+                        || lPart.Equals("<=")
+                        || lPart.Equals(">=")
+                        || lPart.Equals("<")
+                        || lPart.Equals(">")
+                        || lPart.Equals("=="))
+                    {
+                        Node<string> lOperand1 = (Node<string>)lExpressionParts.Pop();
+                        Node<string> lOperand2 = (Node<string>)lExpressionParts.Pop();
+
+                        newNode.AddChildNode(lOperand1);
+                        newNode.AddChildNode(lOperand2);
+
+                        lExpressionParts.Push(newNode);
+                    }
+                    else if (lPart.Equals("not"))
+                    {
+                        Node<string> lOperand = (Node<string>)lExpressionParts.Pop();
+                        newNode.AddChildNode(lOperand);
+                        lExpressionParts.Push(newNode);
+                    }
+                    else
+                    { lExpressionParts.Push(newNode); }
+                }
+                Node<string> lResultNode = (Node<string>)lExpressionParts.Pop();
+                pParent.AddChildNode(lResultNode);
+
             }
-            else
+            catch (Exception ex)
             {
-                //termination condition
-                //the input does not contain any spaces hence it is just one operand
-                Node<string> newNode = new Node<string>(pData);
-                pParent.AddChildNode(newNode);
+                throw ex;
             }
         }
+
+        //////The version which Knut gave the algorithm
+        ////public void AddChild(Node<string> pParent, string pData)
+        ////{
+        ////    if (pParent == null)
+        ////    {
+        ////        //if no node has been entered in then first a dumy node named root will be entered
+        ////        Node<string> newNode = new Node<string>("root");
+        ////        pParent.AddChildNode(newNode);
+        ////    }
+
+        ////    if (pData.Contains(' '))
+        ////    {
+        ////        string lOperator = "";
+        ////        string lOperand1 = "";
+        ////        string lOperand2 = "";
+
+        ////        string lSubString = "";
+        ////        string lRemainderString = "";
+
+        ////        string[] lResult = new string[2];
+
+        ////        lResult = FindFirstInstance(pData, ' ');
+        ////        lSubString = lResult[0];
+        ////        lRemainderString = lResult[1];
+
+        ////        lOperator = lSubString;
+        ////        Node<string> newNode = new Node<string>(lOperator);
+        ////        pParent.AddChildNode(newNode);
+
+        ////        switch (lOperator)
+        ////        {
+        ////            case "or":
+        ////            case "and":
+        ////            case "->":
+        ////            case "<=":
+        ////            case ">=":
+        ////            case "<":
+        ////            case ">":
+        ////            case "==":
+        ////                {
+        ////                    lResult = FindFirstInstance(lRemainderString, ' ');
+        ////                    lOperand1 = lResult[0];
+        ////                    lRemainderString = lResult[1];
+
+        ////                    lResult = FindFirstInstance(lRemainderString, ' ');
+        ////                    lOperand2 = lResult[0];
+        ////                    lRemainderString = lResult[1];
+
+        ////                    AddChild(newNode, lOperand1);
+        ////                    AddChild(newNode, lOperand2); 
+        ////                    //AddChild(newNode, lRemainderString);
+        ////                    break;
+        ////                }
+        ////            case "not":
+        ////                {
+        ////                    lResult = FindFirstInstance(lRemainderString, ' ');
+        ////                    lOperand1 = lResult[0];
+        ////                    lRemainderString = lResult[1];
+        ////                    AddChild(newNode, lOperand1);
+        ////                    break;
+        ////                }
+        ////            default:
+        ////                break;
+        ////        }
+        ////    }
+        ////    else
+        ////    {
+        ////        //termination condition
+        ////        //the input does not contain any spaces hence it is just one operand
+        ////        Node<string> newNode = new Node<string>(pData);
+        ////        pParent.AddChildNode(newNode);
+        ////    }
+        ////}
 
         //My old original version which was bugged
  /*       public void ParseString(string pExpr, NTree<string> pCurrentNode)

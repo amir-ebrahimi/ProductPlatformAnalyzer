@@ -36,6 +36,12 @@ namespace ProductPlatformAnalyzer
             Inactive
         }
 
+        public enum ActionType
+        {
+            I2E,
+            E2F
+        }
+
         public enum GeneralAnalysisType
         {
             Static,

@@ -200,6 +200,27 @@ namespace ProductPlatformAnalyzer
 
         }
 
+        public static string RemoveSpecialCharsFromString(string p, char[] pSpecialChars)
+        {
+            string lResultString = "";
+            try
+            {
+                StringBuilder lSb = new StringBuilder();
+                foreach (char lCharacter in p)
+                {
+                    if (!pSpecialChars.Contains(lCharacter))
+                        lSb.Append(lCharacter);
+                }
+                lResultString = lSb.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error in RemoveSpecialCharsFromString");
+                Console.WriteLine(ex.Message);
+            }
+            return lResultString;
+        }
+
         private static string printStatus(string p)
         {
             string[] condition = new string[3];

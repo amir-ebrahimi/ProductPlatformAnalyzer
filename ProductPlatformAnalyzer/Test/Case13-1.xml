@@ -1,0 +1,242 @@
+<testData>
+   <operations>
+       <operation>
+           <operationName>O-0</operationName>
+           <trigger>or not P-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-19_I not O-11_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-11_I O-15_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-1</operationName>
+           <trigger>or not V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-17_F O-6_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-2_I O-6_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-2</operationName>
+           <trigger>or V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-2_E not O-2_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-10_F not O-19_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-3</operationName>
+           <trigger>or not V-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-2_I not O-3_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-5_E not O-13_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-4</operationName>
+           <trigger>or V-1 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-11_I not O-13_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-3_F not O-11_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-5</operationName>
+           <trigger>or P-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-1_F O-1_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-1_E not O-1_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-6</operationName>
+           <trigger>or P-0 V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-17_I not O-2_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-19_E O-4_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-7</operationName>
+           <trigger>or not V-0 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-11_I O-12_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-10_F O-8_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-8</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-11_F O-5_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-4_F not O-18_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-9</operationName>
+           <trigger>or P-1 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-5_F O-4_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-6_F not O-9_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-10</operationName>
+           <trigger>or not V-0 not P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-17_F O-7_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-8_F not O-10_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-11</operationName>
+           <trigger>or P-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-3_F O-19_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-10_I not O-17_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-12</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-19_I O-13_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-19_I O-11_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-13</operationName>
+           <trigger>or not V-1 V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-12_I O-5_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-16_E not O-19_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-14</operationName>
+           <trigger>or P-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-14_F not O-6_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-9_E O-10_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-15</operationName>
+           <trigger>or P-1 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-11_I not O-16_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-13_I not O-13_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-16</operationName>
+           <trigger>or P-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or O-17_F not O-4_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-7_I not O-2_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-17</operationName>
+           <trigger>or not V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-2_E not O-9_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-2_F O-2_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-18</operationName>
+           <trigger>or not V-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-15_I not O-15_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-18_E O-18_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-19</operationName>
+           <trigger>or not P-0 V-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-12_I O-16_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-10_E not O-2_I </operationRef>
+           </postconditions>
+       </operation>
+   </operations>
+   <variants>
+       <variant>
+           <variantName>V-0</variantName>
+       </variant>
+       <variant>
+           <variantName>V-1</variantName>
+       </variant>
+   </variants>
+   <variantGroups>
+       <variantGroup>
+           <variantGroupName>VG-0</variantGroupName>
+           <groupCardinality>choose exactly one</groupCardinality>
+               <variantRefs>
+                   <variantRef>V-0</variantRef>
+               </variantRefs>
+       </variantGroup>
+   </variantGroups>
+   <parts>
+       <part>
+           <partName>P-0</partName>
+       </part>
+       <part>
+           <partName>P-1</partName>
+       </part>
+   </parts>
+   <itemusagerules>
+       <itemusagerule>
+           <partRef>P-0</partRef>
+           <variantRef>or not V-0 not V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-1</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+   </itemusagerules>
+   <constraints>
+       <logic>or not P-0 V-0 </logic>
+   </constraints>
+</testData>

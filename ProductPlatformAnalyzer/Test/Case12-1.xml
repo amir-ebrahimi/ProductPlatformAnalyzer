@@ -1,0 +1,143 @@
+<testData>
+   <operations>
+       <operation>
+           <operationName>O-0</operationName>
+           <trigger>or not V-0 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-4_I not O-4_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-4_I not O-1_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-1</operationName>
+           <trigger>or not P-1 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-2_F not O-2_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-2_I not O-2_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-2</operationName>
+           <trigger>or V-0 not V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-2_E O-2_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-2_E not O-2_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-3</operationName>
+           <trigger>or not V-0 P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-5_F not O-7_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-7_E O-7_I </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-4</operationName>
+           <trigger>or not V-1 P-1 </trigger>
+           <preconditions>
+               <operationRef>or O-7_I O-6_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-6_E not O-6_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-5</operationName>
+           <trigger>or P-0 V-0 </trigger>
+           <preconditions>
+               <operationRef>or O-9_I O-9_E </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-9_I O-9_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-6</operationName>
+           <trigger>or V-0 P-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-3_I not O-2_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-3_F O-3_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-7</operationName>
+           <trigger>or P-0 not V-1 </trigger>
+           <preconditions>
+               <operationRef>or not O-1_F O-5_F </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-8_F O-4_F </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-8</operationName>
+           <trigger>or V-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or O-5_I not O-1_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or O-5_I O-1_E </operationRef>
+           </postconditions>
+       </operation>
+       <operation>
+           <operationName>O-9</operationName>
+           <trigger>or not P-0 not P-0 </trigger>
+           <preconditions>
+               <operationRef>or not O-9_E not O-1_I </operationRef>
+           </preconditions>
+           <postconditions>
+               <operationRef>or not O-1_F not O-7_F </operationRef>
+           </postconditions>
+       </operation>
+   </operations>
+   <variants>
+       <variant>
+           <variantName>V-0</variantName>
+       </variant>
+       <variant>
+           <variantName>V-1</variantName>
+       </variant>
+   </variants>
+   <variantGroups>
+       <variantGroup>
+           <variantGroupName>VG-0</variantGroupName>
+           <groupCardinality>choose exactly one</groupCardinality>
+               <variantRefs>
+                   <variantRef>V-0</variantRef>
+               </variantRefs>
+       </variantGroup>
+   </variantGroups>
+   <parts>
+       <part>
+           <partName>P-0</partName>
+       </part>
+       <part>
+           <partName>P-1</partName>
+       </part>
+   </parts>
+   <itemusagerules>
+       <itemusagerule>
+           <partRef>P-0</partRef>
+           <variantRef>or not V-0 V-1 </variantRef>
+       </itemusagerule>
+       <itemusagerule>
+           <partRef>P-1</partRef>
+           <variantRef>or V-1 not V-1 </variantRef>
+       </itemusagerule>
+   </itemusagerules>
+   <constraints>
+       <logic>or not V-1 P-0 </logic>
+       <logic>or P-1 not V-1 </logic>
+   </constraints>
+</testData>
