@@ -7,63 +7,66 @@ using System.IO;
 
 namespace ProductPlatform.Test
 {
-    public class TestOperationsData
-    {
-        public string lTestFile;
-        public bool lOperationDependencyResult;
+    //public class TestOperationsData
+    //{
+    //    public string lTestFile;
+    //    public bool lOperationDependencyResult;
 
-        public TestOperationsData(string pTestFile, bool pOperationDependencyResult)
-        {
-            lTestFile = pTestFile;
-            lOperationDependencyResult = pOperationDependencyResult;
-        }
-    }
+    //    public TestOperationsData(string pTestFile, bool pOperationDependencyResult)
+    //    {
+    //        lTestFile = pTestFile;
+    //        lOperationDependencyResult = pOperationDependencyResult;
+    //    }
+    //}
 
-    public class TestData
-    {
-        public string lTestFile;
-        public ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType lGeneralAnalysisType;
-        public ProductPlatformAnalyzer.Enumerations.AnalysisType lAnalysisType;
-        public bool lLoadDataExpectedResult;
-        public int lNoOfModelsRequired;
-        public bool lVariantSelectabilityExpectedResult;
-        public bool lOperationSelectabilityExpectedResult;
-        public bool lAlwaysSelectedVariantExpectedResult;
-        public bool lAlwaysSlectedOperationExpectedResult;
-        public bool lDeadlockDetectionExpectedResult;
-        public int lAnalysisNoOfCycles;
+    //public class TestData
+    //{
+    //    public string TestFile { get; set; }
+    //    public ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType GeneralAnalysisType { get; set; }
+    //    public ProductPlatformAnalyzer.Enumerations.AnalysisType AnalysisType { get; set; }
+    //    //public bool LoadDataExpectedResult { get; set; }
+    //    public int NoOfModelsRequired { get; set; }
+    //    //public bool VariantSelectabilityExpectedResult { get; set; }
+    //    //public bool OperationSelectabilityExpectedResult { get; set; }
+    //    //public bool AlwaysSelectedVariantExpectedResult { get; set; }
+    //    //public bool AlwaysSlectedOperationExpectedResult { get; set; }
+    //    //public bool DeadlockDetectionExpectedResult { get; set; }
+    //    public int AnalysisNoOfCycles { get; set; }
 
-        public TestData(string pTestFile
-                        , bool pLoadDataExpectedResult
-                        , bool pVariantSelectabilityExpectedResult
-                        , bool pOperationSelectabilityExpectedResult
-                        , bool pAlwaysSelectedVariantExpectedResult
-                        , bool pAlwaysSlectedOperationExpectedResult
-                        , bool pDeadlockDetectionExpectedResult
-                        , int pAnalysisNoOfCycles
-                        , int pNoOfModelsRequired = 4)
-        {
-            lTestFile = pTestFile;
-            lLoadDataExpectedResult = pLoadDataExpectedResult;
-            lNoOfModelsRequired = pNoOfModelsRequired;
-            lVariantSelectabilityExpectedResult = pVariantSelectabilityExpectedResult;
-            lOperationSelectabilityExpectedResult = pOperationSelectabilityExpectedResult;
-            lAlwaysSelectedVariantExpectedResult = pAlwaysSelectedVariantExpectedResult;
-            lAlwaysSlectedOperationExpectedResult = pAlwaysSlectedOperationExpectedResult;
-            lDeadlockDetectionExpectedResult = pDeadlockDetectionExpectedResult;
-            lAnalysisNoOfCycles = pAnalysisNoOfCycles;
-        }
-    }
+    //    public TestData(string pTestFile
+    //                    //, bool pLoadDataExpectedResult
+    //                    //, bool pVariantSelectabilityExpectedResult
+    //                    //, bool pOperationSelectabilityExpectedResult
+    //                    //, bool pAlwaysSelectedVariantExpectedResult
+    //                    //, bool pAlwaysSlectedOperationExpectedResult
+    //                    //, bool pDeadlockDetectionExpectedResult
+    //                    , int pAnalysisNoOfCycles
+    //                    , int pNoOfModelsRequired = 4)
+    //    {
+
+    //        TestFile = pTestFile;
+    //        //LoadDataExpectedResult = pLoadDataExpectedResult;
+    //        NoOfModelsRequired = pNoOfModelsRequired;
+    //        //VariantSelectabilityExpectedResult = pVariantSelectabilityExpectedResult;
+    //        //OperationSelectabilityExpectedResult = pOperationSelectabilityExpectedResult;
+    //        //AlwaysSelectedVariantExpectedResult = pAlwaysSelectedVariantExpectedResult;
+    //        //AlwaysSlectedOperationExpectedResult = pAlwaysSlectedOperationExpectedResult;
+    //        //DeadlockDetectionExpectedResult = pDeadlockDetectionExpectedResult;
+    //        AnalysisNoOfCycles = pAnalysisNoOfCycles;
+    //    }
+    //}
 
     [TestFixture]
     public class ProductPlatformTest
     {
 
-        private List<TestData> lTestDataList = new List<TestData>();
-        private List<TestOperationsData> lTestOperationList = new List<TestOperationsData>();
+        //private List<TestData> lTestDataList = new List<TestData>();
+        //private List<TestOperationsData> lTestOperationList = new List<TestOperationsData>();
+        private readonly const string FileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
+        private string TestFilePath;
 
-        [OneTimeSetUp]
-        public void RunBeforeAnyTests()
+        [SetUp]
+        public void Setup()
         {
             //var dir = Path.GetDirectoryName(typeof(MySetUpClass).Assembly.Location);
             //Environment.CurrentDirectory = dir;
@@ -77,9 +80,9 @@ namespace ProductPlatform.Test
 
             //Parameter list: Data file name, load data result, Variant Selectability Result, Operation Selectability Result
             //              , Always Selected Variant Result, Always Selected Operation Result, Deadlock Detection Result
-            var lFileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
+            //var lFileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
 
-            lTestOperationList.Add(new TestOperationsData(lFileDirectory + "OperationDependencyAnalysisTest1.xml", false));
+            //lTestOperationList.Add(new TestOperationsData(FileDirectory + "OperationDependencyAnalysisTest1.xml", false));
 
             //lTestDataList.Add(new TestData(lFileDirectory + "0.0.xml", false, false, false, false, false, false));
             //lTestDataList.Add(new TestData(lFileDirectory + "0.1.xml", false, false, false, false, false, false));
@@ -118,26 +121,41 @@ namespace ProductPlatform.Test
             lTestDataList.Add(new TestData("13.2V1VG2O0C2P.xml", true, true, true, true, true));
             lTestDataList.Add(new TestData("14.2V1VG2O0C2P.xml", true, true, true, false, false));
             */
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 1
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Three operations in sequence
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsDeadlock.xml", true, false, false, false, false, true, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesNoDeadlock3.xml", true, false, false, false, false, false, 4)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNResourcesDeadlock.xml", true, false, false, false, false, true, 4)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "ParallelOperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsAllUnusedNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "ParallelOperationsSameResourceNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
-            lTestDataList.Add(new TestData(lFileDirectory + "OperationsNoDeadlock3.xml", true, false, false, false, false, false, 40)); //Three operations in sequence
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 1
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Three operations in sequence
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsDeadlock.xml", true, false, false, false, false, true, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNResourcesNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNResourcesNoDeadlock2.xml", true, false, false, false, false, false, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNResourcesNoDeadlock3.xml", true, false, false, false, false, false, 4)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNResourcesDeadlock.xml", true, false, false, false, false, true, 4)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "ParallelOperationsNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsAllUnusedNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "ParallelOperationsSameResourceNoDeadlock.xml", true, false, false, false, false, false, 6)); //Case 2
+            //lTestDataList.Add(new TestData(FileDirectory + "OperationsNoDeadlock3.xml", true, false, false, false, false, false, 40)); //Three operations in sequence
+        }
+        private string GetTestFilePath(string pTestFileName)
+        {
+            return FileDirectory + pTestFileName;
         }
 
         [Test]
-        public void LoadInitialData_Test()
+        [TestCase("OperationsNoDeadlock.xml", true)]
+        [TestCase("OperationsNoDeadlock2.xml", true)]
+        [TestCase("OperationsDeadlock.xml", true)]
+        [TestCase("OperationsNResourcesNoDeadlock.xml", true)]
+        [TestCase("OperationsNResourcesNoDeadlock2.xml", true)]
+        [TestCase("OperationsNResourcesNoDeadlock3.xml", true)]
+        [TestCase("OperationsNResourcesDeadlock.xml", true)]
+        [TestCase("ParallelOperationsNoDeadlock.xml", true)]
+        [TestCase("OperationsAllUnusedNoDeadlock.xml", true)]
+        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", true)]
+        [TestCase("OperationsNoDeadlock3.xml", true)]
+        public void LoadInitialData_Test(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try
             {
-                foreach (TestData lTestData in lTestDataList)
-                {
+                //foreach (TestData lTestData in lTestDataList)
+                //{
                     Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
                     OutputHandler lOutputHandler = new OutputHandler();
@@ -146,13 +164,14 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    Console.WriteLine("LoadInitialData Test on : " + lTestData.lTestFile);
+                    Console.WriteLine("LoadInitialData Test on : " + GetTestFilePath(pTestFileName));
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
-                    Assert.AreEqual(lDataLoaded, lTestData.lLoadDataExpectedResult);
+                    //Assert.AreEqual(lDataLoaded, lTestData.LoadDataExpectedResult);
+                    Assert.AreEqual(lDataLoaded, pExpectedAnalysisResult);
 
-                }
+                //}
 
                 //NUnit.Framework.Assert.IsTrue(true);
             }
@@ -165,12 +184,23 @@ namespace ProductPlatform.Test
         }
 
         [Test]
-        public void CalculateAnalysisNoOfCycles_Test()
+        [TestCase("OperationsNoDeadlock.xml", 6)]
+        [TestCase("OperationsNoDeadlock2.xml", 6)]
+        [TestCase("OperationsDeadlock.xml", 6)]
+        [TestCase("OperationsNResourcesNoDeadlock.xml", 6)]
+        [TestCase("OperationsNResourcesNoDeadlock2.xml", 6)]
+        [TestCase("OperationsNResourcesNoDeadlock3.xml", 4)]
+        [TestCase("OperationsNResourcesDeadlock.xml", 4)]
+        [TestCase("ParallelOperationsNoDeadlock.xml", 6)]
+        [TestCase("OperationsAllUnusedNoDeadlock.xml", 6)]
+        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", 6)]
+        [TestCase("OperationsNoDeadlock3.xml", 40)]
+        public void CalculateAnalysisNoOfCycles_Test(string pTestFileName, int pExpectedAnalysisResult)
         {
             try
             {
-                foreach (TestData lTestData in lTestDataList)
-                {
+                //foreach (TestData lTestData in lTestDataList)
+                //{
                     Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
                     OutputHandler lOutputHandler = new OutputHandler();
@@ -179,33 +209,33 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
                     if (lDataLoaded)
                     {
-                        Console.WriteLine("Calculate Analysis No Of Cycles on : " + lTestData.lTestFile);
+                        Console.WriteLine("Calculate Analysis No Of Cycles on : " + GetTestFilePath(pTestFileName));
                         int lAnalysisResult = 0;
 
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                        lZ3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
                                                             , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                         //          , Transitions Result, Analysis Timing, Unsat Core
                         //          , Stop between each transition, Stop at end of analysis, Create HTML Output
                         //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
+                        lZ3SolverEngineer.SetReportType(true, false, false
                                                         , false, false, false
                                                         , false, false, true
                                                         , true, true, false);
 
                         lAnalysisResult = lZ3SolverEngineer.CalculateAnalysisNoOfCycles();
 
-                        Assert.AreEqual(lAnalysisResult, lTestData.lAnalysisNoOfCycles);
+                        Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
                     }
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -344,12 +374,23 @@ namespace ProductPlatform.Test
 
 
         [Test]
-        public void ExistanceOfDeadlockAnalysis_Test()
+        [TestCase("OperationsNoDeadlock.xml", false)]
+        [TestCase("OperationsNoDeadlock2.xml", false)]
+        [TestCase("OperationsDeadlock.xml", true)]
+        [TestCase("OperationsNResourcesNoDeadlock.xml", false)]
+        [TestCase("OperationsNResourcesNoDeadlock2.xml", false)]
+        [TestCase("OperationsNResourcesNoDeadlock3.xml", false)]
+        [TestCase("OperationsNResourcesDeadlock.xml", true)]
+        [TestCase("ParallelOperationsNoDeadlock.xml", false)]
+        [TestCase("OperationsAllUnusedNoDeadlock.xml", false)]
+        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", false)]
+        [TestCase("OperationsNoDeadlock3.xml", false)]
+        public void ExistanceOfDeadlockAnalysis_Test(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try
             {
-                foreach (TestData lTestData in lTestDataList)
-                {
+                //foreach (TestData lTestData in lTestDataList)
+                //{
                     Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
 
                     OutputHandler lOutputHandler = new OutputHandler();
@@ -358,33 +399,33 @@ namespace ProductPlatform.Test
 
                     bool lDataLoaded = false;
 
-                    lDataLoaded = lZ3SolverEngineer.loadInitialData(Enumerations.InitializerSource.InitialDataFile, lTestData.lTestFile);
+                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
                     if (lDataLoaded)
                     {
-                        Console.WriteLine("Existance of deadlock analysis on : " + lTestData.lTestFile);
+                        Console.WriteLine("Existance of deadlock analysis on : " + GetTestFilePath(pTestFileName));
                         bool lAnalysisResult = false;
 
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.setVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                        lZ3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
                                                             , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
                         //Parameters: Analysis Result, Analysis Detail Result, Variants Result
                         //          , Transitions Result, Analysis Timing, Unsat Core
                         //          , Stop between each transition, Stop at end of analysis, Create HTML Output
                         //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.setReportType(true, false, false
+                        lZ3SolverEngineer.SetReportType(true, false, false
                                                         , false, false, false
                                                         , false, false, true
                                                         , true, true, false);
 
                         lAnalysisResult = lZ3SolverEngineer.ExistanceOfDeadlockAnalysis(true, true);
 
-                        Assert.AreEqual(lAnalysisResult, lTestData.lDeadlockDetectionExpectedResult);
+                        Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
                     }
-                }
+                //}
             }
             catch (Exception ex)
             {

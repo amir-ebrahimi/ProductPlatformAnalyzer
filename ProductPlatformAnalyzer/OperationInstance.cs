@@ -35,7 +35,7 @@ namespace ProductPlatformAnalyzer
 
         #endregion
 
-        public OperationInstance createNextOperationInstance(bool pAddToList = true, bool pIncludeResources = false)
+        public OperationInstance CreateNextOperationInstance(bool pAddToList = true, bool pIncludeResources = false)
         {
             string lNextTransition = "";
 
@@ -51,19 +51,19 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        public BoolExpr getResourceExpression()
+        public BoolExpr GetResourceExpression()
         {
             return ExecutingVariable;
         }
 
-        public OperationInstance nextOperationInstance()
+        public OperationInstance NextOperationInstance()
         {
             return MyNextOperationInstance;
         }
 
-        public OperationInstance getOperationInstanceForTransition(int index)
+        public OperationInstance GetOperationInstanceForTransition(int pIndex)
         {
-            return AbstractOperation.getOperationInstanceForTransition(index);
+            return AbstractOperation.GetOperationInstanceForTransition(pIndex);
         }
 
         public OperationInstance(Operation pOperation

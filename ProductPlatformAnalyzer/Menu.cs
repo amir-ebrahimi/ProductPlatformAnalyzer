@@ -16,8 +16,8 @@ namespace ProductPlatformAnalyzer
 {
     public class Menu
     {
-        private OutputHandler cOutputHandler;
-        private Z3SolverEngineer cZ3SolverEngineer;
+        private OutputHandler OutputHandler;
+        private Z3SolverEngineer Z3SolverEngineer;
 
         public Menu()
         {
@@ -82,8 +82,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MainMenu");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in MainMenu");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -128,8 +128,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("AnalyzerSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("AnalyzerSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -142,8 +142,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in UpdateVariationPoints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in UpdateVariationPoints");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -180,8 +180,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("FileAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("FileAnalysis");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -189,16 +189,16 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cZ3SolverEngineer = new Z3SolverEngineer();
+                Z3SolverEngineer = new Z3SolverEngineer();
 
-                cOutputHandler = new OutputHandler();
-                cZ3SolverEngineer.DefaultAnalyzerSetting(cOutputHandler);
+                OutputHandler = new OutputHandler();
+                Z3SolverEngineer.DefaultAnalyzerSetting(OutputHandler);
                 LoadVariationPointsFromXMLFile();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultAnalyzerSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in DefaultAnalyzerSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -229,15 +229,15 @@ namespace ProductPlatformAnalyzer
                     while (lAnotherAnalysis)
                     {
                         DefaultAnalyzerSetting();
-                        cZ3SolverEngineer.RandomInputFile = lCreateRandomFile;
+                        Z3SolverEngineer.RandomInputFile = lCreateRandomFile;
 
                         Console.Clear();
                         SetAnalysisType();
 
-                        if (cZ3SolverEngineer.RandomInputFile)
-                            cZ3SolverEngineer.ProductPlatformAnalysis("", "");
+                        if (Z3SolverEngineer.RandomInputFile)
+                            Z3SolverEngineer.ProductPlatformAnalysis("", "");
                         else
-                            cZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + lFileName + ".xml");
+                            Z3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + lFileName + ".xml");
 
                         Console.Clear();
                         Console.WriteLine("Please choose one of the following: ");
@@ -349,8 +349,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ExternalFileAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in ExternalFileAnalysis");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -361,110 +361,110 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                string newValue = string.Empty;
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load("..\\..\\VariationPoints.xml"); /// you must modify path with what you want
+                string lNewValue = string.Empty;
+                XmlDocument lXmlDoc = new XmlDocument();
+                lXmlDoc.Load("..\\..\\VariationPoints.xml"); /// you must modify path with what you want
                 /// 
-                XmlNodeList nodeList = xmlDoc.DocumentElement.SelectNodes("//variationPoint");
+                XmlNodeList lNodeList = lXmlDoc.DocumentElement.SelectNodes("//variationPoint");
 
-                if (nodeList.Count > 0)
+                if (lNodeList.Count > 0)
                 {
-                    foreach (XmlNode lXmlNode in nodeList)
+                    foreach (XmlNode lXmlNode in lNodeList)
                     {
                         string lVariationPointName = lXmlNode["name"].InnerText;
                         switch (lVariationPointName)
                         {
                             case "ReportAnalysisResult":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportAnalysisResult.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportAnalysisResult.ToString();
                                 break;
                             case "ReportAnalysisDetailResult":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportAnalysisDetailResult.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportAnalysisDetailResult.ToString();
                                 break;
                             case "ReportVariantsResult":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportVariantsResult.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportVariantsResult.ToString();
                                 break;
                             case "ReportTransitionsResult":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportTransitionsResult.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportTransitionsResult.ToString();
                                 break;
                             case "ReportAnalysisTiming":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportAnalysisTiming.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportAnalysisTiming.ToString();
                                 break;
                             case "ReportUnsatCore":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportUnsatCore.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportUnsatCore.ToString();
                                 break;
                             case "StopBetweenEachTransition":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.StopBetweenEachTransition.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.StopBetweenEachTransition.ToString();
                                 break;
                             case "StopAEndOfAnalysis":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.StopAEndOfAnalysis.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.StopAEndOfAnalysis.ToString();
                                 break;
                             case "CreateHTMLOutput":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.CreateHTMLOutput.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.CreateHTMLOutput.ToString();
                                 break;
                             case "ReportTimings":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.ReportTimings.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.ReportTimings.ToString();
                                 break;
                             case "NoOfModelsRequired":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.NoOfModelsRequired.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.NoOfModelsRequired.ToString();
                                 break;
                             case "OperationWaiting":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.OperationWaiting.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.OperationWaiting.ToString();
                                 break;
                             case "OperationMutualExecution":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.OperationMutualExecution.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.OperationMutualExecution.ToString();
                                 break;
                             case "DebugMode":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.getDebugMode().ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.DebugMode.ToString();
                                 break;
                             case "UserMessages":
-                                lXmlNode["value"].InnerText = cOutputHandler.getEnableUserMessages().ToString();
+                                lXmlNode["value"].InnerText = OutputHandler.GetEnableUserMessages().ToString();
                                 break;
                             case "RandomMaxNoOfConfigurationRules":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxNoOfConfigurationRules.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxNoOfConfigurationRules.ToString();
                                 break;
                             //1.RandomMaxVariantGroupumber
                             case "RandomMaxVariantGroupumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxVariantGroupumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxVariantGroupumber.ToString();
                                 break;
                             //2.RandomMaxVariantNumber
                             case "RandomMaxVariantNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxVariantNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxVariantNumber.ToString();
                                 break;
                             //3.RandomMaxPartNumber
                             case "RandomMaxPartNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxPartNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxPartNumber.ToString();
                                 break;
                             //4.RandomMaxOperationNumber
                             case "RandomMaxOperationNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxOperationNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxOperationNumber.ToString();
                                 break;
                             //5.RandomTrueProbability
                             case "RandomTrueProbability":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomTrueProbability.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomTrueProbability.ToString();
                                 break;
                             //6.RandomFalseProbability
                             case "RandomFalseProbability":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomFalseProbability.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomFalseProbability.ToString();
                                 break;
                             //7.RandomExpressionProbability
                             case "RandomExpressionProbability":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomExpressionProbability.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomExpressionProbability.ToString();
                                 break;
                             //8.RandomMaxTraitNumber
                             case "RandomMaxTraitNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxTraitNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxTraitNumber.ToString();
                                 break;
                             //9.RandomMaxNoOfTraitAttributes
                             case "RandomMaxNoOfTraitAttributes":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxNoOfTraitAttributes.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxNoOfTraitAttributes.ToString();
                                 break;
                             //10.RandomMaxResourceNumber
                             case "RandomMaxResourceNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxResourceNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxResourceNumber.ToString();
                                 break;
                             //11.RandomMaxExpressionOperandNumber
                             case "RandomMaxExpressionOperandNumber":
-                                lXmlNode["value"].InnerText = cZ3SolverEngineer.RandomMaxExpressionOperandNumber.ToString();
+                                lXmlNode["value"].InnerText = Z3SolverEngineer.RandomMaxExpressionOperandNumber.ToString();
                                 break;
                             default:
                                 break;
@@ -472,12 +472,12 @@ namespace ProductPlatformAnalyzer
                     }
                 }
 
-                xmlDoc.Save("..\\..\\VariationPoints.xml"); /// you must modify path with what you want
+                lXmlDoc.Save("..\\..\\VariationPoints.xml"); /// you must modify path with what you want
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in SaveVariationPointsToXMLFile");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in SaveVariationPointsToXMLFile");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -490,111 +490,111 @@ namespace ProductPlatformAnalyzer
             {
                 string lFileName = "..\\..\\VariationPoints.xml";
                 //new instance of xdoc
-                XmlDocument xDoc = new XmlDocument();
+                XmlDocument lXDoc = new XmlDocument();
 
                 //First load the XML file from the file path
-                xDoc.Load(lFileName);
+                lXDoc.Load(lFileName);
 
-                XmlNodeList nodeList = xDoc.DocumentElement.SelectNodes("//variationPoint");
+                XmlNodeList lNodeList = lXDoc.DocumentElement.SelectNodes("//variationPoint");
 
-                if (nodeList.Count > 0)
+                if (lNodeList.Count > 0)
                 {
-                    foreach (XmlNode lXmlNode in nodeList)
+                    foreach (XmlNode lXmlNode in lNodeList)
                     {
                         string lVariationPointName = lXmlNode["name"].InnerText;
                         switch (lVariationPointName)
                         {
                             case "ReportAnalysisResult":
-                                cZ3SolverEngineer.ReportAnalysisResult = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportAnalysisResult = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportAnalysisDetailResult":
-                                cZ3SolverEngineer.ReportAnalysisDetailResult = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportAnalysisDetailResult = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportVariantsResult":
-                                cZ3SolverEngineer.ReportVariantsResult = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportVariantsResult = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportTransitionsResult":
-                                cZ3SolverEngineer.ReportTransitionsResult = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportTransitionsResult = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportAnalysisTiming":
-                                cZ3SolverEngineer.ReportAnalysisTiming = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportAnalysisTiming = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportUnsatCore":
-                                cZ3SolverEngineer.ReportUnsatCore = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportUnsatCore = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "StopBetweenEachTransition":
-                                cZ3SolverEngineer.StopBetweenEachTransition = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.StopBetweenEachTransition = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "StopAEndOfAnalysis":
-                                cZ3SolverEngineer.StopAEndOfAnalysis = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.StopAEndOfAnalysis = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "CreateHTMLOutput":
-                                cZ3SolverEngineer.CreateHTMLOutput = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.CreateHTMLOutput = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "ReportTimings":
-                                cZ3SolverEngineer.ReportTimings = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.ReportTimings = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "NoOfModelsRequired":
-                                cZ3SolverEngineer.NoOfModelsRequired = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.NoOfModelsRequired = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "OperationWaiting":
-                                cZ3SolverEngineer.OperationWaiting = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.OperationWaiting = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "OperationMutualExecution":
-                                cZ3SolverEngineer.OperationMutualExecution = bool.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.OperationMutualExecution = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "DebugMode":
-                                cZ3SolverEngineer.setDebugMode(bool.Parse(lXmlNode["value"].InnerText));
+                                Z3SolverEngineer.DebugMode = bool.Parse(lXmlNode["value"].InnerText);
                                 break;
                             case "UserMessages":
-                                cOutputHandler.setEnableUserMessages(bool.Parse(lXmlNode["value"].InnerText));
+                                OutputHandler.SetEnableUserMessages(bool.Parse(lXmlNode["value"].InnerText));
                                 break;
                             case "RandomMaxNoOfConfigurationRules":
-                                cZ3SolverEngineer.RandomMaxNoOfConfigurationRules = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxNoOfConfigurationRules = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //1.RandomMaxVariantGroupumber
                             case "RandomMaxVariantGroupumber":
-                                cZ3SolverEngineer.RandomMaxVariantGroupumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxVariantGroupumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //2.RandomMaxVariantNumber
                             case "RandomMaxVariantNumber":
-                                cZ3SolverEngineer.RandomMaxVariantNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxVariantNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //3.RandomMaxPartNumber
                             case "RandomMaxPartNumber":
-                                cZ3SolverEngineer.RandomMaxPartNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxPartNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //4.RandomMaxOperationNumber
                             case "RandomMaxOperationNumber":
-                                cZ3SolverEngineer.RandomMaxOperationNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxOperationNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //5.RandomTrueProbability
                             case "RandomTrueProbability":
-                                cZ3SolverEngineer.RandomTrueProbability = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomTrueProbability = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //6.RandomFalseProbability
                             case "RandomFalseProbability":
-                                cZ3SolverEngineer.RandomFalseProbability = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomFalseProbability = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //7.RandomExpressionProbability
                             case "RandomExpressionProbability":
-                                cZ3SolverEngineer.RandomExpressionProbability = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomExpressionProbability = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //8.RandomMaxTraitNumber
                             case "RandomMaxTraitNumber":
-                                cZ3SolverEngineer.RandomMaxTraitNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxTraitNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //9.RandomMaxNoOfTraitAttributes
                             case "RandomMaxNoOfTraitAttributes":
-                                cZ3SolverEngineer.RandomMaxNoOfTraitAttributes = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxNoOfTraitAttributes = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //10.RandomMaxResourceNumber
                             case "RandomMaxResourceNumber":
-                                cZ3SolverEngineer.RandomMaxResourceNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxResourceNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             //11.RandomMaxExpressionOperandNumber
                             case "RandomMaxExpressionOperandNumber":
-                                cZ3SolverEngineer.RandomMaxExpressionOperandNumber = int.Parse(lXmlNode["value"].InnerText);
+                                Z3SolverEngineer.RandomMaxExpressionOperandNumber = int.Parse(lXmlNode["value"].InnerText);
                                 break;
                             default:
                                 break;
@@ -604,8 +604,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LoadVariationPointsFromXMLFile");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in LoadVariationPointsFromXMLFile");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -639,84 +639,84 @@ namespace ProductPlatformAnalyzer
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.ProductModelEnumerationAnalysis);
                         break;
                     case "2":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                                             , Enumerations.AnalysisType.ProductManufacturingModelEnumerationAnalysis);
                         break;
                     case "3":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis);
                         break;
                     case "4":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedVariantAnalysis);
                         break;
                     case "5":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.VariantSelectabilityAnalysis);
                         break;
                     case "6":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedPartAnalysis);
                         break;
                     case "7":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedPartAnalysis);
                         break;
                     case "8":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.PartSelectabilityAnalysis);
                         break;
                     case "9":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis);
                         break;
                     case "10":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedOperationAnalysis);
                         break;
                     case "11":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Static
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.OperationSelectabilityAnalysis);
                         break;
                     case "12":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
                         //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
-                        cZ3SolverEngineer.setVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
+                        Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                                             , Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
                         break;
                     default:
@@ -726,8 +726,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("SetAnalysisType");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("SetAnalysisType");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
             //return lResultChooseAnotherFile;
         }
@@ -745,29 +745,29 @@ namespace ProductPlatformAnalyzer
                 {
                     Console.Clear();
                     //1.Analysis Result
-                    Console.WriteLine("1.Analysis Result: " + cZ3SolverEngineer.ReportAnalysisResult.ToString());
+                    Console.WriteLine("1.Analysis Result: " + Z3SolverEngineer.ReportAnalysisResult.ToString());
                     //2.Analysis Detail Result
-                    Console.WriteLine("2.Analysis Detail Result: " + cZ3SolverEngineer.ReportAnalysisDetailResult.ToString());
+                    Console.WriteLine("2.Analysis Detail Result: " + Z3SolverEngineer.ReportAnalysisDetailResult.ToString());
                     //3.Variants Result
-                    Console.WriteLine("3.Variants Result: " + cZ3SolverEngineer.ReportVariantsResult.ToString());
+                    Console.WriteLine("3.Variants Result: " + Z3SolverEngineer.ReportVariantsResult.ToString());
                     //4.Transitions Result
-                    Console.WriteLine("4.Transitions Result: " + cZ3SolverEngineer.ReportTransitionsResult.ToString());
+                    Console.WriteLine("4.Transitions Result: " + Z3SolverEngineer.ReportTransitionsResult.ToString());
                     //5.Analysis Timing
-                    Console.WriteLine("5.Analysis Timing: " + cZ3SolverEngineer.ReportAnalysisTiming.ToString());
+                    Console.WriteLine("5.Analysis Timing: " + Z3SolverEngineer.ReportAnalysisTiming.ToString());
                     //6.Unsat Core
-                    Console.WriteLine("6.Unsat Core: " + cZ3SolverEngineer.ReportUnsatCore.ToString());
+                    Console.WriteLine("6.Unsat Core: " + Z3SolverEngineer.ReportUnsatCore.ToString());
                     //7.Stop between each transition
-                    Console.WriteLine("7.Stop between each transition: " + cZ3SolverEngineer.StopBetweenEachTransition.ToString());
+                    Console.WriteLine("7.Stop between each transition: " + Z3SolverEngineer.StopBetweenEachTransition.ToString());
                     //8.Stop at end of analysis
-                    Console.WriteLine("8.Stop at end of analysis: " + cZ3SolverEngineer.StopAEndOfAnalysis.ToString());
+                    Console.WriteLine("8.Stop at end of analysis: " + Z3SolverEngineer.StopAEndOfAnalysis.ToString());
                     //9.Create HTML Output
-                    Console.WriteLine("9.Create HTML Output: " + cZ3SolverEngineer.CreateHTMLOutput.ToString());
+                    Console.WriteLine("9.Create HTML Output: " + Z3SolverEngineer.CreateHTMLOutput.ToString());
                     //10.Report timings
-                    Console.WriteLine("10.Report timings: " + cZ3SolverEngineer.ReportTimings.ToString());
+                    Console.WriteLine("10.Report timings: " + Z3SolverEngineer.ReportTimings.ToString());
                     //11.Debug Mode (Make model file)
-                    Console.WriteLine("11.Debug Mode (Make model file): " + cZ3SolverEngineer.getDebugMode().ToString());
+                    Console.WriteLine("11.Debug Mode (Make model file): " + Z3SolverEngineer.DebugMode.ToString());
                     //12.User Messages
-                    Console.WriteLine("12.User Messages: " + cOutputHandler.getEnableUserMessages().ToString());
+                    Console.WriteLine("12.User Messages: " + OutputHandler.GetEnableUserMessages().ToString());
 
                     Console.WriteLine("13.Return to main menu.");
 
@@ -777,42 +777,42 @@ namespace ProductPlatformAnalyzer
                     switch (lSettingToChange)
                     {
                         case "1":
-                            cZ3SolverEngineer.ReportAnalysisResult = ChangeSetting(cZ3SolverEngineer.ReportAnalysisResult);
+                            Z3SolverEngineer.ReportAnalysisResult = ChangeSetting(Z3SolverEngineer.ReportAnalysisResult);
                             break;
                         case "2":
-                            cZ3SolverEngineer.ReportAnalysisDetailResult = ChangeSetting(cZ3SolverEngineer.ReportAnalysisDetailResult);
+                            Z3SolverEngineer.ReportAnalysisDetailResult = ChangeSetting(Z3SolverEngineer.ReportAnalysisDetailResult);
                             break;
                         case "3":
-                            cZ3SolverEngineer.ReportVariantsResult = ChangeSetting(cZ3SolverEngineer.ReportVariantsResult);
+                            Z3SolverEngineer.ReportVariantsResult = ChangeSetting(Z3SolverEngineer.ReportVariantsResult);
                             break;
                         case "4":
-                            cZ3SolverEngineer.ReportTransitionsResult = ChangeSetting(cZ3SolverEngineer.ReportTransitionsResult);
+                            Z3SolverEngineer.ReportTransitionsResult = ChangeSetting(Z3SolverEngineer.ReportTransitionsResult);
                             break;
                         case "5":
-                            cZ3SolverEngineer.ReportAnalysisTiming = ChangeSetting(cZ3SolverEngineer.ReportAnalysisTiming);
+                            Z3SolverEngineer.ReportAnalysisTiming = ChangeSetting(Z3SolverEngineer.ReportAnalysisTiming);
                             break;
                         case "6":
-                            cZ3SolverEngineer.ReportUnsatCore = ChangeSetting(cZ3SolverEngineer.ReportUnsatCore);
+                            Z3SolverEngineer.ReportUnsatCore = ChangeSetting(Z3SolverEngineer.ReportUnsatCore);
                             break;
                         case "7":
-                            cZ3SolverEngineer.StopBetweenEachTransition = ChangeSetting(cZ3SolverEngineer.StopBetweenEachTransition);
+                            Z3SolverEngineer.StopBetweenEachTransition = ChangeSetting(Z3SolverEngineer.StopBetweenEachTransition);
                             break;
                         case "8":
-                            cZ3SolverEngineer.StopAEndOfAnalysis = ChangeSetting(cZ3SolverEngineer.StopAEndOfAnalysis);
+                            Z3SolverEngineer.StopAEndOfAnalysis = ChangeSetting(Z3SolverEngineer.StopAEndOfAnalysis);
                             break;
                         case "9":
-                            cZ3SolverEngineer.CreateHTMLOutput = ChangeSetting(cZ3SolverEngineer.CreateHTMLOutput);
+                            Z3SolverEngineer.CreateHTMLOutput = ChangeSetting(Z3SolverEngineer.CreateHTMLOutput);
                             break;
                         case "10":
-                            cZ3SolverEngineer.ReportTimings = ChangeSetting(cZ3SolverEngineer.ReportTimings);
+                            Z3SolverEngineer.ReportTimings = ChangeSetting(Z3SolverEngineer.ReportTimings);
                             break;
                         case "11":
-                            cZ3SolverEngineer.setDebugMode(ChangeSetting(cZ3SolverEngineer.getDebugMode()));
+                            Z3SolverEngineer.DebugMode = ChangeSetting(Z3SolverEngineer.DebugMode);
                             break;
                         case "12":
                             {
-                                var lResultValue = ChangeSetting(cOutputHandler.getEnableUserMessages());
-                                cOutputHandler.setEnableUserMessages(lResultValue);
+                                var lResultValue = ChangeSetting(OutputHandler.GetEnableUserMessages());
+                                OutputHandler.SetEnableUserMessages(lResultValue);
                                 break;
                             }
                         case "13":
@@ -826,8 +826,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("ReportingSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("ReportingSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -840,21 +840,21 @@ namespace ProductPlatformAnalyzer
                 {
                     Console.Clear();
                     //1.Convert variants
-                    Console.WriteLine("1.Convert variants: " + cZ3SolverEngineer.ConvertVariants.ToString());
+                    Console.WriteLine("1.Convert variants: " + Z3SolverEngineer.ConvertVariants.ToString());
                     //2.Convert configuration rules
-                    Console.WriteLine("2.Convert configuration rules: " + cZ3SolverEngineer.ConvertConfigurationRules.ToString());
+                    Console.WriteLine("2.Convert configuration rules: " + Z3SolverEngineer.ConvertConfigurationRules.ToString());
                     //3.Convert operations
-                    Console.WriteLine("3.Convert operations: " + cZ3SolverEngineer.ConvertOperations.ToString());
+                    Console.WriteLine("3.Convert operations: " + Z3SolverEngineer.ConvertOperations.ToString());
                     //4.Convert operation precedence rules
-                    Console.WriteLine("4.Convert operation precedence rules: " + cZ3SolverEngineer.ConvertOperationPrecedenceRules.ToString());
+                    Console.WriteLine("4.Convert operation precedence rules: " + Z3SolverEngineer.ConvertOperationPrecedenceRules.ToString());
                     //5.Convert resources
-                    Console.WriteLine("5.Convert resources: " + cZ3SolverEngineer.ConvertResources.ToString());
+                    Console.WriteLine("5.Convert resources: " + Z3SolverEngineer.ConvertResources.ToString());
                     //6.Convert goals
-                    Console.WriteLine("6.Convert goals: " + cZ3SolverEngineer.ConvertGoal.ToString());
+                    Console.WriteLine("6.Convert goals: " + Z3SolverEngineer.ConvertGoal.ToString());
                     //7.Build P Constraints
-                    Console.WriteLine("7.Build P Constraints: " + cZ3SolverEngineer.BuildPConstraints.ToString());
+                    Console.WriteLine("7.Build P Constraints: " + Z3SolverEngineer.BuildPConstraints.ToString());
                     //8.Number Of Models Required
-                    Console.WriteLine("8.Number Of Models Required: " + cZ3SolverEngineer.NoOfModelsRequired.ToString());
+                    Console.WriteLine("8.Number Of Models Required: " + Z3SolverEngineer.NoOfModelsRequired.ToString());
 
                     Console.WriteLine("9.Return to main menu.");
 
@@ -864,30 +864,30 @@ namespace ProductPlatformAnalyzer
                     switch (lSettingToChange)
                     {
                         case "1":
-                            cZ3SolverEngineer.ConvertVariants = ChangeSetting(cZ3SolverEngineer.ConvertVariants);
+                            Z3SolverEngineer.ConvertVariants = ChangeSetting(Z3SolverEngineer.ConvertVariants);
                             break;
                         case "2":
-                            cZ3SolverEngineer.ConvertConfigurationRules = ChangeSetting(cZ3SolverEngineer.ConvertConfigurationRules);
+                            Z3SolverEngineer.ConvertConfigurationRules = ChangeSetting(Z3SolverEngineer.ConvertConfigurationRules);
                             break;
                         case "3":
-                            cZ3SolverEngineer.ConvertOperations = ChangeSetting(cZ3SolverEngineer.ConvertOperations);
+                            Z3SolverEngineer.ConvertOperations = ChangeSetting(Z3SolverEngineer.ConvertOperations);
                             break;
                         case "4":
-                            cZ3SolverEngineer.ConvertOperationPrecedenceRules = ChangeSetting(cZ3SolverEngineer.ConvertOperationPrecedenceRules);
+                            Z3SolverEngineer.ConvertOperationPrecedenceRules = ChangeSetting(Z3SolverEngineer.ConvertOperationPrecedenceRules);
                             break;
                         case "5":
-                            cZ3SolverEngineer.ConvertResources = ChangeSetting(cZ3SolverEngineer.ConvertResources);
+                            Z3SolverEngineer.ConvertResources = ChangeSetting(Z3SolverEngineer.ConvertResources);
                             break;
                         case "6":
-                            cZ3SolverEngineer.ConvertGoal = ChangeSetting(cZ3SolverEngineer.ConvertGoal);
+                            Z3SolverEngineer.ConvertGoal = ChangeSetting(Z3SolverEngineer.ConvertGoal);
                             break;
                         case "7":
-                            cZ3SolverEngineer.BuildPConstraints = ChangeSetting(cZ3SolverEngineer.BuildPConstraints);
+                            Z3SolverEngineer.BuildPConstraints = ChangeSetting(Z3SolverEngineer.BuildPConstraints);
                             break;
                         case "8":
                             {
                                 Console.WriteLine("How many models do you need to be created?");
-                                cZ3SolverEngineer.NoOfModelsRequired = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.NoOfModelsRequired = int.Parse(Console.ReadLine());
 
                                 break;
                             }
@@ -901,8 +901,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("AnalysisSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("AnalysisSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -919,8 +919,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("ChangeSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("ChangeSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultSettingValue;
         }
@@ -934,29 +934,29 @@ namespace ProductPlatformAnalyzer
                 {
                     Console.Clear();
                     //1.RandomMaxVariantGroupumber
-                    Console.WriteLine("1.RandomMaxVariantGroupumber: " + cZ3SolverEngineer.RandomMaxVariantGroupumber.ToString());
+                    Console.WriteLine("1.RandomMaxVariantGroupumber: " + Z3SolverEngineer.RandomMaxVariantGroupumber.ToString());
                     //2.RandomMaxVariantNumber
-                    Console.WriteLine("2.RandomMaxVariantNumber: " + cZ3SolverEngineer.RandomMaxVariantNumber.ToString());
+                    Console.WriteLine("2.RandomMaxVariantNumber: " + Z3SolverEngineer.RandomMaxVariantNumber.ToString());
                     //3.RandomMaxPartNumber
-                    Console.WriteLine("3.RandomMaxPartNumber: " + cZ3SolverEngineer.RandomMaxPartNumber.ToString());
+                    Console.WriteLine("3.RandomMaxPartNumber: " + Z3SolverEngineer.RandomMaxPartNumber.ToString());
                     //4.RandomMaxOperationNumber
-                    Console.WriteLine("4.RandomMaxOperationNumber: " + cZ3SolverEngineer.RandomMaxOperationNumber.ToString());
+                    Console.WriteLine("4.RandomMaxOperationNumber: " + Z3SolverEngineer.RandomMaxOperationNumber.ToString());
                     //5.RandomMaxNoOfConfigurationRules
-                    Console.WriteLine("5.RandomMaxNoOfConfigurationRules: " + cZ3SolverEngineer.RandomMaxNoOfConfigurationRules.ToString());
+                    Console.WriteLine("5.RandomMaxNoOfConfigurationRules: " + Z3SolverEngineer.RandomMaxNoOfConfigurationRules.ToString());
                     //6.RandomTrueProbability
-                    Console.WriteLine("6.RandomTrueProbability: " + cZ3SolverEngineer.RandomTrueProbability.ToString());
+                    Console.WriteLine("6.RandomTrueProbability: " + Z3SolverEngineer.RandomTrueProbability.ToString());
                     //7.RandomFalseProbability
-                    Console.WriteLine("7.RandomFalseProbability: " + cZ3SolverEngineer.RandomFalseProbability.ToString());
+                    Console.WriteLine("7.RandomFalseProbability: " + Z3SolverEngineer.RandomFalseProbability.ToString());
                     //8.RandomExpressionProbability
-                    Console.WriteLine("8.RandomExpressionProbability: " + cZ3SolverEngineer.RandomExpressionProbability.ToString());
+                    Console.WriteLine("8.RandomExpressionProbability: " + Z3SolverEngineer.RandomExpressionProbability.ToString());
                     //9.RandomMaxTraitNumber
-                    Console.WriteLine("9.RandomMaxTraitNumber: " + cZ3SolverEngineer.RandomMaxTraitNumber.ToString());
+                    Console.WriteLine("9.RandomMaxTraitNumber: " + Z3SolverEngineer.RandomMaxTraitNumber.ToString());
                     //10.RandomMaxNoOfTraitAttributes
-                    Console.WriteLine("10.RandomMaxNoOfTraitAttributes: " + cZ3SolverEngineer.RandomMaxNoOfTraitAttributes.ToString());
+                    Console.WriteLine("10.RandomMaxNoOfTraitAttributes: " + Z3SolverEngineer.RandomMaxNoOfTraitAttributes.ToString());
                     //11.RandomMaxResourceNumber
-                    Console.WriteLine("11.RandomMaxResourceNumber: " + cZ3SolverEngineer.RandomMaxResourceNumber.ToString());
+                    Console.WriteLine("11.RandomMaxResourceNumber: " + Z3SolverEngineer.RandomMaxResourceNumber.ToString());
                     //12.RandomMaxExpressionOperandNumber
-                    Console.WriteLine("12.RandomMaxExpressionOperandNumber: " + cZ3SolverEngineer.RandomMaxExpressionOperandNumber.ToString());
+                    Console.WriteLine("12.RandomMaxExpressionOperandNumber: " + Z3SolverEngineer.RandomMaxExpressionOperandNumber.ToString());
 
                     Console.WriteLine("13.Return to main menu.");
 
@@ -968,84 +968,84 @@ namespace ProductPlatformAnalyzer
                         case "1":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxVariantGroupumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxVariantGroupumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "2":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxVariantNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxVariantNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "3":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxPartNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxPartNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "4":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxOperationNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxOperationNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "5":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxNoOfConfigurationRules = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxNoOfConfigurationRules = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "6":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomTrueProbability = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomTrueProbability = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "7":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomFalseProbability = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomFalseProbability = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "8":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomExpressionProbability = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomExpressionProbability = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "9":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxTraitNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxTraitNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "10":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxNoOfTraitAttributes = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxNoOfTraitAttributes = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "11":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxResourceNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxResourceNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
                         case "12":
                             {
                                 Console.WriteLine("What is the new value?");
-                                cZ3SolverEngineer.RandomMaxExpressionOperandNumber = int.Parse(Console.ReadLine());
+                                Z3SolverEngineer.RandomMaxExpressionOperandNumber = int.Parse(Console.ReadLine());
 
                                 break;
                             }
@@ -1060,8 +1060,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in RandomFileCreationSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                OutputHandler.PrintMessageToConsole("error in RandomFileCreationSetting");
+                OutputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 

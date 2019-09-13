@@ -11,181 +11,114 @@ namespace ProductPlatformAnalyzer
 {
     public class Z3Solver
     {
-        private ArrayExpr cExpressions;
-        private Dictionary<string, Expr> cExpressionDictionary;
-        private Dictionary<string, Expr> cOptimizerExpressionDictionary;
-        private BoolExpr cConstraints;
-        private ArrayList cConstraintList;
-        public Solver cISolver;
-        private Optimize cIOptimize;
+        private Solver _iSolver;
+        private Optimize _iOptimize;
+        private Context _iCtx;
+        private StringBuilder _iDebugText;
+        private StringBuilder _iDebugOptimizerText;
+        private Model _resultModel;
+        private OutputHandler _outputHandler;
 
-        private Context cICtx;
-        private int cConstraintCounter;
-        private int cBooleanExpressionCounter;
-        private bool cIDebugMode;
-        private StringBuilder cIDebugText;
-        private StringBuilder cIDebugOptimizerText;
-        private Model cResultModel;
-        private OutputHandler cOutputHandler;
+        public ArrayExpr Expressions { get; set; }
+        public Dictionary<string, Expr> ExpressionDictionary { get; set; }
+        public Dictionary<string, Expr> _optimizerExpressionDictionary;
+        public BoolExpr Constraints { get; set; }
+        public ArrayList ConstraintList { get; set; }
+        public int ConstraintCounter { get; set; }
+        public int BooleanExpressionCounter { get; set; }
+        public bool DebugMode { get; set; }
 
         public Z3Solver(OutputHandler pOutputHandler)
         {
-            cOutputHandler = pOutputHandler;
+            _outputHandler = pOutputHandler;
             
-            cIDebugText = new StringBuilder();
-            cIDebugOptimizerText = new StringBuilder();
-            cICtx = new Context(new Dictionary<string, string>() { { "proof", "false" } });
-            using (cICtx)
+            _iDebugText = new StringBuilder();
+            _iDebugOptimizerText = new StringBuilder();
+            _iCtx = new Context(new Dictionary<string, string>() { { "proof", "false" } });
+            using (_iCtx)
             {
-                this.cISolver = cICtx.MkSolver("QF_FD");
-                this.cIOptimize = cICtx.MkOptimize();
+                this._iSolver = _iCtx.MkSolver("QF_FD");
+                this._iOptimize = _iCtx.MkOptimize();
 
-                this.cExpressionDictionary = new Dictionary<string, Expr>();
-                this.cOptimizerExpressionDictionary = new Dictionary<string, Expr>();
-                this.cConstraintList = new ArrayList();
+                this.ExpressionDictionary = new Dictionary<string, Expr>();
+                this._optimizerExpressionDictionary = new Dictionary<string, Expr>();
+                this.ConstraintList = new ArrayList();
             }
         }
 
-        public void setDebugMode(bool pDebugMode)
+        public int GetNextBooleanExpressionCounter()
         {
-            cIDebugMode = pDebugMode;
-        }
-
-        public bool getDebugMode()
-        {
-            return cIDebugMode;
-        }
-
-        public void setExpressions(ArrayExpr pExpressions)
-        {
-            cExpressions = pExpressions;
-        }
-
-        public void setExpressionList(Dictionary<string, Expr> pExpressionDictionary)
-        {
-            cExpressionDictionary = pExpressionDictionary;
-        }
-
-        public ArrayExpr getExpression()
-        {
-            return cExpressions;
-        }
-
-        public Dictionary<string, Expr> getExpressionList()
-        {
-            return cExpressionDictionary;
-        }
-
-        public void setConstraints(BoolExpr pConstraints)
-        {
-            cConstraints = pConstraints;
-        }
-
-        public void setConstraintList(ArrayList pConstraintList)
-        {
-            cConstraintList = pConstraintList;
-        }
-
-        public BoolExpr getConstraints()
-        {
-            return cConstraints;
-        }
-
-        public ArrayList getConstraintList()
-        {
-            return cConstraintList;
-        }
-
-        public int getConstraintCounter()
-        {
-            return cConstraintCounter;
-        }
-
-        public void setConstraintCounter(int pCounter)
-        {
-            cConstraintCounter = pCounter;
-        }
-
-        public int getBooleanExpressionCounter()
-        {
-            return cBooleanExpressionCounter;
-        }
-
-        public void setBooleanExpressionCounter(int pCounter)
-        {
-            cBooleanExpressionCounter = pCounter;
-        }
-
-        public int getNextBooleanExpressionCounter()
-        {
-            int newCounter = 0;
+            int lNewCounter = 0;
             try
             {
-                newCounter = getBooleanExpressionCounter() + 1;
-                setBooleanExpressionCounter(newCounter);
+                lNewCounter = BooleanExpressionCounter + 1;
+                BooleanExpressionCounter = lNewCounter;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Error in getNextBooleanExpressionCounter");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("Error in getNextBooleanExpressionCounter");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
-            return newCounter;
+            return lNewCounter;
         }
 
-        public int getNextConstraintCounter()
+        public int GetNextConstraintCounter()
         {
-            int newCounter = 0;
+            int lNewCounter = 0;
             try
             {
-                newCounter = getConstraintCounter() + 1;
-                setConstraintCounter(newCounter);
+                lNewCounter = ConstraintCounter + 1;
+                ConstraintCounter = lNewCounter;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Error in getNextConstraintCounter");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("Error in getNextConstraintCounter");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
-            return newCounter;
+            return lNewCounter;
         }
 
-        public BoolExpr getFalseBoolExpr()
+        public BoolExpr GetFalseBoolExpr()
         {
-            return cICtx.MkFalse();
+            return _iCtx.MkFalse();
         }
 
-        public string ReturnStringElements(string[] pList)
-        {
-            string lResultElements = "";
-            try
-            {
-                foreach (string lElement in pList)
-                    lResultElements += lElement;
+        //Never Used
+        //public string ReturnStringElements(string[] pList)
+        //{
+        //    string lResultElements = "";
+        //    try
+        //    {
+        //        foreach (string lElement in pList)
+        //            lResultElements += lElement;
 
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("Error in ReturnStringElements");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultElements;
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _outputHandler.PrintMessageToConsole("Error in ReturnStringElements");
+        //        _outputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultElements;
+        //}
 
-        public string ReturnBoolExprElementNames(HashSet<BoolExpr> pList)
-        {
-            string lResultElementNames = "";
-            try
-            {
-                foreach (BoolExpr lElement in pList)
-                    lResultElementNames += lElement.ToString();
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("Error in ReturnBoolExprElementNames");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
+        //Never Used
+        //public string ReturnBoolExprElementNames(HashSet<BoolExpr> pList)
+        //{
+        //    string lResultElementNames = "";
+        //    try
+        //    {
+        //        foreach (BoolExpr lElement in pList)
+        //            lResultElementNames += lElement.ToString();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _outputHandler.PrintMessageToConsole("Error in ReturnBoolExprElementNames");
+        //        _outputHandler.PrintMessageToConsole(ex.Message);
+        //    }
 
-            return lResultElementNames;
-        }
+        //    return lResultElementNames;
+        //}
+
 
         public void AddAndOperator2Constraints(List<string> pOperandSet, string pConstraintSource, bool pOptimizer = false)
         {
@@ -198,7 +131,7 @@ namespace ProductPlatformAnalyzer
                     if (lConstraint == null)
                         lConstraint = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lConstraint = cICtx.MkAnd(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
+                        lConstraint = _iCtx.MkAnd(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
@@ -207,42 +140,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddAndOperator2Constraints" );
+                _outputHandler.PrintMessageToConsole("error in AddAndOperator2Constraints");
                 throw ex;
-            }
-        }
-
-        public void AddGreaterOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource)
-        {
-            try
-            {
-                Expr lOperand2 = cICtx.MkConst("pOperand2", cICtx.MkIntSort());
-                BoolExpr lConstraint = cICtx.MkGt((ArithExpr)pOperand1, (ArithExpr)lOperand2);
-
-                AddConstraintToSolver(lConstraint, pConstraintSource);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in AddGreaterOperator2Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-        }
-
-        public void AddEqualOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource, bool pOptimizer = false)
-        {
-            try
-            {
-                //Expr lOperand2 = iCtx.MkConst(pOperand2, iCtx.MkIntSort());
-                BoolExpr lConstraint = cICtx.MkEq((ArithExpr)pOperand1, cICtx.MkInt(pOperand2));
-
-                AddConstraintToSolver(lConstraint, pConstraintSource);
-                if (pOptimizer)
-                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in AddEqualOperator2Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
             }
         }
 
@@ -257,15 +156,50 @@ namespace ProductPlatformAnalyzer
                     if (lConstraint == null)
                         lConstraint = lOperand;
                     else
-                        lConstraint = cICtx.MkAnd(lConstraint, lOperand);
+                        lConstraint = _iCtx.MkAnd(lConstraint, lOperand);
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddAndOperator2Constraints");
+                _outputHandler.PrintMessageToConsole("error in AddAndOperator2Constraints");
                 throw ex;
+            }
+        }
+
+        //Never Used
+        //public void AddGreaterOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource)
+        //{
+        //    try
+        //    {
+        //        Expr lOperand2 = _iCtx.MkConst("pOperand2", _iCtx.MkIntSort());
+        //        BoolExpr lConstraint = _iCtx.MkGt((ArithExpr)pOperand1, (ArithExpr)lOperand2);
+
+        //        AddConstraintToSolver(lConstraint, pConstraintSource);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _outputHandler.PrintMessageToConsole("error in AddGreaterOperator2Constraints");
+        //        _outputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //}
+
+        public void AddEqualOperator2Constraints(Expr pOperand1, int pOperand2, string pConstraintSource, bool pOptimizer = false)
+        {
+            try
+            {
+                //Expr lOperand2 = iCtx.MkConst(pOperand2, iCtx.MkIntSort());
+                BoolExpr lConstraint = _iCtx.MkEq((ArithExpr)pOperand1, _iCtx.MkInt(pOperand2));
+
+                AddConstraintToSolver(lConstraint, pConstraintSource);
+                if (pOptimizer)
+                    AddConstraintToOptimizer(lConstraint, pConstraintSource);
+            }
+            catch (Exception ex)
+            {
+                _outputHandler.PrintMessageToConsole("error in AddEqualOperator2Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -280,14 +214,14 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression == null)
                         lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lResultExpression = cICtx.MkAnd(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
+                        lResultExpression = _iCtx.MkAnd(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
                 }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AndOperator");
+                _outputHandler.PrintMessageToConsole("error in AndOperator");
                 throw ex;
             }
         }
@@ -303,14 +237,14 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression ==null)
                         lResultExpression = lOperand;
                     else
-                        lResultExpression = cICtx.MkAnd(lResultExpression, lOperand);
+                        lResultExpression = _iCtx.MkAnd(lResultExpression, lOperand);
                 }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AndOperator");
+                _outputHandler.PrintMessageToConsole("error in AndOperator");
                 throw ex;
             }
         }
@@ -320,13 +254,13 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = cICtx.MkGt((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkGt((ArithExpr)pOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GreaterThanOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GreaterThanOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -338,13 +272,13 @@ namespace ProductPlatformAnalyzer
             {
                 //Expr lOperand0 = FindExpressionUsingName(pOperand0);
                 Expr lOperand0 = FindExprInExprSet(pOperand0);
-                lResultExpression = cICtx.MkGt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkGt((ArithExpr)lOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GreaterThanOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GreaterThanOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -354,12 +288,28 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = cICtx.MkEq(pOperand0, pOperand1);
+                lResultExpression = _iCtx.MkEq(pOperand0, pOperand1);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in EqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in EqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
+            }
+            return lResultExpression;
+        }
+
+        public BoolExpr EqualOperator(Expr pOperand0, int pOperand1)
+        {
+            BoolExpr lResultExpression = null;
+            try
+            {
+                lResultExpression = _iCtx.MkEq(pOperand0, _iCtx.MkInt(pOperand1));
+
+            }
+            catch (Exception ex)
+            {
+                _outputHandler.PrintMessageToConsole("error in EqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -369,38 +319,22 @@ namespace ProductPlatformAnalyzer
             int lResultExpr = 0;
             try
             {
-                var lExpX = cIOptimize.MkMaximize((ArithExpr)pArithExpr);
-                Status lResultStatus = cIOptimize.Check();
+                var lExpX = _iOptimize.MkMaximize((ArithExpr)pArithExpr);
+                Status lResultStatus = _iOptimize.Check();
 
                 if (lResultStatus.Equals(Status.SATISFIABLE))
                 {
-                    Model lResultModel = cIOptimize.Model;
+                    Model lResultModel = _iOptimize.Model;
                     lResultExpr = int.Parse(lResultModel.Evaluate(pArithExpr).ToString());
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MaximizeExpression");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MaximizeExpression");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
-        }
-
-        public BoolExpr EqualOperator(Expr pOperand0, int pOperand1)
-        {
-            BoolExpr lResultExpression = null;
-            try
-            {
-                lResultExpression = cICtx.MkEq(pOperand0, cICtx.MkInt(pOperand1));
-                
-            }
-            catch (Exception ex)
-            {
-                cOutputHandler.printMessageToConsole("error in EqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
-            }
-            return lResultExpression;
         }
 
         public BoolExpr LessThanOperator(Expr pOperand0, int pOperand1)
@@ -408,13 +342,13 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = cICtx.MkLt((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkLt((ArithExpr)pOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LessThanOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in LessThanOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -426,13 +360,13 @@ namespace ProductPlatformAnalyzer
             {
                 //Expr lOperand0 = FindExpressionUsingName(pOperand0);
                 Expr lOperand0 = FindExprInExprSet(pOperand0);
-                lResultExpression = cICtx.MkLt((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkLt((ArithExpr)lOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LessThanOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in LessThanOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -442,13 +376,13 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = cICtx.MkGe((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkGe((ArithExpr)pOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GreaterOrEqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GreaterOrEqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -460,13 +394,13 @@ namespace ProductPlatformAnalyzer
             {
                 //Expr lOperand0 = FindExpressionUsingName(pOperand0);
                 Expr lOperand0 = FindExprInExprSet(pOperand0);
-                lResultExpression = cICtx.MkGe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkGe((ArithExpr)lOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GreaterOrEqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GreaterOrEqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -476,13 +410,13 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpression = null;
             try
             {
-                lResultExpression = cICtx.MkLe((ArithExpr)pOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkLe((ArithExpr)pOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LessOrEqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in LessOrEqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -494,13 +428,13 @@ namespace ProductPlatformAnalyzer
             {
                 //Expr lOperand0 = FindExpressionUsingName(pOperand0);
                 Expr lOperand0 = FindExprInExprSet(pOperand0);
-                lResultExpression = cICtx.MkLe((ArithExpr)lOperand0, cICtx.MkInt(pOperand1));
+                lResultExpression = _iCtx.MkLe((ArithExpr)lOperand0, _iCtx.MkInt(pOperand1));
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LessOrEqualOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in LessOrEqualOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -514,13 +448,13 @@ namespace ProductPlatformAnalyzer
                 Expr lFirstOperand = FindExprInExprSet(pOperand1);
                 Expr lSecondOperand = FindExprInExprSet(pOperand2);
 
-                BoolExpr Expression = cICtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
+                BoolExpr Expression = _iCtx.MkIff((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
                 return Expression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IffOperator, " + pOperand1 + " , " + pOperand2);
+                _outputHandler.PrintMessageToConsole("error in IffOperator, " + pOperand1 + " , " + pOperand2);
                 throw ex;
             }
         }
@@ -529,7 +463,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr Constraint = cICtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Constraint = _iCtx.MkImplies(pOperand1, pOperand2);
 
                 AddConstraintToSolver(Constraint, pConstraintSource);
                 if (pOptimizer)
@@ -537,7 +471,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                _outputHandler.PrintMessageToConsole("error in AddImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -552,7 +486,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddSimpleConstraint, " + pConstraint);
+                _outputHandler.PrintMessageToConsole("error in AddSimpleConstraint, " + pConstraint);
                 throw ex;
             }
         }
@@ -567,16 +501,16 @@ namespace ProductPlatformAnalyzer
                 
                 Expr lSecondOperand = FindExprInExprSet(pOperand2);
 
-                BoolExpr Expression2 = cICtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
+                BoolExpr Expression2 = _iCtx.MkImplies((BoolExpr)lSecondOperand, (BoolExpr)lFirstOperand);
 
-                BoolExpr Expression1 = cICtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
+                BoolExpr Expression1 = _iCtx.MkImplies((BoolExpr)lFirstOperand, (BoolExpr)lSecondOperand);
 
-                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = _iCtx.MkAnd(Expression1, Expression2);
                 return Expression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1 + " , " + pOperand2);
+                _outputHandler.PrintMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1 + " , " + pOperand2);
                 throw ex;
             }
         }
@@ -587,15 +521,15 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression1 = cICtx.MkImplies(pOperand1, pOperand2);
-                BoolExpr Expression2 = cICtx.MkImplies(pOperand2, pOperand1);
+                BoolExpr Expression1 = _iCtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Expression2 = _iCtx.MkImplies(pOperand2, pOperand1);
 
-                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = _iCtx.MkAnd(Expression1, Expression2);
                 return Expression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                _outputHandler.PrintMessageToConsole("error in TwoWayImpliesOperator, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -610,8 +544,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddTwoWayImpliesOperator2Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddTwoWayImpliesOperator2Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -622,10 +556,10 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression1 = cICtx.MkImplies(pOperand1, pOperand2);
-                BoolExpr Expression2 = cICtx.MkImplies(pOperand2, pOperand1);
+                BoolExpr Expression1 = _iCtx.MkImplies(pOperand1, pOperand2);
+                BoolExpr Expression2 = _iCtx.MkImplies(pOperand2, pOperand1);
 
-                BoolExpr Expression = cICtx.MkAnd(Expression1, Expression2);
+                BoolExpr Expression = _iCtx.MkAnd(Expression1, Expression2);
 
                 if (pOptimizer)
                     AddConstraintToOptimizer(Expression, pConstraintSource);
@@ -634,7 +568,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddTwoWayImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
+                _outputHandler.PrintMessageToConsole("error in AddTwoWayImpliesOperator2Constraints, " + pOperand1.ToString() + " , " + pOperand2.ToString());
                 throw ex;
             }
         }
@@ -650,14 +584,14 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression == null)
                         lResultExpression = lOperand;
                     else
-                        lResultExpression = cICtx.MkIff(lResultExpression, lOperand);
+                        lResultExpression = _iCtx.MkIff(lResultExpression, lOperand);
                 }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IffOperator");
+                _outputHandler.PrintMessageToConsole("error in IffOperator");
                 throw ex;
             }
         }
@@ -673,14 +607,14 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression == null)
                         lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lResultExpression = cICtx.MkImplies(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
+                        lResultExpression = _iCtx.MkImplies(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
                 }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ImpliesOperator");
+                _outputHandler.PrintMessageToConsole("error in ImpliesOperator");
                 throw ex;
             }
         }
@@ -696,14 +630,14 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression == null)
                         lResultExpression = lOperand;
                     else
-                        lResultExpression = cICtx.MkImplies(lResultExpression, lOperand);
+                        lResultExpression = _iCtx.MkImplies(lResultExpression, lOperand);
                 }
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ImpliesOperator");
+                _outputHandler.PrintMessageToConsole("error in ImpliesOperator");
                 throw ex;
             }
         }
@@ -719,14 +653,14 @@ namespace ProductPlatformAnalyzer
                     if (lConstraint == null)
                         lConstraint = lOperand;
                     else
-                        lConstraint = cICtx.MkOr(lConstraint, lOperand);
+                        lConstraint = _iCtx.MkOr(lConstraint, lOperand);
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddOrOperator2Constraints");
+                _outputHandler.PrintMessageToConsole("error in AddOrOperator2Constraints");
                 throw ex;
             }
         }
@@ -742,7 +676,7 @@ namespace ProductPlatformAnalyzer
                     if (lConstraint == null)
                         lConstraint = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lConstraint = cICtx.MkOr(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
+                        lConstraint = _iCtx.MkOr(lConstraint, (BoolExpr)FindExprInExprSet(lOperand));
                 }
 
                 AddConstraintToSolver(lConstraint, pConstraintSource);
@@ -752,7 +686,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddOrOperator2Constraints");
+                _outputHandler.PrintMessageToConsole("error in AddOrOperator2Constraints");
                 throw ex;
             }
         }
@@ -768,13 +702,13 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpression == null)
                         lResultExpression = (BoolExpr)FindExprInExprSet(lOperand);
                     else
-                        lResultExpression = cICtx.MkOr(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
+                        lResultExpression = _iCtx.MkOr(lResultExpression, (BoolExpr)FindExprInExprSet(lOperand));
                 }
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OrOperator");
+                _outputHandler.PrintMessageToConsole("error in OrOperator");
                 throw ex;
             }
         }
@@ -790,13 +724,13 @@ namespace ProductPlatformAnalyzer
                     if (lResultExpr == null)
                         lResultExpr = lOperand;
                     else
-                        lResultExpr = cICtx.MkOr(lResultExpr, lOperand);
+                        lResultExpr = _iCtx.MkOr(lResultExpr, lOperand);
                 }
                 return lResultExpr;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OrOperator");
+                _outputHandler.PrintMessageToConsole("error in OrOperator");
                 throw ex;
             }
         }
@@ -823,7 +757,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddPickOneOperator2Constraints");
+                _outputHandler.PrintMessageToConsole("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
@@ -850,8 +784,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddPickZeroOrOneOperator2Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddPickZeroOrOneOperator2Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -872,8 +806,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickZeroOperand");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PickZeroOperand");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultConstraint;
         }
@@ -894,20 +828,20 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickZeroOperand");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PickZeroOperand");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultConstraint;
         }
 
-        public BoolExpr PickZeroResource(List<Operation> pOperandList, int transition)
+        public BoolExpr PickZeroResource(List<Operation> pOperandList, int pTransition)
         {
             BoolExpr lResultConstraint = null;
             try
             {
                 foreach (var lOperand in pOperandList)
                 {
-                    BoolExpr lNegatedOperand = NotOperator(lOperand.getResourceExpression(transition));
+                    BoolExpr lNegatedOperand = NotOperator(lOperand.GetResourceExpression(pTransition));
                     if (lResultConstraint == null)
                         lResultConstraint = lNegatedOperand;
                     else
@@ -916,13 +850,13 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickZeroResource");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PickZeroResource");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultConstraint;
         }
 
-        public BoolExpr PickOneResource(List<Operation> pOperandSet, int transition)
+        public BoolExpr PickOneResource(List<Operation> pOperandSet, int pTransition)
         {
             try
             {
@@ -937,16 +871,16 @@ namespace ProductPlatformAnalyzer
                 int lCounter = 0;
                foreach (Operation lOperand in pOperandSet)
                 {
-                    lOperandsArray[lCounter] = lOperand.getResourceExpression(transition);
+                    lOperandsArray[lCounter] = lOperand.GetResourceExpression(pTransition);
                     lCounter++;
                 }
-                lResultExpression = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+                lResultExpression = _iCtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickOneResource");
+                _outputHandler.PrintMessageToConsole("error in PickOneResource");
                 throw ex;
             }
         }
@@ -969,12 +903,12 @@ namespace ProductPlatformAnalyzer
                     lOperandsArray[lCounter] = lOperand;
                     lCounter++;
                 }
-                Constraint = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+                Constraint = _iCtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
                 AddConstraintToSolver(Constraint, pConstraintSource);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddPickOneOperator2Constraints");
+                _outputHandler.PrintMessageToConsole("error in AddPickOneOperator2Constraints");
                 throw ex;
             }
         }
@@ -997,13 +931,13 @@ namespace ProductPlatformAnalyzer
                     lOperandsArray[lCounter] = (BoolExpr)FindExprInExprSet(lOperandName);
                     lCounter++;
                 }
-                lResultExpression = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+                lResultExpression = _iCtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickOneOperator");
+                _outputHandler.PrintMessageToConsole("error in PickOneOperator");
                 throw ex;
             }
         }
@@ -1026,13 +960,13 @@ namespace ProductPlatformAnalyzer
                     lOperandsArray[lCounter] = lOperand;
                     lCounter++;
                 }
-                lResultExpression = cICtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
+                lResultExpression = _iCtx.MkPBEq(lCoeffecient, lOperandsArray, 1);
 
                 return lResultExpression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PickOneOperator");
+                _outputHandler.PrintMessageToConsole("error in PickOneOperator");
                 throw ex;
             }
         }
@@ -1045,7 +979,7 @@ namespace ProductPlatformAnalyzer
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindExprInExprSet(pOperand);
 
-                BoolExpr Constraint = cICtx.MkNot((BoolExpr)lOperand);
+                BoolExpr Constraint = _iCtx.MkNot((BoolExpr)lOperand);
                 
                 AddConstraintToSolver(Constraint, pConstraintSource);
                 if (pOptimizer)
@@ -1053,7 +987,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddNotOperator2Constraints, " + pOperand);
+                _outputHandler.PrintMessageToConsole("error in AddNotOperator2Constraints, " + pOperand);
                 throw ex;
             }
         }
@@ -1064,12 +998,12 @@ namespace ProductPlatformAnalyzer
 
             try
             {
-                lResultNum = cICtx.MkIntConst(pNumber.ToString());
+                lResultNum = _iCtx.MkIntConst(pNumber.ToString());
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in Number2Expr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in Number2Expr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultNum;
         }
@@ -1084,12 +1018,12 @@ namespace ProductPlatformAnalyzer
                 {
                     lConvertedList.Add((ArithExpr)lCurrentOperand);
                 }
-                lResultNum = (IntExpr)cICtx.MkAdd(lConvertedList);
+                lResultNum = (IntExpr)_iCtx.MkAdd(lConvertedList);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultNum;
         }
@@ -1104,12 +1038,12 @@ namespace ProductPlatformAnalyzer
                 {
                     lConvertedList.Add((ArithExpr)lCurrentOperand);
                 }
-                lResultNum = (IntExpr)cICtx.MkMul(lConvertedList);
+                lResultNum = (IntExpr)_iCtx.MkMul(lConvertedList);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MulOperator");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MulOperator");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultNum;
         }
@@ -1122,13 +1056,13 @@ namespace ProductPlatformAnalyzer
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindExprInExprSet(pOperand);
 
-                BoolExpr Expression = cICtx.MkNot((BoolExpr)lOperand);
+                BoolExpr Expression = _iCtx.MkNot((BoolExpr)lOperand);
 
                 return Expression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in NotOperator, " + pOperand);
+                _outputHandler.PrintMessageToConsole("error in NotOperator, " + pOperand);
                 throw ex;
             }
         }
@@ -1139,13 +1073,13 @@ namespace ProductPlatformAnalyzer
             {
                 //We assume that both operands are part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
-                BoolExpr Expression = cICtx.MkNot(pOperand);
+                BoolExpr Expression = _iCtx.MkNot(pOperand);
 
                 return Expression;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in NotOperator, " + pOperand.ToString());
+                _outputHandler.PrintMessageToConsole("error in NotOperator, " + pOperand.ToString());
                 throw ex;
             }
         }
@@ -1154,13 +1088,13 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                BoolExpr lResult = cICtx.MkBoolConst(pOperand);
+                BoolExpr lResult = _iCtx.MkBoolConst(pOperand);
 
                 return lResult;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakeBoolVariable, " + pOperand);
+                _outputHandler.PrintMessageToConsole("error in MakeBoolVariable, " + pOperand);
                 throw ex;
             }
         }
@@ -1172,14 +1106,14 @@ namespace ProductPlatformAnalyzer
                 //Here we have to add this constraint to the solver which is previously defined
                 //Also using the solver.AssertAndTrack function which requires to use another named
                 //Boolean expression to track this constraint
-                cIOptimize.Assert(pConstraint);
+                _iOptimize.Assert(pConstraint);
 
-                if (cIDebugMode)
-                    cIDebugOptimizerText.Append("(assert " + pConstraint.ToString() + "); Optimizer - " + pConstraintSource + "\r\n");
+                if (DebugMode)
+                    _iDebugOptimizerText.Append("(assert " + pConstraint.ToString() + "); Optimizer - " + pConstraintSource + "\r\n");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddConstraintToOptimizer");
+                _outputHandler.PrintMessageToConsole("error in AddConstraintToOptimizer");
                 throw ex;
             }
         }
@@ -1191,20 +1125,20 @@ namespace ProductPlatformAnalyzer
                 //Here we have to add this constraint to the solver which is previously defined
                 //Also using the solver.AssertAndTrack function which requires to use another named
                 //Boolean expression to track this constraint
-                int lConstraintIndex = getNextConstraintCounter();
-                BoolExpr ConstraintTracker = cICtx.MkBoolConst("Constraint" + lConstraintIndex);
+                int lConstraintIndex = GetNextConstraintCounter();
+                BoolExpr ConstraintTracker = _iCtx.MkBoolConst("Constraint" + lConstraintIndex);
 
-                cISolver.AssertAndTrack(pConstraint, ConstraintTracker);
+                _iSolver.AssertAndTrack(pConstraint, ConstraintTracker);
                 if (pOptimizer)
                     AddConstraintToOptimizer(pConstraint, pConstraintSource);
                 
-                if (cIDebugMode)
-                    cIDebugText.Append("(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n");
+                if (DebugMode)
+                    _iDebugText.Append("(assert " + pConstraint.ToString() + "); Constraint " + lConstraintIndex + " , Source: " + pConstraintSource + "\r\n");
                 //cOutputHandler.printMessageToConsole("Constraint " + lConstraintIndex + ":" + pConstraint.ToString());
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddConstraintToSolver, " + pConstraint.ToString());
+                _outputHandler.PrintMessageToConsole("error in AddConstraintToSolver, " + pConstraint.ToString());
                 throw ex;
             }
         }
@@ -1279,12 +1213,12 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResultExpr = null;
             try
             {
-                lResultExpr = cICtx.MkBoolConst(pExpression);
+                lResultExpr = _iCtx.MkBoolConst(pExpression);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakeBoolExprFromString");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MakeBoolExprFromString");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -1341,18 +1275,18 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                int newBooleanExpressionCounter = getNextBooleanExpressionCounter();
+                int newBooleanExpressionCounter = GetNextBooleanExpressionCounter();
 
-                Expr tempExpr = cICtx.MkConst(pExprName + "-V" + newBooleanExpressionCounter, cICtx.MkBoolSort());
-                setBooleanExpressionCounter(newBooleanExpressionCounter);
-                cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
+                Expr tempExpr = _iCtx.MkConst(pExprName + "-V" + newBooleanExpressionCounter, _iCtx.MkBoolSort());
+                BooleanExpressionCounter = newBooleanExpressionCounter;
+                ExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
-                if (cIDebugMode)
-                    cIDebugText.Append("(declare-const " + pExprName + " Bool)" + "\r\n");
+                if (DebugMode)
+                    _iDebugText.Append("(declare-const " + pExprName + " Bool)" + "\r\n");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddBooleanExpressionWithIndex, " + pExprName);
+                _outputHandler.PrintMessageToConsole("error in AddBooleanExpressionWithIndex, " + pExprName);
                 throw ex;
             }
         }
@@ -1362,32 +1296,32 @@ namespace ProductPlatformAnalyzer
             BoolExpr lResult = null;
             try
             {
-                Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkBoolSort());
+                Expr tempExpr = _iCtx.MkConst(pExprName, _iCtx.MkBoolSort());
                 if (pExtraDescription.Equals("Optimizer"))
                 {
-                    if (!cOptimizerExpressionDictionary.ContainsKey(tempExpr.ToString()))
+                    if (!_optimizerExpressionDictionary.ContainsKey(tempExpr.ToString()))
                     {
-                        cOptimizerExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
+                        _optimizerExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
-                        if (cIDebugMode)
-                            cIDebugOptimizerText.Append("(declare-const " + pExprName + " Bool);" + pExtraDescription + "\r\n");
+                        if (DebugMode)
+                            _iDebugOptimizerText.Append("(declare-const " + pExprName + " Bool);" + pExtraDescription + "\r\n");
                     }
                 }
                 else
                 {
-                    if (!cExpressionDictionary.ContainsKey(tempExpr.ToString()))
+                    if (!ExpressionDictionary.ContainsKey(tempExpr.ToString()))
                     {
-                        cExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
+                        ExpressionDictionary.Add(tempExpr.ToString(), tempExpr);
 
-                        if (cIDebugMode)
-                            cIDebugText.Append("(declare-const " + pExprName + " Bool);" + pExtraDescription + "\r\n");
+                        if (DebugMode)
+                            _iDebugText.Append("(declare-const " + pExprName + " Bool);" + pExtraDescription + "\r\n");
                     }
                 }
                 lResult = (BoolExpr)tempExpr;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddBooleanExpression, " + pExprName);
+                _outputHandler.PrintMessageToConsole("error in AddBooleanExpression, " + pExprName);
                 throw ex;
             }
             return lResult;
@@ -1402,29 +1336,30 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddStringExpression");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddStringExpression");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
+
         public IntExpr AddIntegerExpression(string pExprName, string pExtraDescription = "")
         {
             IntExpr lReturnedVariable = null;
             try
             {
                 //Expr tempExpr = cICtx.MkConst(pExprName, cICtx.MkIntSort());
-                lReturnedVariable = (IntExpr)cICtx.MkIntConst(pExprName);
+                lReturnedVariable = (IntExpr)_iCtx.MkIntConst(pExprName);
 
-                if (!cOptimizerExpressionDictionary.ContainsKey(lReturnedVariable.ToString()))
+                if (!_optimizerExpressionDictionary.ContainsKey(lReturnedVariable.ToString()))
                 {
-                    cOptimizerExpressionDictionary.Add(lReturnedVariable.ToString(), lReturnedVariable);
+                    _optimizerExpressionDictionary.Add(lReturnedVariable.ToString(), lReturnedVariable);
 
-                    if (cIDebugMode)
-                        cIDebugOptimizerText.Append("(declare-const " + pExprName + " Int) ;"+ pExtraDescription + "\r\n");
+                    if (DebugMode)
+                        _iDebugOptimizerText.Append("(declare-const " + pExprName + " Int) ;"+ pExtraDescription + "\r\n");
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddIntegerExpression, " + pExprName);
+                _outputHandler.PrintMessageToConsole("error in AddIntegerExpression, " + pExprName);
                 throw ex;
             }
             return lReturnedVariable;
@@ -1460,7 +1395,7 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PrepareDebugDirectory");
+                _outputHandler.PrintMessageToConsole("error in PrepareDebugDirectory");
                 throw ex;
             }
         }
@@ -1489,7 +1424,7 @@ namespace ProductPlatformAnalyzer
 
                 if (pCustomFileData== "")
                 {
-                    System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugText.ToString());
+                    System.IO.File.WriteAllText(exePath + "../../../" + endPath, _iDebugText.ToString());
 
                     //endPath.Replace("Transition", "Optimizer");
                     //System.IO.File.WriteAllText(exePath + "../../../" + endPath, cIDebugOptimizerText.ToString());
@@ -1559,7 +1494,7 @@ namespace ProductPlatformAnalyzer
                 if (lSat == Status.SATISFIABLE)
                 {
                     //lSatisfiabilityResult = true;
-                    cResultModel = cISolver.Model;
+                    _resultModel = _iSolver.Model;
 /*                    OutputHandler output = new OutputHandler(wrapper);
 
                                         //adding expressions from model to outputhandler
@@ -1637,7 +1572,7 @@ namespace ProductPlatformAnalyzer
                 //TODO: in the best case all the details about the analysis including the time of the analysis 
                 //should be in one class instance which can be reached by the reporting procedure in the Z3SolverEngineer
                 if (pReportAnalysisDetail && pReportAnalysisTiming)
-                    cOutputHandler.printMessageToConsole("Time: " + stopwatch.Elapsed);
+                    _outputHandler.PrintMessageToConsole("Time: " + stopwatch.Elapsed);
 
 
 /*                ReportSolverResult(pState
@@ -1652,8 +1587,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CheckSatisfiability");               
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CheckSatisfiability");               
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lSat;
         }
@@ -1671,9 +1606,9 @@ namespace ProductPlatformAnalyzer
             {
                 if (pSatResult.Equals(Status.SATISFIABLE))
                 {
-                    Model resultModel = cISolver.Model;
+                    Model resultModel = _iSolver.Model;
 
-                    cOutputHandler.setFrameworkWrapper(pFrameworkWrapper);
+                    _outputHandler.SetFrameworkWrapper(pFrameworkWrapper);
 
                     //adding expressions from model to outputhandler
                     foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
@@ -1683,7 +1618,7 @@ namespace ProductPlatformAnalyzer
                         if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))
                         {
                             string value = "" + resultModel.Evaluate(lCurrentExpr);
-                            cOutputHandler.addExp(lCurrentExpr.ToString(), value, pState);
+                            _outputHandler.AddExp(lCurrentExpr.ToString(), value, pState);
                         }
                     }
 
@@ -1692,26 +1627,26 @@ namespace ProductPlatformAnalyzer
                         //Print and writes an output file showing the result of a finished test
                         if (pReportAnalysisDetail)
                         {
-                            cOutputHandler.printMessageToConsole("Model No " + pState + ":");
+                            _outputHandler.PrintMessageToConsole("Model No " + pState + ":");
                             if (pReportVariants)
                             {
-                                cOutputHandler.printChosenVariants();
+                                _outputHandler.PrintChosenVariants();
                             }
                             if (pReportTransitions)
-                                cOutputHandler.printOperationsTransitions();
+                                _outputHandler.PrintOperationsTransitions();
                         }
-                        cOutputHandler.writeFinished();
-                        cOutputHandler.writeFinishedNoPost();
+                        _outputHandler.WriteFinished();
+                        _outputHandler.WriteFinishedNoPost();
                     }
                     else
                     {
                         //Print and writes an output file showing the result of a deadlocked test
                         if (pReportAnalysisDetail)
-                            cOutputHandler.printCounterExample();
-                        cOutputHandler.writeCounterExample();
-                        cOutputHandler.writeCounterExampleNoPost();
+                            _outputHandler.PrintCounterExample();
+                        _outputHandler.WriteCounterExample();
+                        _outputHandler.WriteCounterExampleNoPost();
                     }
-                    cOutputHandler.writeDebugFile();
+                    _outputHandler.WriteDebugFile();
                 }
                 else
                 {
@@ -1719,7 +1654,7 @@ namespace ProductPlatformAnalyzer
                     //cOutputHandler.printMessageToConsole("core: ");
                     if (pReportUnsatCore)
                     {
-                        foreach (Expr c in cISolver.UnsatCore)
+                        foreach (Expr c in _iSolver.UnsatCore)
                         {
                             Console.WriteLine("{0}", c);
                         }
@@ -1728,8 +1663,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReportSolverResults");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReportSolverResults");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1744,7 +1679,7 @@ namespace ProductPlatformAnalyzer
             OutputHandler lOutputHandler = pOutputHandler;
             try
             {
-                Model resultModel = cISolver.Model;
+                Model resultModel = _iSolver.Model;
 
                 //adding expressions from model to outputhandler
                 foreach (FuncDecl lFunctionDecleration in resultModel.ConstDecls)
@@ -1756,14 +1691,14 @@ namespace ProductPlatformAnalyzer
                         )
                     {
                         string value = "" + resultModel.Evaluate(lCurrentExpr);
-                        lOutputHandler.addExp(lCurrentExpr.ToString(), value, pState);
+                        lOutputHandler.AddExp(lCurrentExpr.ToString(), value, pState);
                     }
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PopulateOutputHandler");                
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PopulateOutputHandler");                
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lOutputHandler;
         }
@@ -1775,13 +1710,13 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (Expr c in cISolver.UnsatCore)
+                foreach (Expr c in _iSolver.UnsatCore)
                     Console.WriteLine("{0}", c);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ConsoleWriteUnsatCore");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ConsoleWriteUnsatCore");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1789,14 +1724,14 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cISolver.Push();
-                if (cIDebugMode)
-                    cIDebugText.Append("(push); \r\n");
+                _iSolver.Push();
+                if (DebugMode)
+                    _iDebugText.Append("(push); \r\n");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in SolverPushFunction");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in SolverPushFunction");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1804,14 +1739,14 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cISolver.Pop();
-                if (cIDebugMode)
-                    cIDebugText.Append("(pop); \r\n");
+                _iSolver.Pop();
+                if (DebugMode)
+                    _iDebugText.Append("(pop); \r\n");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in SolverPopFunction");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in SolverPopFunction");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1826,21 +1761,21 @@ namespace ProductPlatformAnalyzer
             try
             {
                 if (pStrExprToCheck.Equals(""))
-                    lReturnStatus = cISolver.Check();
+                    lReturnStatus = _iSolver.Check();
                     
                     
                 else
                 {
                     Expr lExprToCheck = FindExprInExprSet(pStrExprToCheck);
-                    lReturnStatus = cISolver.Check(lExprToCheck);
+                    lReturnStatus = _iSolver.Check(lExprToCheck);
                 }
 
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CheckModelSatisfiability");               
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CheckModelSatisfiability");               
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lReturnStatus;
         }
@@ -1858,8 +1793,8 @@ namespace ProductPlatformAnalyzer
                     lResultExpr = lFoundExpr[0];*/
                 if (pExtraDescription.Equals("Optimizer"))
                 {
-                    if (cOptimizerExpressionDictionary.ContainsKey(pExprName))
-                        lResultExpr = cOptimizerExpressionDictionary[pExprName];
+                    if (_optimizerExpressionDictionary.ContainsKey(pExprName))
+                        lResultExpr = _optimizerExpressionDictionary[pExprName];
                     else
                     {
                         if (!pJustFind)
@@ -1868,8 +1803,8 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    if (cExpressionDictionary.ContainsKey(pExprName))
-                        lResultExpr = cExpressionDictionary[pExprName];
+                    if (ExpressionDictionary.ContainsKey(pExprName))
+                        lResultExpr = ExpressionDictionary[pExprName];
                     else
                     {
                         if (!pJustFind)
@@ -1882,8 +1817,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Error in FindExprInExprSet!");                
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("Error in FindExprInExprSet!");                
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -1916,7 +1851,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Adding this model value to the assertions
-                BoolExpr addedConstraint = cICtx.MkBoolConst("AddedConstraint");
+                BoolExpr addedConstraint = _iCtx.MkBoolConst("AddedConstraint");
 
                 //should we concentrate on the expressions JUST used in the given model?
                 //We should negate the model itself and add it again to the constraint list
@@ -1933,28 +1868,28 @@ namespace ProductPlatformAnalyzer
                 //}
                 /////////////////////SHOULD BE REMOVED//////////////////////////////
 
-                BoolExpr tempExpression = null;
+                BoolExpr lTempExpression = null;
                 string lLocalDebugText = "";
                 //foreach (FuncDecl lFunctionDecleration in pResultModel.ConstDecls)
-                foreach (FuncDecl lFunctionDecleration in cResultModel.ConstDecls)
+                foreach (FuncDecl lFunctionDecleration in _resultModel.ConstDecls)
                     {
                     Expr lCurrentExpr = FindExprInExprSet(lFunctionDecleration.Name.ToString());
                     if (lCurrentExpr != null && !lCurrentExpr.GetType().Name.Equals("IntExpr"))  
                     {
-                        if (tempExpression == null)
+                        if (lTempExpression == null)
                         {
                             //if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                            if (cResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            if (_resultModel.Evaluate(lCurrentExpr).IsTrue)
                             {
                                 //If the value of the variable is true
-                                tempExpression = cICtx.MkNot((BoolExpr)lCurrentExpr);
+                                lTempExpression = _iCtx.MkNot((BoolExpr)lCurrentExpr);
                                 lLocalDebugText += "(not " + lCurrentExpr.ToString() + " ) ";
                             }
                             else
                             { 
                                 //If the value of the variable is false
-                                tempExpression = (BoolExpr)lCurrentExpr;
-                                if (tempExpression.ToString().Contains(' '))
+                                lTempExpression = (BoolExpr)lCurrentExpr;
+                                if (lTempExpression.ToString().Contains(' '))
                                     lLocalDebugText += "( " + lCurrentExpr.ToString() + " ) ";
                                 else
                                     lLocalDebugText += lCurrentExpr.ToString();
@@ -1964,21 +1899,21 @@ namespace ProductPlatformAnalyzer
                         else
                         {
                             //if (!pResultModel.Evaluate(lCurrentExpr).IsTrue && !pResultModel.Evaluate(lCurrentExpr).IsFalse)
-                            if (!cResultModel.Evaluate(lCurrentExpr).IsTrue && !cResultModel.Evaluate(lCurrentExpr).IsFalse)
+                            if (!_resultModel.Evaluate(lCurrentExpr).IsTrue && !_resultModel.Evaluate(lCurrentExpr).IsFalse)
                             {
                                 //If the value of the variable is neither true nor false (it is don't care, meaning both true and false values for this variable will satisfy the model)
-                                tempExpression = cICtx.MkOr(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lTempExpression = _iCtx.MkOr(lTempExpression, _iCtx.MkNot((BoolExpr)lCurrentExpr));
                                 lLocalDebugText = "(or " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " ))";
                             }
                             //else if (pResultModel.Evaluate(lCurrentExpr).IsTrue)
-                            else if (cResultModel.Evaluate(lCurrentExpr).IsTrue)
+                            else if (_resultModel.Evaluate(lCurrentExpr).IsTrue)
                             {
-                                tempExpression = cICtx.MkOr(tempExpression, cICtx.MkNot((BoolExpr)lCurrentExpr));
+                                lTempExpression = _iCtx.MkOr(lTempExpression, _iCtx.MkNot((BoolExpr)lCurrentExpr));
                                 lLocalDebugText = "(or " + lLocalDebugText + " (not " + lCurrentExpr.ToString() + " )) ";
                             }
                             else
                             { 
-                                tempExpression = cICtx.MkOr(tempExpression, (BoolExpr)lCurrentExpr);
+                                lTempExpression = _iCtx.MkOr(lTempExpression, (BoolExpr)lCurrentExpr);
                                 lLocalDebugText = "(or " + lLocalDebugText + " " + lCurrentExpr.ToString() + " ) ";
                             }
                         }
@@ -1987,14 +1922,14 @@ namespace ProductPlatformAnalyzer
                 }
 
                 //tempExpression = iCtx.MkNot(tempExpression);
-                cISolver.AssertAndTrack(tempExpression, addedConstraint);
-                cIDebugText.Append("(assert " + lLocalDebugText + ")\r\n");
+                _iSolver.AssertAndTrack(lTempExpression, addedConstraint);
+                _iDebugText.Append("(assert " + lLocalDebugText + ")\r\n");
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Error in AddModelItem2SolverAssertion!");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("Error in AddModelItem2SolverAssertion!");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -2008,7 +1943,7 @@ namespace ProductPlatformAnalyzer
             //else
             //    lResultExpr = cICtx.MkEq(l1, l2);
 
-            lResultExpr = cICtx.MkTrue();
+            lResultExpr = _iCtx.MkTrue();
 
             return lResultExpr;
         }
@@ -2023,7 +1958,7 @@ namespace ProductPlatformAnalyzer
             //else
             //    lResultExpr = cICtx.MkEq(l1, l2);
 
-            lResultExpr = cICtx.MkFalse();
+            lResultExpr = _iCtx.MkFalse();
 
             return lResultExpr;
         }

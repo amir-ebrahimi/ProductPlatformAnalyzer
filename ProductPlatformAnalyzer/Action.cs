@@ -31,7 +31,7 @@ namespace ProductPlatformAnalyzer
 
         public OperationInstance GetOperationInstanceForTransition(int pIndex)
         {
-            return MyOperationInstance.getOperationInstanceForTransition(pIndex);
+            return MyOperationInstance.GetOperationInstanceForTransition(pIndex);
         }
 
         public Action GetActionForTransition(int pIndex)

@@ -9,75 +9,87 @@ namespace ProductPlatformAnalyzer
 {
     public class Operation
     {
-        private string _name;
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        #region Props
+        public string Name { get; set; }
+        public string Trigger { get; set; }
+        public string OperationTriggerVariableName { get; set; } //set was not there, but it was setting the object so I added it
+        public BoolExpr OperationTriggerVariable { get; set; }
+        public List<string> Precondition { get; set; }
+        public List<string> Postcondition { get; set; }
+        public string Requirement { get; set; }
+        public string OperationRequirementVariableName { get; set; } //set was not there, but it was setting the object so I added it
+        public BoolExpr OperationRequirementVariable { get; set; }
+        public string Resource { get; set; }
+        #endregion
 
-        private string _trigger;
-        public string Trigger
-        {
-            get { return _trigger; }
-            set { _trigger = value; }
-        }
+        #region Getter-Setter
+        //private string _name;
+        //public string Name
+        //{
+        //    get { return _name; }
+        //    set { _name = value; }
+        //}
 
-        private string _operationTriggerVariableName;
-        public string OperationTriggerVariableName
-        {
-            get { return _operationTriggerVariableName; }
-        }
+        //private string _trigger;
+        //public string Trigger
+        //{
+        //    get { return _trigger; }
+        //    set { _trigger = value; }
+        //}
 
-        private BoolExpr _operationTriggerVariable;
-        public BoolExpr OperationTriggerVariable
-        {
-            get { return _operationTriggerVariable; }
-            set { _operationTriggerVariable = value; }
-        }
+        //private string _operationTriggerVariableName;
+        //public string OperationTriggerVariableName
+        //{
+        //    get { return _operationTriggerVariableName; }
+        //}
 
-        private List<string> _precondition;
-        public List<string> Precondition
-        {
-            get { return _precondition; }
-            set { _precondition = value; }
-        }
+        //private BoolExpr _operationTriggerVariable;
+        //public BoolExpr OperationTriggerVariable
+        //{
+        //    get { return _operationTriggerVariable; }
+        //    set { _operationTriggerVariable = value; }
+        //}
 
-        private List<string> _postcondition;
-        public List<string> Postcondition
-        {
-            get { return _postcondition; }
-            set { _postcondition = value; }
-        }
+        //private List<string> _precondition;
+        //public List<string> Precondition
+        //{
+        //    get { return _precondition; }
+        //    set { _precondition = value; }
+        //}
 
-        private string _requirement;
-        public string Requirement
-        {
-            get { return _requirement; }
-            set { _requirement = value; }
-        }
+        //private List<string> _postcondition;
+        //public List<string> Postcondition
+        //{
+        //    get { return _postcondition; }
+        //    set { _postcondition = value; }
+        //}
 
-        private string _operationRequirementVariableName;
-        public string OperationRequirementVariableName
-        {
-            get { return _operationRequirementVariableName; }
-        }
+        //private string _requirement;
+        //public string Requirement
+        //{
+        //    get { return _requirement; }
+        //    set { _requirement = value; }
+        //}
 
-        private BoolExpr _operationRequirementVariable;
-        public BoolExpr OperationRequirementVariable
-        {
-            get { return _operationRequirementVariable; }
-            set { _operationRequirementVariable = value; }
-        }
+        //private string _operationRequirementVariableName;
+        //public string OperationRequirementVariableName
+        //{
+        //    get { return _operationRequirementVariableName; }
+        //}
 
-        private string _resource;
-        public string Resource
-        {
-            get { return _resource; }
-            set { _resource = value; }
-        }
+        //private BoolExpr _operationRequirementVariable;
+        //public BoolExpr OperationRequirementVariable
+        //{
+        //    get { return _operationRequirementVariable; }
+        //    set { _operationRequirementVariable = value; }
+        //}
 
-        public List<OperationInstance> MyOperationInstances = new List<OperationInstance>();
+        //private string _resource;
+        //public string Resource
+        //{
+        //    get { return _resource; }
+        //    set { _resource = value; }
+        //}
 
         /*private Z3Solver _z3Solver;
         public Z3Solver Z3Solver
@@ -85,26 +97,30 @@ namespace ProductPlatformAnalyzer
             get { return _z3Solver; }
             set { _z3Solver = value; }
         }*/
+        #endregion
+
+
+        public List<OperationInstance> MyOperationInstances = new List<OperationInstance>();
 
         public Operation(string pOperationName, string pTrigger, string pRequirement, string pPrecondition, string pPostcondition, string pResource)
         {
-            _name = pOperationName;
-            _trigger = pTrigger;
-            _requirement = pRequirement;
-            _precondition = new List<string>();
-            _postcondition = new List<string>();
-            _resource = pResource;
+            Name = pOperationName;
+            Trigger = pTrigger;
+            Requirement = pRequirement;
+            Precondition = new List<string>();
+            Postcondition = new List<string>();
+            Resource = pResource;
 
             if (pPrecondition != null)
                 if (pPrecondition != "")
-                    _precondition.Add(pPrecondition);
+                    Precondition.Add(pPrecondition);
 
             if (pPostcondition != null)
                 if (pPostcondition != "")
-                    _postcondition.Add(pPostcondition);
+                    Postcondition.Add(pPostcondition);
 
             //_z3Solver = pZ3Solver;
-            createOperationVariableNames();
+            CreateOperationVariableNames();
             //createOperationVariables();
         }
 
@@ -114,28 +130,28 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        public OperationInstance getOperationInstanceForTransition(int index)
+        public OperationInstance GetOperationInstanceForTransition(int pIndex)
         {
-            return MyOperationInstances[index];
+            return MyOperationInstances[pIndex];
         }
 
-        public BoolExpr getResourceExpression(int index)
+        public BoolExpr GetResourceExpression(int pIndex)
         {
-            return MyOperationInstances[index].getResourceExpression();
+            return MyOperationInstances[pIndex].GetResourceExpression();
         }
 
         public void AddPrecondition(string pPrecondition)
         {
             if (pPrecondition != null)
                 if (!ContainPrecondition(pPrecondition))
-                    _precondition.Add(pPrecondition);
+                    Precondition.Add(pPrecondition);
         }
 
         public void RemovePrecondition(string pPrecondition)
         {
             if (pPrecondition != null)
                 if (ContainPrecondition(pPrecondition))
-                    _precondition.Remove(pPrecondition);
+                    Precondition.Remove(pPrecondition);
         }
 
         public void AddPrecondition(List<string> pPreconditions)
@@ -150,7 +166,7 @@ namespace ProductPlatformAnalyzer
         {
             bool lResult = false;
 
-            foreach (string lPrecondition in _precondition)
+            foreach (string lPrecondition in Precondition)
             {
                 if (lPrecondition.Equals(pPrecondition))
                     lResult = true;
@@ -162,7 +178,7 @@ namespace ProductPlatformAnalyzer
         {
             bool lResult = false;
 
-            foreach (string lPostcondition in _postcondition)
+            foreach (string lPostcondition in Postcondition)
             {
                 if (lPostcondition.Equals(pPostcondition))
                     lResult = true;
@@ -174,14 +190,14 @@ namespace ProductPlatformAnalyzer
         {
             if (pPostcondition != null)
                 if (!ContainPostcondition(pPostcondition))
-                    _postcondition.Add(pPostcondition);
+                    Postcondition.Add(pPostcondition);
         }
 
         public void RemovePostcondition(string pPostcondition)
         {
             if (pPostcondition != null)
                 if (ContainPostcondition(pPostcondition))
-                    _postcondition.Remove(pPostcondition);
+                    Postcondition.Remove(pPostcondition);
         }
 
         public void AddPostcondition(List<string> pPostconditions)
@@ -192,10 +208,10 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private void createOperationVariableNames()
+        private void CreateOperationVariableNames()
         {
-            _operationRequirementVariableName = String.Join("_", new String[] { _name, "Requirement" });
-            _operationTriggerVariableName = String.Join("_", new String[] { _name, "Trigger" });
+            OperationRequirementVariableName = String.Join("_", new String[] { Name, "Requirement" });
+            OperationTriggerVariableName = String.Join("_", new String[] { Name, "Trigger" });
         }
 
         /*private void createOperationVariables()

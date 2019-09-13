@@ -8,9 +8,9 @@ namespace ProductPlatformAnalyzer
 {
     static class GeneralUtilities
     {
-        public static string parseExpression(string pPrefixExpr, string pParseType)
+        public static string ParseExpression(string pPrefixExpr, string pParseType)
         {
-            string newExpr = null;
+            string lNewExpr = null;
 
             try
             {
@@ -20,19 +20,19 @@ namespace ProductPlatformAnalyzer
 
                 lConditionParser.AddChild(lExprTree, pPrefixExpr);
 
-                foreach (Node<string> item in lExprTree)
+                foreach (Node<string> lItem in lExprTree)
                 {
                     //Then we have to traverse the tree
                     switch (pParseType)
                     {
                         case "infix":
-                            newExpr = ParseInfix(item);
+                            lNewExpr = ParseInfix(lItem);
                             break;
                         case "prefix":
-                            newExpr = ParsePrefix(item);
+                            lNewExpr = ParsePrefix(lItem);
                             break;
                         default:
-                            newExpr = ParseInfix(item);
+                            lNewExpr = ParseInfix(lItem);
                             break;
                     }
                 }
@@ -43,7 +43,7 @@ namespace ProductPlatformAnalyzer
                 Console.WriteLine(ex.Message);
             }
 
-            return newExpr;
+            return lNewExpr;
         }
 
         private static string ParseInfix(Node<string> pNode)
@@ -51,7 +51,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 List<Node<string>> lChildren = new List<Node<string>>();
-                string newCon = null;
+                string lNewCon = null;
                 if ((pNode.Data != "and")
                     && (pNode.Data != "or")
                     && (pNode.Data != "not")
@@ -62,7 +62,7 @@ namespace ProductPlatformAnalyzer
                     )
                 {
                     //We have one operator
-                    newCon = printStatus(pNode.Data);
+                    lNewCon = PrintStatus(pNode.Data);
                 }
                 else
                 {
@@ -74,45 +74,45 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " and " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " and " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case "or":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " or " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " or " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case "<=":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " <= " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " <= " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case ">=":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " >= " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " >= " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case ">":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " > " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " > " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case "<":
                             {
-                                newCon = "(" + ParseInfix(lChildren[0]) + " < " + ParseInfix(lChildren[1]) + ")";
+                                lNewCon = "(" + ParseInfix(lChildren[0]) + " < " + ParseInfix(lChildren[1]) + ")";
                                 break;
                             }
                         case "not":
                             {
                                 ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
-                                newCon = "(not " + ParseInfix(lChildren[0]) + ")";
+                                lNewCon = "(not " + ParseInfix(lChildren[0]) + ")";
                                 break;
                             }
                         default:
                             break;
                     }
                 }
-                return newCon;
+                return lNewCon;
             }
             catch (Exception ex)
             {
@@ -128,7 +128,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 List<Node<string>> lChildren = new List<Node<string>>();
-                string newCon = null;
+                string lNewCon = null;
                 if ((pNode.Data != "and")
                     && (pNode.Data != "or")
                     && (pNode.Data != "not")
@@ -139,7 +139,7 @@ namespace ProductPlatformAnalyzer
                     )
                 {
                     //We have one operator
-                    newCon = printStatus(pNode.Data);
+                    lNewCon = PrintStatus(pNode.Data);
                 }
                 else
                 {
@@ -151,45 +151,45 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                newCon = "(" + " and " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " and " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case "or":
                             {
-                                newCon = "(" + " or " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " or " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case "<=":
                             {
-                                newCon = "(" + " <= " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " <= " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case ">=":
                             {
-                                newCon = "(" + " >= " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " >= " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case ">":
                             {
-                                newCon = "(" + " > " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " > " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case "<":
                             {
-                                newCon = "(" + " < " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
+                                lNewCon = "(" + " < " + ParsePrefix(lChildren[0]) + ParsePrefix(lChildren[1]) + ")";
                                 break;
                             }
                         case "not":
                             {
                                 ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
-                                newCon = "(not " + ParsePrefix(lChildren[0]) + ")";
+                                lNewCon = "(not " + ParsePrefix(lChildren[0]) + ")";
                                 break;
                             }
                         default:
                             break;
                     }
                 }
-                return newCon;
+                return lNewCon;
             }
             catch (Exception ex)
             {
@@ -221,26 +221,26 @@ namespace ProductPlatformAnalyzer
             return lResultString;
         }
 
-        private static string printStatus(string p)
+        private static string PrintStatus(string p)
         {
-            string[] condition = new string[3];
+            string[] lCondition = new string[3];
 
             try
             {
 
-                condition = p.Split('_');
+                lCondition = p.Split('_');
 
-                if (condition.Length == 1)
+                if (lCondition.Length == 1)
                     return p;
                 else
-                    switch (condition[1])
+                    switch (lCondition[1])
                     {
                         case "F":
-                            return condition[0] + ".Finished";
+                            return lCondition[0] + ".Finished";
                         case "I":
-                            return condition[0] + ".Initial";
+                            return lCondition[0] + ".Initial";
                         default:
-                            return condition[0] + ".Executing";
+                            return lCondition[0] + ".Executing";
                     }
             }
             catch (Exception ex)

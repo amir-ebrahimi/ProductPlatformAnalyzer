@@ -16,255 +16,292 @@ namespace ProductPlatformAnalyzer
 {
     public class Z3SolverEngineer
     {
-        private FrameworkWrapper cFrameworkWrapper;
-        private Z3Solver cZ3Solver;
-        private OutputHandler cOutputHandler;
-        private RandomTestCreator cRandomTestCreator;
+        private FrameworkWrapper _frameworkWrapper;
+        private Z3Solver _z3Solver;
+        private OutputHandler _outputHandler;
+        private RandomTestCreator _randomTestCreator;
 
-        private bool cDebugMode;
-        private bool cOpSeqAnalysis;
-        private bool cNeedPreAnalysis;
-        private bool cPreAnalysisResult;
+        //private bool cDebugMode;
+        private bool _opSeqAnalysis;
+        private bool _needPreAnalysis;
+        private bool _preAnalysisResult;
 
         //private OperationInstance cOperationInstance_CurrentState;
         //private OperationInstance cOperationInstance_NextState;
 
-        private List<BoolExpr> cConfigurationConstraints;
-        private HashSet<BoolExpr> cPConstraints;
+        private List<BoolExpr> _configurationConstraints;
+        private HashSet<BoolExpr> _pConstraints;
 
 
-        private int cCurrentTransitionNumber;
-        private int cMaxNumberOfTransitions;
+        private int _currentTransitionNumber;
+        private int _maxNumberOfTransitions;
 
         //boolean variation point variables for model building
-        private Enumerations.GeneralAnalysisType cGeneralAnalysisType;
-        private Enumerations.AnalysisType cAnalysisType;
+        private Enumerations.GeneralAnalysisType _generalAnalysisType;
+        private Enumerations.AnalysisType _analysisType;
 
-        private bool cConvertVariants;
-        private bool cConvertConfigurationRules;
-        private bool cConvertOperations;
-        private bool cConvertOperationPrecedenceRules;
-        //private bool cConvertVariantOperationRelations;
-        private bool cConvertResources;
-        private bool cConvertGoal;
-        private bool cBuildPConstraints;
-        private bool cOperationMutualExecution;
+        //private bool cConvertVariants;
+        //private bool cConvertConfigurationRules;
+        //private bool cConvertOperations;
+        //private bool cConvertOperationPrecedenceRules;
+        ////private bool cConvertVariantOperationRelations;
+        //private bool cConvertResources;
+        //private bool cConvertGoal;
+        //private bool cBuildPConstraints;
+        //private bool cOperationMutualExecution;
 
         //boolean variation point variables for reporting in output
-        private bool cReportAnalysisResult;
-        private bool cReportAnalysisDetailResult;
-        private bool cReportVariantsResult;
-        private bool cReportTransitionsResult;
-        private bool cReportAnalysisTiming;
-        private bool cReportUnsatCore;
-        private bool cStopBetweenEachTransition;
-        private bool cStopAEndOfAnalysis;
-        private bool cCreateHTMLOutput;
-        private bool cReportTimings;
-        private int cNoOfModelsRequired;
-        private bool cOperationWaiting;
+        //private bool cReportAnalysisResult;
+        //private bool cReportAnalysisDetailResult;
+        //private bool cReportVariantsResult;
+        //private bool cReportTransitionsResult;
+        //private bool cReportAnalysisTiming;
+        //private bool cReportUnsatCore;
+        //private bool cStopBetweenEachTransition;
+        //private bool cStopAEndOfAnalysis;
+        //private bool cCreateHTMLOutput;
+        //private bool cReportTimings;
+        //private int cNoOfModelsRequired;
+        //private bool cOperationWaiting;
 
         //boolean variation points for random file creation
-        private int cRandomMaxVariantGroupumber;
-        private int cRandomMaxVariantNumber;
-        private int cRandomMaxPartNumber;
-        private int cRandomMaxOperationNumber;
-        private int cRandomMaxNoOfConfigurationRules;
-        private int cRandomTrueProbability;
-        private int cRandomFalseProbability;
-        private int cRandomExpressionProbability;
-        private int cRandomMaxTraitNumber;
-        private int cRandomMaxNoOfTraitAttributes;
-        private int cRandomMaxResourceNumber;
-        private int cRandomMaxExpressionOperandNumber;
-        private bool cRandomInputFile;
+        //private int cRandomMaxVariantGroupumber;
+        //private int cRandomMaxVariantNumber;
+        //private int cRandomMaxPartNumber;
+        //private int cRandomMaxOperationNumber;
+        //private int cRandomMaxNoOfConfigurationRules;
+        //private int cRandomTrueProbability;
+        //private int cRandomFalseProbability;
+        //private int cRandomExpressionProbability;
+        //private int cRandomMaxTraitNumber;
+        //private int cRandomMaxNoOfTraitAttributes;
+        //private int cRandomMaxResourceNumber;
+        //private int cRandomMaxExpressionOperandNumber;
+        //private bool cRandomInputFile;
 
         //Timing variables
-        private Stopwatch cStopWatchDetailed = new Stopwatch();
-        private Stopwatch cStopWatchTotal = new Stopwatch();
+        private Stopwatch _stopWatchDetailed = new Stopwatch();
+        private Stopwatch _stopWatchTotal = new Stopwatch();
 
-        private double cModelCreationTime;
-        private double cModelAnalysisTime;
-        private double cModelAnalysisReportingTime;
+        private double _modelCreationTime;
+        private double _modelAnalysisTime;
+        private double _modelAnalysisReportingTime;
 
-        Dictionary<string, List<Operation>> cResourcesOperations = new Dictionary<string, List<Operation>>();
+        Dictionary<string, List<Operation>> _resourcesOperations = new Dictionary<string, List<Operation>>();
 
 
         #region Getter-Setters
+        //public List<DependentActions> DependentActionsList { get; set; }
+
+        //public void setDebugMode(bool pDebugMode)
+        //{
+        //    cZ3Solver.SetDebugMode(pDebugMode);
+        //}
+
+        //public bool getDebugMode()
+        //{
+        //    return cZ3Solver.GetDebugMode();
+        //}
+
+        //public int RandomMaxNoOfConfigurationRules {
+        //    get { return cRandomMaxNoOfConfigurationRules; }
+        //    set { cRandomMaxNoOfConfigurationRules = value; }
+        //}
+        //public int RandomMaxExpressionOperandNumber
+        //{
+        //    get { return cRandomMaxExpressionOperandNumber; }
+        //    set { cRandomMaxExpressionOperandNumber = value; }
+        //}
+        //public int RandomMaxResourceNumber
+        //{
+        //    get { return cRandomMaxResourceNumber; }
+        //    set { cRandomMaxResourceNumber = value; }
+        //}
+        //public int RandomMaxNoOfTraitAttributes
+        //{
+        //    get { return cRandomMaxNoOfTraitAttributes; }
+        //    set { cRandomMaxNoOfTraitAttributes = value; }
+        //}
+        //public int RandomMaxTraitNumber
+        //{
+        //    get { return cRandomMaxTraitNumber; }
+        //    set { cRandomMaxTraitNumber = value; }
+        //}
+        //public int RandomExpressionProbability
+        //{
+        //    get { return cRandomExpressionProbability; }
+        //    set { cRandomExpressionProbability = value; }
+        //}
+        //public int RandomFalseProbability
+        //{
+        //    get { return cRandomFalseProbability; }
+        //    set { cRandomFalseProbability = value; }
+        //}
+        //public int RandomTrueProbability
+        //{
+        //    get { return cRandomTrueProbability; }
+        //    set { cRandomTrueProbability = value; }
+        //}
+        //public int RandomMaxOperationNumber
+        //{
+        //    get { return cRandomMaxOperationNumber; }
+        //    set { cRandomMaxOperationNumber = value; }
+        //}
+        //public int RandomMaxPartNumber
+        //{
+        //    get { return cRandomMaxPartNumber; }
+        //    set { cRandomMaxPartNumber = value; }
+        //}
+        //public int RandomMaxVariantNumber
+        //{
+        //    get { return cRandomMaxVariantNumber; }
+        //    set { cRandomMaxVariantNumber = value; }
+        //}
+        //public int RandomMaxVariantGroupumber
+        //{
+        //    get { return cRandomMaxVariantGroupumber; }
+        //    set { cRandomMaxVariantGroupumber = value; }
+        //}
+        //public bool RandomInputFile
+        //{
+        //    get { return cRandomInputFile; }
+        //    set { cRandomInputFile = value; }
+        //}
+        //public bool ConvertVariants
+        //{
+        //    get { return cConvertVariants; }
+        //    set { cConvertVariants = value; }
+        //}
+        //public bool ConvertConfigurationRules
+        //{
+        //    get { return cConvertConfigurationRules; }
+        //    set { cConvertConfigurationRules = value; }
+        //}
+        //public bool ConvertOperations
+        //{
+        //    get { return cConvertOperations; }
+        //    set { cConvertOperations = value; }
+        //}
+        //public bool ConvertOperationPrecedenceRules
+        //{
+        //    get { return cConvertOperationPrecedenceRules; }
+        //    set { cConvertOperationPrecedenceRules = value; }
+        //}
+        //public bool ConvertResources
+        //{
+        //    get { return cConvertResources; }
+        //    set { cConvertResources = value; }
+        //}
+        //public bool ConvertGoal
+        //{
+        //    get { return cConvertGoal; }
+        //    set { cConvertGoal = value; }
+        //}
+        //public bool BuildPConstraints
+        //{
+        //    get { return cBuildPConstraints; }
+        //    set { cBuildPConstraints = value; }
+        //}
+        //public bool OperationMutualExecution
+        //{
+        //    get { return cOperationMutualExecution; }
+        //    set { cOperationMutualExecution = value; }
+        //}
+        //public bool ReportAnalysisResult
+        //{
+        //    get { return cReportAnalysisResult; }
+        //    set { cReportAnalysisResult = value; }
+        //}
+        //public bool ReportAnalysisDetailResult
+        //{
+        //    get { return cReportAnalysisDetailResult; }
+        //    set { cReportAnalysisDetailResult = value; }
+        //}
+        //public bool ReportVariantsResult
+        //{
+        //    get { return cReportVariantsResult; }
+        //    set { cReportVariantsResult = value; }
+        //}
+        //public bool ReportTransitionsResult
+        //{
+        //    get { return cReportTransitionsResult; }
+        //    set { cReportTransitionsResult = value; }
+        //}
+        //public bool ReportAnalysisTiming
+        //{
+        //    get { return cReportAnalysisTiming; }
+        //    set { cReportAnalysisTiming = value; }
+        //}
+        //public bool ReportUnsatCore
+        //{
+        //    get { return cReportUnsatCore; }
+        //    set { cReportUnsatCore = value; }
+        //}
+        //public bool StopBetweenEachTransition {
+        //    get { return cStopBetweenEachTransition; }
+        //    set { cStopBetweenEachTransition = value;}
+        //}
+        //public bool StopAEndOfAnalysis {
+        //    get { return cStopAEndOfAnalysis; }
+        //    set { cStopAEndOfAnalysis = value; }
+        //}
+        //public bool CreateHTMLOutput
+        //{
+        //    get { return cCreateHTMLOutput; }
+        //    set { cCreateHTMLOutput = value; }
+        //}
+        //public bool ReportTimings {
+        //    get { return cReportTimings; }
+        //    set { cReportTimings = value;}
+        //}
+        //public int NoOfModelsRequired
+        //{
+        //    get { return cNoOfModelsRequired; }
+        //    set { cNoOfModelsRequired = value; }
+        //}
+        //public bool OperationWaiting
+        //{
+        //    get { return cOperationWaiting; }
+        //    set { cOperationWaiting = value; }
+        //}
+        #endregion
+
+        #region Props
         public List<DependentActions> DependentActionsList { get; set; }
-
-        public void setDebugMode(bool pDebugMode)
-        {
-            cZ3Solver.setDebugMode(pDebugMode);
-        }
-
-        public bool getDebugMode()
-        {
-            return cZ3Solver.getDebugMode();
-        }
-
-        public int RandomMaxNoOfConfigurationRules {
-            get { return cRandomMaxNoOfConfigurationRules; }
-            set { cRandomMaxNoOfConfigurationRules = value; }
-        }
-        public int RandomMaxExpressionOperandNumber
-        {
-            get { return cRandomMaxExpressionOperandNumber; }
-            set { cRandomMaxExpressionOperandNumber = value; }
-        }
-        public int RandomMaxResourceNumber
-        {
-            get { return cRandomMaxResourceNumber; }
-            set { cRandomMaxResourceNumber = value; }
-        }
-        public int RandomMaxNoOfTraitAttributes
-        {
-            get { return cRandomMaxNoOfTraitAttributes; }
-            set { cRandomMaxNoOfTraitAttributes = value; }
-        }
-        public int RandomMaxTraitNumber
-        {
-            get { return cRandomMaxTraitNumber; }
-            set { cRandomMaxTraitNumber = value; }
-        }
-        public int RandomExpressionProbability
-        {
-            get { return cRandomExpressionProbability; }
-            set { cRandomExpressionProbability = value; }
-        }
-        public int RandomFalseProbability
-        {
-            get { return cRandomFalseProbability; }
-            set { cRandomFalseProbability = value; }
-        }
-        public int RandomTrueProbability
-        {
-            get { return cRandomTrueProbability; }
-            set { cRandomTrueProbability = value; }
-        }
-        public int RandomMaxOperationNumber
-        {
-            get { return cRandomMaxOperationNumber; }
-            set { cRandomMaxOperationNumber = value; }
-        }
-        public int RandomMaxPartNumber
-        {
-            get { return cRandomMaxPartNumber; }
-            set { cRandomMaxPartNumber = value; }
-        }
-        public int RandomMaxVariantNumber
-        {
-            get { return cRandomMaxVariantNumber; }
-            set { cRandomMaxVariantNumber = value; }
-        }
-        public int RandomMaxVariantGroupumber
-        {
-            get { return cRandomMaxVariantGroupumber; }
-            set { cRandomMaxVariantGroupumber = value; }
-        }
-        public bool RandomInputFile
-        {
-            get { return cRandomInputFile; }
-            set { cRandomInputFile = value; }
-        }
-        public bool ConvertVariants
-        {
-            get { return cConvertVariants; }
-            set { cConvertVariants = value; }
-        }
-        public bool ConvertConfigurationRules
-        {
-            get { return cConvertConfigurationRules; }
-            set { cConvertConfigurationRules = value; }
-        }
-        public bool ConvertOperations
-        {
-            get { return cConvertOperations; }
-            set { cConvertOperations = value; }
-        }
-        public bool ConvertOperationPrecedenceRules
-        {
-            get { return cConvertOperationPrecedenceRules; }
-            set { cConvertOperationPrecedenceRules = value; }
-        }
-        public bool ConvertResources
-        {
-            get { return cConvertResources; }
-            set { cConvertResources = value; }
-        }
-        public bool ConvertGoal
-        {
-            get { return cConvertGoal; }
-            set { cConvertGoal = value; }
-        }
-        public bool BuildPConstraints
-        {
-            get { return cBuildPConstraints; }
-            set { cBuildPConstraints = value; }
-        }
-        public bool OperationMutualExecution
-        {
-            get { return cOperationMutualExecution; }
-            set { cOperationMutualExecution = value; }
-        }
-        public bool ReportAnalysisResult
-        {
-            get { return cReportAnalysisResult; }
-            set { cReportAnalysisResult = value; }
-        }
-        public bool ReportAnalysisDetailResult
-        {
-            get { return cReportAnalysisDetailResult; }
-            set { cReportAnalysisDetailResult = value; }
-        }
-        public bool ReportVariantsResult
-        {
-            get { return cReportVariantsResult; }
-            set { cReportVariantsResult = value; }
-        }
-        public bool ReportTransitionsResult
-        {
-            get { return cReportTransitionsResult; }
-            set { cReportTransitionsResult = value; }
-        }
-        public bool ReportAnalysisTiming
-        {
-            get { return cReportAnalysisTiming; }
-            set { cReportAnalysisTiming = value; }
-        }
-        public bool ReportUnsatCore
-        {
-            get { return cReportUnsatCore; }
-            set { cReportUnsatCore = value; }
-        }
-        public bool StopBetweenEachTransition {
-            get { return cStopBetweenEachTransition; }
-            set { cStopBetweenEachTransition = value;}
-        }
-        public bool StopAEndOfAnalysis {
-            get { return cStopAEndOfAnalysis; }
-            set { cStopAEndOfAnalysis = value; }
-        }
-        public bool CreateHTMLOutput
-        {
-            get { return cCreateHTMLOutput; }
-            set { cCreateHTMLOutput = value; }
-        }
-        public bool ReportTimings {
-            get { return cReportTimings; }
-            set { cReportTimings = value;}
-        }
-        public int NoOfModelsRequired
-        {
-            get { return cNoOfModelsRequired; }
-            set { cNoOfModelsRequired = value; }
-        }
-        public bool OperationWaiting
-        {
-            get { return cOperationWaiting; }
-            set { cOperationWaiting = value; }
-        }
-
+        public bool DebugMode { get; set; }
+        public int RandomMaxNoOfConfigurationRules { get; set; }
+        public int RandomMaxExpressionOperandNumber { get; set; }
+        public int RandomMaxResourceNumber { get; set; }
+        public int RandomMaxNoOfTraitAttributes { get; set; }
+        public int RandomMaxTraitNumber { get; set; }
+        public int RandomExpressionProbability { get; set; }
+        public int RandomFalseProbability { get; set; }
+        public int RandomTrueProbability { get; set; }
+        public int RandomMaxOperationNumber { get; set; }
+        public int RandomMaxPartNumber { get; set; }
+        public int RandomMaxVariantNumber { get; set; }
+        public int RandomMaxVariantGroupumber { get; set; }
+        public bool RandomInputFile { get; set; }
+        public bool ConvertVariants { get; set; }
+        public bool ConvertConfigurationRules { get; set; }
+        public bool ConvertOperations { get; set; }
+        public bool ConvertOperationPrecedenceRules { get; set; }
+        public bool ConvertResources { get; set; }
+        public bool ConvertGoal { get; set; }
+        public bool BuildPConstraints { get; set; }
+        public bool OperationMutualExecution { get; set; }
+        public bool ReportAnalysisResult { get; set; }
+        public bool ReportAnalysisDetailResult { get; set; }
+        public bool ReportVariantsResult { get; set; }
+        public bool ReportTransitionsResult { get; set; }
+        public bool ReportAnalysisTiming { get; set; } 
+        public bool ReportUnsatCore { get; set; }
+        public bool StopBetweenEachTransition { get; set; }
+        public bool StopAEndOfAnalysis { get; set; }
+        public bool CreateHTMLOutput { get; set; }
+        public bool ReportTimings { get; set; }
+        public int NoOfModelsRequired { get; set; }
+        public bool OperationWaiting { get; set; }
         #endregion
 
         /// <summary>
@@ -274,20 +311,20 @@ namespace ProductPlatformAnalyzer
         {
             DependentActionsList = new List<ProductPlatformAnalyzer.DependentActions>();
 
-            cCurrentTransitionNumber = 0;
-            cMaxNumberOfTransitions = 0;
+            _currentTransitionNumber = 0;
+            _maxNumberOfTransitions = 0;
 
             //DefaultAnalyzerSetting();
 
-            cDebugMode = false;
-            cOpSeqAnalysis = true;
-            cNeedPreAnalysis = true;
-            cPreAnalysisResult = true;
-            cConfigurationConstraints = new List<BoolExpr>();
-            cPConstraints = new HashSet<BoolExpr>();
+            DebugMode = false;
+            _opSeqAnalysis = true;
+            _needPreAnalysis = true;
+            _preAnalysisResult = true;
+            _configurationConstraints = new List<BoolExpr>();
+            _pConstraints = new HashSet<BoolExpr>();
 
             if (pFrameworkWrapper != null)
-                cFrameworkWrapper = pFrameworkWrapper;
+                _frameworkWrapper = pFrameworkWrapper;
             //boolean variation point variables
             //setVariationPoints(Enumerations.GeneralAnalysisType.Static, Enumerations.AnalysisType.CompleteAnalysis);
 
@@ -305,24 +342,24 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cOutputHandler = pOutputHandler;
-                cFrameworkWrapper = new FrameworkWrapper(cOutputHandler);
-                cZ3Solver = new Z3Solver(cOutputHandler);
-                cRandomTestCreator = new RandomTestCreator(cOutputHandler, this, cFrameworkWrapper, cZ3Solver);
+                _outputHandler = pOutputHandler;
+                _frameworkWrapper = new FrameworkWrapper(_outputHandler);
+                _z3Solver = new Z3Solver(_outputHandler);
+                _randomTestCreator = new RandomTestCreator(_outputHandler, this, _frameworkWrapper, _z3Solver);
 
                 //LoadVariationPointsFromXMLFile();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultAnalyzerSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultAnalyzerSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
         /// <summary>
         /// This function sets how the outputs should be reported, it does this by setting the output variation points
         /// </summary>
-        public void setReportType(bool pAnalysisResult
+        public void SetReportType(bool pAnalysisResult
                                     , bool pAnalysisDetailResult
                                     , bool pVariantsResult
                                     , bool pTransitionsResult
@@ -337,23 +374,23 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cReportAnalysisResult = pAnalysisResult;
-                cReportAnalysisDetailResult = pAnalysisDetailResult;
-                cReportVariantsResult = pVariantsResult;
-                cReportTransitionsResult = pTransitionsResult;
-                cReportAnalysisTiming = pAnalysisTiming;
-                cReportUnsatCore = pUnsatCore;
-                cStopBetweenEachTransition = pStopBetweenEachTransition;
-                cStopAEndOfAnalysis = pStopAtEndOfAnalysis;
-                cCreateHTMLOutput = pCreateHTMLOutput;
-                cReportTimings = pReportTimings;
-                cOutputHandler.setEnableUserMessages(pUserMessages);
-                cZ3Solver.setDebugMode(pDebugMode);
+                ReportAnalysisResult = pAnalysisResult;
+                ReportAnalysisDetailResult = pAnalysisDetailResult;
+                ReportVariantsResult = pVariantsResult;
+                ReportTransitionsResult = pTransitionsResult;
+                ReportAnalysisTiming = pAnalysisTiming;
+                ReportUnsatCore = pUnsatCore;
+                StopBetweenEachTransition = pStopBetweenEachTransition;
+                StopAEndOfAnalysis = pStopAtEndOfAnalysis;
+                CreateHTMLOutput = pCreateHTMLOutput;
+                ReportTimings = pReportTimings;
+                _outputHandler.SetEnableUserMessages(pUserMessages);
+                _z3Solver.DebugMode = pDebugMode;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in setReportType");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in setReportType");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -373,19 +410,19 @@ namespace ProductPlatformAnalyzer
                 //    cNoOfModelsRequired = 1;
                 //else
                 //    cNoOfModelsRequired = pOverrideNoOfModelsRequired;
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? true : false;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? true : false;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultProductModelEnumerationAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultProductModelEnumerationAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -401,19 +438,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultVariantSelectabilityAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultVariantSelectabilityAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -429,19 +466,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultPartSelectabilityAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultPartSelectabilityAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -457,19 +494,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultAlwaysSelectedVariantAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultAlwaysSelectedVariantAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -485,19 +522,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultNeverSelectedVariantAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultNeverSelectedVariantAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -513,19 +550,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultAlwaysSelectedPartAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultAlwaysSelectedPartAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -541,19 +578,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultNeverSelectedPartAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultNeverSelectedPartAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -569,19 +606,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultOperationSelectabilityAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultOperationSelectabilityAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -597,19 +634,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultAlwaysSelectedOperationAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultAlwaysSelectedOperationAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -625,19 +662,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? false : true;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? false : true;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? false : true;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? false : true;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultNeverSelectedOperationAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultNeverSelectedOperationAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -653,19 +690,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? true : false;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? true : false;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? true : false;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? true : false;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? true : false;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? true : false;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultExistanceOfDeadlockAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultExistanceOfDeadlockAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -681,19 +718,19 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cConvertVariants = (!pOverrideConvertVariants) ? true : false;
-                cConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
-                cConvertOperations = (!pOverrideConvertOperations) ? true : false;
-                cConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? true : false;
-                cConvertResources = (!pOverrideConvertResources) ? false : true;
-                cConvertGoal = (!pOverrideConvertGoal) ? true : false;
-                cBuildPConstraints = (!pOverrideBuildPConstaints) ? true : false;
-                cOperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
+                ConvertVariants = (!pOverrideConvertVariants) ? true : false;
+                ConvertConfigurationRules = (!pOverrideConvertConfigurationRules) ? true : false;
+                ConvertOperations = (!pOverrideConvertOperations) ? true : false;
+                ConvertOperationPrecedenceRules = (!pOverrideConvertOperationPrecedenceRules) ? true : false;
+                ConvertResources = (!pOverrideConvertResources) ? false : true;
+                ConvertGoal = (!pOverrideConvertGoal) ? true : false;
+                BuildPConstraints = (!pOverrideBuildPConstaints) ? true : false;
+                OperationMutualExecution = (!pOverrideOperationMutualExecution) ? false : true;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefaultProductManufacturingEnumerationAnalysisVariationPointSetting");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefaultProductManufacturingEnumerationAnalysisVariationPointSetting");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -711,7 +748,7 @@ namespace ProductPlatformAnalyzer
         /// <param name="pConvertGoal">If the goal should be converted or not</param>
         /// <param name="pBuildPConstaints">If the precedence rules constraints should be kept in a local list or not</param>
         /// <param name="pNoOfModelsRequired">In case models needs to be created how many models are needed</param>
-        public void setVariationPoints(Enumerations.GeneralAnalysisType pGeneralAnalysisType
+        public void SetVariationPoints(Enumerations.GeneralAnalysisType pGeneralAnalysisType
                                         , Enumerations.AnalysisType pAnalysisType
                                         , bool pOverrideOperationMutualExecution = false
                                         , bool pOverrideConvertVariants = false
@@ -725,9 +762,9 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cGeneralAnalysisType = pGeneralAnalysisType;
-                cAnalysisType = pAnalysisType;
-                switch (cAnalysisType)
+                _generalAnalysisType = pGeneralAnalysisType;
+                _analysisType = pAnalysisType;
+                switch (_analysisType)
                 {
                     case Enumerations.AnalysisType.ProductModelEnumerationAnalysis:
                         {
@@ -897,8 +934,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in setVariationPoints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in setVariationPoints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -921,19 +958,19 @@ namespace ProductPlatformAnalyzer
         /// NOT USED ANYWHERE IN PROJECT
         /// According to the variant group least for each variant group a boolean expression is created.
         /// </summary>
-        public void makeExpressionListFromVariantGroupList()
+        public void MakeExpressionListFromVariantGroupList()
         {
             try
             {
                 //List<variantGroup> localVariantGroupList = cFrameworkWrapper.VariantGroupList;
 
-                foreach (variantGroup localVariantGroup in cFrameworkWrapper.VariantGroupSet)
-                    cZ3Solver.AddBooleanExpression(localVariantGroup.names);
+                foreach (variantGroup localVariantGroup in _frameworkWrapper.VariantGroupSet)
+                    _z3Solver.AddBooleanExpression(localVariantGroup.names);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in makeExpressionListFromVariantGroupList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in makeExpressionListFromVariantGroupList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -941,17 +978,17 @@ namespace ProductPlatformAnalyzer
         /// NOT USED ANYWHERE IN THE PROJECT
         /// For each part in the local list a boolean variable is created
         /// </summary>
-        public void makeExpressionListFromPartList()
+        public void MakeExpressionListFromPartList()
         {
             try
             {
-                foreach (part localPart in cFrameworkWrapper.PartSet)
-                    cZ3Solver.AddBooleanExpression(localPart.names);
+                foreach (part localPart in _frameworkWrapper.PartSet)
+                    _z3Solver.AddBooleanExpression(localPart.names);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in makeExpressionListFromPartList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in makeExpressionListFromPartList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -959,17 +996,17 @@ namespace ProductPlatformAnalyzer
         /// NOT USED ANYWHERE IN THE PROJECT
         /// For each variant in the local list a boolean variable is created
         /// </summary>
-        public void makeExpressionListFromVariantList()
+        public void MakeExpressionListFromVariantList()
         {
             try
             {
-                foreach (variant localVariant in cFrameworkWrapper.VariantSet)
-                    cZ3Solver.AddBooleanExpression(localVariant.names);
+                foreach (variant localVariant in _frameworkWrapper.VariantSet)
+                    _z3Solver.AddBooleanExpression(localVariant.names);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in makeExpressionListFromVariantList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in makeExpressionListFromVariantList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -978,23 +1015,23 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pFile"></param>
         /// <returns>If the data is loaded correctly or not</returns>
-        public bool loadAMLInitialData(string pFile)
+        public bool LoadAMLInitialData(string pFile)
         {
             bool lDataLoaded = true;
             try
             {
                 var document = CAEXDocument.LoadFromFile(pFile);
                 
-                var converter = new AMLConverter(document, cZ3Solver);
+                var converter = new AMLConverter(document, _z3Solver);
 
                 //This function populate should return a boolean result which indicates if the population is done right or not
                 converter.Populate();
-                converter.PopulateFrameworkWrapper(cFrameworkWrapper);
+                converter.PopulateFrameworkWrapper(_frameworkWrapper);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in loadAMLInitialData");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in loadAMLInitialData");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -1005,15 +1042,15 @@ namespace ProductPlatformAnalyzer
         /// <param name="pInitialData"></param>
         /// <param name="pFile"></param>
         /// <returns>If the data is loaded correctly or not</returns>
-        public bool loadInitialData(Enumerations.InitializerSource pInitialData
+        public bool LoadInitialData(Enumerations.InitializerSource pInitialData
                                     , String pInitialDataFileName = "")
         {
             bool lDataLoaded = false;
             try
             {
-                Enumerations.InputFileType lInitialDataFileExtension = returnInputFileType(pInitialDataFileName);
+                Enumerations.InputFileType lInitialDataFileExtension = ReturnInputFileType(pInitialDataFileName);
                 if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.AML))
-                    lDataLoaded = loadAMLInitialData(pInitialDataFileName);
+                    lDataLoaded = LoadAMLInitialData(pInitialDataFileName);
                 else if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.XML))
                 {
                     switch (pInitialData)
@@ -1032,23 +1069,23 @@ namespace ProductPlatformAnalyzer
                                 //Parameters: pMaxVariantGroupNumber, pMaxVariantNumber, pMaxPartNumber, pMaxOperationNumber
                                 //           ,pTrueProbability, pFalseProbability, pExpressionProbability
                                 //           ,pMaxTraitNumber, pMaxNoOfTraitAttributes, pMaxResourceNumber
-                                lDataLoaded = cRandomTestCreator.createRandomData(cRandomMaxVariantGroupumber
-                                                                                , cRandomMaxVariantNumber
-                                                                                , cRandomMaxPartNumber
-                                                                                , cRandomMaxOperationNumber
-                                                                                , cRandomTrueProbability
-                                                                                , cRandomFalseProbability
-                                                                                , cRandomExpressionProbability
-                                                                                , cRandomMaxTraitNumber
-                                                                                , cRandomMaxNoOfTraitAttributes
-                                                                                , cRandomMaxResourceNumber
-                                                                                , cRandomMaxExpressionOperandNumber
-                                                                                , cRandomMaxNoOfConfigurationRules);
+                                lDataLoaded = _randomTestCreator.createRandomData(RandomMaxVariantGroupumber
+                                                                                , RandomMaxVariantNumber
+                                                                                , RandomMaxPartNumber
+                                                                                , RandomMaxOperationNumber
+                                                                                , RandomTrueProbability
+                                                                                , RandomFalseProbability
+                                                                                , RandomExpressionProbability
+                                                                                , RandomMaxTraitNumber
+                                                                                , RandomMaxNoOfTraitAttributes
+                                                                                , RandomMaxResourceNumber
+                                                                                , RandomMaxExpressionOperandNumber
+                                                                                , RandomMaxNoOfConfigurationRules);
 
-                                if (cRandomMaxPartNumber > 0)
-                                    cFrameworkWrapper.UsePartInfo = true;
+                                if (RandomMaxPartNumber > 0)
+                                    _frameworkWrapper.UsePartInfo = true;
                                 else
-                                    cFrameworkWrapper.UsePartInfo = false;
+                                    _frameworkWrapper.UsePartInfo = false;
 
                                 break;
                             }
@@ -1060,8 +1097,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in loadInitialData");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in loadInitialData");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -1071,7 +1108,7 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pFileName">Input file name</param>
         /// <returns>Extension of the file</returns>
-        public Enumerations.InputFileType returnInputFileType(string pFileName)
+        public Enumerations.InputFileType ReturnInputFileType(string pFileName)
         {
             Enumerations.InputFileType lDataFileType = Enumerations.InputFileType.XML;
             try
@@ -1083,8 +1120,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in returnInputFileType");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in returnInputFileType");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lDataFileType;
         }
@@ -1161,7 +1198,7 @@ namespace ProductPlatformAnalyzer
                 ComputeOperationsToResourceMap();
 
                 //Here we calculate the maximum number of loops the analysis has to have, which is according to the maximum number of operations
-                cMaxNumberOfTransitions = CalculateAnalysisNoOfCycles();
+                _maxNumberOfTransitions = CalculateAnalysisNoOfCycles();
 
                 //This check is because if it is a random input file then the configuration rules are only created which satisfy the model!
                 if (!RandomInputFile)
@@ -1174,8 +1211,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PreAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PreAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultStatus;
         }
@@ -1190,14 +1227,14 @@ namespace ProductPlatformAnalyzer
             {
                 //If it is asked for the model to include the variants they are added to the created model
                 //Variation Point
-                if (cConvertVariants)
-                    convertProductPlatform(pOptimizer);
+                if (ConvertVariants)
+                    ConvertProductPlatform(pOptimizer);
 
                 //If it is asked for the configuration rules to be added to the model then they are added
                 //Variation Point
                 
-                if (cConvertConfigurationRules)
-                    convertFConstraint2Z3Constraint(pExtraConfigurationRule, pOptimizer);
+                if (ConvertConfigurationRules)
+                    ConvertFConstraint2Z3Constraint(pExtraConfigurationRule, pOptimizer);
 
                 ////I am not sure this part would be needed here, hence I added it to the previous part.
                 ////if (lConvertConfigurationRules)
@@ -1205,14 +1242,14 @@ namespace ProductPlatformAnalyzer
 
                 //If it is asked for the resources to be added to the model then they are added
                 //Variation Point
-                if (cConvertResources)
-                    convertResourcesNOperationResourceRelations(pOptimizer);
+                if (ConvertResources)
+                    ConvertResourcesNOperationResourceRelations(pOptimizer);
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakeStaticPartOfProductPlatformModel");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MakeStaticPartOfProductPlatformModel");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1220,7 +1257,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                 foreach (Operation lCurrentOperation in lOperationSet)
                 {
@@ -1243,12 +1280,12 @@ namespace ProductPlatformAnalyzer
             {
                 //First we do an intial analysis on the set of operations, to find out which operation pairs are dependent on each other
                 //For the dependent operation pairs formula 6 is applied, but for independent operations formula 6 is not applied
-                if (cConvertOperations)
+                if (ConvertOperations)
                 {
                     Stopwatch lStopWatchDetailed = new Stopwatch();
                     Stopwatch lStopWatchTotal = new Stopwatch();
                     double lActionDependencyModelCreationTime = 0;
-                    if (cReportTimings)
+                    if (ReportTimings)
                     {
                         lStopWatchDetailed.Start();
                         lStopWatchTotal.Start();
@@ -1257,12 +1294,12 @@ namespace ProductPlatformAnalyzer
 
                     OperationDependencyAnalysis();
 
-                    if (cReportTimings)
+                    if (ReportTimings)
                     {
                         lStopWatchDetailed.Stop();
                         lActionDependencyModelCreationTime = lStopWatchDetailed.ElapsedMilliseconds;
 
-                        cOutputHandler.printMessageToConsole("Action Dependency Analysis Time:" + lActionDependencyModelCreationTime + "ms.");
+                        _outputHandler.PrintMessageToConsole("Action Dependency Analysis Time:" + lActionDependencyModelCreationTime + "ms.");
 
                         lStopWatchDetailed.Restart();
                     }
@@ -1272,8 +1309,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in FindDependentOperations");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in FindDependentOperations");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1321,12 +1358,12 @@ namespace ProductPlatformAnalyzer
 
                 //If it is asked for the model to include the operations then they are added to the model
                 //Variation Point
-                if (cConvertOperations)
+                if (ConvertOperations)
                 {
                     //int lTempTransitionNo = int.Parse(pTransitionNo) + 1;
                     //for (int i = 0; i <= lTempTransitionNo; i++)
                     //{
-                    convertFOperations2Z3Operations(pTransitionNo);
+                    ConvertFOperations2Z3Operations(pTransitionNo);
                     //}
 
                 }
@@ -1337,15 +1374,15 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lFinishedRule = null;
                 //If it is asked for the operation precedence rues to be added to the model then they are added
                 //Variation Point
-                if (cConvertOperationPrecedenceRules || cBuildPConstraints)
+                if (ConvertOperationPrecedenceRules || BuildPConstraints)
                 {
-                    convertOperationsPrecedenceRules(pTransitionNo);
-                    if (pTransitionNo <= cMaxNumberOfTransitions)
+                    ConvertOperationsPrecedenceRules(pTransitionNo);
+                    if (pTransitionNo <= _maxNumberOfTransitions)
                         lProgressionRule = InitializeOperationProgressionRule(pTransitionNo);
                 }
 
-                if (cPreAnalysisResult)
-                    if (cOpSeqAnalysis)
+                if (_preAnalysisResult)
+                    if (_opSeqAnalysis)
                         lDeadlockRule = InitializeDeadlockRule(pTransitionNo);
 
                 lFinishedRule = InitializeFinishedRule(pTransitionNo);
@@ -1358,8 +1395,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakeDynamicPartOfProductPlatformModel");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MakeDynamicPartOfProductPlatformModel");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1374,22 +1411,22 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lRightHandSide = null;
 
                 //(not Deadlock) and (not Finished) => Progression
-                lNotDeadlock = cZ3Solver.NotOperator(pDeadlockRule);
+                lNotDeadlock = _z3Solver.NotOperator(pDeadlockRule);
 
                 if (pFinishedRule != null)
-                    lNotFinished = cZ3Solver.NotOperator(pFinishedRule);
+                    lNotFinished = _z3Solver.NotOperator(pFinishedRule);
 
                 if (lNotFinished != null)
-                    lRightHandSide = cZ3Solver.AndOperator(new List<BoolExpr>() { lNotDeadlock, lNotFinished });
+                    lRightHandSide = _z3Solver.AndOperator(new List<BoolExpr>() { lNotDeadlock, lNotFinished });
                 else
                     lRightHandSide = lNotDeadlock;
 
-                cZ3Solver.AddImpliesOperator2Constraints(lRightHandSide, pProgressionRule, "SettingProgressionRule");
+                _z3Solver.AddImpliesOperator2Constraints(lRightHandSide, pProgressionRule, "SettingProgressionRule");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in SetProgressionRule");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in SetProgressionRule");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1398,29 +1435,29 @@ namespace ProductPlatformAnalyzer
             BoolExpr lFinishedRule = null;
             try
             {
-                BoolExpr lFinishedVariable = cZ3Solver.AddBooleanExpression("Finished_" + pTransitionNo);
+                BoolExpr lFinishedVariable = _z3Solver.AddBooleanExpression("Finished_" + pTransitionNo);
 
-                HashSet<OperationInstance> lOperationInstanceSet = cFrameworkWrapper.getOperationInstancesInOneTransition(pTransitionNo);
+                HashSet<OperationInstance> lOperationInstanceSet = _frameworkWrapper.GetOperationInstancesInOneTransition(pTransitionNo);
 
                 foreach (OperationInstance lCurrentOperationInstance in lOperationInstanceSet)
                 {
                     BoolExpr lTempExpr = null;
-                    lTempExpr = cZ3Solver.OrOperator(new List<BoolExpr>() { lCurrentOperationInstance.FinishedVariable
+                    lTempExpr = _z3Solver.OrOperator(new List<BoolExpr>() { lCurrentOperationInstance.FinishedVariable
                                                                             , lCurrentOperationInstance.UnusedVariable});
                     if (lFinishedRule == null)
                         lFinishedRule = lTempExpr;
                     else
-                        lFinishedRule = cZ3Solver.AndOperator(new List<BoolExpr>() { lFinishedRule, lTempExpr});
+                        lFinishedRule = _z3Solver.AndOperator(new List<BoolExpr>() { lFinishedRule, lTempExpr});
                 }
 
-                cZ3Solver.AddTwoWayImpliesOperator2Constraints(lFinishedVariable, lFinishedRule, "Finished Rule Initialization");
+                _z3Solver.AddTwoWayImpliesOperator2Constraints(lFinishedVariable, lFinishedRule, "Finished Rule Initialization");
 
                 lFinishedRule = lFinishedVariable;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in InitializeFinishedRule");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in InitializeFinishedRule");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lFinishedRule;
         }
@@ -1446,8 +1483,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnPreconditionsAsString");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnPreconditionsAsString");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultString;
         }
@@ -1461,11 +1498,11 @@ namespace ProductPlatformAnalyzer
                 //Here we pick each pair of operations and carry out the analysis on them, 
                 //SAT => means that the operation pair are dependent
                 //UNSAT => means the operation pair are independent
-                Z3Solver lTempZ3Solver = cZ3Solver;
+                Z3Solver lTempZ3Solver = _z3Solver;
 
-                var OperationList = cFrameworkWrapper.OperationSet;
+                var OperationList = _frameworkWrapper.OperationSet;
 
-                Z3Solver dependencySolver = new Z3Solver(cOutputHandler);
+                Z3Solver dependencySolver = new Z3Solver(_outputHandler);
 
                 for (int i = 0; i < OperationList.Count-1; i++)
                 {
@@ -1493,8 +1530,8 @@ namespace ProductPlatformAnalyzer
                             OperationInstance lCurrentOperation1Instance = new OperationInstance(Operation1, "K", false, true);
                             OperationInstance lCurrentOperation2Instance = new OperationInstance(Operation2, "K", false, true);
 
-                            OperationInstance lNextOperation1Instance = lCurrentOperation1Instance.createNextOperationInstance(false, true);
-                            OperationInstance lNextOperation2Instance = lCurrentOperation2Instance.createNextOperationInstance(false, true);
+                            OperationInstance lNextOperation1Instance = lCurrentOperation1Instance.CreateNextOperationInstance(false, true);
+                            OperationInstance lNextOperation2Instance = lCurrentOperation2Instance.CreateNextOperationInstance(false, true);
                             //OperationInstance lNextOperation1Instance = cFrameworkWrapper.addOperationInstance(Operation1, "K+1");
                             //OperationInstance lNextOperation2Instance = cFrameworkWrapper.addOperationInstance(Operation2, "K+1");
 
@@ -1534,7 +1571,7 @@ namespace ProductPlatformAnalyzer
                                 //This means the two analyzed actions are dependent hence they should not happen at the same time
                                 DependentActionsList.Add(new DependentActions(lAction1, lAction2));
 
-                            cZ3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
+                            _z3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
 
                             //Case 2: Operation1.ActionI2E vs Operation2.ActionE2F
                             lAction1 = lCurrentOperation1Instance.Action_I2E;
@@ -1572,7 +1609,7 @@ namespace ProductPlatformAnalyzer
                                 //This means the two analyzed actions are dependent hence they should not happen at the same time
                                 DependentActionsList.Add(new DependentActions(lAction1, lAction2));
 
-                            cZ3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
+                            _z3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
 
                             //Case 3: Operation1.ActionE2F vs Operation2.ActionI2E
                             lAction1 = lCurrentOperation1Instance.Action_E2F;
@@ -1610,7 +1647,7 @@ namespace ProductPlatformAnalyzer
                                 //This means the two analyzed actions are dependent hence they should not happen at the same time
                                 DependentActionsList.Add(new DependentActions(lAction1, lAction2));
 
-                            cZ3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
+                            _z3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
 
                             //Case 4: Operation1.ActionE2F vs Operation2.ActionE2F
                             lAction1 = lCurrentOperation1Instance.Action_E2F;
@@ -1648,23 +1685,23 @@ namespace ProductPlatformAnalyzer
                                 //This means the two analyzed actions are dependent hence they should not happen at the same time
                                 DependentActionsList.Add(new DependentActions(lAction1, lAction2));
 
-                            cZ3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
+                            _z3Solver.WriteDebugFile("0", 0, lAction1.Name + "-" + lAction2.Name + "-Dependency");
                     }
                 }
 
-                cZ3Solver.WriteDebugFile("0", 0, "ActionDependencyResults", lActionDependencyTracking);
+                _z3Solver.WriteDebugFile("0", 0, "ActionDependencyResults", lActionDependencyTracking);
 
                 if (DependentActionsList.Count > 0)
                     lOperationDependencyAnalysisResult = true;
 
-                cOutputHandler.printMessageToConsole("No of Actions Dependent: " + DependentActionsList.Count);
+                _outputHandler.PrintMessageToConsole("No of Actions Dependent: " + DependentActionsList.Count);
 
-                cZ3Solver = lTempZ3Solver;
+                _z3Solver = lTempZ3Solver;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OperationDependencyAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in OperationDependencyAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lOperationDependencyAnalysisResult;
         }
@@ -1702,19 +1739,19 @@ namespace ProductPlatformAnalyzer
                                 pOldNewVariables.Add(lPart, lPart + "+1");
                     }
 
-                    cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(pAction_Pre, lTempAction_Pre), "ActionPrecondition");
+                    _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(pAction_Pre, lTempAction_Pre), "ActionPrecondition");
 
                     ///string lAction_PreNew_Name = ReplaceStringVariables(lTempAction_PreStr, pOldNewVariables);
                     ///BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lAction1PreNew_Name, "K+1");
 
-                    cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(pAction_New_Pre, lTempAction_New_Pre), "ActionNewVariables");
+                    _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(pAction_New_Pre, lTempAction_New_Pre), "ActionNewVariables");
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CarryOutNeededActionsOnPrecondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CarryOutNeededActionsOnPrecondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1732,30 +1769,30 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //A new Z3Solver is used, with a new Solver
-               var lZ3Solver2 = new Z3Solver(cOutputHandler);
+               var lZ3Solver2 = new Z3Solver(_outputHandler);
 
                 //lZ3Solver.cISolver.Reset();
-                cZ3Solver = lZ3Solver2;
+                _z3Solver = lZ3Solver2;
 
                 //This line will make copy of the created model in an external file
-                cZ3Solver.setDebugMode(true);
+                _z3Solver.DebugMode = true;
 
                 Dictionary<string, string> OldNewVariables = new Dictionary<string, string>();
 
-                foreach (resource lCurrentResource in cFrameworkWrapper.ResourceSet)
+                foreach (resource lCurrentResource in _frameworkWrapper.ResourceSet)
                 {
-                    BoolExpr lResource_k = cZ3Solver.AddBooleanExpression(lCurrentResource.names + "_K");
-                    BoolExpr lResource_Newk = cZ3Solver.AddBooleanExpression(lCurrentResource.names + "_K+1");
+                    BoolExpr lResource_k = _z3Solver.AddBooleanExpression(lCurrentResource.names + "_K");
+                    BoolExpr lResource_Newk = _z3Solver.AddBooleanExpression(lCurrentResource.names + "_K+1");
                     Add2OldNewVariableList(lCurrentResource.names + "_K", lCurrentResource.names + "_K+1", OldNewVariables);
                 }
 
-                BoolExpr lTarget = cZ3Solver.AddBooleanExpression("Target");
-                BoolExpr lAction1Pre = cZ3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first part name
-                BoolExpr lAction1PreNew = cZ3Solver.AddBooleanExpression("Action1Pre_K+1");
+                BoolExpr lTarget = _z3Solver.AddBooleanExpression("Target");
+                BoolExpr lAction1Pre = _z3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first part name
+                BoolExpr lAction1PreNew = _z3Solver.AddBooleanExpression("Action1Pre_K+1");
                 Add2OldNewVariableList("Action1Pre_K", "Action1Pre_K+1", OldNewVariables);
 
-                BoolExpr lAction2Pre = cZ3Solver.AddBooleanExpression("Action2Pre_K"); //Formula first part name
-                BoolExpr lAction2PreNew = cZ3Solver.AddBooleanExpression("Action2Pre_K+1");
+                BoolExpr lAction2Pre = _z3Solver.AddBooleanExpression("Action2Pre_K"); //Formula first part name
+                BoolExpr lAction2PreNew = _z3Solver.AddBooleanExpression("Action2Pre_K+1");
                 Add2OldNewVariableList("Action2Pre_K", "Action2Pre_K+1", OldNewVariables);
 
                 //First we create the needed variables mentioned in the precondition expression
@@ -1783,10 +1820,10 @@ namespace ProductPlatformAnalyzer
                 //                  3 NEW variables for Op1PostOp2Eff_i_0, Op1PostOp2Eff_e_0, Op1PostOp2Eff_Pre
                 //                  One variable for each type of resource, as the resource tatus can change as part of any operation precondition or effect
 
-                BoolExpr lAction1EffNew = cZ3Solver.AddBooleanExpression("Action1Eff_K+1");
-                BoolExpr lAction2EffNew = cZ3Solver.AddBooleanExpression("Action2Eff_K+1");
-                BoolExpr lOtherVarSame1 = cZ3Solver.AddBooleanExpression("OtherVarSame1");
-                BoolExpr lOtherVarSame2 = cZ3Solver.AddBooleanExpression("OtherVarSame2");
+                BoolExpr lAction1EffNew = _z3Solver.AddBooleanExpression("Action1Eff_K+1");
+                BoolExpr lAction2EffNew = _z3Solver.AddBooleanExpression("Action2Eff_K+1");
+                BoolExpr lOtherVarSame1 = _z3Solver.AddBooleanExpression("OtherVarSame1");
+                BoolExpr lOtherVarSame2 = _z3Solver.AddBooleanExpression("OtherVarSame2");
 
                 //Now for creating operation instance variables for the current operation 1 and in transition 0
                 //HashSet<OperationInstance> lOperationInstances4Operation1 = cFrameworkWrapper.getOperationInstancesForOneOperationInOneTrasition(pOperation1, 0);
@@ -1820,16 +1857,16 @@ namespace ProductPlatformAnalyzer
 
                 AddZ3ModelVariable(pOperationInstance1.UnusedVariableName);
 
-                BoolExpr lPickOne1 = cZ3Solver.PickOneOperator(new List<string> { pOperationInstance1.InitialVariableName
+                BoolExpr lPickOne1 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance1.InitialVariableName
                                                                                 , pOperationInstance1.ExecutingVariableName
                                                                                 , pOperationInstance1.FinishedVariableName
                                                                                 , pOperationInstance1.UnusedVariableName });
-                BoolExpr lPickOne1New = cZ3Solver.PickOneOperator(new List<string> { pNextOperationInstance1.InitialVariableName
+                BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pNextOperationInstance1.InitialVariableName
                                                                                 , pNextOperationInstance1.ExecutingVariableName
                                                                                 , pNextOperationInstance1.FinishedVariableName
                                                                                 , pNextOperationInstance1.UnusedVariableName });
-                cZ3Solver.AddConstraintToSolver(lPickOne1, "PickOne1_K");
-                cZ3Solver.AddConstraintToSolver(lPickOne1New, "PickOne1_K+1");
+                _z3Solver.AddConstraintToSolver(lPickOne1, "PickOne1_K");
+                _z3Solver.AddConstraintToSolver(lPickOne1New, "PickOne1_K+1");
 
                 //}
 
@@ -1867,16 +1904,16 @@ namespace ProductPlatformAnalyzer
 
                 AddZ3ModelVariable(pOperationInstance2.UnusedVariableName);
 
-                BoolExpr lPickOne2 = cZ3Solver.PickOneOperator(new List<string> { pOperationInstance2.InitialVariableName
+                BoolExpr lPickOne2 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance2.InitialVariableName
                                                                                 , pOperationInstance2.ExecutingVariableName
                                                                                 , pOperationInstance2.FinishedVariableName
                                                                                 , pOperationInstance2.UnusedVariableName });
-                BoolExpr lPickOne2New = cZ3Solver.PickOneOperator(new List<string> { pNextOperationInstance2.InitialVariableName
+                BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pNextOperationInstance2.InitialVariableName
                                                                                 , pNextOperationInstance2.ExecutingVariableName
                                                                                 , pNextOperationInstance2.FinishedVariableName
                                                                                 , pNextOperationInstance2.UnusedVariableName });
-                cZ3Solver.AddConstraintToSolver(lPickOne2, "PickOne2_K");
-                cZ3Solver.AddConstraintToSolver(lPickOne2New, "PickOne2_K+1");
+                _z3Solver.AddConstraintToSolver(lPickOne2, "PickOne2_K");
+                _z3Solver.AddConstraintToSolver(lPickOne2New, "PickOne2_K+1");
                 //}
 
                 //2. Use the defined variables to build the formula
@@ -1889,42 +1926,42 @@ namespace ProductPlatformAnalyzer
                 ///cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(lAction1PreNew, lTempBoolExpr), "Action1NewVariables");
 
                 string lAction1EffNew_Name = ReplaceStringVariables(pAction1.Effect, OldNewVariables);
-                lAction1EffNew = convertComplexString2BoolExpr(lAction1EffNew_Name);
+                lAction1EffNew = ConvertComplexString2BoolExpr(lAction1EffNew_Name);
 
                 string lAction2EffNew_Name = ReplaceStringVariables(pAction2.Effect, OldNewVariables);
-                lAction2EffNew = convertComplexString2BoolExpr(lAction2EffNew_Name);
+                lAction2EffNew = ConvertComplexString2BoolExpr(lAction2EffNew_Name);
 
                 BoolExpr lTempBoolExpr1 = MakingOtherVariablesSameExpression(pAction1.Effect, OldNewVariables);
-                cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(lTempBoolExpr1, lOtherVarSame1), "OtherVarsStaySame1");
+                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr1, lOtherVarSame1), "OtherVarsStaySame1");
 
                 BoolExpr lTempBoolExpr2 = MakingOtherVariablesSameExpression(pAction2.Effect, OldNewVariables);
-                cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(lTempBoolExpr2, lOtherVarSame2), "OtherVarsStaySame2");
+                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr2, lOtherVarSame2), "OtherVarsStaySame2");
 
-                BoolExpr lRightHandSide1 = cZ3Solver.AndOperator(new List<BoolExpr>(){ lAction1Pre
-                                                                                        , cZ3Solver.NotOperator(lAction1PreNew)
+                BoolExpr lRightHandSide1 = _z3Solver.AndOperator(new List<BoolExpr>(){ lAction1Pre
+                                                                                        , _z3Solver.NotOperator(lAction1PreNew)
                                                                                         , lAction2Pre
                                                                                         , lAction2EffNew
                                                                                         , lOtherVarSame1});
 
-                BoolExpr lRightHandSide2 = cZ3Solver.AndOperator(new List<BoolExpr>(){ lAction2Pre
-                                                                                        , cZ3Solver.NotOperator(lAction2PreNew)
+                BoolExpr lRightHandSide2 = _z3Solver.AndOperator(new List<BoolExpr>(){ lAction2Pre
+                                                                                        , _z3Solver.NotOperator(lAction2PreNew)
                                                                                         , lAction1Pre
                                                                                         , lAction1EffNew
                                                                                         , lOtherVarSame2});
 
-                BoolExpr lTempExpr = cZ3Solver.OrOperator(new List<BoolExpr>() { lRightHandSide1, lRightHandSide2 });
+                BoolExpr lTempExpr = _z3Solver.OrOperator(new List<BoolExpr>() { lRightHandSide1, lRightHandSide2 });
 
                 //BoolExpr lFormula = cZ3Solver.TwoWayImpliesOperator(lTarget, lRightHandSide);
-                BoolExpr lFormula = cZ3Solver.TwoWayImpliesOperator(lTarget, lTempExpr);
-                cZ3Solver.AddConstraintToSolver(lFormula, "ActionsDependencyFormula");
+                BoolExpr lFormula = _z3Solver.TwoWayImpliesOperator(lTarget, lTempExpr);
+                _z3Solver.AddConstraintToSolver(lFormula, "ActionsDependencyFormula");
 
                 //The satisfiability of the model is checked
-                lResult = cZ3Solver.CheckModelSatisfiability("Target");
+                lResult = _z3Solver.CheckModelSatisfiability("Target");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in Check2ActionsDependency");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in Check2ActionsDependency");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -1938,8 +1975,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in Add2OldNewVariableList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in Add2OldNewVariableList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -1955,8 +1992,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in BuildNewVariableName");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in BuildNewVariableName");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultVariableName;
         }
@@ -1981,20 +2018,20 @@ namespace ProductPlatformAnalyzer
                     if (lKeyValuePair.Key.StartsWith("O"))
                     {
                         BoolExpr lTempExpression = null;
-                        lTempExpression = cZ3Solver.TwoWayImpliesOperator(lKeyValuePair.Key, lKeyValuePair.Value);
+                        lTempExpression = _z3Solver.TwoWayImpliesOperator(lKeyValuePair.Key, lKeyValuePair.Value);
 
                         if (lResultExpression == null)
                             lResultExpression = lTempExpression;
                         else
-                            lResultExpression = cZ3Solver.AndOperator(new List<BoolExpr>() { lResultExpression, lTempExpression });
+                            lResultExpression = _z3Solver.AndOperator(new List<BoolExpr>() { lResultExpression, lTempExpression });
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakingOtherVariablesSameExpression");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MakingOtherVariablesSameExpression");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
@@ -2021,8 +2058,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnListOfVariablesInAString");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnListOfVariablesInAString");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultList;
         }
@@ -2044,8 +2081,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReplaceStringVariables");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReplaceStringVariables");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -2060,18 +2097,18 @@ namespace ProductPlatformAnalyzer
                 {
                     BoolExpr lTempBoolExpr = null;
                     //Each precondition can be an expression over needed variables
-                    lTempBoolExpr = convertComplexString2BoolExpr(Precondition, pTransitionNo, false, false);
+                    lTempBoolExpr = ConvertComplexString2BoolExpr(Precondition, pTransitionNo, false, false);
 
                     if (lResultBoolExpr == null)
                         lResultBoolExpr = lTempBoolExpr;
                     else
-                        lResultBoolExpr = cZ3Solver.AndOperator(new List<BoolExpr> { lResultBoolExpr, lTempBoolExpr });
+                        lResultBoolExpr = _z3Solver.AndOperator(new List<BoolExpr> { lResultBoolExpr, lTempBoolExpr });
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreatePreconditionNeededVariables");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreatePreconditionNeededVariables");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultBoolExpr;
         }
@@ -2100,60 +2137,60 @@ namespace ProductPlatformAnalyzer
             try
             {
 
-                cOpSeqAnalysis = true;
+                _opSeqAnalysis = true;
 
                 string lStrExprToBeAnalyzed = "";
 
                 //If it is only checking the satisfiability of model constraints then there is no specific goal the check
                 if (!pCheckingModelConstraints)
                 {
-                    if (cAnalysisType == Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis)
+                    if (_analysisType == Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis)
                         lStrExprToBeAnalyzed = "Deadlock_" + pTransitionNo;
-                    else if (cAnalysisType == Enumerations.AnalysisType.OperationSelectabilityAnalysis)
+                    else if (_analysisType == Enumerations.AnalysisType.OperationSelectabilityAnalysis)
                         lStrExprToBeAnalyzed = pExtraConfigurationRule;
                 }
 
                 ////Previous version: lTestResult = anlyzeModel(pTransitionNo, pAnalysisComplete, lStrExprToBeAnalyzed);
-                if (cPreAnalysisResult)
+                if (_preAnalysisResult)
                 {
                     if (!pAnalysisComplete)
                     {
-                        if (cGeneralAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
+                        if (_generalAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
                             if (!pQuickAnalysis)
-                                cOutputHandler.printMessageToConsole("Analysis No: " + pTransitionNo);
+                                _outputHandler.PrintMessageToConsole("Analysis No: " + pTransitionNo);
                         ////Removing unwanted code, this function was pointing to a one line function
                         ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
-                        lTestResult = cZ3Solver.CheckSatisfiability(pTransitionNo.ToString()
+                        lTestResult = _z3Solver.CheckSatisfiability(pTransitionNo.ToString()
                                                                     , pAnalysisComplete
-                                                                    , cFrameworkWrapper
-                                                                    , cConvertGoal
-                                                                    , cReportAnalysisDetailResult
-                                                                    , cReportVariantsResult
-                                                                    , cReportTransitionsResult
-                                                                    , cReportAnalysisTiming
-                                                                    , cReportUnsatCore
+                                                                    , _frameworkWrapper
+                                                                    , ConvertGoal
+                                                                    , ReportAnalysisDetailResult
+                                                                    , ReportVariantsResult
+                                                                    , ReportTransitionsResult
+                                                                    , ReportAnalysisTiming
+                                                                    , ReportUnsatCore
                                                                     , lStrExprToBeAnalyzed);
 
-                        if (cAnalysisType.Equals(Enumerations.AnalysisType.ProductModelEnumerationAnalysis))
-                            cZ3Solver.WriteDebugFile("-1", pModelIndex);
+                        if (_analysisType.Equals(Enumerations.AnalysisType.ProductModelEnumerationAnalysis))
+                            _z3Solver.WriteDebugFile("-1", pModelIndex);
                         else
-                            cZ3Solver.WriteDebugFile(pTransitionNo.ToString(), -1);
+                            _z3Solver.WriteDebugFile(pTransitionNo.ToString(), -1);
 
                             
                         if (lTestResult.Equals(Status.SATISFIABLE) && !pQuickAnalysis)
-                            cZ3Solver.AddModelItem2SolverAssertion(cFrameworkWrapper);
+                            _z3Solver.AddModelItem2SolverAssertion(_frameworkWrapper);
                     }
                 }
 
                 //variation point
-                if (cStopBetweenEachTransition)
+                if (StopBetweenEachTransition)
                     Console.ReadKey();
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AnalyzeProductPlatform");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AnalyzeProductPlatform");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTestResult;
         }
@@ -2173,14 +2210,14 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cOutputHandler.setFrameworkWrapper(pFrameworkWrapper);
+                _outputHandler.SetFrameworkWrapper(pFrameworkWrapper);
 
                 if (pSatResult == Status.SATISFIABLE)
                 {
-                    cOutputHandler = cZ3Solver.PopulateOutputHandler(pState.ToString(), cOutputHandler);
+                    _outputHandler = _z3Solver.PopulateOutputHandler(pState.ToString(), _outputHandler);
                 }
 
-                    switch (cAnalysisType)
+                    switch (_analysisType)
                 {
                     case Enumerations.AnalysisType.ProductModelEnumerationAnalysis:
                     case Enumerations.AnalysisType.ProductManufacturingModelEnumerationAnalysis:
@@ -2188,42 +2225,42 @@ namespace ProductPlatformAnalyzer
                             if (pSatResult.Equals(Status.SATISFIABLE))
                             {
                                 //What does the satisfiable result in this analysis mean?
-                                if (cReportAnalysisResult)
-                                    cOutputHandler.printMessageToConsole("The ProductPlatform has a model to satisfy it.");
+                                if (ReportAnalysisResult)
+                                    _outputHandler.PrintMessageToConsole("The ProductPlatform has a model to satisfy it.");
 
                                 //Means that there has been a model which has been found
-                                cOutputHandler.printMessageToConsole("Model No " + pExtraField.ToString() + ":");
-                                if (cReportVariantsResult)
-                                    cOutputHandler.printChosenVariants();
-                                if (cReportTransitionsResult)
-                                    cOutputHandler.printOperationsTransitions();
+                                _outputHandler.PrintMessageToConsole("Model No " + pExtraField.ToString() + ":");
+                                if (ReportVariantsResult)
+                                    _outputHandler.PrintChosenVariants();
+                                if (ReportTransitionsResult)
+                                    _outputHandler.PrintOperationsTransitions();
 
-                                if (cCreateHTMLOutput)
+                                if (CreateHTMLOutput)
                                 {
-                                    cOutputHandler.writeModel();
-                                    cOutputHandler.writeModelNoPost();
+                                    _outputHandler.WriteModel();
+                                    _outputHandler.WriteModelNoPost();
                                 }
 
                             }
                             else if (pSatResult.Equals(Status.UNSATISFIABLE))
                             {
                                 //What does the unsatisfiable result in this analysis mean?
-                                if (cReportAnalysisResult)
-                                    cOutputHandler.printMessageToConsole("The ProductPlatform has no more valid models.");
+                                if (ReportAnalysisResult)
+                                    _outputHandler.PrintMessageToConsole("The ProductPlatform has no more valid models.");
 
-                                if (cReportAnalysisDetailResult)
-                                    cOutputHandler.printCounterExample();
+                                if (ReportAnalysisDetailResult)
+                                    _outputHandler.PrintCounterExample();
 
-                                if (cCreateHTMLOutput)
+                                if (CreateHTMLOutput)
                                 {
-                                    cOutputHandler.writeCounterExample();
-                                    cOutputHandler.writeCounterExampleNoPost();
+                                    _outputHandler.WriteCounterExample();
+                                    _outputHandler.WriteCounterExampleNoPost();
                                 }
 
                                 //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
                                 //cOutputHandler.printMessageToConsole("core: ");
-                                if (cReportUnsatCore)
-                                    cZ3Solver.ConsoleWriteUnsatCore();
+                                if (ReportUnsatCore)
+                                    _z3Solver.ConsoleWriteUnsatCore();
                             }
                             break;
                         }
@@ -2239,22 +2276,22 @@ namespace ProductPlatformAnalyzer
                                     if (pExtraField.GetType().FullName.Equals("variant"))
                                     {
                                         lAnalyzedVariant = (variant)pExtraField;
-                                        if (cReportAnalysisResult)
+                                        if (ReportAnalysisResult)
                                         {
-                                            cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
-                                            cOutputHandler.printMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
-                                            cOutputHandler.printMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
+                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
                                         }
 
                                     }
                                     else if (pExtraField.GetType().FullName.Equals("part"))
                                     {
                                         lAnalyzedPart = (part)pExtraField;
-                                        if (cReportAnalysisResult)
+                                        if (ReportAnalysisResult)
                                         {
-                                            cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
-                                            cOutputHandler.printMessageToConsole("Selected Part: " + lAnalyzedPart.names);
-                                            cOutputHandler.printMessageToConsole(lAnalyzedPart.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
+                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.names + " is Selectable.");
                                         }
 
                                     }
@@ -2278,22 +2315,22 @@ namespace ProductPlatformAnalyzer
                                     if (pExtraField.GetType().FullName.Equals("variant"))
                                     {
                                         lAnalyzedVariant = (variant)pExtraField;
-                                        if (cReportAnalysisResult)
+                                        if (ReportAnalysisResult)
                                         {
-                                            cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
-                                            cOutputHandler.printMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
-                                            cOutputHandler.printMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
+                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
                                         }
 
                                     }
                                     else if (pExtraField.GetType().FullName.Equals("part"))
                                     {
                                         lAnalyzedPart = (part)pExtraField;
-                                        if (cReportAnalysisResult)
+                                        if (ReportAnalysisResult)
                                         {
-                                            cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
-                                            cOutputHandler.printMessageToConsole("Selected Part: " + lAnalyzedPart.names);
-                                            cOutputHandler.printMessageToConsole(lAnalyzedPart.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
+                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.names + " is Selectable.");
                                         }
 
                                     }
@@ -2312,15 +2349,15 @@ namespace ProductPlatformAnalyzer
                                 if (pExtraField != null)
                                 {
                                     part lAnalyzedVariant = (part)pExtraField;
-                                    if (cReportAnalysisResult)
+                                    if (ReportAnalysisResult)
                                     {
                                         //Initial info
-                                        cOutputHandler.printMessageToConsole("---------------------------------------------------------------------");
-                                        cOutputHandler.printMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
+                                        _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
+                                        _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
 
                                         //Analysis Result
                                         //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                                        cOutputHandler.printMessageToConsole("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
+                                        _outputHandler.PrintMessageToConsole("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
                                     }
                                 }
                             }
@@ -2328,8 +2365,8 @@ namespace ProductPlatformAnalyzer
                             {
                                 if (pExtraField != null)
                                 {
-                                    part lAnalyzedVariant = cFrameworkWrapper.partLookupByName(pExtraField.ToString());
-                                    cOutputHandler.printMessageToConsole("All valid configurations DO include " + lAnalyzedVariant.names + ".");
+                                    part lAnalyzedVariant = _frameworkWrapper.PartLookupByName(pExtraField.ToString());
+                                    _outputHandler.PrintMessageToConsole("All valid configurations DO include " + lAnalyzedVariant.names + ".");
                                 }
                             }
                             break;
@@ -2342,27 +2379,27 @@ namespace ProductPlatformAnalyzer
                                 {
                                     string lAnalyzedOperationName = (string)pExtraField;
                                     //What does the satisfiable result in this analysis mean?
-                                    if (cReportAnalysisResult)
+                                    if (ReportAnalysisResult)
                                     {
                                         //Initial info
-                                        cOutputHandler.printMessageToConsole("----------------------------------------------------------------");
-                                        cOutputHandler.printMessageToConsole("Analysing operation named: " + lAnalyzedOperationName);
+                                        _outputHandler.PrintMessageToConsole("----------------------------------------------------------------");
+                                        _outputHandler.PrintMessageToConsole("Analysing operation named: " + lAnalyzedOperationName);
 
                                         //Analysis Result
-                                        cOutputHandler.printMessageToConsole(lAnalyzedOperationName + " is selectable.");
+                                        _outputHandler.PrintMessageToConsole(lAnalyzedOperationName + " is selectable.");
                                     }
                                 }
                             }
                             else if (pSatResult.Equals(Status.UNSATISFIABLE))
                             {
                                 //Here we check if this operation is in active operation or not, meaning does a variant use this operation for its assembly or not
-                                Operation lTempOperation = cFrameworkWrapper.operationLookupByName(pExtraField.ToString());
+                                Operation lTempOperation = _frameworkWrapper.OperationLookupByName(pExtraField.ToString());
                                 //Initial info
-                                cOutputHandler.printMessageToConsole("----------------------------------------------------------------");
-                                cOutputHandler.printMessageToConsole("Analysing operation named: " + lTempOperation.Name);
+                                _outputHandler.PrintMessageToConsole("----------------------------------------------------------------");
+                                _outputHandler.PrintMessageToConsole("Analysing operation named: " + lTempOperation.Name);
 
                                 //This is when we want to report only the operation name
-                                cOutputHandler.printMessageToConsole("Operation " + lTempOperation.Name + " is NOT selectable!");
+                                _outputHandler.PrintMessageToConsole("Operation " + lTempOperation.Name + " is NOT selectable!");
                             }
                             break;
                         }
@@ -2376,17 +2413,17 @@ namespace ProductPlatformAnalyzer
                                     string lOperationName = lTempOperationInstace.AbstractOperation.Name;
 
                                     //if it does hold, then there exists a valid configuration in which the current operation is UNUSED!
-                                    cOutputHandler.printMessageToConsole("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
+                                    _outputHandler.PrintMessageToConsole("There DOES exist a configuration in which " + lOperationName + " is in an UNUSED state!");
                                 }
                             }
                             else if (pSatResult.Equals(Status.UNSATISFIABLE))
                             {
                                 if (pExtraField != null)
                                 {
-                                    Operation lTempOperation = cFrameworkWrapper.operationLookupByName(pExtraField.ToString());
+                                    Operation lTempOperation = _frameworkWrapper.OperationLookupByName(pExtraField.ToString());
                                     string lOperationName = lTempOperation.Name;
 
-                                    cOutputHandler.printMessageToConsole("All valid configurations DO include " + lOperationName + ".");
+                                    _outputHandler.PrintMessageToConsole("All valid configurations DO include " + lOperationName + ".");
                                 }
                             }
                             break;
@@ -2402,40 +2439,40 @@ namespace ProductPlatformAnalyzer
                                     //If the result of the analysis is SAT meaning that there has been a deadlock found
 
                                     //Print and writes an output file showing the result of a deadlocked test
-                                    if (cReportAnalysisDetailResult)
-                                        cOutputHandler.printCounterExample();
+                                    if (ReportAnalysisDetailResult)
+                                        _outputHandler.PrintCounterExample();
 
-                                    if (cCreateHTMLOutput)
+                                    if (CreateHTMLOutput)
                                     {
-                                        cOutputHandler.writeCounterExample();
-                                        cOutputHandler.writeCounterExampleNoPost();
+                                        _outputHandler.WriteCounterExample();
+                                        _outputHandler.WriteCounterExampleNoPost();
                                     }
 
                                     //cOutputHandler.printMessageToConsole("proof: {0}", iSolver.Proof);
                                     //cOutputHandler.printMessageToConsole("core: ");
-                                    if (cReportUnsatCore)
-                                        cZ3Solver.ConsoleWriteUnsatCore();
+                                    if (ReportUnsatCore)
+                                        _z3Solver.ConsoleWriteUnsatCore();
                                 }
                                 else if (pSatResult.Equals(Status.UNSATISFIABLE))
                                 {
                                     //If the result of the analysis is UNSAT meaning that there was NO deadlock found
 
                                     //Print and writes an output file showing the result of a finished test
-                                    if (cReportAnalysisDetailResult)
+                                    if (ReportAnalysisDetailResult)
                                     {
-                                        cOutputHandler.printMessageToConsole("Model No " + pState + ":");
-                                        if (cReportVariantsResult)
+                                        _outputHandler.PrintMessageToConsole("Model No " + pState + ":");
+                                        if (ReportVariantsResult)
                                         {
-                                            cOutputHandler.printChosenVariants();
+                                            _outputHandler.PrintChosenVariants();
                                         }
-                                        if (cReportTransitionsResult)
-                                            cOutputHandler.printOperationsTransitions();
+                                        if (ReportTransitionsResult)
+                                            _outputHandler.PrintOperationsTransitions();
                                     }
 
-                                    if (cCreateHTMLOutput)
+                                    if (CreateHTMLOutput)
                                     {
-                                        cOutputHandler.writeFinished();
-                                        cOutputHandler.writeFinishedNoPost();
+                                        _outputHandler.WriteFinished();
+                                        _outputHandler.WriteFinishedNoPost();
                                     }
                                 }
                             //}
@@ -2478,41 +2515,41 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReportSolverResults");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReportSolverResults");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
         
         /// <summary>
         /// This function converts the static part of the product platform, i.e. variants, followed by the group cardinalities
         /// </summary>
-        private void convertProductPlatform(bool pOptimizer = false)
+        private void ConvertProductPlatform(bool pOptimizer = false)
         {
             try
             {
-                convertFVariants2Z3Variants();
+                ConvertFVariants2Z3Variants();
 
-                convertFParts2Z3Parts();
+                ConvertFParts2Z3Parts();
 
-                convertItemUsageRulesConstraints(pOptimizer);
+                ConvertItemUsageRulesConstraints(pOptimizer);
 
                 //formula 2
-                produceVariantGroupGCardinalityConstraints(pOptimizer);
+                ProduceVariantGroupGCardinalityConstraints(pOptimizer);
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertProductPlatform");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertProductPlatform");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        public void convertItemUsageRulesConstraints(bool pOptmizer = false)
+        public void ConvertItemUsageRulesConstraints(bool pOptmizer = false)
         {
             try
             {
 
-                foreach (itemUsageRule lItemUsageRule in cFrameworkWrapper.ItemUsageRuleSet)
+                foreach (itemUsageRule lItemUsageRule in _frameworkWrapper.ItemUsageRuleSet)
                 {
                     ////Previous version: In this version it was variant -> parts
                     ////first we have to make a string of the parts anded to gether
@@ -2529,21 +2566,21 @@ namespace ProductPlatformAnalyzer
                     //BoolExpr lConstraint = cZ3Solver.TwoWayImpliesOperator(lLeftHandSide, lRightHandSide);
                     //cZ3Solver.AddConstraintToSolver(lConstraint, "ItemUsageRule");
 
-                    BoolExpr lRightHandSide = (BoolExpr)cZ3Solver.FindExprInExprSet(lItemUsageRule.getPart().names);
+                    BoolExpr lRightHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lItemUsageRule.getPart().names);
 
-                    BoolExpr lLeftHandSide = convertComplexString2BoolExpr(lItemUsageRule.getVariantExp());
+                    BoolExpr lLeftHandSide = ConvertComplexString2BoolExpr(lItemUsageRule.getVariantExp());
 
-                    BoolExpr lConstraint = cZ3Solver.TwoWayImpliesOperator(lLeftHandSide, lRightHandSide);
-                    cZ3Solver.AddConstraintToSolver(lConstraint, "ItemUsageRule");
+                    BoolExpr lConstraint = _z3Solver.TwoWayImpliesOperator(lLeftHandSide, lRightHandSide);
+                    _z3Solver.AddConstraintToSolver(lConstraint, "ItemUsageRule");
 
                     if (pOptmizer)
-                        cZ3Solver.AddConstraintToOptimizer(lConstraint, "ItemUsageRule");
+                        _z3Solver.AddConstraintToOptimizer(lConstraint, "ItemUsageRule");
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertItemUsageRulesConstraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertItemUsageRulesConstraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -2613,42 +2650,42 @@ namespace ProductPlatformAnalyzer
                 List<BoolExpr> lSingleOperationProressionList = new List<BoolExpr>();
                 BoolExpr lAllOperationProgression = null;
 
-                BoolExpr lProgressionRule = cZ3Solver.AddBooleanExpression("ProgressionRule_" + pTransitionNo);
+                BoolExpr lProgressionRule = _z3Solver.AddBooleanExpression("ProgressionRule_" + pTransitionNo);
 
-                HashSet<Operation> lAbstractOperations = cFrameworkWrapper.OperationSet;
+                HashSet<Operation> lAbstractOperations = _frameworkWrapper.OperationSet;
                 //var lOperationInstanceSet = cFrameworkWrapper.getOperationInstancesInOneTransition(pTransitionNo.ToString());
                 List<OperationInstance> lOperationInstanceSet = new List<OperationInstance>();
                 foreach (Operation lCurrentAbstractOperation in lAbstractOperations)
                 {
-                    lOperationInstanceSet.Add(lCurrentAbstractOperation.getOperationInstanceForTransition(pTransitionNo));
+                    lOperationInstanceSet.Add(lCurrentAbstractOperation.GetOperationInstanceForTransition(pTransitionNo));
                 }
 
                 foreach (var lCurrentOperationInstance in lOperationInstanceSet)
                 {
                     //(O1_i_t <-> O1_i_t+1) AND (O1_e_t <-> O1_e_t+1)
                     ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(lCurrentOperationInstance);
-                    OperationInstance lNextTransitionOperationInstance = lCurrentOperationInstance.nextOperationInstance();
-                    BoolExpr lFirstPart = cZ3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.InitialVariable
+                    OperationInstance lNextTransitionOperationInstance = lCurrentOperationInstance.NextOperationInstance();
+                    BoolExpr lFirstPart = _z3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.InitialVariable
                                                                 , lNextTransitionOperationInstance.InitialVariable);
-                    BoolExpr lSecondPart = cZ3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.ExecutingVariable
+                    BoolExpr lSecondPart = _z3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.ExecutingVariable
                                                                 , lNextTransitionOperationInstance.ExecutingVariable);
-                    BoolExpr lCurrentOperationExpression = cZ3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart });
+                    BoolExpr lCurrentOperationExpression = _z3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart });
 
                     lSingleOperationProressionList.Add(lCurrentOperationExpression);
                 }
 
-                lAllOperationProgression = cZ3Solver.AndOperator(lSingleOperationProressionList);
+                lAllOperationProgression = _z3Solver.AndOperator(lSingleOperationProressionList);
 
-                lOverallOperationProgressionRule = cZ3Solver.NotOperator(lAllOperationProgression);
-                cZ3Solver.AddTwoWayImpliesOperator2Constraints(lProgressionRule, lOverallOperationProgressionRule, "OperationProgression");
+                lOverallOperationProgressionRule = _z3Solver.NotOperator(lAllOperationProgression);
+                _z3Solver.AddTwoWayImpliesOperator2Constraints(lProgressionRule, lOverallOperationProgressionRule, "OperationProgression");
 
 
                 lResultExpr = lProgressionRule;
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertOperationProgressionRule");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertOperationProgressionRule");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -2658,18 +2695,18 @@ namespace ProductPlatformAnalyzer
         /// and the relationship between operations and variants
         /// </summary>
         /// <param name="pState"></param>
-        private void convertOperationsPrecedenceRules(int pTransitionNo)
+        private void ConvertOperationsPrecedenceRules(int pTransitionNo)
         {
             try
             {
                 //TODO: Here we have to check if the operations have really been converted.
 
-                if (cNeedPreAnalysis && cCurrentTransitionNumber.Equals(0))
-                    cPreAnalysisResult = cFrameworkWrapper.checkPreAnalysis();
+                if (_needPreAnalysis && _currentTransitionNumber.Equals(0))
+                    _preAnalysisResult = _frameworkWrapper.CheckPreAnalysis();
 
-                if (cPreAnalysisResult)
+                if (_preAnalysisResult)
                 {
-                    intializeOperationTriggerRules();
+                    IntializeOperationTriggerRules();
                     //formula 5 and New Formula
                     //5.1: (O_I_k_j and Pre_k_j) => O_E_k_j+1 or O_I_k_j+1
                     //5.2: O_I_k_j and (not Pre_k_j) => (O_I_k_j <=> O_I_k_j+1)
@@ -2681,25 +2718,25 @@ namespace ProductPlatformAnalyzer
                     //5.8: Ai2e <=> (O_I_k_j AND O_E_k_j+1)
                     //5.9: Ae2f <=> (O_E_k_j AND O_F_k_j+1)
                     //TODO: Bring the comment for formula 6 from the follwing function
-                    convertFOperationsPrecedenceRulesNStatusControl2Z3ConstraintNewVersion(pTransitionNo);
+                    ConvertFOperationsPrecedenceRulesNStatusControl2Z3ConstraintNewVersion(pTransitionNo);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertOperationsPrecedenceRules");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertOperationsPrecedenceRules");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void intializeOperationTriggerRules()
+        private void IntializeOperationTriggerRules()
         {
             try
             {
-                HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                 foreach (Operation lCurrentOperation in lOperationSet)
                 {
-                    if (cCurrentTransitionNumber == 0)
+                    if (_currentTransitionNumber == 0)
                         DefiningNInitializingOperationTriggerAttributes(lCurrentOperation);
                 }
 
@@ -2707,8 +2744,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertOperationsPrecedenceRules");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertOperationsPrecedenceRules");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -2716,24 +2753,24 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// This function converts the resources and the operation resource relationships
         /// </summary>
-        private void convertResourcesNOperationResourceRelations(bool pOptimizer = false)
+        private void ConvertResourcesNOperationResourceRelations(bool pOptimizer = false)
         {
             try
             {
-                if (cPreAnalysisResult)
+                if (_preAnalysisResult)
                 {
                     //New formulas for implementing resources
-                    if (cFrameworkWrapper.ResourceSet.Count != 0)
+                    if (_frameworkWrapper.ResourceSet.Count != 0)
                     {
-                        convertFResource2Z3Constraints(pOptimizer);
-                        checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints(pOptimizer);
+                        ConvertFResource2Z3Constraints(pOptimizer);
+                        CheckFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints(pOptimizer);
                     }
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertResourcesNOperationResourceRelations");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertResourcesNOperationResourceRelations");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -2743,15 +2780,15 @@ namespace ProductPlatformAnalyzer
         /// <param name="pState"></param>
         /// <param name="pDone"></param>
         ////private void convertGoal(int pState, bool pDone)
-        private void convertExistenceOfDeadlockGoal(int pState)
+        private void ConvertExistenceOfDeadlockGoal(int pState)
         {
             //TODO: this function is not needed and the lower level function down below can be called straight away
             try
             {
                 //TODO: these two conditions have to be moved to one level higher and this function should be removed.
-                if (cPreAnalysisResult)
+                if (_preAnalysisResult)
                 {
-                    if (cOpSeqAnalysis)
+                    if (_opSeqAnalysis)
                     {
                         ////Removed when seperating the model building from model analysis
                         ////Might be added by runa, don't know why!
@@ -2764,8 +2801,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertGoal");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertGoal");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -2776,75 +2813,75 @@ namespace ProductPlatformAnalyzer
         /// <param name="pDone">If the analysis is finished or not</param>
         /// <param name="pStrExprToCheck">If a special epression needs to be checked</param>
         /// <returns>Analysis result of the goal</returns>
-        private Status anlyzeModel(int pState, bool pDone, string pStrExprToCheck = "")
+        private Status AnlyzeModel(int pState, bool pDone, string pStrExprToCheck = "")
         {
             Status lTestResult = Status.UNKNOWN;
             try
             {
-                if (cPreAnalysisResult)
+                if (_preAnalysisResult)
                 {
                     if (!pDone)
                     {
-                        if (cGeneralAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
-                            cOutputHandler.printMessageToConsole("Analysis No: " + pState);
+                        if (_generalAnalysisType.Equals(Enumerations.GeneralAnalysisType.Dynamic))
+                            _outputHandler.PrintMessageToConsole("Analysis No: " + pState);
                         ////Removing unwanted code, this function was pointing to a one line function
                         ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
-                        lTestResult = cZ3Solver.CheckSatisfiability(pState.ToString()
+                        lTestResult = _z3Solver.CheckSatisfiability(pState.ToString()
                                                                     , pDone
-                                                                    , cFrameworkWrapper
-                                                                    , cConvertGoal
-                                                                    , cReportAnalysisDetailResult
-                                                                    , cReportVariantsResult
-                                                                    , cReportTransitionsResult
-                                                                    , cReportAnalysisTiming
-                                                                    , cReportUnsatCore
+                                                                    , _frameworkWrapper
+                                                                    , ConvertGoal
+                                                                    , ReportAnalysisDetailResult
+                                                                    , ReportVariantsResult
+                                                                    , ReportTransitionsResult
+                                                                    , ReportAnalysisTiming
+                                                                    , ReportUnsatCore
                                                                     , pStrExprToCheck);
 
-                        cZ3Solver.WriteDebugFile(pState.ToString(), -1);
+                        _z3Solver.WriteDebugFile(pState.ToString(), -1);
                     }
                     else
                     {
                         ////TODO: If the analysis is finished why should it check the satisfiablity again???????
                         ////TODO: Have to remember the reason behind this else.
 
-                        cOutputHandler.printMessageToConsole("Finished: ");
+                        _outputHandler.PrintMessageToConsole("Finished: ");
                         ////Removing unwanted code, this function was pointing to a one line function
                         ////lTestResult = analyseZ3Model(pState, pDone, lFrameworkWrapper, pStrExprToCheck);
-                        lTestResult = cZ3Solver.CheckSatisfiability(pState.ToString()
+                        lTestResult = _z3Solver.CheckSatisfiability(pState.ToString()
                                                                     , pDone
-                                                                    , cFrameworkWrapper
-                                                                    , cConvertGoal
-                                                                    , cReportAnalysisDetailResult
-                                                                    , cReportVariantsResult
-                                                                    , cReportTransitionsResult
-                                                                    , cReportAnalysisTiming
-                                                                    , cReportUnsatCore
+                                                                    , _frameworkWrapper
+                                                                    , ConvertGoal
+                                                                    , ReportAnalysisDetailResult
+                                                                    , ReportVariantsResult
+                                                                    , ReportTransitionsResult
+                                                                    , ReportAnalysisTiming
+                                                                    , ReportUnsatCore
                                                                     , pStrExprToCheck);
 
-                        cZ3Solver.WriteDebugFile(pState.ToString(), -1);
+                        _z3Solver.WriteDebugFile(pState.ToString(), -1);
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in anlyzeModel");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in anlyzeModel");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTestResult;
         }
 
-        private void convertFResource2Z3Constraints(bool pOptimizer = false)
+        private void ConvertFResource2Z3Constraints(bool pOptimizer = false)
         {
             try
             {
                 //List<resource> lResourceList = cFrameworkWrapper.ResourceList;
-                foreach (resource lResource in cFrameworkWrapper.ResourceSet)
+                foreach (resource lResource in _frameworkWrapper.ResourceSet)
                 {
                     string lResourceName = lResource.names;
                     foreach (Tuple<string,string,string> lAttribute in lResource.attributes)
                     {
-                        convertFResourceAttribute2Z3Constraint(lResourceName, lAttribute, pOptimizer);
+                        ConvertFResourceAttribute2Z3Constraint(lResourceName, lAttribute, pOptimizer);
 
 
                     }
@@ -2852,12 +2889,12 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFResource2Z3Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFResource2Z3Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void convertFResourceAttribute2Z3Constraint(string pResourceName, Tuple<string,string,string> pAttribute, bool pOptimizer = false)
+        private void ConvertFResourceAttribute2Z3Constraint(string pResourceName, Tuple<string,string,string> pAttribute, bool pOptimizer = false)
         {
             try
             {
@@ -2870,11 +2907,11 @@ namespace ProductPlatformAnalyzer
                     case "string":
                         break;
                     case "int":
-                        cZ3Solver.AddIntegerExpression(lAttributeName);
+                        _z3Solver.AddIntegerExpression(lAttributeName);
                         //IntExpr lExprVariable = cZ3Solver.FindIntExpressionUsingName(lAttributeName);
-                        Expr lExprVariable = cZ3Solver.FindExprInExprSet(lAttributeName);
+                        Expr lExprVariable = _z3Solver.FindExprInExprSet(lAttributeName);
 
-                        cZ3Solver.AddEqualOperator2Constraints(lExprVariable
+                        _z3Solver.AddEqualOperator2Constraints(lExprVariable
                                                                 , int.Parse(lAttributeValue)
                                                                 , "Attribute_Value"
                                                                 , pOptimizer);
@@ -2882,42 +2919,42 @@ namespace ProductPlatformAnalyzer
                         break;
                     default:
                         //The default case is boolean variables
-                        cZ3Solver.AddBooleanExpression(lAttributeName);
+                        _z3Solver.AddBooleanExpression(lAttributeName);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFResourceAttribute2Z3Constraint");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFResourceAttribute2Z3Constraint");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void checkFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints(bool pOptimizer = false)
+        private void CheckFOperationExecutabilityWithCurrentResourcesUsingZ3Constraints(bool pOptimizer = false)
         {
             try
             {
 
                 //foreach (Operation lActiveOperation in cFrameworkWrapper.ActiveOperationSet)
-                foreach (Operation lActiveOperation in cFrameworkWrapper.OperationSet)
+                foreach (Operation lActiveOperation in _frameworkWrapper.OperationSet)
                 {
 //                    List<string> lPossibleResourceVariablesForActiveOperation = new List<string>();
                     List<string> lUseResourceVariablesForActiveOperation = new List<string>();
                     
                     //This variable shows if the current operation can be run with at least one resource
                     string lPossibleToRunActiveOperationName = "Possible_to_run_" + lActiveOperation.Name;
-                    cZ3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
+                    _z3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
 
-                    foreach (resource lActiveResource in cFrameworkWrapper.ResourceSet)
+                    foreach (resource lActiveResource in _frameworkWrapper.ResourceSet)
                     {
                         //This variable shows if the current operation CAN be run with the current resource
                         string lPossibleToUseResource4OperationName = "Possible_to_use_" + lActiveResource.names + "_for_" + lActiveOperation.Name;
-                        cZ3Solver.AddBooleanExpression(lPossibleToUseResource4OperationName);
+                        _z3Solver.AddBooleanExpression(lPossibleToUseResource4OperationName);
 //                        lPossibleResourceVariablesForActiveOperation.Add(lPossibleToUseResource4OperationName);
 
                         //This variable shows if the current operation WILL be run with the current resource
                         string lUseResource4OperationName = "Use_" + lActiveResource.names + "_for_" + lActiveOperation.Name;
-                        cZ3Solver.AddBooleanExpression(lUseResource4OperationName);
+                        _z3Solver.AddBooleanExpression(lUseResource4OperationName);
                         lUseResourceVariablesForActiveOperation.Add(lUseResource4OperationName);
 
                         //formula 6.1
@@ -2927,16 +2964,16 @@ namespace ProductPlatformAnalyzer
                         {
                             //Active operation has requirements defined
 
-                            HashSet<resource> lOperationChosenResources = cFrameworkWrapper.ReturnOperationChosenResource(lActiveOperation.Name);
+                            HashSet<resource> lOperationChosenResources = _frameworkWrapper.ReturnOperationChosenResource(lActiveOperation.Name);
 
                             if (lOperationChosenResources.Contains(lActiveResource))
                             {
                                 //This active resource is one of the resources that can run this operation
-                                BoolExpr lActiveOperationRequirementExpr = returnFExpression2Z3Constraint(lActiveOperationRequirements);
+                                BoolExpr lActiveOperationRequirementExpr = ReturnFExpression2Z3Constraint(lActiveOperationRequirements);
                                 /*cZ3Solver.AddTwoWayImpliesOperator2Constraints(cZ3Solver.FindBoolExpressionUsingName(lPossibleToUseResource4OperationName)
                                                                             , lActiveOperationRequirementExpr
                                                                             , "formula 6.1");*/
-                                cZ3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)cZ3Solver.FindExprInExprSet(lPossibleToUseResource4OperationName)
+                                _z3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)_z3Solver.FindExprInExprSet(lPossibleToUseResource4OperationName)
                                                                             , lActiveOperationRequirementExpr
                                                                             , "formula 6.1"
                                                                             , pOptimizer);
@@ -2944,22 +2981,22 @@ namespace ProductPlatformAnalyzer
                             else
                             {
                                 //This active resource is not one of the resources that can run this operation
-                                cZ3Solver.AddNotOperator2Constraints(lPossibleToUseResource4OperationName
+                                _z3Solver.AddNotOperator2Constraints(lPossibleToUseResource4OperationName
                                                                         , "formula 6.1"
                                                                         , pOptimizer);
                             }
                         }
                         else
                             //Active operation has no requirements defined, hence it is always possible to run
-                            cZ3Solver.AddConstraintToSolver((BoolExpr)cZ3Solver.FindExprInExprSet(lPossibleToRunActiveOperationName)
+                            _z3Solver.AddConstraintToSolver((BoolExpr)_z3Solver.FindExprInExprSet(lPossibleToRunActiveOperationName)
                                                             , "formula 6.1"
                                                             , pOptimizer);
 
 
                         //formula 6.2
                         // Use_ActiveResource_ActiveOperation -> Possible_to_use_ActiveResource_for_ActiveOperation
-                        cZ3Solver.AddImpliesOperator2Constraints((BoolExpr)cZ3Solver.FindExprInExprSet(lUseResource4OperationName)
-                                                                , (BoolExpr)cZ3Solver.FindExprInExprSet(lPossibleToUseResource4OperationName)
+                        _z3Solver.AddImpliesOperator2Constraints((BoolExpr)_z3Solver.FindExprInExprSet(lUseResource4OperationName)
+                                                                , (BoolExpr)_z3Solver.FindExprInExprSet(lPossibleToUseResource4OperationName)
                                                                 , "formula 6.2"
                                                                 , pOptimizer);
                     }
@@ -2971,9 +3008,9 @@ namespace ProductPlatformAnalyzer
                     //Possible_to_run_ActiveOperation -> Possible_to_use_Resource1_for_ActiveOperation or Possible_to_use_Resource2_for_ActiveOperation or ...
 
                     //                    lPossibleToRunOperationVariableNames.Add(lPossibleToRunActiveOperationName);
-                    BoolExpr lPossibleToRunActiveOperation = (BoolExpr)cZ3Solver.FindExprInExprSet(lPossibleToRunActiveOperationName);
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints(lPossibleToRunActiveOperation
-                                                                , cZ3Solver.PickOneOperator(lUseResourceVariablesForActiveOperation)
+                    BoolExpr lPossibleToRunActiveOperation = (BoolExpr)_z3Solver.FindExprInExprSet(lPossibleToRunActiveOperationName);
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints(lPossibleToRunActiveOperation
+                                                                , _z3Solver.PickOneOperator(lUseResourceVariablesForActiveOperation)
                                                                 , "formula6.3"
                                                                 , pOptimizer);
                     //formula 6.2
@@ -2990,8 +3027,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFResourceOperationMapping2Z3Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFResourceOperationMapping2Z3Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3010,32 +3047,32 @@ namespace ProductPlatformAnalyzer
             return lZ3Solver.CheckSatisfiability(pState, done, wrapper, lConvertGoal, lReportAnalysisTiming, lReportUnsatCore, pStrExprToCheck);
         }*/
 
-        public void convertFVariants2Z3Variants()
+        public void ConvertFVariants2Z3Variants()
         {
             try
             {
-                foreach (variant lVariant in cFrameworkWrapper.VariantSet)
-                    cZ3Solver.AddBooleanExpression(lVariant.names);
+                foreach (variant lVariant in _frameworkWrapper.VariantSet)
+                    _z3Solver.AddBooleanExpression(lVariant.names);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFVariants2Z3Variants");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFVariants2Z3Variants");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void convertFParts2Z3Parts()
+        public void ConvertFParts2Z3Parts()
         {
             try
             {
-                foreach (part lPart in cFrameworkWrapper.PartSet)
-                    cZ3Solver.AddBooleanExpression(lPart.names);
+                foreach (part lPart in _frameworkWrapper.PartSet)
+                    _z3Solver.AddBooleanExpression(lPart.names);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFParts2Z3Parts");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFParts2Z3Parts");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
 
         }
@@ -3085,8 +3122,8 @@ namespace ProductPlatformAnalyzer
                 {
                     lConstraintSource = pExtraDescription + " - Operation_Trigger_Initializing";
                     //O_Trigger <=> Trigger expression
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints(pSpecificOperation.OperationTriggerVariable
-                                                                    , convertComplexString2BoolExpr(pSpecificOperation.Trigger)
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints(pSpecificOperation.OperationTriggerVariable
+                                                                    , ConvertComplexString2BoolExpr(pSpecificOperation.Trigger)
                                                                     , lConstraintSource
                                                                     , true);
 
@@ -3095,8 +3132,8 @@ namespace ProductPlatformAnalyzer
                 {
                     lConstraintSource = "Operation_Trigger_Initializing";
                     //O_Trigger <=> Trigger expression
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints(pSpecificOperation.OperationTriggerVariable
-                                                                    , convertComplexString2BoolExpr(pSpecificOperation.Trigger)
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints(pSpecificOperation.OperationTriggerVariable
+                                                                    , ConvertComplexString2BoolExpr(pSpecificOperation.Trigger)
                                                                     , lConstraintSource
                                                                     , false);
 
@@ -3106,8 +3143,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefiningNInitializingOperationTriggerAttributes");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefiningNInitializingOperationTriggerAttributes");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3115,7 +3152,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                var lOperations = cFrameworkWrapper.OperationSet;
+                var lOperations = _frameworkWrapper.OperationSet;
 
                 foreach (var lOperation in lOperations)
                 {
@@ -3124,16 +3161,16 @@ namespace ProductPlatformAnalyzer
                     //Initializing trigger variable (only if the transition number is 0)
 
                     //O_Trigger <=> Trigger expression
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints(lOperation.OperationTriggerVariable
-                                                                    , convertComplexString2BoolExpr(lOperation.Trigger)
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints(lOperation.OperationTriggerVariable
+                                                                    , ConvertComplexString2BoolExpr(lOperation.Trigger)
                                                                     , "Operation_Trigger_Initializing");
 
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in DefiningNInitializingOperationTriggerAttributes");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in DefiningNInitializingOperationTriggerAttributes");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3142,13 +3179,13 @@ namespace ProductPlatformAnalyzer
         /// For the inactive operations we only define current state variables in the Z3 model
         /// </summary>
         /// <param name="pState"></param>
-        public void convertFOperations2Z3Operations(int pTransitionNo)
+        public void ConvertFOperations2Z3Operations(int pTransitionNo)
         {
             try
             {
                 // Here we have to loop over all operations and operation instances and create the needed variables
 
-                var lOperations = cFrameworkWrapper.OperationSet;
+                var lOperations = _frameworkWrapper.OperationSet;
 
                 foreach (var lOperation in lOperations)
                 {
@@ -3162,9 +3199,9 @@ namespace ProductPlatformAnalyzer
                             lCurrentOperationInstance = new OperationInstance(lOperation, pTransitionNo.ToString());
                         else if (lCurrentOperationInstance == null)
                             //I am pretty sure we can only have one operation instance for each operation in each transition!!!!!
-                            lCurrentOperationInstance = cFrameworkWrapper.getOperationInstancesForOneOperationInOneTrasition(lOperation, lCurrentTransitionNo).First();
+                            lCurrentOperationInstance = _frameworkWrapper.GetOperationInstancesForOneOperationInOneTrasition(lOperation, lCurrentTransitionNo).First();
                         else
-                            lCurrentOperationInstance = lCurrentOperationInstance.createNextOperationInstance();
+                            lCurrentOperationInstance = lCurrentOperationInstance.CreateNextOperationInstance();
 
                         ////These two lines are now carried out in the Static part of the model making
                         ////lOperation.OperationTriggerVariable = AddZ3ModelVariable(lOperation.OperationTriggerVariableName);
@@ -3191,11 +3228,11 @@ namespace ProductPlatformAnalyzer
 
                 }
 
-                if (cCurrentTransitionNumber.Equals(0))
+                if (_currentTransitionNumber.Equals(0))
                 {
                     //forula 4 - Setting operation status if they were picked or not
                     // C = (BIG AND) (O_I_j_0 <=> O_Trigger) AND (! O_e_j_0) AND (! O_f_j_0) AND (O_u_j_0 <=> (! O_Trigger))
-                    initializeFOperation2Z3Constraints();
+                    InitializeFOperation2Z3Constraints();
 
                     ////computeOperationsToResourceMap();
 
@@ -3205,12 +3242,12 @@ namespace ProductPlatformAnalyzer
                 //Op1.Req = Res1, Op2.Req = Res2, Op3.Req = Res3 
                 //Res1 => Op1, Op3 ; Res2 => Op2 
                 //Add constraint: ZeroOrOne(Op1,Op2)
-                addOperationResourcesConstraints();
+                AddOperationResourcesConstraints();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFOperations2Z3Operations");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFOperations2Z3Operations");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3218,7 +3255,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                HashSet<resource> lResourceList = cFrameworkWrapper.ResourceSet;
+                HashSet<resource> lResourceList = _frameworkWrapper.ResourceSet;
 
                 if (lResourceList.Count >0)
                 {
@@ -3228,28 +3265,28 @@ namespace ProductPlatformAnalyzer
                         //This part creates a list of all resources with an empty list of the operations related to each resource
                         List<Operation> lOperations = new List<Operation>();
 
-                        cResourcesOperations.Add(lResource.names, lOperations);
+                        _resourcesOperations.Add(lResource.names, lOperations);
                     }
 
-                    HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                    HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                     // If an operations has a resource add it to the list of that resource
                     foreach (Operation lCurrentAbstractOperation in lOperationSet)
                     {
                         string lNeededResource = lCurrentAbstractOperation.Resource;
-                        cResourcesOperations[lNeededResource].Add(lCurrentAbstractOperation);
+                        _resourcesOperations[lNeededResource].Add(lCurrentAbstractOperation);
                     }
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ComputeOperationsToResourceMap");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ComputeOperationsToResourceMap");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        private void addOperationResourcesConstraints()
+        private void AddOperationResourcesConstraints()
         {
             //formula x - Setting constraints for operation resources
             //Op1.Req = Res1, Op2.Req = Res2, Op3.Req = Res1
@@ -3309,7 +3346,7 @@ namespace ProductPlatformAnalyzer
   */
                    //
                     //Add constraint: ZeroOrOne(Op1,Op2)
-                    foreach (KeyValuePair<string, List<Operation>> lCurrentKVP in cResourcesOperations)
+                    foreach (KeyValuePair<string, List<Operation>> lCurrentKVP in _resourcesOperations)
                     {
                         
                         if (lCurrentKVP.Value.Count > 1)
@@ -3319,20 +3356,20 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lZeroConstraint = null;
                             BoolExpr lOneConstraint = null;
                             BoolExpr lConstraint = null;
-                            if (cCurrentTransitionNumber == 0)
+                            if (_currentTransitionNumber == 0)
                             {
-                                lZeroConstraint = cZ3Solver.PickZeroResource(lCurrentKVP.Value, 0);
-                                lOneConstraint = cZ3Solver.PickOneResource(lCurrentKVP.Value, 0);
-                                lConstraint = cZ3Solver.OrOperator(new List<BoolExpr>() { lZeroConstraint, lOneConstraint });
-                                cZ3Solver.AddConstraintToSolver(lConstraint, "formula X");
+                                lZeroConstraint = _z3Solver.PickZeroResource(lCurrentKVP.Value, 0);
+                                lOneConstraint = _z3Solver.PickOneResource(lCurrentKVP.Value, 0);
+                                lConstraint = _z3Solver.OrOperator(new List<BoolExpr>() { lZeroConstraint, lOneConstraint });
+                                _z3Solver.AddConstraintToSolver(lConstraint, "formula X");
                             }
 
-                            if (cCurrentTransitionNumber < cMaxNumberOfTransitions)
+                            if (_currentTransitionNumber < _maxNumberOfTransitions)
                             {
-                                lZeroConstraint = cZ3Solver.PickZeroResource(lCurrentKVP.Value, cCurrentTransitionNumber + 1);
-                                lOneConstraint = cZ3Solver.PickOneResource(lCurrentKVP.Value, cCurrentTransitionNumber + 1);
-                                lConstraint = cZ3Solver.OrOperator(new List<BoolExpr>() { lZeroConstraint, lOneConstraint });
-                                cZ3Solver.AddConstraintToSolver(lConstraint, "formula X");
+                                lZeroConstraint = _z3Solver.PickZeroResource(lCurrentKVP.Value, _currentTransitionNumber + 1);
+                                lOneConstraint = _z3Solver.PickOneResource(lCurrentKVP.Value, _currentTransitionNumber + 1);
+                                lConstraint = _z3Solver.OrOperator(new List<BoolExpr>() { lZeroConstraint, lOneConstraint });
+                                _z3Solver.AddConstraintToSolver(lConstraint, "formula X");
                             }
 
 
@@ -3344,8 +3381,8 @@ namespace ProductPlatformAnalyzer
 
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in addOperationResourcesConstraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in addOperationResourcesConstraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3357,12 +3394,12 @@ namespace ProductPlatformAnalyzer
                 if (pZ3Solver != null)
                     lResultVariable = pZ3Solver.AddBooleanExpression(pVariableName, pExtraDescription);
                 else
-                    lResultVariable = cZ3Solver.AddBooleanExpression(pVariableName, pExtraDescription);
+                    lResultVariable = _z3Solver.AddBooleanExpression(pVariableName, pExtraDescription);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddZ3ModelVariable");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddZ3ModelVariable");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultVariable;
         }
@@ -3563,27 +3600,27 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        public void produceVariantGroupGCardinalityConstraints(bool pOptimizer = false)
+        public void ProduceVariantGroupGCardinalityConstraints(bool pOptimizer = false)
         {
             try
             {
                 //Formula 2
                 //List<variantGroup> localVariantGroupsList = cFrameworkWrapper.VariantGroupList;
 
-                foreach (variantGroup lVariantGroup in cFrameworkWrapper.VariantGroupSet)
+                foreach (variantGroup lVariantGroup in _frameworkWrapper.VariantGroupSet)
                 {
-                    makeGCardinalityConstraint(lVariantGroup, pOptimizer);
+                    MakeGCardinalityConstraint(lVariantGroup, pOptimizer);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in produceVariantGroupGCardinalityConstraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in produceVariantGroupGCardinalityConstraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
         //TODO: We need an enum for the Variant Group Cardinality to be used here and also used where the Variant Groups are created from the input files
-        public void makeGCardinalityConstraint(variantGroup pVariantGroup, bool pOptimizer = false)
+        public void MakeGCardinalityConstraint(variantGroup pVariantGroup, bool pOptimizer = false)
         {
             try
             {
@@ -3596,11 +3633,11 @@ namespace ProductPlatformAnalyzer
 
                 if (lVariantNames.Count.Equals(1))
                 {
-                    BoolExpr lTempBoolExpr = (BoolExpr)cZ3Solver.FindExprInExprSet(lVariantNames.First());
-                    cZ3Solver.AddConstraintToSolver(lTempBoolExpr, "GroupCardinality");
+                    BoolExpr lTempBoolExpr = (BoolExpr)_z3Solver.FindExprInExprSet(lVariantNames.First());
+                    _z3Solver.AddConstraintToSolver(lTempBoolExpr, "GroupCardinality");
 
                     if (pOptimizer)
-                        cZ3Solver.AddConstraintToOptimizer(lTempBoolExpr, "GroupCardinality");
+                        _z3Solver.AddConstraintToOptimizer(lTempBoolExpr, "GroupCardinality");
                 }
                 else
                 {
@@ -3608,19 +3645,19 @@ namespace ProductPlatformAnalyzer
                     {
                         case "choose exactly one":
                             {
-                                cZ3Solver.AddPickOneOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
+                                _z3Solver.AddPickOneOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
 
                                 break;
                             }
                         case "choose at least one":
                             {
-                                cZ3Solver.AddOrOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
+                                _z3Solver.AddOrOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
 
                                 break;
                             }
                         case "choose all":
                             {
-                                cZ3Solver.AddAndOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
+                                _z3Solver.AddAndOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
 
                                 break;
                             }
@@ -3631,7 +3668,7 @@ namespace ProductPlatformAnalyzer
                             }
                         case "choose zero or one":
                             {
-                                cZ3Solver.AddPickZeroOrOneOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
+                                _z3Solver.AddPickZeroOrOneOperator2Constraints(lVariantNames, "GroupCardinality", pOptimizer);
                                 break;
                             }
                     }
@@ -3645,7 +3682,7 @@ namespace ProductPlatformAnalyzer
 
         }
 
-        public void initializeFOperation2Z3Constraints()
+        public void InitializeFOperation2Z3Constraints()
         {
             try
             {
@@ -3663,42 +3700,42 @@ namespace ProductPlatformAnalyzer
                 // C = (BIG AND) (O_I_j_0 <=> O_Trigger) AND (! O_e_j_0) AND (! O_f_j_0) AND (O_u_j_0 <=> (! O_Trigger))
                 //This formula has to be applied to all operation instances
                 //Each operation has the field of when it is triggered which can be used in this formula.
-                HashSet<OperationInstance> lOperationInstanceList = cFrameworkWrapper.getOperationInstancesInOneTransition(0);
+                HashSet<OperationInstance> lOperationInstanceList = _frameworkWrapper.GetOperationInstancesInOneTransition(0);
 
                 foreach (OperationInstance lCurrentOperationInstance in lOperationInstanceList)
                 {
                     //if (lCurrentOperationInstance.TransitionNumber.Equals(0))
                     //{
                         //(O_I_j_0 <=> O_Trigger)
-                        BoolExpr lFirstPart = cZ3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.InitialVariable
+                        BoolExpr lFirstPart = _z3Solver.TwoWayImpliesOperator(lCurrentOperationInstance.InitialVariable
                                                                             , lCurrentOperationInstance.AbstractOperation.OperationTriggerVariable);
 
                         //(! O_e_j_0)
-                        BoolExpr lSecondPart = cZ3Solver.NotOperator(lCurrentOperationInstance.ExecutingVariable);
+                        BoolExpr lSecondPart = _z3Solver.NotOperator(lCurrentOperationInstance.ExecutingVariable);
                         //(! O_f_j_0)
-                        BoolExpr lThirdPart = cZ3Solver.NotOperator(lCurrentOperationInstance.FinishedVariable);
+                        BoolExpr lThirdPart = _z3Solver.NotOperator(lCurrentOperationInstance.FinishedVariable);
 
                         //(O_u_j_0 <=> (! O_Trigger))
                         BoolExpr lFirstOperand = lCurrentOperationInstance.UnusedVariable;
-                        BoolExpr lFourthPart = cZ3Solver.TwoWayImpliesOperator(lFirstOperand
-                                                                            , cZ3Solver.NotOperator(lCurrentOperationInstance.AbstractOperation.OperationTriggerVariable));
+                        BoolExpr lFourthPart = _z3Solver.TwoWayImpliesOperator(lFirstOperand
+                                                                            , _z3Solver.NotOperator(lCurrentOperationInstance.AbstractOperation.OperationTriggerVariable));
 
                         //(O_I_j_0 <=> O_Trigger) AND (! O_e_j_0) AND (! O_f_j_0) AND (O_u_j_0 <=> (! O_Trigger))
-                        BoolExpr lWholeFormula = cZ3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart });
+                        BoolExpr lWholeFormula = _z3Solver.AndOperator(new List<BoolExpr>() { lFirstPart, lSecondPart, lThirdPart, lFourthPart });
 
                         //(BIG AND) (O_I_j_0 <=> O_Trigger) AND (! O_e_j_0) AND (! O_f_j_0) AND (O_u_j_0 <=> (! O_Trigger))
-                        if (cConvertOperations)
-                            cZ3Solver.AddAndOperator2Constraints(new List<BoolExpr>() { lWholeFormula }, "formula4-Operation_Status_Initializing");
+                        if (ConvertOperations)
+                            _z3Solver.AddAndOperator2Constraints(new List<BoolExpr>() { lWholeFormula }, "formula4-Operation_Status_Initializing");
 
-                        if (cBuildPConstraints)
+                        if (BuildPConstraints)
                             AddPrecedanceConstraintToLocalList(lWholeFormula);
                     //}
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in initializeFOperation2Z3Constraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in initializeFOperation2Z3Constraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -3710,13 +3747,13 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (!cPConstraints.Contains(pPrecedanceConstraint))
-                cPConstraints.Add(pPrecedanceConstraint);
+                if (!_pConstraints.Contains(pPrecedanceConstraint))
+                _pConstraints.Add(pPrecedanceConstraint);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddPrecedanceConstraintToLocalList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddPrecedanceConstraintToLocalList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
         /*public void convertFOperations2Z3Constraint(int pState)
@@ -3949,15 +3986,15 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lExprPart != "and" || lExprPart != "or" || lExprPart != "not")
                     {
-                        variant lVariant = cFrameworkWrapper.variantLookupByName(lExprPart);
+                        variant lVariant = _frameworkWrapper.VariantLookupByName(lExprPart);
                         lResultVariantList.Add(lVariant);
                     }
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GetListOfVariantsFromAVariantExpr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GetListOfVariantsFromAVariantExpr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultVariantList;
         }
@@ -3977,15 +4014,15 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lExprPart != "and" || lExprPart != "or" || lExprPart != "not")
                     {
-                        part lPart = cFrameworkWrapper.partLookupByName(lExprPart);
+                        part lPart = _frameworkWrapper.PartLookupByName(lExprPart);
                         lResultPartList.Add(lPart);
                     }
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in GetListOfPartsFromAPartExpr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in GetListOfPartsFromAPartExpr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultPartList;
         }
@@ -4107,7 +4144,7 @@ namespace ProductPlatformAnalyzer
             return lOperationInstance;
         }*/
 
-        public BoolExpr convertIncompleteOperationInstances2CompleteOperationInstanceExpr(string pIncompleteOperationInstance
+        public BoolExpr ConvertIncompleteOperationInstances2CompleteOperationInstanceExpr(string pIncompleteOperationInstance
                                                                                         , string pTransitionNumber = "-1"
                                                                                         , bool pKeepOriginalVariable = false
                                                                                         , bool pAdd2List = true) 
@@ -4116,15 +4153,15 @@ namespace ProductPlatformAnalyzer
             try
             {
                 if (pIncompleteOperationInstance.Equals("true"))
-                    lResultBoolExpr = cZ3Solver.MakeTrueExpr();
+                    lResultBoolExpr = _z3Solver.MakeTrueExpr();
                 else if (pIncompleteOperationInstance.Equals("false"))
-                    lResultBoolExpr = cZ3Solver.MakeFalseExpr();
+                    lResultBoolExpr = _z3Solver.MakeFalseExpr();
                 else
                 {
                     //By "Complete" we mean it mentions the operation state and transition
                     if (IsOperationInstanceComplete(pIncompleteOperationInstance))
                     {
-                        lResultBoolExpr = (BoolExpr)cZ3Solver.FindExprInExprSet(pIncompleteOperationInstance);
+                        lResultBoolExpr = (BoolExpr)_z3Solver.FindExprInExprSet(pIncompleteOperationInstance);
                     }
                     else
                     {
@@ -4133,7 +4170,7 @@ namespace ProductPlatformAnalyzer
                         {
                             //This preconditon should consider state FINISHED or state UNUSED and any variants and any transitions
                             string lOperationName = pIncompleteOperationInstance;
-                            var lOperation = cFrameworkWrapper.getOperationFromOperationName(lOperationName);
+                            var lOperation = _frameworkWrapper.GetOperationFromOperationName(lOperationName);
                             //Note: In this part we want to implement weak links, which means if an operation is mentioned as a precondition 
                             //it means either the operation is in finished state or in an unused state
                             //Hence we have to make an operation instance from it
@@ -4142,7 +4179,7 @@ namespace ProductPlatformAnalyzer
                                 BoolExpr lBoolExprPart1 = ConvertOperationInstanceWithMissingTransitionNumber(lOperation, Enumerations.OperationInstanceState.Finished, pTransitionNumber, false, false);
                                 BoolExpr lBoolExprPart2 = ConvertOperationInstanceWithMissingTransitionNumber(lOperation, Enumerations.OperationInstanceState.Unused, pTransitionNumber, false, false);
 
-                                lResultBoolExpr = cZ3Solver.OrOperator(new List<BoolExpr>() { lBoolExprPart1, lBoolExprPart2 });
+                                lResultBoolExpr = _z3Solver.OrOperator(new List<BoolExpr>() { lBoolExprPart1, lBoolExprPart2 });
 
                             }
                             else
@@ -4156,16 +4193,16 @@ namespace ProductPlatformAnalyzer
                             if (!pKeepOriginalVariable)
                             {
                                 //This precondition should consider current transitions
-                                string lOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstanceName(pIncompleteOperationInstance);
-                                var lOperation = cFrameworkWrapper.getOperationFromOperationName(lOperationName);
-                                Enumerations.OperationInstanceState lOperationState = cFrameworkWrapper.ReturnOperationStateFromOperationInstanceName(pIncompleteOperationInstance);
+                                string lOperationName = _frameworkWrapper.ReturnOperationNameFromOperationInstanceName(pIncompleteOperationInstance);
+                                var lOperation = _frameworkWrapper.GetOperationFromOperationName(lOperationName);
+                                Enumerations.OperationInstanceState lOperationState = _frameworkWrapper.ReturnOperationStateFromOperationInstanceName(pIncompleteOperationInstance);
 
                                 lResultBoolExpr = ConvertOperationInstanceWithMissingTransitionNumber(lOperation, lOperationState, pTransitionNumber, false, false);
                             }
                             //This means (pKeepOriginalVariable = true) that we don't want to complete the incomplete operation instance variable
                             else
                             {
-                                lResultBoolExpr = (BoolExpr)cZ3Solver.FindExprInExprSet(pIncompleteOperationInstance);
+                                lResultBoolExpr = (BoolExpr)_z3Solver.FindExprInExprSet(pIncompleteOperationInstance);
                             }
                         }
 
@@ -4174,8 +4211,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertIncompleteOperationInstances2CompleteOperationInstanceExpr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertIncompleteOperationInstances2CompleteOperationInstanceExpr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultBoolExpr;
         }
@@ -4201,8 +4238,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IsOperationInstanceComplete");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in IsOperationInstanceComplete");
+                _outputHandler.PrintMessageToConsole(ex.Message);
                 lResult = false;
             }
             return lResult;
@@ -4224,8 +4261,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingTransitionNo");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in IsOperationInstanceMissingTransitionNo");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -4246,8 +4283,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingVariant");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in IsOperationInstanceMissingVariant");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -4269,8 +4306,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in IsOperationInstanceMissingStatus");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in IsOperationInstanceMissingStatus");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -4383,14 +4420,14 @@ namespace ProductPlatformAnalyzer
             try
             {
                 if (IsOperationInstanceComplete(pOperationInstance))
-                    lResultExpr = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance);
+                    lResultExpr = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance);
                 else
-                    lResultExpr = convertIncompleteOperationInstances2CompleteOperationInstanceExpr(pOperationInstance, pTransitionNumber.ToString());
+                    lResultExpr = ConvertIncompleteOperationInstances2CompleteOperationInstanceExpr(pOperationInstance, pTransitionNumber.ToString());
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in FindExprInExprList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in FindExprInExprList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -4404,13 +4441,13 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lResult = null;
                 if (pNode.Data.Contains("Possible"))
                 {
-                    lResult = cZ3Solver.MakeBoolExprFromString(pNode.Data);
+                    lResult = _z3Solver.MakeBoolExprFromString(pNode.Data);
                 }
                 else if ((pNode.Data != "and") && (pNode.Data != "or") && (pNode.Data != "not"))
                 {
                     //We have one operator
                     ////lResult = pNode.Data;
-                    lResult = mkCondition(pNode.Data, pState);
+                    lResult = MkCondition(pNode.Data, pState);
                 }
                 else
                 {
@@ -4422,20 +4459,20 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                lResult = cZ3Solver.AndOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState)
+                                lResult = _z3Solver.AndOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState)
                                                                                     , ParseCondition(lChildren[1], pState) });
                                 break;
                             }
                         case "or":
                             {
-                                lResult = cZ3Solver.OrOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState)
+                                lResult = _z3Solver.OrOperator(new List<BoolExpr>() { ParseCondition(lChildren[0], pState)
                                                                                     , ParseCondition(lChildren[1], pState) });
                                 break;
                             }
                         case "not":
                             {
                                 ////lResult = lZ3Solver.NotOperator(ParseConstraint(lChildren[0])).ToString();
-                                lResult = cZ3Solver.NotOperator(ParseCondition(lChildren[0], pState));
+                                lResult = _z3Solver.NotOperator(ParseCondition(lChildren[0], pState));
                                 break;
                             }
                         default:
@@ -4452,7 +4489,7 @@ namespace ProductPlatformAnalyzer
         }
 
         //construct pre/postcondition conponents
-        private BoolExpr mkCondition(string pCon, int pTransitionNo)
+        private BoolExpr MkCondition(string pCon, int pTransitionNo)
         {
             BoolExpr lResult = null;
             try
@@ -4482,7 +4519,7 @@ namespace ProductPlatformAnalyzer
                         else*/ if (lOperationNameParts.Length == 3)
                         {
                             //This means the precondition does includes a variant but not a state
-                            lResult = ((BoolExpr)cZ3Solver.FindExprInExprSet(pCon + "_" + pTransitionNo.ToString()));
+                            lResult = ((BoolExpr)_z3Solver.FindExprInExprSet(pCon + "_" + pTransitionNo.ToString()));
                         }
                         else
                             //This means the precondition only includes an operation
@@ -4490,17 +4527,17 @@ namespace ProductPlatformAnalyzer
                     }
                     else
                         //This means the precondition includes a state and a variant
-                        if (cFrameworkWrapper.getOperationTransitionNumberFromOperationInstanceString(pCon) > pTransitionNo)
+                        if (_frameworkWrapper.GetOperationTransitionNumberFromOperationInstanceString(pCon) > pTransitionNo)
                         {
                             //This means the precondition is on a transition state which has not been reached yet!
                             //lZ3Solver.AddConstraintToSolver(lZ3Solver.NotOperator(lOpPrecondition), pPreconditionSource);
                             //unsatisfiable = true;
                             //break;
-                            lResult = cZ3Solver.getFalseBoolExpr();
+                            lResult = _z3Solver.GetFalseBoolExpr();
                         }
                         else
                         {
-                            lResult = (BoolExpr)cZ3Solver.FindExprInExprSet(pCon);
+                            lResult = (BoolExpr)_z3Solver.FindExprInExprSet(pCon);
                         }
                 }
                 else
@@ -4509,8 +4546,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in mkCondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in mkCondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -4552,7 +4589,7 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        public void initializingOperationPreconditionVariable(OperationInstance pOperationInstance, int pTransitionNo)
+        public void InitializingOperationPreconditionVariable(OperationInstance pOperationInstance, int pTransitionNo)
         {
             try
             {
@@ -4578,7 +4615,7 @@ namespace ProductPlatformAnalyzer
                             {
                                 //This means firstly that this precondition is a single operation instance
                                 //Secondly the precondition has all parts mentioned, i.e. operation name, operation state, and operation transition no
-                                int lTransitionNo = cFrameworkWrapper.getOperationTransitionNumberFromOperationInstanceString(lPrecondition);
+                                int lTransitionNo = _frameworkWrapper.GetOperationTransitionNumberFromOperationInstanceString(lPrecondition);
 
                                 if (lTransitionNo.Equals("K"))
                                 {
@@ -4599,20 +4636,20 @@ namespace ProductPlatformAnalyzer
                                     {
                                         //This means the precondition is on a transition state which has not been reached yet!
                                         //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
-                                        cZ3Solver.AddConstraintToSolver(cZ3Solver.NotOperator(lPrecondition), lConstraintSource);
+                                        _z3Solver.AddConstraintToSolver(_z3Solver.NotOperator(lPrecondition), lConstraintSource);
                                     }
                                 else
                                 {
                                     //We already know that the precondition is a complete operation instance
                                     //This means the precondition includes an operation status
                                     //lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
-                                    lPreconditionExpressions.Add((BoolExpr)cZ3Solver.FindExprInExprSet(lPrecondition));
+                                    lPreconditionExpressions.Add((BoolExpr)_z3Solver.FindExprInExprSet(lPrecondition));
                                 }
                             }
                             else
                             {
                                 //This means that the precondition has been an expression
-                                BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lPrecondition, pOperationInstance.TransitionNumber);
+                                BoolExpr lTempBoolExpr = ConvertComplexString2BoolExpr(lPrecondition, pOperationInstance.TransitionNumber);
                                 lPreconditionExpressions.Add(lTempBoolExpr);
                             }
                         }
@@ -4624,8 +4661,8 @@ namespace ProductPlatformAnalyzer
                                                                                          , pTransitionNo));
 
 
-                        cZ3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPreconditionVariable
-                                                                       , cZ3Solver.AndOperator(lPreconditionExpressions)
+                        _z3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPreconditionVariable
+                                                                       , _z3Solver.AndOperator(lPreconditionExpressions)
                                                                        , lConstraintSource);
                     }
                     else
@@ -4635,13 +4672,13 @@ namespace ProductPlatformAnalyzer
                         {
                             lPreconditionExpressions.Add(ExpressionToEvaluateIfResourceIsIdle(pOperationInstance.AbstractOperation.Resource
                                                                                              , pTransitionNo));            
-                            cZ3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPreconditionVariable
-                                                                           , cZ3Solver.AndOperator(lPreconditionExpressions)
+                            _z3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPreconditionVariable
+                                                                           , _z3Solver.AndOperator(lPreconditionExpressions)
                                                                            , lConstraintSource);
 
                         }
                         else
-                            cZ3Solver.AddConstraintToSolver(pOperationInstance.OperationPreconditionVariable
+                            _z3Solver.AddConstraintToSolver(pOperationInstance.OperationPreconditionVariable
                                                         , lConstraintSource);
                 }
 
@@ -4652,8 +4689,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in initializingOperationPreconditionVariable");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in initializingOperationPreconditionVariable");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -4665,35 +4702,35 @@ namespace ProductPlatformAnalyzer
 
                 //Ri is idle if not(O1^e_CurrntTransition OR O5^e_CurrntTransition OR O6^e_CurrntTransition)
                 //This will give us the list of operations which use this resource
-                List<Operation> lListOfAbstractOperations = cResourcesOperations[pResourceName];
+                List<Operation> lListOfAbstractOperations = _resourcesOperations[pResourceName];
 
                 if (lListOfAbstractOperations != null)
                 {
                     foreach (Operation lCurrentOperation in lListOfAbstractOperations)
 	                {
-                        HashSet<OperationInstance> lOperationInstanceList = cFrameworkWrapper.getOperationInstancesForOneOperationInOneTrasition(lCurrentOperation, pTransitionNumber);
+                        HashSet<OperationInstance> lOperationInstanceList = _frameworkWrapper.GetOperationInstancesForOneOperationInOneTrasition(lCurrentOperation, pTransitionNumber);
                         OperationInstance lOperationInstance = lOperationInstanceList.First();
 
                         if (lResultExpression == null)
                             lResultExpression = lOperationInstance.ExecutingVariable;
                         else
-                            lResultExpression = cZ3Solver.OrOperator(new List<BoolExpr>() { lResultExpression, lOperationInstance.ExecutingVariable });
+                            lResultExpression = _z3Solver.OrOperator(new List<BoolExpr>() { lResultExpression, lOperationInstance.ExecutingVariable });
 		 
 	                }
                 }
 
                 if (lResultExpression != null)
-                    lResultExpression = cZ3Solver.NotOperator(lResultExpression);
+                    lResultExpression = _z3Solver.NotOperator(lResultExpression);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ExpressionToEvaluateIfResourceIsIdle");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ExpressionToEvaluateIfResourceIsIdle");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpression;
         }
 
-        public void initializingOperationPostconditionVariable(OperationInstance pOperationInstance, int pTransitionNo)
+        public void InitializingOperationPostconditionVariable(OperationInstance pOperationInstance, int pTransitionNo)
         {
             try
             {
@@ -4712,48 +4749,48 @@ namespace ProductPlatformAnalyzer
                             {
                                 //This means firstly that this precondition is a single operation instance
                                 //Secondly the precondition has all parts mentioned, i.e. operation name, operation state, and operation transition no
-                                int lOperationInstanceTransitionNo = cFrameworkWrapper.getOperationTransitionNumberFromOperationInstanceString(lPostcondition);
+                                int lOperationInstanceTransitionNo = _frameworkWrapper.GetOperationTransitionNumberFromOperationInstanceString(lPostcondition);
                                 if (lOperationInstanceTransitionNo > int.Parse(pOperationInstance.TransitionNumber))
                                 {
                                     //This means the precondition is on a transition state which has not been reached yet!
                                     //lOpPrecondition = lZ3Solver.NotOperator(lOpPrecondition);
-                                    cZ3Solver.AddConstraintToSolver(cZ3Solver.NotOperator(lPostcondition), lConstraintSource);
+                                    _z3Solver.AddConstraintToSolver(_z3Solver.NotOperator(lPostcondition), lConstraintSource);
                                 }
                                 else
                                 {
                                     //We already know that the precondition is a complete operation instance
                                     //This means the precondition includes an operation status
                                     //lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + currentVariant.index  + "_" + pState.ToString());
-                                    lPostconditionExpressions.Add((BoolExpr)cZ3Solver.FindExprInExprSet(lPostcondition));
+                                    lPostconditionExpressions.Add((BoolExpr)_z3Solver.FindExprInExprSet(lPostcondition));
                                 }
                             }
                             else
                             {
                                 //This means that the precondition has been an expression
-                                BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lPostcondition, pOperationInstance.TransitionNumber);
+                                BoolExpr lTempBoolExpr = ConvertComplexString2BoolExpr(lPostcondition, pOperationInstance.TransitionNumber);
                                 lPostconditionExpressions.Add(lTempBoolExpr);
                             }
                         }
-                        cZ3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPostconditionVariable
-                                                                       , cZ3Solver.AndOperator(lPostconditionExpressions)
+                        _z3Solver.AddTwoWayImpliesOperator2Constraints(pOperationInstance.OperationPostconditionVariable
+                                                                       , _z3Solver.AndOperator(lPostconditionExpressions)
                                                                        , lConstraintSource);
                     }
                     else
                         //If the operation DOES NOT have a precondition hence
                         //We want to force the precondition to be true
-                        cZ3Solver.AddConstraintToSolver(pOperationInstance.OperationPostconditionVariable
+                        _z3Solver.AddConstraintToSolver(pOperationInstance.OperationPostconditionVariable
                                                         , lConstraintSource);
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in initializingOperationPostconditionVariable");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in initializingOperationPostconditionVariable");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        public void convertFOperationsPrecedenceRulesNStatusControl2Z3ConstraintNewVersion(int pTransitionNo)
+        public void ConvertFOperationsPrecedenceRulesNStatusControl2Z3ConstraintNewVersion(int pTransitionNo)
         {
             try
             {
@@ -4761,40 +4798,40 @@ namespace ProductPlatformAnalyzer
                 //After the operation trigger field is introduced we will loop over operation instances
 
                 //var lOperationInstanceSet = cFrameworkWrapper.OperationInstanceSet;
-                var lOperationInstanceSet = cFrameworkWrapper.getOperationInstancesInOneTransition(pTransitionNo);
+                var lOperationInstanceSet = _frameworkWrapper.GetOperationInstancesInOneTransition(pTransitionNo);
 
                 foreach (var lCurrentOperationInstance in lOperationInstanceSet)
                 {
                     //First we have to set the precondition field of each operation as the precondition is needed in these formulas
-                    initializingOperationPreconditionVariable(lCurrentOperationInstance, pTransitionNo);
-                    initializingOperationPostconditionVariable(lCurrentOperationInstance, pTransitionNo);
+                    InitializingOperationPreconditionVariable(lCurrentOperationInstance, pTransitionNo);
+                    InitializingOperationPostconditionVariable(lCurrentOperationInstance, pTransitionNo);
 
                     //With operation waiting
                     //5.1: (O_I_j and Pre_j) => O_E_j+1 or O_I_j+1
                     //Without operation waiting
                     //5.1: (O_I_j and Pre_j) => O_E_j+1
-                    createFormula51(lCurrentOperationInstance);
+                    CreateFormula51(lCurrentOperationInstance);
 
                     //5.2: not (O_I_j and Pre_j) => (O_I_j <=> O_I_j+1)
-                    createFormula52(lCurrentOperationInstance);
+                    CreateFormula52(lCurrentOperationInstance);
 
                     //5.3: PICKONE O_I_j O_E_j O_F_j O_U_j
-                    createFormula53(lCurrentOperationInstance, pTransitionNo);
+                    CreateFormula53(lCurrentOperationInstance, pTransitionNo);
 
                     //With operation waiting
                     //5.4: (O_E_j AND Post_j) => O_F_j+1 or O_E_j+1
                     //Without operation waiting
                     //5.4: (O_E_j AND Post_j) => O_F_j+1
-                    createFormula54(lCurrentOperationInstance);
+                    CreateFormula54(lCurrentOperationInstance);
 
                     //5.5: O_E_j and (not Post_j) => (O_E_j <=> O_E_j+1)
-                    createFormula55(lCurrentOperationInstance);
+                    CreateFormula55(lCurrentOperationInstance);
 
                     //5.6: O_U_j => O_U_j+1
-                    createFormula56(lCurrentOperationInstance);
+                    CreateFormula56(lCurrentOperationInstance);
 
                     //5.7: O_F_j => O_F_j+1
-                    createFormula57(lCurrentOperationInstance);
+                    CreateFormula57(lCurrentOperationInstance);
 
                     //5.8: A_i2e_j <=> (O_I_j AND O_E_j+1)
                     CreateFormula58(lCurrentOperationInstance);
@@ -4804,18 +4841,18 @@ namespace ProductPlatformAnalyzer
 
                 }
 
-                if (!cOperationMutualExecution)
+                if (!OperationMutualExecution)
                 {
                     //formula 6
                     //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
                     //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
-                    createFormula6();
+                    CreateFormula6();
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFOperations2Z3ConstraintNewVersion");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFOperations2Z3ConstraintNewVersion");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -4828,7 +4865,7 @@ namespace ProductPlatformAnalyzer
 
                 //A_I2E_j <=> (O_I_j AND O_E_j+1)
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pCurrentOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pCurrentOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pCurrentOperationInstance.NextOperationInstance();
 
                 if (lNextTransitionOperationInstance != null)
                 {
@@ -4837,7 +4874,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //With operation waiting
                         //O_I_j AND O_E_j+1
-                        tempRightHandSide = cZ3Solver.AndOperator(new List<BoolExpr>() {pCurrentOperationInstance.InitialVariable
+                        tempRightHandSide = _z3Solver.AndOperator(new List<BoolExpr>() {pCurrentOperationInstance.InitialVariable
                                                                                             , lNextTransitionOperationInstance.ExecutingVariable});
                     }
                     else
@@ -4847,19 +4884,19 @@ namespace ProductPlatformAnalyzer
                         tempRightHandSide = lNextTransitionOperationInstance.ExecutingVariable;
                     }
                     //In case the current transition number is the last transition then the next transition number will be NULL!
-                    BoolExpr lWholeFormula = cZ3Solver.TwoWayImpliesOperator(LeftHandSide, tempRightHandSide);
+                    BoolExpr lWholeFormula = _z3Solver.TwoWayImpliesOperator(LeftHandSide, tempRightHandSide);
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.8");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.8");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula58");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula58");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -4873,7 +4910,7 @@ namespace ProductPlatformAnalyzer
 
                 //A_E2F_j <=> (O_E_j AND O_F_j+1)
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pCurrentOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pCurrentOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pCurrentOperationInstance.NextOperationInstance();
 
                 if (lNextTransitionOperationInstance != null)
                 {
@@ -4883,7 +4920,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //With operation waiting
                         //O_E_j AND O_F_j+1
-                        lRightHandSide = cZ3Solver.AndOperator(new List<BoolExpr>() { pCurrentOperationInstance.ExecutingVariable 
+                        lRightHandSide = _z3Solver.AndOperator(new List<BoolExpr>() { pCurrentOperationInstance.ExecutingVariable 
                                                                                           , lNextTransitionOperationInstance.FinishedVariable});
                     }
                     else
@@ -4893,23 +4930,23 @@ namespace ProductPlatformAnalyzer
                         lRightHandSide = lNextTransitionOperationInstance.FinishedVariable;
                     }
 
-                    BoolExpr lWholeFormula = cZ3Solver.TwoWayImpliesOperator(LeftHandSide, lRightHandSide);
+                    BoolExpr lWholeFormula = _z3Solver.TwoWayImpliesOperator(LeftHandSide, lRightHandSide);
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.9");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.9");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula59");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula59");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula6()
+        private void CreateFormula6()
         {
             try
             {
@@ -4983,55 +5020,55 @@ namespace ProductPlatformAnalyzer
                     Action lSecondDependencyAction = lCurrectDependencyActions.Action2;  // Action from Dependency Analysis, i.e Action K
 
                     //lFirstOperand = O_I_k_j
-                    Action lFirstAction = lFirstDependencyAction.GetActionForTransition(cCurrentTransitionNumber);
+                    Action lFirstAction = lFirstDependencyAction.GetActionForTransition(_currentTransitionNumber);
                     //lSecondAction = O_I_l_j
-                    Action lSecondAction = lSecondDependencyAction.GetActionForTransition(cCurrentTransitionNumber);
+                    Action lSecondAction = lSecondDependencyAction.GetActionForTransition(_currentTransitionNumber);
 
                     //lNextStateFirstOperand = O_I_k_(j+1)
-                    Action lNextStateFirstAction = lFirstAction.GetActionForTransition(cCurrentTransitionNumber + 1);
+                    Action lNextStateFirstAction = lFirstAction.GetActionForTransition(_currentTransitionNumber + 1);
                     //lNextStateSecondOperand = O_I_l_(j+1)
-                    Action lNextStateSecondAction = lSecondAction.GetActionForTransition(cCurrentTransitionNumber + 1); 
+                    Action lNextStateSecondAction = lSecondAction.GetActionForTransition(_currentTransitionNumber + 1); 
 
                     //FirstOperand_NextTransition = !(O_I_k_(j+1))
-                    BoolExpr lTempSecondOperand = cZ3Solver.NotOperator(lNextStateFirstAction.Name);
+                    BoolExpr lTempSecondOperand = _z3Solver.NotOperator(lNextStateFirstAction.Name);
 
                     //FirstOperand_NextTransition = !(O_I_l_(j+1))
-                    BoolExpr lTempFourthOperand = cZ3Solver.NotOperator(lNextStateSecondAction.Name);
+                    BoolExpr lTempFourthOperand = _z3Solver.NotOperator(lNextStateSecondAction.Name);
 
                     //lTempFirstPart = (O_I_k_j and !(O_I_k_(j+1)))
-                    BoolExpr lTempFirstPart = cZ3Solver.AndOperator(new List<BoolExpr>(){lFirstAction.Variable
+                    BoolExpr lTempFirstPart = _z3Solver.AndOperator(new List<BoolExpr>(){lFirstAction.Variable
                                                                                             , lTempSecondOperand});
 
                     //lTempSecondPart = (O_I_l_j AND !(O_I_l_(j+1)))
-                    BoolExpr lTempSecondPart = cZ3Solver.AndOperator(new List<BoolExpr>(){lSecondAction.Variable
+                    BoolExpr lTempSecondPart = _z3Solver.AndOperator(new List<BoolExpr>(){lSecondAction.Variable
                                                                                             , lTempFourthOperand});
 
                     //lTempExpr = lTempFirstPart AND lTempSecondPart
-                    BoolExpr lTempExpr = cZ3Solver.AndOperator(new List<BoolExpr>(){lTempFirstPart
+                    BoolExpr lTempExpr = _z3Solver.AndOperator(new List<BoolExpr>(){lTempFirstPart
                                                                                     , lTempSecondPart});
 
                     //lTempExpr = not (lTempExpr)
-                    lTempExpr = (BoolExpr)cZ3Solver.NotOperator(lTempExpr);
+                    lTempExpr = (BoolExpr)_z3Solver.NotOperator(lTempExpr);
 
                     if (lFormulaSix == null)
                         lFormulaSix = lTempExpr;
                     else
-                        lFormulaSix = (BoolExpr)cZ3Solver.AndOperator(new List<BoolExpr>() { lFormulaSix, lTempExpr });
+                        lFormulaSix = (BoolExpr)_z3Solver.AndOperator(new List<BoolExpr>() { lFormulaSix, lTempExpr });
                 }
 
                 if (lFormulaSix != null)
                 {
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lFormulaSix, "formula6");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lFormulaSix, "formula6");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lFormulaSix);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula6");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula6");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5082,63 +5119,63 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        private void createFormula57(OperationInstance pOperationInstance)
+        private void CreateFormula57(OperationInstance pOperationInstance)
         {
             try
             {
                 //Formula 5.7
                 //O_F_k_j => O_F_k_j+1
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pOperationInstance.NextOperationInstance();
                 if (lNextTransitionOperationInstance != null)
                 {
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { pOperationInstance.FinishedVariable
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>() { pOperationInstance.FinishedVariable
                                                                                     , lNextTransitionOperationInstance.FinishedVariable });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.7");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.7");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula57");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula57");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula56(OperationInstance pOperationInstance)
+        private void CreateFormula56(OperationInstance pOperationInstance)
         {
             try
             {
                 //Formula 5.6
                 //O_U_k_j => O_U_k_j+1
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pOperationInstance.NextOperationInstance();
 
                 if (lNextTransitionOperationInstance != null)
                 {
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>{ pOperationInstance.UnusedVariable
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>{ pOperationInstance.UnusedVariable
                                                                                         , lNextTransitionOperationInstance.UnusedVariable});
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.6");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.6");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
 
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula56");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula56");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula54(OperationInstance pOperationInstance)
+        private void CreateFormula54(OperationInstance pOperationInstance)
         {
             try
             {
@@ -5154,7 +5191,7 @@ namespace ProductPlatformAnalyzer
                 BoolExpr lLeftHandSide = ReturnOperationExecutingStateNItsPostcondition(pOperationInstance);
 
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pOperationInstance.NextOperationInstance();
 
                 if (lNextTransitionOperationInstance != null)
                 {
@@ -5164,7 +5201,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //With operation waiting
                         //O_F_k_j+1 or O_E_k_j+1
-                        lRightHandSide = cZ3Solver.OrOperator(new List<BoolExpr>() { lNextTransitionOperationInstance.FinishedVariable 
+                        lRightHandSide = _z3Solver.OrOperator(new List<BoolExpr>() { lNextTransitionOperationInstance.FinishedVariable 
                                                                                           , lNextTransitionOperationInstance.ExecutingVariable});
                     }
                     else
@@ -5174,24 +5211,24 @@ namespace ProductPlatformAnalyzer
                         lRightHandSide = lNextTransitionOperationInstance.FinishedVariable;
                     }
 
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { lLeftHandSide
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>() { lLeftHandSide
                                                                                         , lRightHandSide });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.4");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.4");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula54");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula54");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula53(OperationInstance pOperationInstance, int pTransitionNo)
+        private void CreateFormula53(OperationInstance pOperationInstance, int pTransitionNo)
         {
             try
             {
@@ -5200,48 +5237,48 @@ namespace ProductPlatformAnalyzer
 
                 if (pTransitionNo == 0)
                 {
-                    BoolExpr lWholeFormula = cZ3Solver.PickOneOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
+                    BoolExpr lWholeFormula = _z3Solver.PickOneOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
                                                                                 , pOperationInstance.ExecutingVariable
                                                                                 , pOperationInstance.FinishedVariable
                                                                                 , pOperationInstance.UnusedVariable });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.3");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.3");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
 
                 ///OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pOperationInstance.NextOperationInstance();
 
-                BoolExpr lWholeFormula1 = cZ3Solver.PickOneOperator(new List<BoolExpr> { lNextTransitionOperationInstance.InitialVariable
+                BoolExpr lWholeFormula1 = _z3Solver.PickOneOperator(new List<BoolExpr> { lNextTransitionOperationInstance.InitialVariable
                                                                             , lNextTransitionOperationInstance.ExecutingVariable
                                                                             , lNextTransitionOperationInstance.FinishedVariable
                                                                             , lNextTransitionOperationInstance.UnusedVariable });
 
-                if (cConvertOperationPrecedenceRules)
-                    cZ3Solver.AddConstraintToSolver(lWholeFormula1, "formula5.3");
+                if (ConvertOperationPrecedenceRules)
+                    _z3Solver.AddConstraintToSolver(lWholeFormula1, "formula5.3");
 
-                if (cBuildPConstraints)
+                if (BuildPConstraints)
                     AddPrecedanceConstraintToLocalList(lWholeFormula1);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula53");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula53");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
 
-        private void createFormula53GeneralVersion(OperationInstance pOperationInstance)
+        private void CreateFormula53GeneralVersion(OperationInstance pOperationInstance)
         {
             try
             {
                 //Fromula 5.3
                 //for this XOR O_I_k_j O_E_k_j O_F_k_j O_U_k_j
 
-                cZ3Solver.AddPickOneOperator2Constraints(new List<string> { pOperationInstance.InitialVariableName
+                _z3Solver.AddPickOneOperator2Constraints(new List<string> { pOperationInstance.InitialVariableName
                                                                       , pOperationInstance.ExecutingVariableName
                                                                       , pOperationInstance.FinishedVariableName
                                                                       , pOperationInstance.UnusedVariableName }, "formula5.3");
@@ -5249,12 +5286,12 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula53");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula53");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula52(OperationInstance pOperationInstance)
+        private void CreateFormula52(OperationInstance pOperationInstance)
         {
             try
             {
@@ -5269,30 +5306,30 @@ namespace ProductPlatformAnalyzer
                 BoolExpr tempRightHandSideTwo;
 
                 ///OperationInstance lNextOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextOperationInstance = pOperationInstance.NextOperationInstance();
 
                 if (lNextOperationInstance != null)
                 {
-                    tempRightHandSideTwo = cZ3Solver.TwoWayImpliesOperator(pOperationInstance.InitialVariable
+                    tempRightHandSideTwo = _z3Solver.TwoWayImpliesOperator(pOperationInstance.InitialVariable
                                                                             , lNextOperationInstance.InitialVariable);
 
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideTwo, tempRightHandSideTwo });
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideTwo, tempRightHandSideTwo });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.2");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.2");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula52");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula52");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void createFormula55(OperationInstance pOperationInstance)
+        private void CreateFormula55(OperationInstance pOperationInstance)
         {
             try
             {
@@ -5307,26 +5344,26 @@ namespace ProductPlatformAnalyzer
                 BoolExpr tempRightHandSideTwo;
 
                 ///OperationInstance lNextOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextOperationInstance = pOperationInstance.NextOperationInstance();
 
                 if (lNextOperationInstance != null)
                 {
-                    tempRightHandSideTwo = cZ3Solver.TwoWayImpliesOperator(pOperationInstance.ExecutingVariable
+                    tempRightHandSideTwo = _z3Solver.TwoWayImpliesOperator(pOperationInstance.ExecutingVariable
                                                                             , lNextOperationInstance.ExecutingVariable);
 
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideTwo, tempRightHandSideTwo });
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideTwo, tempRightHandSideTwo });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.5");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.5");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula5");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula5");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5368,7 +5405,7 @@ namespace ProductPlatformAnalyzer
         //////    return lOperationInstance;
         //////}
 
-        private void createFormula51(OperationInstance pOperationInstance)
+        private void CreateFormula51(OperationInstance pOperationInstance)
         {
             try
             {
@@ -5388,7 +5425,7 @@ namespace ProductPlatformAnalyzer
 
                 //(O_I_k_j and Pre_k_j) => O_E_k_j+1 or O_I_k_j+1
                 ////OperationInstance lNextTransitionOperationInstance = getNextTransitionOperationInstance(pOperationInstance);
-                OperationInstance lNextTransitionOperationInstance = pOperationInstance.nextOperationInstance();
+                OperationInstance lNextTransitionOperationInstance = pOperationInstance.NextOperationInstance();
                 
                 if (lNextTransitionOperationInstance != null)
                 {
@@ -5397,7 +5434,7 @@ namespace ProductPlatformAnalyzer
                     {
                         //With operation waiting
                         //O_E_k_j+1 or O_I_k_j+1
-                        tempRightHandSide = cZ3Solver.OrOperator(new List<BoolExpr>() {lNextTransitionOperationInstance.ExecutingVariable
+                        tempRightHandSide = _z3Solver.OrOperator(new List<BoolExpr>() {lNextTransitionOperationInstance.ExecutingVariable
                                                                                             , lNextTransitionOperationInstance.InitialVariable});
                     }
                     else
@@ -5407,20 +5444,20 @@ namespace ProductPlatformAnalyzer
                         tempRightHandSide = lNextTransitionOperationInstance.ExecutingVariable;
                     }
                     //In case the current transition number is the last transition then the next transition number will be NULL!
-                    BoolExpr lWholeFormula = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideOne
+                    BoolExpr lWholeFormula = _z3Solver.ImpliesOperator(new List<BoolExpr>() { tempLeftHandSideOne
                                                                                             , tempRightHandSide });
 
-                    if (cConvertOperationPrecedenceRules)
-                        cZ3Solver.AddConstraintToSolver(lWholeFormula, "formula5.1");
+                    if (ConvertOperationPrecedenceRules)
+                        _z3Solver.AddConstraintToSolver(lWholeFormula, "formula5.1");
 
-                    if (cBuildPConstraints)
+                    if (BuildPConstraints)
                         AddPrecedanceConstraintToLocalList(lWholeFormula);
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CreateFormula51");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CreateFormula51");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5434,12 +5471,12 @@ namespace ProductPlatformAnalyzer
                 {
                     if (pOperationInstance.AbstractOperation.Postcondition.Count != 0)
                     {
-                        BoolExpr lNotPost = cZ3Solver.NotOperator(pOperationInstance.OperationPostconditionVariable);
-                        result = cZ3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.ExecutingVariable
+                        BoolExpr lNotPost = _z3Solver.NotOperator(pOperationInstance.OperationPostconditionVariable);
+                        result = _z3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.ExecutingVariable
                                                                     ,  lNotPost});
                     }
                     else
-                        result = cZ3Solver.MakeFalseExpr();
+                        result = _z3Solver.MakeFalseExpr();
                 }
                 else
                     result = pOperationInstance.ExecutingVariable;
@@ -5447,8 +5484,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationExecutingStateNItsPostcondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationExecutingStateNItsPostcondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -5464,7 +5501,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (pOperationInstance.AbstractOperation.Postcondition.Count != 0)
                     {
-                        result = cZ3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.ExecutingVariable
+                        result = _z3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.ExecutingVariable
                                                                     ,  pOperationInstance.OperationPostconditionVariable});
                     }
                     else
@@ -5476,8 +5513,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationExecutingStateNItsPostcondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationExecutingStateNItsPostcondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -5493,12 +5530,12 @@ namespace ProductPlatformAnalyzer
                 {
                     if (pOperationInstance.AbstractOperation.Precondition.Count != 0)
                     {
-                        BoolExpr lNotPre = cZ3Solver.NotOperator(pOperationInstance.OperationPreconditionVariable);
-                        result = cZ3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
+                        BoolExpr lNotPre = _z3Solver.NotOperator(pOperationInstance.OperationPreconditionVariable);
+                        result = _z3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
                                                                     , lNotPre });
                     }
                     else
-                        result = cZ3Solver.MakeFalseExpr();
+                        result = _z3Solver.MakeFalseExpr();
                 }
                 else
                     result = pOperationInstance.InitialVariable;
@@ -5506,8 +5543,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationInitialStateNItsPrecondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationInitialStateNItsPrecondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -5523,7 +5560,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (pOperationInstance.AbstractOperation.Precondition.Count != 0)
                     {
-                        result = cZ3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
+                        result = _z3Solver.AndOperator(new List<BoolExpr> { pOperationInstance.InitialVariable
                                                                     , pOperationInstance.OperationPreconditionVariable });
                     }
                     else
@@ -5535,8 +5572,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationInitialStateNItsPrecondition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationInitialStateNItsPrecondition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
                 result = null;
             }
             return result;
@@ -5578,8 +5615,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in FindingADatasBooleanVariable");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in FindingADatasBooleanVariable");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultVariable;
         }
@@ -5592,13 +5629,13 @@ namespace ProductPlatformAnalyzer
             {
                 string lResourceVariableName = pResourceName + "_" + pTransitionNo;
 
-                lResultExpr = (BoolExpr)cZ3Solver.FindExprInExprSet(lResourceVariableName);
+                lResultExpr = (BoolExpr)_z3Solver.FindExprInExprSet(lResourceVariableName);
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in MakeResourceVariable");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in MakeResourceVariable");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
 
             return lResultExpr;
@@ -5624,13 +5661,13 @@ namespace ProductPlatformAnalyzer
                     //We have one operator
                     ////lResult = pNode.Data;
                     //This operand can be an operation or it can be a variant or it can be a part, if it is an operation then it has to be checked if it is in a complete operation instance format or not
-                    if (cFrameworkWrapper.havePartWithName(pNode.Data) || cFrameworkWrapper.haveVariantWithName(pNode.Data))
-                        lResult = (BoolExpr)cZ3Solver.FindExprInExprSet(pNode.Data);
+                    if (_frameworkWrapper.HavePartWithName(pNode.Data) || _frameworkWrapper.HaveVariantWithName(pNode.Data))
+                        lResult = (BoolExpr)_z3Solver.FindExprInExprSet(pNode.Data);
                     else
                         if (pNode.Data.StartsWith("R"))
                             lResult = ReturnResourceVariable(pNode.Data, pTransitionNumber, pKeepOriginalVariables);
                         else
-                            lResult = convertIncompleteOperationInstances2CompleteOperationInstanceExpr(pNode.Data, pTransitionNumber, pKeepOriginalVariables);
+                            lResult = ConvertIncompleteOperationInstances2CompleteOperationInstanceExpr(pNode.Data, pTransitionNumber, pKeepOriginalVariables);
 
                 }
                 else
@@ -5644,25 +5681,25 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                lResult = cZ3Solver.AndOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
+                                lResult = _z3Solver.AndOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
                                                                                     , ParseComplexString(lChildren[1], pTransitionNumber, pKeepOriginalVariables) });
                                 break;
                             }
                         case "or":
                             {
-                                lResult = cZ3Solver.OrOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
+                                lResult = _z3Solver.OrOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
                                                                                     , ParseComplexString(lChildren[1], pTransitionNumber, pKeepOriginalVariables) });
                                 break;
                             }
                         case "=>":
                             {
-                                lResult = cZ3Solver.ImpliesOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
+                                lResult = _z3Solver.ImpliesOperator(new List<BoolExpr>() { ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables)
                                                                                             , ParseComplexString(lChildren[1], pTransitionNumber, pKeepOriginalVariables) });
                                 break;
                             }
                         case "not":
                             {
-                                lResult = cZ3Solver.NotOperator(ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables));
+                                lResult = _z3Solver.NotOperator(ParseComplexString(lChildren[0], pTransitionNumber, pKeepOriginalVariables));
                                 break;
                             }
 /*                        case ">=":
@@ -5692,8 +5729,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ParseExpression");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ParseExpression");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -5716,7 +5753,7 @@ namespace ProductPlatformAnalyzer
                 {
                     //We have one operator
                     ////lResult = pNode.Data;
-                    lResult = (BoolExpr)cZ3Solver.FindExprInExprSet(pNode.Data);
+                    lResult = (BoolExpr)_z3Solver.FindExprInExprSet(pNode.Data);
                 }
                 else
                 {
@@ -5729,42 +5766,42 @@ namespace ProductPlatformAnalyzer
                     {
                         case "and":
                             {
-                                lResult = cZ3Solver.AndOperator(new List<BoolExpr>() { ParseExpression(lChildren[0])
+                                lResult = _z3Solver.AndOperator(new List<BoolExpr>() { ParseExpression(lChildren[0])
                                                                                     , ParseExpression(lChildren[1]) });
                                 break;
                             }
                         case "or":
                             {
-                                lResult = cZ3Solver.OrOperator(new List<BoolExpr>() { ParseExpression(lChildren[0])
+                                lResult = _z3Solver.OrOperator(new List<BoolExpr>() { ParseExpression(lChildren[0])
                                                                                     , ParseExpression(lChildren[1]) });
                                 break;
                             }
                         case "not":
                             {
-                                lResult = cZ3Solver.NotOperator(ParseExpression(lChildren[0]));
+                                lResult = _z3Solver.NotOperator(ParseExpression(lChildren[0]));
                                 break;
                             }
                         case ">=":
                             {
-                                lResult = cZ3Solver.GreaterOrEqualOperator(lChildren[0].Data
+                                lResult = _z3Solver.GreaterOrEqualOperator(lChildren[0].Data
                                                                             , int.Parse(lChildren[1].Data));
                                 break;
                             }
                         case "<=":
                             {
-                                lResult = cZ3Solver.LessOrEqualOperator(lChildren[0].Data
+                                lResult = _z3Solver.LessOrEqualOperator(lChildren[0].Data
                                                                         , int.Parse(lChildren[1].Data));
                                 break;
                             }
                         case "<":
                             {
-                                lResult = cZ3Solver.LessThanOperator(lChildren[0].Data
+                                lResult = _z3Solver.LessThanOperator(lChildren[0].Data
                                                                     , int.Parse(lChildren[1].Data));
                                 break;
                             }
                         case ">":
                             {
-                                lResult = cZ3Solver.GreaterThanOperator(lChildren[0].Data
+                                lResult = _z3Solver.GreaterThanOperator(lChildren[0].Data
                                                                         , int.Parse(lChildren[1].Data));
                                 break;
                             }
@@ -5775,13 +5812,13 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ParseExpression");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ParseExpression");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
 
-        public string returnConstraintsString()
+        public string ReturnConstraintsString()
         {
             string lConstraintsString = "";
             try
@@ -5789,7 +5826,7 @@ namespace ProductPlatformAnalyzer
                 //First we have to loop the constraint list
                 //List<string> localConstraintList = cFrameworkWrapper.ConstraintList;
 
-                foreach (string lConstraint in cFrameworkWrapper.ConstraintSet)
+                foreach (string lConstraint in _frameworkWrapper.ConstraintSet)
                 {
                     if (lConstraintsString != "")
                         lConstraintsString += " AND ";
@@ -5799,8 +5836,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in returnConstraintsString");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in returnConstraintsString");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lConstraintsString;
         }
@@ -5809,21 +5846,21 @@ namespace ProductPlatformAnalyzer
         /// This function uses the constraint set to return all the constraints in one boolExpr
         /// </summary>
         /// <returns>The one boolExpr which represents the constraint set</returns>
-        public BoolExpr returnBoolExprOfConstraintsSet()
+        public BoolExpr ReturnBoolExprOfConstraintsSet()
         {
             BoolExpr lReturnBoolExpr = null;
             try
             {
                 //First we have to loop the constraint list
-                HashSet<string> localConstraintList = cFrameworkWrapper.ConstraintSet;
+                HashSet<string> localConstraintList = _frameworkWrapper.ConstraintSet;
 
                 ////foreach (string lConstraint in localConstraintList)
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in returnBoolExprOfConstraintsSet");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in returnBoolExprOfConstraintsSet");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lReturnBoolExpr;
         }
@@ -5847,17 +5884,17 @@ namespace ProductPlatformAnalyzer
         /// This function adds a stand alone constraint to the Z3 model which the user wants to add directly
         /// </summary>
         /// <param name="pStandAloneConstraint">User specified stand alone constraint</param>
-        public void addStandAloneConstraint2Z3Solver(BoolExpr pStandAloneConstraint)
+        public void AddStandAloneConstraint2Z3Solver(BoolExpr pStandAloneConstraint)
         {
             try
             {
                 if (pStandAloneConstraint != null)
-                    cZ3Solver.AddConstraintToSolver(pStandAloneConstraint, "StandAlone Constraint");
+                    _z3Solver.AddConstraintToSolver(pStandAloneConstraint, "StandAlone Constraint");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in addStandAloneConstraint2Z3Solver");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in addStandAloneConstraint2Z3Solver");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5869,14 +5906,14 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                cZ3Solver.AddConstraintToSolver(convertComplexString2BoolExpr(pExtraConfigurationRule)
+                _z3Solver.AddConstraintToSolver(ConvertComplexString2BoolExpr(pExtraConfigurationRule)
                                                 , "formula3-extra configuration rule");
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddExtraConstraint2Z3Constraint");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddExtraConstraint2Z3Constraint");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5885,7 +5922,7 @@ namespace ProductPlatformAnalyzer
         /// Also adds any given extra constraints to the Z3 model
         /// </summary>
         /// <param name="pExtraConfigurationRule"></param>
-        public void convertFConstraint2Z3Constraint(string pExtraConfigurationRule = "", bool pOptimizer = false)
+        public void ConvertFConstraint2Z3Constraint(string pExtraConfigurationRule = "", bool pOptimizer = false)
         {
             try
             {
@@ -5893,18 +5930,18 @@ namespace ProductPlatformAnalyzer
                 //First we have to loop the constraint list
                 //List<string> localConstraintList = cFrameworkWrapper.ConstraintList;
 
-                foreach (string lConstraint in cFrameworkWrapper.ConstraintSet)
+                foreach (string lConstraint in _frameworkWrapper.ConstraintSet)
                 {
-                    BoolExpr lBoolExprConstraint = convertComplexString2BoolExpr(lConstraint);
+                    BoolExpr lBoolExprConstraint = ConvertComplexString2BoolExpr(lConstraint);
 
-                    cZ3Solver.AddConstraintToSolver(lBoolExprConstraint
+                    _z3Solver.AddConstraintToSolver(lBoolExprConstraint
                                                     , "formula3");
                     if (pOptimizer)
-                        cZ3Solver.AddConstraintToOptimizer(lBoolExprConstraint
+                        _z3Solver.AddConstraintToOptimizer(lBoolExprConstraint
                                                         , "formula3");
 
-                    if (cAnalysisType == Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis 
-                        || cAnalysisType == Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis)
+                    if (_analysisType == Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis 
+                        || _analysisType == Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis)
                         AddConfigurationConstraintToLocalList(lBoolExprConstraint);
 
                 }
@@ -5912,19 +5949,19 @@ namespace ProductPlatformAnalyzer
                 //TODO: by default this extra configuration rule can be an array
                 if (pExtraConfigurationRule != "")
                 {
-                    BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(pExtraConfigurationRule);
-                    cZ3Solver.AddConstraintToSolver(lTempBoolExpr
+                    BoolExpr lTempBoolExpr = ConvertComplexString2BoolExpr(pExtraConfigurationRule);
+                    _z3Solver.AddConstraintToSolver(lTempBoolExpr
                                                     , "formula3-ExtraConfigRule");
                     if (pOptimizer)
-                        cZ3Solver.AddConstraintToOptimizer(lTempBoolExpr
+                        _z3Solver.AddConstraintToOptimizer(lTempBoolExpr
                                 , "formula3-ExtraConfigRule");
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFConstraint2Z3Constraint");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFConstraint2Z3Constraint");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -5936,17 +5973,17 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (!cConfigurationConstraints.Contains(pConfigurationConstraint))
-                    cConfigurationConstraints.Add(pConfigurationConstraint);
+                if (!_configurationConstraints.Contains(pConfigurationConstraint))
+                    _configurationConstraints.Add(pConfigurationConstraint);
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AddConfigurationConstraintToLocalList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AddConfigurationConstraintToLocalList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        private BoolExpr returnFExpression2Z3Constraint(string pExpression)
+        private BoolExpr ReturnFExpression2Z3Constraint(string pExpression)
         {
             BoolExpr lResultExpr = null;
             try
@@ -5968,13 +6005,13 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in addFExpression2Z3Constraint");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in addFExpression2Z3Constraint");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
 
-        public BoolExpr convertComplexString2BoolExpr(string pExpression
+        public BoolExpr ConvertComplexString2BoolExpr(string pExpression
                                                     , string pTransitionNumber = "-1"
                                                     , bool pKeepOriginalVariables = false
                                                     , bool pAdd2List = true)
@@ -5999,8 +6036,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertComplexString2BoolExpr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertComplexString2BoolExpr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -6245,7 +6282,7 @@ namespace ProductPlatformAnalyzer
             return lResultFormula7;
         }*/
 
-        public BoolExpr convertOperationPreconditions2BoolExpr(List<string> pOperationPreconditionList)
+        public BoolExpr ConvertOperationPreconditions2BoolExpr(List<string> pOperationPreconditionList)
         {
             BoolExpr lResultExpr = null;
             try
@@ -6257,20 +6294,20 @@ namespace ProductPlatformAnalyzer
 
 
                     if (lResultExpr != null)
-                        lResultExpr = (BoolExpr)cZ3Solver.AndOperator(new List<BoolExpr>() { lResultExpr, lTempBoolEpr });
+                        lResultExpr = (BoolExpr)_z3Solver.AndOperator(new List<BoolExpr>() { lResultExpr, lTempBoolEpr });
                     else
                         lResultExpr = lTempBoolEpr;
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertOperationPreconditions2BoolExpr");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertOperationPreconditions2BoolExpr");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
 
-        public BoolExpr createFormula7(HashSet<OperationInstance> pOperationInstanceList, int pState)
+        public BoolExpr CreateFormula7(HashSet<OperationInstance> pOperationInstanceList, int pState)
         {
             BoolExpr lResultFormula7 = null;
             try
@@ -6280,7 +6317,7 @@ namespace ProductPlatformAnalyzer
                 //(Big And) ((! Pre_k_pState AND O_I_k_pState) OR (! Post_k_pState AND O_E_k_pState) OR O_F_k_pState OR O_U_k_pState)
 
                 //This boolean expression is used to refer to this overall goal
-                cZ3Solver.AddBooleanExpression("F7_" + pState);
+                _z3Solver.AddBooleanExpression("F7_" + pState);
 
                 //This formula should be carried out for each created operation instance
 
@@ -6288,18 +6325,18 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lCurrentOperationInstance.TransitionNumber.Equals(pState.ToString()))
                     {
-                        BoolExpr lNotPreCondition = cZ3Solver.NotOperator(lCurrentOperationInstance.OperationPreconditionVariable);
+                        BoolExpr lNotPreCondition = _z3Solver.NotOperator(lCurrentOperationInstance.OperationPreconditionVariable);
                         //BoolExpr lPreCondition = lCurrentOperationInstance.OperationPreconditionVariable;
 
                         //Assumption: As the post condition is not used here this part of the formula will become false!
                         //BoolExpr lNotPostCondition = cZ3Solver.NotOperator(cOpPostcondition);
 
-                        BoolExpr lFirstOperand = cZ3Solver.AndOperator(new List<BoolExpr>() { lNotPreCondition
+                        BoolExpr lFirstOperand = _z3Solver.AndOperator(new List<BoolExpr>() { lNotPreCondition
                                                                                     , lCurrentOperationInstance.InitialVariable });
 
-                        BoolExpr lNotPostCondition = cZ3Solver.NotOperator(lCurrentOperationInstance.OperationPostconditionVariable);
+                        BoolExpr lNotPostCondition = _z3Solver.NotOperator(lCurrentOperationInstance.OperationPostconditionVariable);
                         //Assumption: The previous assumption will make this part false as well
-                        BoolExpr lSecondOperand = cZ3Solver.AndOperator(new List<BoolExpr>() { lNotPostCondition
+                        BoolExpr lSecondOperand = _z3Solver.AndOperator(new List<BoolExpr>() { lNotPostCondition
                                                                                                 , lCurrentOperationInstance.ExecutingVariable });
                         //BoolExpr lSecondOperand = (BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentOperationInstance.ExecutingVariableName);
 
@@ -6307,7 +6344,7 @@ namespace ProductPlatformAnalyzer
                         //BoolExpr lOperand = cZ3Solver.OrOperator(new List<BoolExpr>() { lFirstOperand
                         //                                                    , lCurrentOperationInstance.FinishedVariable
                         //                                                    , lCurrentOperationInstance.UnusedVariable });
-                        BoolExpr lOperand = cZ3Solver.OrOperator(new List<BoolExpr>() { lFirstOperand
+                        BoolExpr lOperand = _z3Solver.OrOperator(new List<BoolExpr>() { lFirstOperand
                                                                             , lSecondOperand
                                                                             , lCurrentOperationInstance.FinishedVariable
                                                                             , lCurrentOperationInstance.UnusedVariable });
@@ -6316,12 +6353,12 @@ namespace ProductPlatformAnalyzer
                             lResultFormula7 = lOperand;
                         else
                             //lResultFormula7 = cZ3Solver.AndOperator(new List<BoolExpr>() { lResultFormula7, lOperand });
-                            lResultFormula7 = cZ3Solver.AndOperator(new List<BoolExpr>() { lResultFormula7, lOperand });
+                            lResultFormula7 = _z3Solver.AndOperator(new List<BoolExpr>() { lResultFormula7, lOperand });
                     }
                 }
                 if (lResultFormula7 != null)
                     //lZ3Solver.AddConstraintToSolver(lOverallGoal, "overallGoal");
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)cZ3Solver.FindExprInExprSet("F7_" + pState)
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)_z3Solver.FindExprInExprSet("F7_" + pState)
                                                                 , lResultFormula7
                                                                 , "Formula7");
                 //            if (formula7 != null)
@@ -6329,13 +6366,13 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in createFormula7");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in createFormula7");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultFormula7;
         }
 
-        public BoolExpr createFormula8(HashSet<OperationInstance> pOperationInstanceList, int pState)
+        public BoolExpr CreateFormula8(HashSet<OperationInstance> pOperationInstanceList, int pState)
         {
             BoolExpr lResultFormula8 = null;
             try
@@ -6345,25 +6382,25 @@ namespace ProductPlatformAnalyzer
                 //(Big OR) (O_I_k_j OR O_E_k_j)
 
                 //This boolean expression is used to refer to this formula 8
-                cZ3Solver.AddBooleanExpression("F8_" + pState);
+                _z3Solver.AddBooleanExpression("F8_" + pState);
 
                 foreach (OperationInstance lCurrentOperationInstance in pOperationInstanceList)
                 {
                     BoolExpr lOperand = null;
                     if (lCurrentOperationInstance.TransitionNumber.Equals(pState.ToString()))
                     {
-                        lOperand = cZ3Solver.OrOperator(new List<string>() { lCurrentOperationInstance.InitialVariableName
+                        lOperand = _z3Solver.OrOperator(new List<string>() { lCurrentOperationInstance.InitialVariableName
                                                                                 , lCurrentOperationInstance.ExecutingVariableName });
 
                         if (lResultFormula8 == null)
                             lResultFormula8 = lOperand;
                         else
-                            lResultFormula8 = cZ3Solver.OrOperator(new List<BoolExpr>() { lResultFormula8, lOperand });
+                            lResultFormula8 = _z3Solver.OrOperator(new List<BoolExpr>() { lResultFormula8, lOperand });
                     }
                 }
                 if (lResultFormula8 != null)
                     //lZ3Solver.AddConstraintToSolver(lOverallGoal, "overallGoal");
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)cZ3Solver.FindExprInExprSet("F8_" + pState)
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints((BoolExpr)_z3Solver.FindExprInExprSet("F8_" + pState)
                                                                 , lResultFormula8
                                                                 , "Formula8");
                 //            if (formula8 != null)
@@ -6371,8 +6408,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in createFormula8");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in createFormula8");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultFormula8;
         }
@@ -6381,17 +6418,17 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (cReportTimings)
+                if (ReportTimings)
                 {
-                    cStopWatchDetailed.Start();
-                    cStopWatchTotal.Start();
+                    _stopWatchDetailed.Start();
+                    _stopWatchTotal.Start();
 
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in StartModelTiming");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in StartModelTiming");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -6399,21 +6436,21 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (cReportTimings)
+                if (ReportTimings)
                 {
-                    cStopWatchDetailed.Stop();
-                    cModelCreationTime = cStopWatchDetailed.ElapsedMilliseconds;
+                    _stopWatchDetailed.Stop();
+                    _modelCreationTime = _stopWatchDetailed.ElapsedMilliseconds;
 
-                    cOutputHandler.printMessageToConsole(pMessage + " Time: " + cModelCreationTime + "ms.");
+                    _outputHandler.PrintMessageToConsole(pMessage + " Time: " + _modelCreationTime + "ms.");
 
-                    cStopWatchDetailed.Restart();
+                    _stopWatchDetailed.Restart();
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in StopNReportModelTimingNStartAnalysisTiming");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in StopNReportModelTimingNStartAnalysisTiming");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -6421,21 +6458,21 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (cReportTimings)
+                if (ReportTimings)
                 {
-                    cStopWatchDetailed.Stop();
-                    cModelAnalysisTime = cStopWatchDetailed.ElapsedMilliseconds;
+                    _stopWatchDetailed.Stop();
+                    _modelAnalysisTime = _stopWatchDetailed.ElapsedMilliseconds;
 
-                    cOutputHandler.printMessageToConsole("Model Analysis Time: " + cModelAnalysisTime + "ms.");
+                    _outputHandler.PrintMessageToConsole("Model Analysis Time: " + _modelAnalysisTime + "ms.");
 
-                    cStopWatchDetailed.Restart();
+                    _stopWatchDetailed.Restart();
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in StopNReportAnalysisTiming");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in StopNReportAnalysisTiming");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -6443,20 +6480,20 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                if (cReportTimings)
+                if (ReportTimings)
                 {
-                    cStopWatchDetailed.Stop();
-                    cStopWatchTotal.Stop();
-                    cModelAnalysisReportingTime = cStopWatchDetailed.ElapsedMilliseconds;
-                    cOutputHandler.printMessageToConsole("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
-                    cOutputHandler.printMessageToConsole("Model Analysis TOTAL Time: " + cStopWatchTotal.ElapsedMilliseconds + "ms.");
+                    _stopWatchDetailed.Stop();
+                    _stopWatchTotal.Stop();
+                    _modelAnalysisReportingTime = _stopWatchDetailed.ElapsedMilliseconds;
+                    _outputHandler.PrintMessageToConsole("Model Analysis Reporting Time: " + _modelAnalysisReportingTime + "ms.");
+                    _outputHandler.PrintMessageToConsole("Model Analysis TOTAL Time: " + _stopWatchTotal.ElapsedMilliseconds + "ms.");
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in StopNReportModelAnalysisTiming");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in StopNReportModelAnalysisTiming");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -6473,8 +6510,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AnalyzeModelConstraints");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AnalyzeModelConstraints");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
         }
@@ -6496,14 +6533,14 @@ namespace ProductPlatformAnalyzer
                 StartModelTiming();
 
                 //TODO: Only should be done when a flag is set
-                cOutputHandler.printMessageToConsole("Existance Of Valid Production Path Analysis:");
+                _outputHandler.PrintMessageToConsole("Existance Of Valid Production Path Analysis:");
 
                 bool lAnalysisComplete = false;
 
-                cZ3Solver.PrepareDebugDirectory();
+                _z3Solver.PrepareDebugDirectory();
 
                 if (!pVariationPointsSet)
-                    setVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
+                    SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                         , Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -6511,7 +6548,7 @@ namespace ProductPlatformAnalyzer
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
                 //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
-                    setReportType(true, true, true
+                    SetReportType(true, true, true
                                 , true, false, false
                                 , false, true, false
                                 , true, true, true);
@@ -6523,11 +6560,11 @@ namespace ProductPlatformAnalyzer
 
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
-                    for (int lTransitionNo = 0; lTransitionNo <= cMaxNumberOfTransitions; lTransitionNo++)
+                    for (int lTransitionNo = 0; lTransitionNo <= _maxNumberOfTransitions; lTransitionNo++)
                     {
-                        cCurrentTransitionNumber = lTransitionNo;
+                        _currentTransitionNumber = lTransitionNo;
 
-                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
+                        _outputHandler.PrintMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
 
                         lAnalysisComplete = false;
 
@@ -6536,8 +6573,8 @@ namespace ProductPlatformAnalyzer
 
                         //Now the goal is added to the model according to the type of analysis
                         //Variation Point
-                        if (cConvertGoal && !lAnalysisComplete)
-                            convertExistenceOfDeadlockGoal(lTransitionNo);
+                        if (ConvertGoal && !lAnalysisComplete)
+                            ConvertExistenceOfDeadlockGoal(lTransitionNo);
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
@@ -6555,15 +6592,15 @@ namespace ProductPlatformAnalyzer
                             StopNReportAnalysisTiming();
 
                             //If the result is true it means we have found a deadlock!
-                            cOutputHandler.printMessageToConsole("A deadlock was found!");
+                            _outputHandler.PrintMessageToConsole("A deadlock was found!");
                             int lTempInt = lTransitionNo + 1;
-                            ReportSolverResult(lTempInt, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
+                            ReportSolverResult(lTempInt, lAnalysisComplete, _frameworkWrapper, lInternalAnalysisResult, null);
                             break;
                         }
 
                         //TODO: Is this the best way to end the loop on the transiton numbers???????
                         //If all the transition cycles are completed then the analysis is completed
-                        if (lTransitionNo == cMaxNumberOfTransitions - 1)
+                        if (lTransitionNo == _maxNumberOfTransitions - 1)
                             lAnalysisComplete = true;
                     }
                 }
@@ -6574,7 +6611,7 @@ namespace ProductPlatformAnalyzer
                 else
                     lAnalysisResult = false;
 
-                cOutputHandler.printMessageToConsole("Analysis Report: ");
+                _outputHandler.PrintMessageToConsole("Analysis Report: ");
 
                 //if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 if (RandomInputFile)
@@ -6584,9 +6621,9 @@ namespace ProductPlatformAnalyzer
                         //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
 
                         //If t is deadlock free then there is nothing to report as there will be no model given!!
-                        ReportSolverResult(cMaxNumberOfTransitions, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
+                        ReportSolverResult(_maxNumberOfTransitions, lAnalysisComplete, _frameworkWrapper, lInternalAnalysisResult, null);
 
-                        cOutputHandler.printMessageToConsole("NO deadlock was found!");
+                        _outputHandler.PrintMessageToConsole("NO deadlock was found!");
                     }
 
                 }
@@ -6599,14 +6636,14 @@ namespace ProductPlatformAnalyzer
                             //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
 
                             //If t is deadlock free then there is nothing to report as there will be no model given!!
-                            ReportSolverResult(cMaxNumberOfTransitions, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
+                            ReportSolverResult(_maxNumberOfTransitions, lAnalysisComplete, _frameworkWrapper, lInternalAnalysisResult, null);
 
-                            cOutputHandler.printMessageToConsole("NO deadlock was found!");
+                            _outputHandler.PrintMessageToConsole("NO deadlock was found!");
                         }
 
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflics between model constraints.");
+                        _outputHandler.PrintMessageToConsole("There are conflics between model constraints.");
                 }
 
                 StopNReportModelAnalysisTiming();
@@ -6614,8 +6651,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ExistanceOfDeadlockAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ExistanceOfDeadlockAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -6636,17 +6673,17 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Product Manufacturing Enumeration Analysis:");
+                _outputHandler.PrintMessageToConsole("Product Manufacturing Enumeration Analysis:");
 
                 bool lAnalysisComplete = false;
 
                 ////Here we calculate the maximum number of loops the analysis has to have, which is according to the maximum number of operations
                 //cMaxNumberOfTransitions = CalculateAnalysisNoOfCycles();
 
-                cZ3Solver.PrepareDebugDirectory();
+                _z3Solver.PrepareDebugDirectory();
 
                 if (!pVariationPointsSet)
-                    setVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
+                    SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                         , Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
                 //Parameters: Analysis Result, Analysis Detail Result, Variants Result
@@ -6654,7 +6691,7 @@ namespace ProductPlatformAnalyzer
                 //          , Stop between each transition, Stop at end of analysis, Create HTML Output
                 //          , Report timings, Debug Mode (Make model file), User Messages
                 if (!pReportTypeSet)
-                    setReportType(true, true, true
+                    SetReportType(true, true, true
                                 , true, false, false
                                 , false, true, false
                                 , true, true, true);
@@ -6665,22 +6702,22 @@ namespace ProductPlatformAnalyzer
                 ////Making the static part of the model
                 MakeStaticPartOfProductPlatformModel();
 
-                for (int i = 0; i < cNoOfModelsRequired; i++)
+                for (int i = 0; i < NoOfModelsRequired; i++)
                 {
 
-                    for (int lTransitionNo = 0; lTransitionNo < cMaxNumberOfTransitions; lTransitionNo++)
+                    for (int lTransitionNo = 0; lTransitionNo < _maxNumberOfTransitions; lTransitionNo++)
                     {
-                        cCurrentTransitionNumber = lTransitionNo;
+                        _currentTransitionNumber = lTransitionNo;
 
-                        cOutputHandler.printMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
+                        _outputHandler.PrintMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
 
                         ////Making the dynamic part of the model (Operations and transition between operation status)
                         MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
 
                         //Now the goal is added to the model
                         //Variation Point
-                        if (cConvertGoal)
-                            addFindingModelGoal(lTransitionNo.ToString());
+                        if (ConvertGoal)
+                            AddFindingModelGoal(lTransitionNo.ToString());
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
@@ -6699,11 +6736,11 @@ namespace ProductPlatformAnalyzer
 
                             //cOutputHandler.printMessageToConsole("Model created in transition No: " + lTempInt2);
 
-                            ReportSolverResult(lTempInt2, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, i);
+                            ReportSolverResult(lTempInt2, lAnalysisComplete, _frameworkWrapper, lInternalAnalysisResult, i);
                             break;
                         }
 
-                        if (lTransitionNo == cMaxNumberOfTransitions - 1)
+                        if (lTransitionNo == _maxNumberOfTransitions - 1)
                             lAnalysisComplete = true;
 
 
@@ -6716,13 +6753,13 @@ namespace ProductPlatformAnalyzer
                 else
                     lAnalysisResult = false;
 
-                cOutputHandler.printMessageToConsole("Analysis Report: ");
+                _outputHandler.PrintMessageToConsole("Analysis Report: ");
 
-                if (cReportTimings)
+                if (ReportTimings)
                 {
                     lStopWatch.Stop();
-                    cModelAnalysisReportingTime = lStopWatch.ElapsedMilliseconds;
-                    cOutputHandler.printMessageToConsole("Model Analysis Reporting Time: " + cModelAnalysisReportingTime + "ms.");
+                    _modelAnalysisReportingTime = lStopWatch.ElapsedMilliseconds;
+                    _outputHandler.PrintMessageToConsole("Model Analysis Reporting Time: " + _modelAnalysisReportingTime + "ms.");
                 }
 
                 //TODO: Do we need a stand alone constraint????????? Considering that this line comes with a stand alone constraint!!!
@@ -6736,14 +6773,14 @@ namespace ProductPlatformAnalyzer
                 if (!lAnalysisResult)
                 {
                     //If the result is false it means no deadlock can be found! HENCE DEADLOCK FREE!!
-                    ReportSolverResult(cMaxNumberOfTransitions, lAnalysisComplete, cFrameworkWrapper, lInternalAnalysisResult, null);
-                    cOutputHandler.printMessageToConsole("NO deadlock was found!");
+                    ReportSolverResult(_maxNumberOfTransitions, lAnalysisComplete, _frameworkWrapper, lInternalAnalysisResult, null);
+                    _outputHandler.PrintMessageToConsole("NO deadlock was found!");
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ExistanceOfDeadlockAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ExistanceOfDeadlockAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -6760,12 +6797,12 @@ namespace ProductPlatformAnalyzer
             Status lInternalAnalysisResult = Status.UNKNOWN;
             try
             {
-                cOutputHandler.printMessageToConsole("Model enumeration Analysis:");
+                _outputHandler.PrintMessageToConsole("Model enumeration Analysis:");
 
                 //This variable controls if the analysis has been completed or not
                 bool lAnalysisComplete = false;
 
-                cZ3Solver.PrepareDebugDirectory();
+                _z3Solver.PrepareDebugDirectory();
 
                 StartModelTiming();
                 //This analysis is going to be carried out in two steps:
@@ -6791,9 +6828,9 @@ namespace ProductPlatformAnalyzer
 
                 StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                for (int i = 0; i < cNoOfModelsRequired; i++)
+                for (int i = 0; i < NoOfModelsRequired; i++)
                 {
-                    cOutputHandler.ResetOutputResult();
+                    _outputHandler.ResetOutputResult();
                     //For each variant check if this statement holds - carry out the analysis
                     lInternalAnalysisResult = AnalyzeProductPlatform(0
                                                             , i
@@ -6810,7 +6847,7 @@ namespace ProductPlatformAnalyzer
                         //??addStandAloneConstraint2Z3Solver(lZ3Solver.FindBoolExpressionUsingName(lCurrentVariant.names));
                         ReportSolverResult(i
                                         , lAnalysisComplete
-                                        , cFrameworkWrapper
+                                        , _frameworkWrapper
                                         , lInternalAnalysisResult
                                         , null);
                     }
@@ -6818,9 +6855,9 @@ namespace ProductPlatformAnalyzer
                     {
                         //If the product platform did not have any more models!
                         if (i.Equals(0))
-                            cOutputHandler.printMessageToConsole("This Product Platform DID NOT have any Models.");
+                            _outputHandler.PrintMessageToConsole("This Product Platform DID NOT have any Models.");
                         else if (i > 0)
-                            cOutputHandler.printMessageToConsole("This Product Platform only had " + i + " Models.");
+                            _outputHandler.PrintMessageToConsole("This Product Platform only had " + i + " Models.");
                         break;
                     }
 
@@ -6839,8 +6876,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ProductModelEnumerationAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ProductModelEnumerationAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -6862,18 +6899,18 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Variant Selectability Analysis:");
+                _outputHandler.PrintMessageToConsole("Variant Selectability Analysis:");
 
                 bool lAnalysisComplete = false;
 
 
                 //This is the list of all the variants/parts in the product platform
-                HashSet<variant> lVariantList = cFrameworkWrapper.VariantSet;
+                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 //This is an empty list which is going to be filled by all he variants which are not able to be picked
                 List<variant> lUnselectableVariantList = new List<variant>();
 
-                cZ3Solver.PrepareDebugDirectory();
+                _z3Solver.PrepareDebugDirectory();
 
                 //This analysis is going to be carried out in two steps:
                 //Step A, check the product platform structurally without the goal
@@ -6882,7 +6919,7 @@ namespace ProductPlatformAnalyzer
 
                 ////As this analysis type is a static analysis we only carry t out for the first transition
                 int lTransitionNo = 0;
-                cCurrentTransitionNumber = lTransitionNo;
+                _currentTransitionNumber = lTransitionNo;
 
                 MakeStaticPartOfProductPlatformModel();
 
@@ -6898,9 +6935,9 @@ namespace ProductPlatformAnalyzer
                     foreach (variant lCurrentVariant in lVariantList)
                     {
 
-                        cZ3Solver.SolverPushFunction();
+                        _z3Solver.SolverPushFunction();
 
-                        addStandAloneConstraint2Z3Solver((BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentVariant.names));
+                        AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names));
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
@@ -6914,7 +6951,7 @@ namespace ProductPlatformAnalyzer
                         {
                             ReportSolverResult(lTransitionNo
                                                 , lAnalysisComplete
-                                                , cFrameworkWrapper
+                                                , _frameworkWrapper
                                                 , lInternalAnalysisResult
                                                 , lCurrentVariant);
                         }
@@ -6927,35 +6964,35 @@ namespace ProductPlatformAnalyzer
 
                         StopNReportAnalysisTiming();
 
-                        cZ3Solver.SolverPopFunction();
+                        _z3Solver.SolverPopFunction();
 
                         //Here according to the number of unselectable variants which we have found we will give the coresponding report
                     }
                 }
 
-                cOutputHandler.printMessageToConsole("Analysis Report: ");
+                _outputHandler.PrintMessageToConsole("Analysis Report: ");
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
                     if (lUnselectableVariantList.Count != 0)
                     {
-                        cOutputHandler.printMessageToConsole("Variats which are not selectable are: " + ReturnVariantNamesFromList(lUnselectableVariantList));
+                        _outputHandler.PrintMessageToConsole("Variats which are not selectable are: " + ReturnVariantNamesFromList(lUnselectableVariantList));
                         lAnalysisResult = false;
                     }
                     else
                     {
-                        cOutputHandler.printMessageToConsole("All Variats are selectable!");
+                        _outputHandler.PrintMessageToConsole("All Variats are selectable!");
                         lAnalysisResult = true;
                     }
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                    _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in VariantSelectabilityGoal");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in VariantSelectabilityGoal");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -6977,18 +7014,18 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Part Selectability Analysis:");
+                _outputHandler.PrintMessageToConsole("Part Selectability Analysis:");
 
                 bool lAnalysisComplete = false;
 
 
                 //This is the list of all the variants/parts in the product platform
-                HashSet<part> lPartList = cFrameworkWrapper.PartSet;
+                HashSet<part> lPartList = _frameworkWrapper.PartSet;
 
                 //This is an empty list which is going to be filled by all he variants which are not able to be picked
                 List<part> lUnselectablePartList = new List<part>();
 
-                cZ3Solver.PrepareDebugDirectory();
+                _z3Solver.PrepareDebugDirectory();
 
                 //This analysis is going to be carried out in two steps:
                 //Step A, check the product platform structurally without the goal
@@ -6997,7 +7034,7 @@ namespace ProductPlatformAnalyzer
 
                 ////As this analysis type is a static analysis we only carry t out for the first transition
                 int lTransitionNo = 0;
-                cCurrentTransitionNumber = lTransitionNo;
+                _currentTransitionNumber = lTransitionNo;
 
                 MakeStaticPartOfProductPlatformModel();
 
@@ -7008,14 +7045,14 @@ namespace ProductPlatformAnalyzer
 
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
-                    if (cFrameworkWrapper.UsePartInfo)
+                    if (_frameworkWrapper.UsePartInfo)
                     {
                         //Then we have to go over all variants one by one, for this we use the list we previously filled
                         foreach (part lCurrentPart in lPartList)
                         {
-                            cZ3Solver.SolverPushFunction();
+                            _z3Solver.SolverPushFunction();
 
-                            addStandAloneConstraint2Z3Solver((BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentPart.names));
+                            AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names));
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
@@ -7029,7 +7066,7 @@ namespace ProductPlatformAnalyzer
                             {
                                 ReportSolverResult(lTransitionNo
                                                     , lAnalysisComplete
-                                                    , cFrameworkWrapper
+                                                    , _frameworkWrapper
                                                     , lInternalAnalysisResult
                                                     , lCurrentPart);
 
@@ -7043,7 +7080,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportModelAnalysisTiming();
 
-                            cZ3Solver.SolverPopFunction();
+                            _z3Solver.SolverPopFunction();
 
                             //Here according to the number of unselectable variants which we have found we will give the coresponding report
                         }
@@ -7051,36 +7088,36 @@ namespace ProductPlatformAnalyzer
                     }
                     else
                     {
-                        cOutputHandler.printMessageToConsole("Parts are not available in this model!");
+                        _outputHandler.PrintMessageToConsole("Parts are not available in this model!");
                     }
                 }
 
-                cOutputHandler.printMessageToConsole("Analysis Report: ");
+                _outputHandler.PrintMessageToConsole("Analysis Report: ");
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
-                    if (cFrameworkWrapper.UsePartInfo)
+                    if (_frameworkWrapper.UsePartInfo)
                     {
                         if (lUnselectablePartList.Count != 0)
                         {
-                            cOutputHandler.printMessageToConsole("Parts which are not selectable are: " + ReturnPartNamesFromList(lUnselectablePartList));
+                            _outputHandler.PrintMessageToConsole("Parts which are not selectable are: " + ReturnPartNamesFromList(lUnselectablePartList));
                             lAnalysisResult = false;
                         }
                         else
                         {
-                            cOutputHandler.printMessageToConsole("All Parts are selectable!");
+                            _outputHandler.PrintMessageToConsole("All Parts are selectable!");
                             lAnalysisResult = true;
                         }
                     }
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                    _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in PartSelectabilityGoal");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in PartSelectabilityGoal");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Returns the result of the analysis
             return lAnalysisResult;
@@ -7101,9 +7138,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Never selected variant Analysis:");
+                _outputHandler.PrintMessageToConsole("Never selected variant Analysis:");
 
-                HashSet<variant> lVariantList = cFrameworkWrapper.VariantSet;
+                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 if (lVariantList.Count > 0)
                 {
@@ -7112,7 +7149,7 @@ namespace ProductPlatformAnalyzer
                     List<variant> lNeverSelectedVariantList = new List<variant>();
                     List<variant> lSelectedVariantList = new List<variant>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     //4. Is there any variant(s) that are NEVER selected for a configuration?
                     //V_i
@@ -7120,15 +7157,15 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: This variant is never selected
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     lAnalysisComplete = false;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
@@ -7138,7 +7175,7 @@ namespace ProductPlatformAnalyzer
                         foreach (variant lCurrentVariant in lVariantList)
                         {
 
-                            cZ3Solver.SolverPushFunction();
+                            _z3Solver.SolverPushFunction();
 
                             BoolExpr lStandAloneConstraint = null;
 
@@ -7147,16 +7184,16 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lLeftHandSide = null;
 
                             //V_i
-                            lLeftHandSide = (BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentVariant.names);
+                            lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names);
 
                             lStandAloneConstraint = lLeftHandSide;
 
-                            addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                            AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                             //For each variant check if this statement holds - carry out the analysis
-                            lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                            lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
 
@@ -7170,7 +7207,7 @@ namespace ProductPlatformAnalyzer
                             StopNReportAnalysisTiming();
 
                             //if it does hold we go to the next variant
-                            cZ3Solver.SolverPopFunction();
+                            _z3Solver.SolverPopFunction();
 
                         }
                     }
@@ -7188,24 +7225,24 @@ namespace ProductPlatformAnalyzer
 
 
                         if (lNeverSelectedVariantList.Count != 0)
-                            cOutputHandler.printMessageToConsole("Variats which can NEVER be selected are: " + ReturnVariantNamesFromList(lNeverSelectedVariantList));
+                            _outputHandler.PrintMessageToConsole("Variats which can NEVER be selected are: " + ReturnVariantNamesFromList(lNeverSelectedVariantList));
                         else
-                            cOutputHandler.printMessageToConsole("Every Variat can be selected in at least one configuration!");
+                            _outputHandler.PrintMessageToConsole("Every Variat can be selected in at least one configuration!");
 
 
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Variants to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Variants to perform this analysis!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in NeverSelectedVariantAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in NeverSelectedVariantAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7225,9 +7262,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Always selected variant Analysis:");
+                _outputHandler.PrintMessageToConsole("Always selected variant Analysis:");
 
-                HashSet<variant> lVariantList = cFrameworkWrapper.VariantSet;
+                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 if (lVariantList.Count > 0)
                 {
@@ -7236,7 +7273,7 @@ namespace ProductPlatformAnalyzer
                     List<variant> lAlwaysSelectedVariantList = new List<variant>();
                     List<variant> lNotSelectedVariantList = new List<variant>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     //3. Is there any variant(s) that are ALWAYS selected for a configuration?
                     //!V_i
@@ -7244,16 +7281,16 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: All configurations include this variant
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     lAnalysisComplete = false;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
                     //This model is checked to see if there is no initial problem with the model's constraint set
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
@@ -7263,7 +7300,7 @@ namespace ProductPlatformAnalyzer
                         foreach (variant lCurrentVariant in lVariantList)
                         {
 
-                            cZ3Solver.SolverPushFunction();
+                            _z3Solver.SolverPushFunction();
 
                             BoolExpr lStandAloneConstraint = null;
 
@@ -7272,16 +7309,16 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lLeftHandSide = null;
 
                             //!V_i
-                            lLeftHandSide = cZ3Solver.NotOperator((BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentVariant.names));
+                            lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names));
 
                             lStandAloneConstraint = lLeftHandSide;
 
-                            addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                            AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                             //For each variant check if this statement holds - carry out the analysis
-                            lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                            lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
 
@@ -7295,7 +7332,7 @@ namespace ProductPlatformAnalyzer
                             StopNReportAnalysisTiming();
 
                             //if it does hold we go to the next variant
-                            cZ3Solver.SolverPopFunction();
+                            _z3Solver.SolverPopFunction();
 
                         }
                     }
@@ -7313,24 +7350,24 @@ namespace ProductPlatformAnalyzer
 
 
                         if (lAlwaysSelectedVariantList.Count != 0)
-                            cOutputHandler.printMessageToConsole("Variats which are ALWAYS selected are: " + ReturnVariantNamesFromList(lAlwaysSelectedVariantList));
+                            _outputHandler.PrintMessageToConsole("Variats which are ALWAYS selected are: " + ReturnVariantNamesFromList(lAlwaysSelectedVariantList));
                         else
-                            cOutputHandler.printMessageToConsole("None of the Variats are ALWAYS selected!");
+                            _outputHandler.PrintMessageToConsole("None of the Variats are ALWAYS selected!");
 
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Variants to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Variants to perform this analysis!");
 
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AlwaysSelectedVariantAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AlwaysSelectedVariantAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7349,9 +7386,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Always selected part Analysis:");
+                _outputHandler.PrintMessageToConsole("Always selected part Analysis:");
 
-                HashSet<part> lPartList = cFrameworkWrapper.PartSet;
+                HashSet<part> lPartList = _frameworkWrapper.PartSet;
 
                 if (lPartList.Count > 0)
                 {
@@ -7360,7 +7397,7 @@ namespace ProductPlatformAnalyzer
                     List<part> lAlwaysSelectedPartList = new List<part>();
                     List<part> lNotSelectedPartList = new List<part>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     //6. Is there any part(s) that are ALWAYS selected for a configuration?
                     //!P_i
@@ -7368,25 +7405,25 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: This part is selected in ALL configurations
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     lAnalysisComplete = false;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             foreach (part lCurrentPart in lPartList)
                             {
-                                cZ3Solver.SolverPushFunction();
+                                _z3Solver.SolverPushFunction();
 
                                 BoolExpr lStandAloneConstraint = null;
 
@@ -7395,16 +7432,16 @@ namespace ProductPlatformAnalyzer
                                 BoolExpr lLeftHandSide = null;
 
                                 //!P_i 
-                                lLeftHandSide = cZ3Solver.NotOperator((BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentPart.names));
+                                lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names));
 
                                 lStandAloneConstraint = lLeftHandSide;
 
-                                addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                                AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                                 StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                                 //For each part check if this statement holds - carry out the analysis
-                                lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                                lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                         , 0
                                                                         , lAnalysisComplete);
 
@@ -7417,7 +7454,7 @@ namespace ProductPlatformAnalyzer
                                 StopNReportAnalysisTiming();
 
                                 //if it does hold we go to the next part
-                                cZ3Solver.SolverPopFunction();
+                                _z3Solver.SolverPopFunction();
 
                             }
 
@@ -7428,7 +7465,7 @@ namespace ProductPlatformAnalyzer
                     //contains any record then the analysis will be true, other wise it will be false
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             if (lNotSelectedPartList.Count > 0)
                                 lAnalysisResult = true;
@@ -7437,28 +7474,28 @@ namespace ProductPlatformAnalyzer
                         }
 
 
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             if (lAlwaysSelectedPartList.Count != 0)
-                                cOutputHandler.printMessageToConsole("Parts which are ALWAYS selected are: " + ReturnPartNamesFromList(lAlwaysSelectedPartList));
+                                _outputHandler.PrintMessageToConsole("Parts which are ALWAYS selected are: " + ReturnPartNamesFromList(lAlwaysSelectedPartList));
                             else
-                                cOutputHandler.printMessageToConsole("None of the Parts are ALWAYS selected!");
+                                _outputHandler.PrintMessageToConsole("None of the Parts are ALWAYS selected!");
 
                         }
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
 
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Parts to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Parts to perform this analysis!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AlwaysSelectedPartAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AlwaysSelectedPartAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7477,9 +7514,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Never selected part Analysis:");
+                _outputHandler.PrintMessageToConsole("Never selected part Analysis:");
 
-                HashSet<part> lPartList = cFrameworkWrapper.PartSet;
+                HashSet<part> lPartList = _frameworkWrapper.PartSet;
 
                 if (lPartList.Count > 0)
                 {
@@ -7488,7 +7525,7 @@ namespace ProductPlatformAnalyzer
                     List<part> lNeverSelectedPartList = new List<part>();
                     List<part> lSelectedPartList = new List<part>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     //7. Is there any part(s) that are NEVER selected for a configuration?
                     //P_i
@@ -7496,25 +7533,25 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: There is NO configuration where this part is selected
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     lAnalysisComplete = false;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             foreach (part lCurrentPart in lPartList)
                             {
-                                cZ3Solver.SolverPushFunction();
+                                _z3Solver.SolverPushFunction();
 
                                 BoolExpr lStandAloneConstraint = null;
 
@@ -7523,16 +7560,16 @@ namespace ProductPlatformAnalyzer
                                 BoolExpr lLeftHandSide = null;
 
                                 //P_i 
-                                lLeftHandSide = (BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentPart.names);
+                                lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names);
 
                                 lStandAloneConstraint = lLeftHandSide;
 
-                                addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                                AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                                 StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                                 //For each part check if this statement holds - carry out the analysis
-                                lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                                lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                         , 0
                                                                         , lAnalysisComplete);
 
@@ -7545,7 +7582,7 @@ namespace ProductPlatformAnalyzer
                                 StopNReportAnalysisTiming();
 
                                 //if it does hold we go to the next part
-                                cZ3Solver.SolverPopFunction();
+                                _z3Solver.SolverPopFunction();
 
                             }
 
@@ -7556,7 +7593,7 @@ namespace ProductPlatformAnalyzer
                     //contains any record then the analysis will be true, other wise it will be false
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             if (lNeverSelectedPartList.Count > 0)
                                 lAnalysisResult = true;
@@ -7565,28 +7602,28 @@ namespace ProductPlatformAnalyzer
                         }
 
 
-                        if (cFrameworkWrapper.UsePartInfo)
+                        if (_frameworkWrapper.UsePartInfo)
                         {
                             if (lNeverSelectedPartList.Count != 0)
-                                cOutputHandler.printMessageToConsole("Parts which are NEVER selected are: " + ReturnPartNamesFromList(lNeverSelectedPartList));
+                                _outputHandler.PrintMessageToConsole("Parts which are NEVER selected are: " + ReturnPartNamesFromList(lNeverSelectedPartList));
                             else
-                                cOutputHandler.printMessageToConsole("Every Part can be selected in at least one configuration!");
+                                _outputHandler.PrintMessageToConsole("Every Part can be selected in at least one configuration!");
 
                         }
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Parts to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Parts to perform this analysis!");
 
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in NeverSelectedPartAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in NeverSelectedPartAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7606,9 +7643,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Never selected operation Analysis:");
+                _outputHandler.PrintMessageToConsole("Never selected operation Analysis:");
 
-                HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                 if (lOperationSet.Count > 0)
                 {
@@ -7621,17 +7658,17 @@ namespace ProductPlatformAnalyzer
                     HashSet<string> lNeverSelectedOperationNameList = new HashSet<string>();
                     HashSet<string> lSelectedOperationNameList = new HashSet<string>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
                     ////Hence there is no need to loop over all transitions like previous types of analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
@@ -7643,7 +7680,7 @@ namespace ProductPlatformAnalyzer
                                                                                             , Enumerations.OperationInstanceState.Initial
                                                                                             , "0");
 
-                            cZ3Solver.SolverPushFunction();
+                            _z3Solver.SolverPushFunction();
 
                             BoolExpr lStandAloneConstraint = null;
 
@@ -7656,12 +7693,12 @@ namespace ProductPlatformAnalyzer
 
                             lStandAloneConstraint = lLeftHandSide;
 
-                            addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                            AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                             //For each variant check if this statement holds - carry out the analysis
-                            lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                            lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
                             /////                            if (!lAnalysisResult && !lAnalysisComplete)
@@ -7678,7 +7715,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportAnalysisTiming();
 
-                            cZ3Solver.SolverPopFunction();
+                            _z3Solver.SolverPopFunction();
 
                         }
                     }
@@ -7693,24 +7730,24 @@ namespace ProductPlatformAnalyzer
                             lAnalysisResult = false;
 
                         if (lNeverSelectedOperationNameList.Count != 0)
-                            cOutputHandler.printMessageToConsole("Operations which are NEVER selected are: "
+                            _outputHandler.PrintMessageToConsole("Operations which are NEVER selected are: "
                                 + ReturnOperationNamesStringFromOperationNameList(lNeverSelectedOperationNameList));
                         else
-                            cOutputHandler.printMessageToConsole("Every operation can be selected in at least one configuration!");
+                            _outputHandler.PrintMessageToConsole("Every operation can be selected in at least one configuration!");
 
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Operations to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Operations to perform this analysis!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in NeverSelectedOperationAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in NeverSelectedOperationAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7730,9 +7767,9 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Always selected operation Analysis:");
+                _outputHandler.PrintMessageToConsole("Always selected operation Analysis:");
 
-                HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                 if (lOperationSet.Count > 0)
                 {
@@ -7745,17 +7782,17 @@ namespace ProductPlatformAnalyzer
                     HashSet<string> lAlwaysSelectedOperationNameList = new HashSet<string>();
                     HashSet<string> lUnusedOperationNameList = new HashSet<string>();
 
-                    cZ3Solver.PrepareDebugDirectory();
+                    _z3Solver.PrepareDebugDirectory();
 
                     ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
                     ////Hence there is no need to loop over all transitions like previous types of analysis
-                    cCurrentTransitionNumber = 0;
+                    _currentTransitionNumber = 0;
 
                     MakeStaticPartOfProductPlatformModel();
 
-                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, cCurrentTransitionNumber);
+                    MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, _currentTransitionNumber);
 
-                    lModelConstraintCheck = AnalyzeProductPlatform(cCurrentTransitionNumber
+                    lModelConstraintCheck = AnalyzeProductPlatform(_currentTransitionNumber
                                                             , 0
                                                             , lAnalysisComplete);
 
@@ -7768,7 +7805,7 @@ namespace ProductPlatformAnalyzer
                                                                                             , Enumerations.OperationInstanceState.Unused
                                                                                             , "0");
 
-                            cZ3Solver.SolverPushFunction();
+                            _z3Solver.SolverPushFunction();
 
                             BoolExpr lStandAloneConstraint = null;
 
@@ -7781,12 +7818,12 @@ namespace ProductPlatformAnalyzer
 
                             lStandAloneConstraint = lLeftHandSide;
 
-                            addStandAloneConstraint2Z3Solver(lStandAloneConstraint);
+                            AddStandAloneConstraint2Z3Solver(lStandAloneConstraint);
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
                             //For each variant check if this statement holds - carry out the analysis
-                            lInternalAnalysisResult = AnalyzeProductPlatform(cCurrentTransitionNumber
+                            lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
                             /////                            if (!lAnalysisResult && !lAnalysisComplete)
@@ -7801,7 +7838,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportAnalysisTiming();
 
-                            cZ3Solver.SolverPopFunction();
+                            _z3Solver.SolverPopFunction();
 
                         }
                     }
@@ -7816,24 +7853,24 @@ namespace ProductPlatformAnalyzer
                             lAnalysisResult = false;
 
                         if (lAlwaysSelectedOperationNameList.Count != 0)
-                            cOutputHandler.printMessageToConsole("Operations which are ALWAYS USED are: "
+                            _outputHandler.PrintMessageToConsole("Operations which are ALWAYS USED are: "
                                 + ReturnOperationNamesStringFromOperationNameList(lAlwaysSelectedOperationNameList));
                         else
-                            cOutputHandler.printMessageToConsole("None of the operations is ALWAYS selected!");
+                            _outputHandler.PrintMessageToConsole("None of the operations is ALWAYS selected!");
 
                     }
                     else
-                        cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                        _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are no Operations to perform this analysis!");
+                    _outputHandler.PrintMessageToConsole("There are no Operations to perform this analysis!");
 
                 StopNReportModelAnalysisTiming();
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in AlwaysSelectedOperationAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in AlwaysSelectedOperationAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7853,7 +7890,7 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                cOutputHandler.printMessageToConsole("Operation Selectability Analysis:");
+                _outputHandler.PrintMessageToConsole("Operation Selectability Analysis:");
 
                 //11. Is there any operation(s) which is possible to choose for a configuration?
                 //O_i
@@ -7863,7 +7900,7 @@ namespace ProductPlatformAnalyzer
                 //HashSet<OperationInstance> lOperationInstanceList = cFrameworkWrapper.OperationInstanceSet;
 
                 //To start all operations are unselectable unless otherwise proven
-                lUnselectableOperationNameSet = cFrameworkWrapper.getSetOfOperationNames();
+                lUnselectableOperationNameSet = _frameworkWrapper.GetSetOfOperationNames();
 
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
                 ////Hence there is no need to loop over all transitions like previous types of analysis
@@ -7879,7 +7916,7 @@ namespace ProductPlatformAnalyzer
 
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
-                    HashSet<Operation> lOperationSet = cFrameworkWrapper.OperationSet;
+                    HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
 
                     foreach (Operation lCurrentOperation in lOperationSet)
                     {
@@ -7887,9 +7924,9 @@ namespace ProductPlatformAnalyzer
                                                                         , Enumerations.OperationInstanceState.Initial
                                                                         , lTransitionNo.ToString());
 
-                        cZ3Solver.SolverPushFunction();
+                        _z3Solver.SolverPushFunction();
 
-                        addStandAloneConstraint2Z3Solver(l);
+                        AddStandAloneConstraint2Z3Solver(l);
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
@@ -7903,7 +7940,7 @@ namespace ProductPlatformAnalyzer
                         {
                             ReportSolverResult(lTransitionNo
                                                 , lAnalysisComplete
-                                                , cFrameworkWrapper
+                                                , _frameworkWrapper
                                                 , lInternalAnalysisResult
                                                 , lCurrentOperation.Name);
 
@@ -7918,7 +7955,7 @@ namespace ProductPlatformAnalyzer
                             //This is when we want to report only the operation name
                             ReportSolverResult(lTransitionNo
                                                 , lAnalysisComplete
-                                                , cFrameworkWrapper
+                                                , _frameworkWrapper
                                                 , lInternalAnalysisResult
                                                 , lCurrentOperation.Name);
 
@@ -7929,7 +7966,7 @@ namespace ProductPlatformAnalyzer
                         }
                         StopNReportAnalysisTiming();
 
-                        cZ3Solver.SolverPopFunction();
+                        _z3Solver.SolverPopFunction();
                     }
                 }
 
@@ -7942,24 +7979,24 @@ namespace ProductPlatformAnalyzer
                         lAnalysisResult = false;
 
 
-                    if (cReportAnalysisResult)
+                    if (ReportAnalysisResult)
                     {
                         if (lUnselectableOperationNameSet.Count != 0)
-                            cOutputHandler.printMessageToConsole("Operations which are not selectable are: " + ReturnOperationNamesStringFromOperationNameList(lUnselectableOperationNameSet));
+                            _outputHandler.PrintMessageToConsole("Operations which are not selectable are: " + ReturnOperationNamesStringFromOperationNameList(lUnselectableOperationNameSet));
                         else
-                            cOutputHandler.printMessageToConsole("All operations are selectable!");
+                            _outputHandler.PrintMessageToConsole("All operations are selectable!");
                     }
                 }
                 else
-                    cOutputHandler.printMessageToConsole("There are conflicts between the model constraints!");
+                    _outputHandler.PrintMessageToConsole("There are conflicts between the model constraints!");
 
                 StopNReportModelAnalysisTiming();
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OperationSelectabilityAnalysis");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in OperationSelectabilityAnalysis");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lAnalysisResult;
         }
@@ -7983,23 +8020,23 @@ namespace ProductPlatformAnalyzer
 
                 //Here we calculate the maximum number of loops the analysis has to have, which is according to the maximum number of operations
                 ///int lMaxNoOfTransitions = CalculateAnalysisNoOfCycles();
-                for (int i = 0; i < cMaxNumberOfTransitions; i++)
+                for (int i = 0; i < _maxNumberOfTransitions; i++)
                 {
                     BoolExpr lCurrentOperationInstance;
                     if (pSpecificTransitionNo != -1 && pSpecificTransitionNo.Equals(i))
                     {
-                        lCurrentOperationInstance = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.FinishedVariableName);
+                        lCurrentOperationInstance = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.FinishedVariableName);
                     }
                     else
                     {
                         OperationInstance lTempOperationInstance = new OperationInstance(pOperationInstance.AbstractOperation
                                                                                         , i.ToString());
-                        lCurrentOperationInstance = (BoolExpr)cZ3Solver.FindExprInExprSet(lTempOperationInstance.FinishedVariableName);
+                        lCurrentOperationInstance = (BoolExpr)_z3Solver.FindExprInExprSet(lTempOperationInstance.FinishedVariableName);
 
                     }
                     if (lCurrentOperationInstance != null)
                         if (lResultExpr != null)
-                            lResultExpr = cZ3Solver.AndOperator(new List<BoolExpr>() { lResultExpr, lCurrentOperationInstance });
+                            lResultExpr = _z3Solver.AndOperator(new List<BoolExpr>() { lResultExpr, lCurrentOperationInstance });
                         else
                             lResultExpr = lCurrentOperationInstance;
                     else
@@ -8010,8 +8047,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in OperationInAllTransitions");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -8156,7 +8193,7 @@ namespace ProductPlatformAnalyzer
                     if (lCurrentOperationInstance != null)
                     {
                         if (lResultExpr != null)
-                            lResultExpr = cZ3Solver.OrOperator(new List<BoolExpr>() { lResultExpr, lCurrentOperationInstance });
+                            lResultExpr = _z3Solver.OrOperator(new List<BoolExpr>() { lResultExpr, lCurrentOperationInstance });
                         else
                             lResultExpr = lCurrentOperationInstance;
                     }
@@ -8165,8 +8202,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in OperationInAllTransitions");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in OperationInAllTransitions");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultExpr;
         }
@@ -8179,27 +8216,27 @@ namespace ProductPlatformAnalyzer
                 switch (pOperationState)
                 {
                     case Enumerations.OperationInstanceState.Initial:
-                        lResultOperationInstanceVariable = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.InitialVariableName);
+                        lResultOperationInstanceVariable = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.InitialVariableName);
                         break;
                     case Enumerations.OperationInstanceState.Executing:
-                        lResultOperationInstanceVariable = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.ExecutingVariableName);
+                        lResultOperationInstanceVariable = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.ExecutingVariableName);
                         break;
                     case Enumerations.OperationInstanceState.Finished:
-                        lResultOperationInstanceVariable = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.FinishedVariableName);
+                        lResultOperationInstanceVariable = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.FinishedVariableName);
                         break;
                     case Enumerations.OperationInstanceState.Unused:
-                        lResultOperationInstanceVariable = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.UnusedVariableName);
+                        lResultOperationInstanceVariable = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.UnusedVariableName);
                         break;
                     default:
-                        lResultOperationInstanceVariable = (BoolExpr)cZ3Solver.FindExprInExprSet(pOperationInstance.UnusedVariableName);
+                        lResultOperationInstanceVariable = (BoolExpr)_z3Solver.FindExprInExprSet(pOperationInstance.UnusedVariableName);
                         break;
                 }
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationInstanceVariableInOneState");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationInstanceVariableInOneState");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultOperationInstanceVariable;
         }
@@ -8514,8 +8551,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnPartNamesFromList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnPartNamesFromList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Return the string with the name of the parts
             return lPartNames;
@@ -8548,8 +8585,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnVariantNamesFromList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnVariantNamesFromList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Return the string with the name of the variants
             return lVariantNames;
@@ -8582,8 +8619,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesFromList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationNamesFromList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Return the string with the name of the operations
             return lOperationNames;
@@ -8617,8 +8654,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesFromOpertionInstanceList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationNamesFromOpertionInstanceList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             //Return the string with the name of the operations
             return lOperationNames;
@@ -8644,13 +8681,13 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in ReturnOperationNamesStringFromOperationNameList");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in ReturnOperationNamesStringFromOperationNameList");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lOperationNamesString;
         }
 
-        public void addFindingModelGoal(string pTransitionNo)
+        public void AddFindingModelGoal(string pTransitionNo)
         {
             try
             {
@@ -8666,25 +8703,25 @@ namespace ProductPlatformAnalyzer
                 ///int lTempInteger = int.Parse(lMaxNoOfTransitions) - 1;
                 ///string lTempString = lTempInteger.ToString();
                 //List<OperationInstance> lCurrentTrnasitionNoOperationInstanceSet = filterOperationInstancesOfOneTransition(lOperationInstanceSet, pTransitionNo);
-                HashSet<OperationInstance> lCurrentTrnasitionNoOperationInstanceSet = cFrameworkWrapper.getOperationInstancesInOneTransition(int.Parse(pTransitionNo));
+                HashSet<OperationInstance> lCurrentTrnasitionNoOperationInstanceSet = _frameworkWrapper.GetOperationInstancesInOneTransition(int.Parse(pTransitionNo));
                 
                 //List of : (O_F_0_m OR O_U_0_m), (O_F_1_m OR O_U_1_m), ..., (O_F_n_m OR O_U_n_m)
-                List<BoolExpr> lWantedExprForEachVariant = returnWantedExprForEachVariantORPart(lCurrentTrnasitionNoOperationInstanceSet);
+                List<BoolExpr> lWantedExprForEachVariant = ReturnWantedExprForEachVariantORPart(lCurrentTrnasitionNoOperationInstanceSet);
 
                 //BoolExpr lCurrentTransitionFormulaPart = returnPartsANDedExpression(lWantedExprForEachVariant);
 
-                lResultFormula = cZ3Solver.AndOperator(lWantedExprForEachVariant);
+                lResultFormula = _z3Solver.AndOperator(lWantedExprForEachVariant);
 
-                cZ3Solver.AddConstraintToSolver(lResultFormula, "FindingModelGoal");
+                _z3Solver.AddConstraintToSolver(lResultFormula, "FindingModelGoal");
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in convertFindingModelGoal");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in convertFindingModelGoal");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
-        public List<BoolExpr> returnWantedExprForEachVariantORPart(HashSet<OperationInstance> pCurrentTransitionOperationInstanceList)
+        public List<BoolExpr> ReturnWantedExprForEachVariantORPart(HashSet<OperationInstance> pCurrentTransitionOperationInstanceList)
         {
             //List of : (O_F_0_m OR O_U_0_m), (O_F_1_m OR O_U_1_m), ..., (O_F_n_m OR O_U_n_m)
             //The transition 'm' is given from the set in the parameter
@@ -8695,7 +8732,7 @@ namespace ProductPlatformAnalyzer
                 foreach (var lCurrentOperationInstance in pCurrentTransitionOperationInstanceList)
                 {
 
-                    BoolExpr lCurrentOperationInstanceExpr = cZ3Solver.OrOperator(new List<string>() { lCurrentOperationInstance.FinishedVariableName
+                    BoolExpr lCurrentOperationInstanceExpr = _z3Solver.OrOperator(new List<string>() { lCurrentOperationInstance.FinishedVariableName
                                                                                                         , lCurrentOperationInstance.UnusedVariableName});
                     lResultWantedExpr.Add(lCurrentOperationInstanceExpr);
                 }
@@ -8755,8 +8792,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in returnWantedExprForEachPart");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in returnWantedExprForEachPart");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultWantedExpr;
         }
@@ -8780,7 +8817,7 @@ namespace ProductPlatformAnalyzer
             return lTempExpression;
         }*/
 
-        public List<OperationInstance> filterOperationInstancesOfOneTransition(HashSet<OperationInstance> pOperationInstanceList, string pTransitionNo)
+        public List<OperationInstance> FilterOperationInstancesOfOneTransition(HashSet<OperationInstance> pOperationInstanceList, string pTransitionNo)
         {
             List<OperationInstance> lTempOperationInstanceList = new List<OperationInstance>();
             try
@@ -8796,8 +8833,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in filterOperationInstancesOfOneTransition");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in filterOperationInstancesOfOneTransition");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTempOperationInstanceList;
         }
@@ -8832,38 +8869,38 @@ namespace ProductPlatformAnalyzer
             {
 
                 //This boolean expression is used to refer to this overall goal
-                lDeadlockVariable = cZ3Solver.AddBooleanExpression("Deadlock_" + pTransitionNo);
+                lDeadlockVariable = _z3Solver.AddBooleanExpression("Deadlock_" + pTransitionNo);
                 //What we add to the solver is: P_i => (formula 7) AND (formula 8)
 
                 //HashSet<OperationInstance> lOperationInstanceSet = cFrameworkWrapper.OperationInstanceSet;
-                HashSet<OperationInstance> lOperationInstanceSet = cFrameworkWrapper.getOperationInstancesInOneTransition(pTransitionNo);
+                HashSet<OperationInstance> lOperationInstanceSet = _frameworkWrapper.GetOperationInstancesInOneTransition(pTransitionNo);
 
                 //Meaning: NO operation can preceed!
                 //(Big And) ((! Pre_k_pState AND O_I_k_pState) OR (! Post_k_pState AND O_E_k_pState) OR O_F_k_pState OR O_U_k_pState)
                 BoolExpr lFormula7;
-                lFormula7 = createFormula7(lOperationInstanceSet, pTransitionNo);
+                lFormula7 = CreateFormula7(lOperationInstanceSet, pTransitionNo);
 
                 //Meaning: At least ONE operation is in the initial or executing state!
                 //(Big OR) (O_I_k_pState OR O_E_k_pState)
                 BoolExpr lFormula8;
-                lFormula8 = createFormula8(lOperationInstanceSet, pTransitionNo);
+                lFormula8 = CreateFormula8(lOperationInstanceSet, pTransitionNo);
 
                 if (lFormula7 != null && lFormula8 != null)
                 {
-                    lDeadlockRule = cZ3Solver.AndOperator(new List<BoolExpr>() { (BoolExpr)cZ3Solver.FindExprInExprSet("F7_" + pTransitionNo)
-                                                                                , (BoolExpr)cZ3Solver.FindExprInExprSet("F8_" + pTransitionNo) });
+                    lDeadlockRule = _z3Solver.AndOperator(new List<BoolExpr>() { (BoolExpr)_z3Solver.FindExprInExprSet("F7_" + pTransitionNo)
+                                                                                , (BoolExpr)_z3Solver.FindExprInExprSet("F8_" + pTransitionNo) });
 
                     //lOverallGoal = cZ3Solver.OrOperator(new List<BoolExpr>() { lTempExpr, cZ3Solver.NotOperator(lProgressionRules) });
 
-                    cZ3Solver.AddTwoWayImpliesOperator2Constraints(lDeadlockVariable
+                    _z3Solver.AddTwoWayImpliesOperator2Constraints(lDeadlockVariable
                                                                 , lDeadlockRule
                                                                 , "Deadlock Rule");
                 }
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Error in InitializeDeadlockRule");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("Error in InitializeDeadlockRule");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lDeadlockVariable;
         }
@@ -9011,50 +9048,50 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Parts
-                cFrameworkWrapper.PartSet.Clear();
-                cFrameworkWrapper.PartNameLookup.Clear();
-                cFrameworkWrapper.PartIndexLookup.Clear();
-                cFrameworkWrapper.PartSymbolicNameLookup.Clear();
+                _frameworkWrapper.PartSet.Clear();
+                _frameworkWrapper.PartNameLookup.Clear();
+                _frameworkWrapper.PartIndexLookup.Clear();
+                _frameworkWrapper.PartSymbolicNameLookup.Clear();
 
                 //Variants
-                cFrameworkWrapper.VariantSet.Clear();
-                cFrameworkWrapper.VariantNameLookup.Clear();
-                cFrameworkWrapper.IndexVariantLookup.Clear();
-                cFrameworkWrapper.VariantIndexLookup.Clear();
-                cFrameworkWrapper.VariantSymbolicNameLookup.Clear();
+                _frameworkWrapper.VariantSet.Clear();
+                _frameworkWrapper.VariantNameLookup.Clear();
+                _frameworkWrapper.IndexVariantLookup.Clear();
+                _frameworkWrapper.VariantIndexLookup.Clear();
+                _frameworkWrapper.VariantSymbolicNameLookup.Clear();
 
                 //Variant group
-                cFrameworkWrapper.VariantGroupSet.Clear();
+                _frameworkWrapper.VariantGroupSet.Clear();
 
                 //Constraint
-                cFrameworkWrapper.ConstraintSet.Clear();
+                _frameworkWrapper.ConstraintSet.Clear();
 
                 //Operations
-                cFrameworkWrapper.OperationSet.Clear();
-                cFrameworkWrapper.OperationNameLookup.Clear();
-                cFrameworkWrapper.OperationSymbolicNameLookup.Clear();
+                _frameworkWrapper.OperationSet.Clear();
+                _frameworkWrapper.OperationNameLookup.Clear();
+                _frameworkWrapper.OperationSymbolicNameLookup.Clear();
 
                 //cFrameworkWrapper.OperationInstanceSet.Clear();
                 //cFrameworkWrapper.OperationInstanceDictionary.Clear();
 
                 //Item usadge rules
-                cFrameworkWrapper.ItemUsageRuleSet.Clear();
+                _frameworkWrapper.ItemUsageRuleSet.Clear();
 
                 //Traits
-                cFrameworkWrapper.TraitSet.Clear();
-                cFrameworkWrapper.TraitNameLookup.Clear();
-                cFrameworkWrapper.TraitSymbolicNameLookup.Clear();
+                _frameworkWrapper.TraitSet.Clear();
+                _frameworkWrapper.TraitNameLookup.Clear();
+                _frameworkWrapper.TraitSymbolicNameLookup.Clear();
 
                 //Resources
-                cFrameworkWrapper.ResourceSet.Clear();
-                cFrameworkWrapper.ResourceNameLookup.Clear();
-                cFrameworkWrapper.ResourceSymbolicNameLookup.Clear();
+                _frameworkWrapper.ResourceSet.Clear();
+                _frameworkWrapper.ResourceNameLookup.Clear();
+                _frameworkWrapper.ResourceSymbolicNameLookup.Clear();
 
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in InitializeDataFiles");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in InitializeDataFiles");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -9074,22 +9111,22 @@ namespace ProductPlatformAnalyzer
                 InitializeDataFiles();
 
                 bool lPartsLoaded = false;
-                lPartsLoaded = cFrameworkWrapper.createPartInstances(xDoc);
+                lPartsLoaded = _frameworkWrapper.CreatePartInstances(xDoc);
 
                 bool lVariantsLoaded = false;
-                lVariantsLoaded = cFrameworkWrapper.createVariantInstances(xDoc);
+                lVariantsLoaded = _frameworkWrapper.CreateVariantInstances(xDoc);
 
                 bool lVariantGroupsLoaded = false;
-                lVariantGroupsLoaded = cFrameworkWrapper.createVariantGroupInstances(xDoc);
+                lVariantGroupsLoaded = _frameworkWrapper.CreateVariantGroupInstances(xDoc);
 
                 bool lConstraintsLoaded = false;
-                lConstraintsLoaded = cFrameworkWrapper.createConstraintInstances(xDoc);
+                lConstraintsLoaded = _frameworkWrapper.CreateConstraintInstances(xDoc);
 
                 bool lOperationsLoaded = false;
-                lOperationsLoaded = cFrameworkWrapper.createOperationInstances(xDoc);
+                lOperationsLoaded = _frameworkWrapper.CreateOperationInstances(xDoc);
 
                 bool lItemUsageRulesLoaded = false;
-                lItemUsageRulesLoaded = cFrameworkWrapper.createItemUsageRulesInstances(xDoc);
+                lItemUsageRulesLoaded = _frameworkWrapper.CreateItemUsageRulesInstances(xDoc);
 
                 //These two parts are not needed because the trigger field in the operationinstance object will serve this purpose
                 /*
@@ -9101,10 +9138,10 @@ namespace ProductPlatformAnalyzer
                 */
 
                 bool lTraitsLoaded = false;
-                lTraitsLoaded = cFrameworkWrapper.createTraitInstances(xDoc);
+                lTraitsLoaded = _frameworkWrapper.CreateTraitInstances(xDoc);
 
                 bool lResourceLoaded = false;
-                lResourceLoaded = cFrameworkWrapper.createResourceInstances(xDoc);
+                lResourceLoaded = _frameworkWrapper.CreateResourceInstances(xDoc);
 
 
                 lDataLoaded = ((lVariantsLoaded && lVariantGroupsLoaded) && lOperationsLoaded);
@@ -9113,8 +9150,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lDataLoaded;
         }
@@ -9132,7 +9169,7 @@ namespace ProductPlatformAnalyzer
             {
                 //NoOfCycles = NumOfOperations * NumOfTransitions
                 ////TODO: It should be the second one because that would be more accurate but at the time of this calculation the number of active operations is not known! Maybe can be fixed!
-                int lNoOfOperations = cFrameworkWrapper.OperationSet.Count();
+                int lNoOfOperations = _frameworkWrapper.OperationSet.Count();
                 //int lNoOfOperations = lFrameworkWrapper.getNumberOfActiveOperations();
 
 
@@ -9146,50 +9183,50 @@ namespace ProductPlatformAnalyzer
 
                 List<IntExpr> lListOfOperationUsedVariables = new List<IntExpr>();
                 //We do this by defining an interger variable for each operation
-                foreach (Operation lCurrentOperation in cFrameworkWrapper.OperationSet)
+                foreach (Operation lCurrentOperation in _frameworkWrapper.OperationSet)
                 {
                     //(declare-const O1_Used Int)
                     string lOperationVariableName = lCurrentOperation.Name + "_Used";
-                    IntExpr lOperationUsedVariable = cZ3Solver.AddIntegerExpression(lOperationVariableName, "Optimizer");
+                    IntExpr lOperationUsedVariable = _z3Solver.AddIntegerExpression(lOperationVariableName, "Optimizer");
 
                     lListOfOperationUsedVariables.Add(lOperationUsedVariable);
                     lListOfOperationUsedVariables.Add(lOperationUsedVariable);
 
                     //(assert (< O1_Used 2))
-                    BoolExpr lAssertion = cZ3Solver.LessThanOperator(lOperationUsedVariable, 2);
-                    cZ3Solver.AddConstraintToOptimizer(lAssertion, "OperationUsedVariableUpperBound");
+                    BoolExpr lAssertion = _z3Solver.LessThanOperator(lOperationUsedVariable, 2);
+                    _z3Solver.AddConstraintToOptimizer(lAssertion, "OperationUsedVariableUpperBound");
 
                     //We also need to connect the variable of each operation to the trigger expression of the operation
                     //(declare-const O1_Trigger Bool)
                     //(assert (and (=> O1_Trigger (or V2 V1)) (=> (or V2 V1) O1_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
                     DefiningNInitializingOperationTriggerAttributes(lCurrentOperation, "Optimizer");
-                    Expr lOperationTriggerVariable = cZ3Solver.FindExprInExprSet(lCurrentOperation.OperationTriggerVariableName, false, "Optimizer");
+                    Expr lOperationTriggerVariable = _z3Solver.FindExprInExprSet(lCurrentOperation.OperationTriggerVariableName, false, "Optimizer");
                     //(assert (=> O1_Trigger (= O1_Used 1)))
-                    cZ3Solver.AddConstraintToOptimizer(cZ3Solver.ImpliesOperator(new List<BoolExpr>{(BoolExpr)lOperationTriggerVariable
-                                                                                , cZ3Solver.EqualOperator(lOperationUsedVariable, 1)}), "InitializingOperationUsedVariable");
+                    _z3Solver.AddConstraintToOptimizer(_z3Solver.ImpliesOperator(new List<BoolExpr>{(BoolExpr)lOperationTriggerVariable
+                                                                                , _z3Solver.EqualOperator(lOperationUsedVariable, 1)}), "InitializingOperationUsedVariable");
                     //(assert (=> (not O1_Trigger) (= O1_Used 0)))
-                    cZ3Solver.AddConstraintToOptimizer(cZ3Solver.ImpliesOperator(new List<BoolExpr>{cZ3Solver.NotOperator((BoolExpr)lOperationTriggerVariable)
-                                                                                , cZ3Solver.EqualOperator(lOperationUsedVariable, 0)}), "InitializingOperationUsedVariable");
+                    _z3Solver.AddConstraintToOptimizer(_z3Solver.ImpliesOperator(new List<BoolExpr>{_z3Solver.NotOperator((BoolExpr)lOperationTriggerVariable)
+                                                                                , _z3Solver.EqualOperator(lOperationUsedVariable, 0)}), "InitializingOperationUsedVariable");
                 
                 }
 
 
                 //Then we will try to maximize the function which is built from adding up these variables on the operations
                 //(declare-const MaxNoOfOpsUsed Int)
-                Expr lMaximizeVariable = cZ3Solver.AddIntegerExpression("MaxNoOfOperationUsed", "Optimizer");
+                Expr lMaximizeVariable = _z3Solver.AddIntegerExpression("MaxNoOfOperationUsed", "Optimizer");
                 //Expr lMaximizeVariable = cZ3Solver.FindExprInExprSet("MaxNoOfOperationUsed");
                 //(assert (= MaxNoOfOpsUsed (+ O1_Used O2_Used)))
                 
-                IntExpr lAddedOperationUsedVariables = cZ3Solver.AddOperator(lListOfOperationUsedVariables);
+                IntExpr lAddedOperationUsedVariables = _z3Solver.AddOperator(lListOfOperationUsedVariables);
                 //IntExpr l2Expr = cZ3Solver.Number2Expr(2);
                 //IntExpr lTempExpr = cZ3Solver.MulOperator(new List<IntExpr>() { lAddedOperationUsedVariables, lAddedOperationUsedVariables });
 
-                cZ3Solver.AddConstraintToOptimizer(cZ3Solver.EqualOperator(lMaximizeVariable
+                _z3Solver.AddConstraintToOptimizer(_z3Solver.EqualOperator(lMaximizeVariable
                                                                         , lAddedOperationUsedVariables), "InitializingTheMaxVariable");
 
                 //We will solve this as an optimization problom. Solver.Optimize
                 //(maximize MaxNoOfOpsUsed)
-                int lMaxValue = cZ3Solver.MaximizeExpression(lMaximizeVariable);
+                int lMaxValue = _z3Solver.MaximizeExpression(lMaximizeVariable);
 
                 //Then we will return the maximum number which is returned with Solver.printmode[variable]
                 //This returned value will be an accurate maximum number of operations which will be actvated in this case
@@ -9198,8 +9235,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                cOutputHandler.printMessageToConsole("error in CalculateAnalysisNoOfCycles");
-                cOutputHandler.printMessageToConsole(ex.Message);
+                _outputHandler.PrintMessageToConsole("error in CalculateAnalysisNoOfCycles");
+                _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResultNoOfCycles;
         }
@@ -9228,15 +9265,15 @@ namespace ProductPlatformAnalyzer
             try
             {
                 if (pInternalFileData != "")
-                    lLoadInitialData = loadInitialData(Enumerations.InitializerSource.InitialDataFile, pInternalFileData);
+                    lLoadInitialData = LoadInitialData(Enumerations.InitializerSource.InitialDataFile, pInternalFileData);
                 else
-                    lLoadInitialData = loadInitialData(Enumerations.InitializerSource.RandomData, "");
+                    lLoadInitialData = LoadInitialData(Enumerations.InitializerSource.RandomData, "");
 
 
 
                 if (lLoadInitialData)
                 {
-                    switch (cAnalysisType)
+                    switch (_analysisType)
                     {
                         case Enumerations.AnalysisType.ProductModelEnumerationAnalysis:
                             {
@@ -9312,22 +9349,22 @@ namespace ProductPlatformAnalyzer
                             }
                     }
 
-                    if (cStopAEndOfAnalysis)
+                    if (StopAEndOfAnalysis)
                         Console.ReadKey();
 
                 }
                 else
                 {
-                    cOutputHandler.printMessageToConsole("Initial data incomplete! Analysis can't be done!");
-                    if (cStopAEndOfAnalysis)
+                    _outputHandler.PrintMessageToConsole("Initial data incomplete! Analysis can't be done!");
+                    if (StopAEndOfAnalysis)
                         Console.ReadKey();
                 }
 
             }
             catch (Z3Exception ex)
             {
-                cOutputHandler.printMessageToConsole("Z3 Managed Exception: " + ex.Message);
-                cOutputHandler.printMessageToConsole("Stack trace: " + ex.StackTrace);
+                _outputHandler.PrintMessageToConsole("Z3 Managed Exception: " + ex.Message);
+                _outputHandler.PrintMessageToConsole("Stack trace: " + ex.StackTrace);
             }
             return lTestResult;
         }

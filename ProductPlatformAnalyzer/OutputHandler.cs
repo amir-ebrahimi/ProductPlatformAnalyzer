@@ -13,99 +13,94 @@ namespace ProductPlatformAnalyzer
     //Helping class for storing ouput expressions
     public partial class OutputExp
     {
-        public OutputExp(string lname, string lvalue)
+        public int State { get; set; }
+        public string Name { get; set; }
+        public string Operation { get; set; }
+        public string Value { get; set; }
+        public string OpState { get; set; }
+        public string Variant { get; set; }
+
+        public OutputExp(string pName, string pValue)
         {
-            name = lname;
-            value = lvalue;
-            setValues(lname);
+            Name = pName;
+            Value = pValue;
+            SetValues(pName);
         }
-
-        public int state { get; set; }
-
-        public string name { get; set; }
-
-        public string operation { get; set; }
-
-        public string value { get; set; }
-
-        public string opState { get; set; }
-
-        public string variant { get; set; }
 
         public override string ToString()
         {
-            return name + " = " + value;
+            return Name + " = " + Value;
         }
 
-        private void setValues(string name)
+        private void SetValues(string pName)
         {
             try
             {
-                if (name.Contains("_"))
+                if (pName.Contains("_"))
                 {
-                    String[] lOperationNameParts = name.Split('_');
+                    String[] lOperationNameParts = pName.Split('_');
                     if (string.Equals(lOperationNameParts[0],"Possible"))
                     {
                     
-                        operation = "";
-                        foreach (string str in lOperationNameParts)
+                        Operation = "";
+                        foreach (string lStr in lOperationNameParts)
                         {
-                            operation = operation + str + " ";
+                            Operation = Operation + lStr + " ";
                         }
-                        opState = "possible";
+                        OpState = "possible";
                         //variant = -1;
-                        state = -1;
+                        State = -1;
                     }
                     else if(string.Equals(lOperationNameParts[0],"Use"))
                     {
 
-                        operation = "";
+                        Operation = "";
                         foreach (string str in lOperationNameParts)
                         {
-                            operation = operation + str + " ";
+                            Operation = Operation + str + " ";
                         }
-                        opState = "use";
-                        state = -1;
+                        OpState = "use";
+                        State = -1;
                     }
                     else if (string.Equals(lOperationNameParts[1],"Trigger"))
                     {
-                        operation = lOperationNameParts[0];
-                        opState = "trigger";
-                        state = -1;
+                        Operation = lOperationNameParts[0];
+                        OpState = "trigger";
+                        State = -1;
                     }
                     else if(string.Equals(lOperationNameParts[1],"Precondition"))
                     {
-                        operation = lOperationNameParts[0];
-                        opState = "precondition";
-                        state = Convert.ToInt32(lOperationNameParts[2]);
+                        Operation = lOperationNameParts[0];
+                        OpState = "precondition";
+                        State = Convert.ToInt32(lOperationNameParts[2]);
                     }
                     else
                     {
-                        operation = lOperationNameParts[0];
+                        Operation = lOperationNameParts[0];
                         if (lOperationNameParts[1] != "E2F" && lOperationNameParts[1] != "I2E")
                         {
-                            opState = lOperationNameParts[1];
-                            state = Convert.ToInt32(lOperationNameParts[2]);
+                            OpState = lOperationNameParts[1];
+                            State = Convert.ToInt32(lOperationNameParts[2]);
                         }
                         else
                         {
-                            opState = null;
-                            state = -1;
+                            OpState = null;
+                            State = -1;
                         }
                     }
                 }
-                else if (name.StartsWith("V"))
+                else if (pName.StartsWith("V"))
                 {
-                    variant = name;
-                    operation = null;
-                    opState = null;
-                    state = -1;
+                    Variant = pName;
+                    Operation = null;
+                    OpState = null;
+                    State = -1;
                 }
                 else
                 {
-                    operation = null;
-                    opState = null;
-                    state = -1;
+                    Operation = null;
+                    OpState = null;
+                    State = -1;
                 }
 
             }
@@ -123,34 +118,34 @@ namespace ProductPlatformAnalyzer
     //Class for storing and writing results
     public class OutputHandler
     {
-        private List<OutputExp> outputResult;
-        private string path = "../../Output/";
-        private FrameworkWrapper cFrameworkWrapper;
-        private bool cEnableUserMessages;
+        private List<OutputExp> OutputResult;
+        private string Path = "../../Output/";
+        private FrameworkWrapper FrameworkWrapper;
+        private bool EnableUserMessages;
 
-        public FrameworkWrapper getFrameworkWrapper()
+        public FrameworkWrapper GetFrameworkWrapper()
         {
-            return cFrameworkWrapper;
+            return FrameworkWrapper;
         }
 
-        public void setFrameworkWrapper(FrameworkWrapper pFrameworkWrapper)
+        public void SetFrameworkWrapper(FrameworkWrapper pFrameworkWrapper)
         {
-            cFrameworkWrapper = pFrameworkWrapper;
+            FrameworkWrapper = pFrameworkWrapper;
         }
 
-        public void setOutputResult(List<OutputExp> pOutputExp)
+        public void SetOutputResult(List<OutputExp> pOutputExp)
         {
-            outputResult = pOutputExp;
+            OutputResult = pOutputExp;
         }
 
-        public bool getEnableUserMessages()
+        public bool GetEnableUserMessages()
         {
-            return cEnableUserMessages;
+            return EnableUserMessages;
         }
 
-        public void setEnableUserMessages(bool pEnableUserMessages)
+        public void SetEnableUserMessages(bool pEnableUserMessages)
         {
-            cEnableUserMessages = pEnableUserMessages;
+            EnableUserMessages = pEnableUserMessages;
         }
 
         public OutputHandler()
@@ -160,23 +155,23 @@ namespace ProductPlatformAnalyzer
 
         public void ResetOutputResult()
         {
-            outputResult = new List<OutputExp>();
+            OutputResult = new List<OutputExp>();
         }
 
-        public void addExp(string name, string value, string pState)
+        public void AddExp(string pName, string pValue, string pState)
         {
             try
             {
-                if (!goalState(name, pState))
+                if (!GoalState(pName, pState))
                 {
-                    OutputExp temp = new OutputExp(name, value);
-                    outputResult.Add(temp);
+                    OutputExp lTemp = new OutputExp(pName, pValue);
+                    OutputResult.Add(lTemp);
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in addExp in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in addExp in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
@@ -184,15 +179,15 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                outputResult.Sort(delegate(OutputExp exp1, OutputExp exp2)
+                OutputResult.Sort(delegate(OutputExp lExp1, OutputExp lExp2)
                 {
-                    return exp1.state.CompareTo(exp2.state);
+                    return lExp1.State.CompareTo(lExp2.State);
                 });
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in sortAfterState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in sortAfterState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
@@ -201,15 +196,15 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                outputResult.Sort(delegate(OutputExp exp1, OutputExp exp2)
+                OutputResult.Sort(delegate(OutputExp lExp1, OutputExp lExp2)
                 {
-                    return exp2.value.CompareTo(exp1.value);
+                    return lExp2.Value.CompareTo(lExp1.Value);
                 });
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in sortAfterValue in outputHander");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in sortAfterValue in outputHander");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
@@ -217,489 +212,489 @@ namespace ProductPlatformAnalyzer
         /// <summary>
         /// Prints chosen operation transitions for showing a finished analysis to console
         /// </summary>
-        public void printOperationsTransitions()
+        public void PrintOperationsTransitions()
         {
             try
             {
                 SortAfterState();
-                printMessageToConsole("\nOperations in order: ");
-                printOpTransformations();
+                PrintMessageToConsole("\nOperations in order: ");
+                PrintOpTransformations();
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printOperationTransitions");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printOperationTransitions");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         /// <summary>
         /// Prints chosen variant values for showing a finished analysis to console
         /// </summary>
-        public void printChosenVariants()
+        public void PrintChosenVariants()
         {
             try
             {
                 SortAfterValue();
-                printMessageToConsole("\nVariants: ");
-                printVariantsNParts();
+                PrintMessageToConsole("\nVariants: ");
+                PrintVariantsNParts();
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printChosenVariants");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printChosenVariants");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
 
         //Writes values for showing a finished analysis to HTML-file
-        public void writeFinished()
+        public void WriteFinished()
         {
             try
             {
-                StringWriter stringwriter = new StringWriter();
-                HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+                StringWriter lStringwriter = new StringWriter();
+                HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInput(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInput(lWriter);
+                lWriter.WriteEndTag("div");
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("The analysis was successful, all operations can be perfomed in the presented order.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteChosenVariants(lWriter);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
+                WriteAvailableResources(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "result.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "result.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeFinished");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeFinished");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
 
         //Writes values for showing a finished analysis to HTML-file
-        public void writeFinishedNoPost()
+        public void WriteFinishedNoPost()
         {
             try
             {
-                StringWriter stringwriter = new StringWriter();
-                HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+                StringWriter lStringwriter = new StringWriter();
+                HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInputNoPost(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInputNoPost(lWriter);
+                lWriter.WriteEndTag("div");
 
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p style=\"font-size:22px\"");
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteBeginTag("p style=\"font-size:22px\"");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("The analysis was successful, all operations can be perfomed in the presented order.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("The analysis was successful, all operations can be perfomed in the presented order.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteChosenVariants(lWriter);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
+                WriteAvailableResources(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "resultNoPost.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "resultNoPost.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeFinishedNoPost");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeFinishedNoPost");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
 
 
-        public void writeInputFile()
+        public void WriteInputFile()
         {
             try
             {
-                StringWriter stringwriter = new StringWriter();
-                HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+                StringWriter lWtringwriter = new StringWriter();
+                HtmlTextWriter lWriter = new HtmlTextWriter(lWtringwriter);
 
-                writeInput(writer);
+                WriteInput(lWriter);
 
-                File.WriteAllText(path + "input.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "input.htm", lWtringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeInputFile");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeInputFile");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        private void writeInput(HtmlTextWriter writer)
+        private void WriteInput(HtmlTextWriter pWriter)
         {
             try
             {
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Input");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"resultHeading\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Input");
+                pWriter.WriteEndTag("p");
 
 
-                writer.WriteBeginTag("p id=\"inF\" class=\"title\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(" Feature Model");
+                pWriter.WriteBeginTag("p id=\"inF\" class=\"title\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(" Feature Model");
 
-                writer.WriteBeginTag("span id=\"titleFArr\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("&#x25BC");
+                pWriter.WriteBeginTag("span id=\"titleFArr\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("&#x25BC");
                 //upp &#x25B2
-                writer.WriteEndTag("span");
-                writer.WriteEndTag("p");
+                pWriter.WriteEndTag("span");
+                pWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("div id=\"inFContent\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writeVariants(writer);
+                pWriter.WriteBeginTag("div id=\"inFContent\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                WriteVariants(pWriter);
 
-                writer.WriteBeginTag("p style=\"font-size:18px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(" ");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p style=\"font-size:18px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(" ");
+                pWriter.WriteEndTag("p");
 
 
-                writeConstraints(writer);
-                writer.WriteEndTag("div");
+                WriteConstraints(pWriter);
+                pWriter.WriteEndTag("div");
 
-                writeResourcesAndTraits(writer);
+                WriteResourcesAndTraits(pWriter);
 
-                writeOperationsWithPrePostCon(writer);
+                WriteOperationsWithPrePostCon(pWriter);
                 //writeVariantOperationMappings(writer);
                 //writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeInput");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeInput");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
 
-        private void writeInputNoPost(HtmlTextWriter writer)
+        private void WriteInputNoPost(HtmlTextWriter pWriter)
         {
             try
             {
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"resultHeading\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Analysis result");
+                pWriter.WriteEndTag("p");
 
 
-                writer.WriteBeginTag("p id=\"inF\" class=\"title\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(" Feature Model");
+                pWriter.WriteBeginTag("p id=\"inF\" class=\"title\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(" Feature Model");
 
-                writer.WriteBeginTag("span id=\"titleFArr\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("&#x25BC");
+                pWriter.WriteBeginTag("span id=\"titleFArr\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("&#x25BC");
                 //upp &#x25B2
-                writer.WriteEndTag("span");
-                writer.WriteEndTag("p");
+                pWriter.WriteEndTag("span");
+                pWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("div id=\"inFContent\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writeVariants(writer);
+                pWriter.WriteBeginTag("div id=\"inFContent\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                WriteVariants(pWriter);
 
-                writer.WriteBeginTag("p style=\"font-size:18px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(" ");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p style=\"font-size:18px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(" ");
+                pWriter.WriteEndTag("p");
 
 
-                writeConstraints(writer);
-                writer.WriteEndTag("div");
+                WriteConstraints(pWriter);
+                pWriter.WriteEndTag("div");
 
-                writeResourcesAndTraits(writer);
+                WriteResourcesAndTraits(pWriter);
 
-                writeOperationsWithPreCon(writer);
+                WriteOperationsWithPreCon(pWriter);
                 //writePartOperationMappings(writer);
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeInputNoPost");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeInputNoPost");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void printCounterExample()
+        public void PrintCounterExample()
         {
             try
             {
-                int lastState = getLastState();
+                int lLastState = GetLastState();
 
                 SortAfterValue();
-                printMessageToConsole("\nVariants:");
-                printVariantsNParts();
+                PrintMessageToConsole("\nVariants:");
+                PrintVariantsNParts();
 
-                printMessageToConsole("\nOperation in last state:");
-                printOpState(lastState);
+                PrintMessageToConsole("\nOperation in last state:");
+                PrintOpState(lLastState);
 
                 SortAfterState();
-                printMessageToConsole("\nOperations in order: ");
-                printOpTransformations(lastState);
+                PrintMessageToConsole("\nOperations in order: ");
+                PrintOpTransformations(lLastState);
 
-                printMessageToConsole("\nFalse pre/post-conditions:");
-                printConditionsState(lastState);
+                PrintMessageToConsole("\nFalse pre/post-conditions:");
+                PrintConditionsState(lLastState);
             }
 
             catch (Exception ex)
             {
-                printMessageToConsole("error in printCounterExample");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printCounterExample");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
 
-        public void writeCounterExample()
+        public void WriteCounterExample()
         {
-            StringWriter stringwriter = new StringWriter();
-            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            StringWriter lStringwriter = new StringWriter();
+            HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
             try
             {
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInput(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInput(lWriter);
+                lWriter.WriteEndTag("div");
 
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Counterexample found, all operations needed could not be performed.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Counterexample found, all operations needed could not be performed.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
+                WriteChosenVariants(lWriter);
                 //writeOpStateTable(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
-                writeFalsePrePost(writer);
+                WriteAvailableResources(lWriter);
+                WriteFalsePrePost(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "counterEx.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "counterEx.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeCounterExample");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeCounterExample");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void writeModel()
+        public void WriteModel()
         {
-            StringWriter stringwriter = new StringWriter();
-            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            StringWriter lStringwriter = new StringWriter();
+            HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
             try
             {
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInput(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInput(lWriter);
+                lWriter.WriteEndTag("div");
 
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Model found.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Model found.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
+                WriteChosenVariants(lWriter);
                 //writeOpStateTable(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
-                writeFalsePrePost(writer);
+                WriteAvailableResources(lWriter);
+                WriteFalsePrePost(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "Model.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "Model.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeModel");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeModel");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void writeCounterExampleNoPost()
+        public void WriteCounterExampleNoPost()
         {
-            StringWriter stringwriter = new StringWriter();
-            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            StringWriter lStringwriter = new StringWriter();
+            HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
             try
             {
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInputNoPost(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInputNoPost(lWriter);
+                lWriter.WriteEndTag("div");
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
                 
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Counterexample found, all operations needed could not be performed.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Counterexample found, all operations needed could not be performed.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
+                WriteChosenVariants(lWriter);
                 //writeOpStateTable(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
-                writeFalsePre(writer);
+                WriteAvailableResources(lWriter);
+                WriteFalsePre(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "counterExNoPost.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "counterExNoPost.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeCounterExampleNoPost");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeCounterExampleNoPost");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void writeModelNoPost()
+        public void WriteModelNoPost()
         {
-            StringWriter stringwriter = new StringWriter();
-            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            StringWriter lStringwriter = new StringWriter();
+            HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
 
             try
             {
-                writeDocStart(writer);
-                writeTabList(writer);
+                EriteDocStart(lWriter);
+                WriteTabList(lWriter);
 
-                writer.WriteFullBeginTag("div id=\"tabs-1\"");
-                writeInputNoPost(writer);
-                writer.WriteEndTag("div");
+                lWriter.WriteFullBeginTag("div id=\"tabs-1\"");
+                WriteInputNoPost(lWriter);
+                lWriter.WriteEndTag("div");
 
-                writer.WriteFullBeginTag("div id=\"tabs-2\"");
+                lWriter.WriteFullBeginTag("div id=\"tabs-2\"");
 
-                writer.WriteBeginTag("p class=\"resultHeading\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Analysis result");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"resultHeading\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Analysis result");
+                lWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("p class=\"discription\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Model found.");
-                writer.WriteEndTag("p");
+                lWriter.WriteBeginTag("p class=\"discription\"");
+                lWriter.Write(HtmlTextWriter.TagRightChar);
+                lWriter.Write("Model found.");
+                lWriter.WriteEndTag("p");
 
-                writeChosenVariants(writer);
+                WriteChosenVariants(lWriter);
                 //writeOpStateTable(writer);
-                writeTransitionTableState(writer);
-                writeOpOrder(writer);
+                WriteTransitionTableState(lWriter);
+                WriteOpOrder(lWriter);
                 //writeTransitionDiagram(writer);
-                writeAvailableResources(writer);
-                writeFalsePre(writer);
+                WriteAvailableResources(lWriter);
+                WriteFalsePre(lWriter);
 
-                writer.WriteEndTag("div");
-                writeDocEnd(writer);
+                lWriter.WriteEndTag("div");
+                WriteDocEnd(lWriter);
 
-                File.WriteAllText(path + "ModelNoPost.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "ModelNoPost.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeModelNoPost");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeModelNoPost");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        public void writeDebugFile()
+        public void WriteDebugFile()
         {
-            StringWriter stringwriter = new StringWriter();
-            HtmlTextWriter writer = new HtmlTextWriter(stringwriter);
+            StringWriter lStringwriter = new StringWriter();
+            HtmlTextWriter lWriter = new HtmlTextWriter(lStringwriter);
             SortAfterState();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    writer.WriteBeginTag("p");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(exp);
-                    writer.WriteEndTag("p");
+                    lWriter.WriteBeginTag("p");
+                    lWriter.Write(HtmlTextWriter.TagRightChar);
+                    lWriter.Write(lExp);
+                    lWriter.WriteEndTag("p");
                 }
 
-                File.WriteAllText(path + "debug.htm", stringwriter.ToString());
+                File.WriteAllText(Path + "debug.htm", lStringwriter.ToString());
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in writeDebugFile");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in writeDebugFile");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
@@ -709,79 +704,79 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    printMessageToConsole(exp.ToString());
+                    PrintMessageToConsole(lExp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in Print in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in Print in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         //Print all true outputexpressions
-        public void printTrue()
+        public void PrintTrue()
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.value.Equals("true"))
-                        printMessageToConsole(exp.ToString());
+                    if (lExp.Value.Equals("true"))
+                        PrintMessageToConsole(lExp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printTrue in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printTrue in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         //Print all chosen variants or parts
-        public void printVariantsNParts()
+        public void PrintVariantsNParts()
         {
             try
             {
                 string lVariantName, lPartName, vg;
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
                     //if (exp.state == -1)
-                    if (exp.opState == null)
+                    if (lExp.OpState == null)
                     {
                         //First we have to check if the chosen item is a variant or a part
-                        if (cFrameworkWrapper.existVariantByName(exp.ToString()))
+                        if (FrameworkWrapper.ExistVariantByName(lExp.ToString()))
                         {
-                            lVariantName = exp.ToString();
-                            vg = cFrameworkWrapper.getVariantGroup(lVariantName.Split(' ')[0]);
+                            lVariantName = lExp.ToString();
+                            vg = FrameworkWrapper.GetVariantGroup(lVariantName.Split(' ')[0]);
                             if (vg != "")
                             {
                                 //Meaning var was a variant
                                 if (!vg.Contains("Virtual-VG"))
-                                    printMessageToConsole(vg + "." + lVariantName);
+                                    PrintMessageToConsole(vg + "." + lVariantName);
                             }
                         }
                         else
                         {
                             //Meaning var was a part
-                            lPartName = exp.ToString();
-                            printMessageToConsole(lPartName);
+                            lPartName = lExp.ToString();
+                            PrintMessageToConsole(lPartName);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printVariants");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printVariants");
+                PrintMessageToConsole(ex.Message);
             }
 
         }
 
-        private void writeDocStart(HtmlTextWriter writer)
+        private void EriteDocStart(HtmlTextWriter pWriter)
         {
-            writer.WriteLine("<!doctype html> <html lang=\"en\"> <head><meta charset=\"utf-8\">"
+            pWriter.WriteLine("<!doctype html> <html lang=\"en\"> <head><meta charset=\"utf-8\">"
                                 + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
                                 + "<title>Product Platform Analyser</title>"
                                 + "<link rel=\"stylesheet\" href=\"../css/jquery-ui.css\">"
@@ -797,114 +792,114 @@ namespace ProductPlatformAnalyzer
                                 + " $(\"#outOpOContent\").hide(); });</script></head><body>");
         }
 
-        private void writeDocEnd(HtmlTextWriter writer)
+        private void WriteDocEnd(HtmlTextWriter pWriter)
         {
-            writer.WriteLine("</body> </html>");
+            pWriter.WriteLine("</body> </html>");
         }
 
-        private void writeTabList(HtmlTextWriter writer)
+        private void WriteTabList(HtmlTextWriter pWriter)
         {
-            writer.WriteLine("<div id=\"tabs\">" +
+            pWriter.WriteLine("<div id=\"tabs\">" +
                              "<ul>" +
                              "<li><a href=\"#tabs-1\">Input</a></li>" +
                              "<li><a href=\"#tabs-2\">Result</a></li>" +
                              "</ul>");
         }
 
-        private void writeTransitionDiagram(HtmlTextWriter writer)
+        private void WriteTransitionDiagram(HtmlTextWriter pWriter)
         {
-            List<string[]> transforms = getOpTransformations();
+            List<string[]> lTransforms = GetOpTransformations();
 
-            writer.WriteBeginTag("p id=\"outOOT\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Order of operation transitions");
+            pWriter.WriteBeginTag("p id=\"outOOT\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Order of operation transitions");
 
-            writer.WriteBeginTag("span id=\"titleOOTArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleOOTArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outOOTContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outOOTContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
             //writer.WriteBeginTag("ol style=\"margin-left:1em;\" ");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation");
-            writer.WriteEndTag("th");
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Transition");
-            writer.WriteEndTag("th");
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation");
+            pWriter.WriteEndTag("th");
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Transition");
+            pWriter.WriteEndTag("th");
 
 
-            foreach (String[] trans in transforms)
+            foreach (String[] lTrans in lTransforms)
             {
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
                 //Pil ner
                 //writer.Write("&darr; ");
-                writer.Write(trans[0]);
+                pWriter.Write(lTrans[0]);
 
-                writer.WriteEndTag("td");
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                if (String.Equals(trans[2], "E"))
+                pWriter.WriteEndTag("td");
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                if (String.Equals(lTrans[2], "E"))
                     //pil upp
-                    writer.Write(" &uarr;");
+                    pWriter.Write(" &uarr;");
                 else
                     //pil ner
-                    writer.Write(" &darr;");
+                    pWriter.Write(" &darr;");
 
-                writer.WriteEndTag("td");
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("td");
+                pWriter.WriteEndTag("tr");
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
         }
 
         //Returns all chosen variants
-        public List<String> getChosenVariants()
+        public List<String> GetChosenVariants()
         {
-            List<String> vars = new List<String>();
+            List<String> lVars = new List<String>();
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == -1 && String.Equals(exp.value, "true") && !String.Equals(exp.opState, "possible") && !String.Equals(exp.opState, "use"))
-                        vars.Add(exp.name);
+                    if (lExp.State == -1 && String.Equals(lExp.Value, "true") && !String.Equals(lExp.OpState, "possible") && !String.Equals(lExp.OpState, "use"))
+                        lVars.Add(lExp.Name);
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getChosenVariants in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getChosenVariants in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return vars;
+            return lVars;
 
         }
 
         //Returns all chosen variants
-        public List<string[]> getChosenVariantsWithGroup()
+        public List<string[]> GetChosenVariantsWithGroup()
         {
-            string var, vg;
-            string[] list;
-            List<string[]> vars = new List<string[]>();
+            string lVar, lVg;
+            string[] lList;
+            List<string[]> lVars = new List<string[]>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
                     //if (exp.opState == null 
                     //    && String.Equals(exp.value, "true") 
@@ -913,37 +908,37 @@ namespace ProductPlatformAnalyzer
                     //    && !String.Equals(exp.opState, "precondition")
                     //    && !String.Equals(exp.opState, "trigger")
                     //    )
-                    if (exp.variant != null)
+                    if (lExp.Variant != null)
                     {
 
-                        var = exp.name;
-                        vg = cFrameworkWrapper.getVariantGroup(var);
-                        if (!String.Equals(vg, "Virtual-VG"))
+                        lVar = lExp.Name;
+                        lVg = FrameworkWrapper.GetVariantGroup(lVar);
+                        if (!String.Equals(lVg, "Virtual-VG"))
                         {
-                            list = new string[2] { vg, var };
-                            vars.Add(list);
+                            lList = new string[2] { lVg, lVar };
+                            lVars.Add(lList);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getChosenVariantsWithGroup in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getChosenVariantsWithGroup in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return vars;
+            return lVars;
         }
 
 
         //Returns all chosen variant groups
-        public List<string> getChosenVariantGroups()
+        public List<string> GetChosenVariantGroups()
         {
-            string var, vg;
-            List<string> vars = new List<string>();
+            string lVar, lVg;
+            List<string> lVars = new List<string>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
                     //if (exp.opState == null 
                     //    && String.Equals(exp.value, "true") 
@@ -952,394 +947,394 @@ namespace ProductPlatformAnalyzer
                     //    && !String.Equals(exp.opState, "precondition")
                     //    && !String.Equals(exp.opState, "trigger")
                     //    )
-                    if (exp.variant != null)
+                    if (lExp.Variant != null)
                     {
 
-                        var = exp.name;
-                        vg = cFrameworkWrapper.getVariantGroup(var);
-                        if (!String.Equals(vg, "Virtual-VG") && !vars.Contains(vg))
+                        lVar = lExp.Name;
+                        lVg = FrameworkWrapper.GetVariantGroup(lVar);
+                        if (!String.Equals(lVg, "Virtual-VG") && !lVars.Contains(lVg))
                         {
-                            vars.Add(vg);
+                            lVars.Add(lVg);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getChosenVariantGroups in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getChosenVariantGroups in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return vars;
+            return lVars;
         }
 
         //Print all operation transformations
-        public void printOpTransformations()
+        public void PrintOpTransformations()
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    OutputExp nextOp = findNextOp(exp);
-                    if (nextOp != null)
-                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                            printMessageToConsole(exp.ToString() + " -> " + nextOp.ToString());
+                    OutputExp lNextOp = FindNextOp(lExp);
+                    if (lNextOp != null)
+                        if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true"))
+                            PrintMessageToConsole(lExp.ToString() + " -> " + lNextOp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printOpTransformations in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printOpTransformations in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
-        private void writeChosenVariants(HtmlTextWriter writer)
+        private void WriteChosenVariants(HtmlTextWriter pWriter)
         {
-            List<String[]> variants = getChosenVariantsWithGroup();
-            List<String> groups = getChosenVariantGroups();
+            List<String[]> lVariants = GetChosenVariantsWithGroup();
+            List<String> lGroups = GetChosenVariantGroups();
 
 
-            writer.WriteBeginTag("p id=\"outCV\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Chosen variants");
+            pWriter.WriteBeginTag("p id=\"outCV\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Chosen variants");
 
-            writer.WriteBeginTag("span id=\"titleCVArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleCVArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outCVContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outCVContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
 
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Variants");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Variants");
+            pWriter.WriteEndTag("th");
+            pWriter.WriteEndTag("tr");
 
-            foreach (String vg in groups)
+            foreach (String lVg in lGroups)
             {
-                if (!String.Equals(vg, "Virtual-VG"))
+                if (!String.Equals(lVg, "Virtual-VG"))
                 {
 
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.WriteBeginTag("th class=\"vg\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(vg);
-                    writer.WriteEndTag("th");
-                    writer.WriteEndTag("tr");
-                    foreach (string[] var in variants)
-                        if (String.Equals(var[0], vg))
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("th class=\"vg\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lVg);
+                    pWriter.WriteEndTag("th");
+                    pWriter.WriteEndTag("tr");
+                    foreach (string[] var in lVariants)
+                        if (String.Equals(var[0], lVg))
                         {
-                            writer.WriteBeginTag("tr");
-                            writer.Write(HtmlTextWriter.TagRightChar);
-                            writer.WriteBeginTag("td");
-                            writer.Write(HtmlTextWriter.TagRightChar);
-                            writer.Write(var[1]);
-                            writer.WriteEndTag("td");
-                            writer.WriteEndTag("tr");
+                            pWriter.WriteBeginTag("tr");
+                            pWriter.Write(HtmlTextWriter.TagRightChar);
+                            pWriter.WriteBeginTag("td");
+                            pWriter.Write(HtmlTextWriter.TagRightChar);
+                            pWriter.Write(var[1]);
+                            pWriter.WriteEndTag("td");
+                            pWriter.WriteEndTag("tr");
                         }
                 }
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
         }
 
-        private List<OutputExp> getPossibleResources()
+        private List<OutputExp> GetPossibleResources()
         {
-            List<OutputExp> poss = new List<OutputExp>();
+            List<OutputExp> lPoss = new List<OutputExp>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (String.Equals(exp.opState, "possible"))
-                        poss.Add(exp);
+                    if (String.Equals(lExp.OpState, "possible"))
+                        lPoss.Add(lExp);
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getPossibleResources in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getPossibleResources in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
-            return poss;
+            return lPoss;
         }
 
-        private void writeAvailableResources(HtmlTextWriter writer)
+        private void WriteAvailableResources(HtmlTextWriter pWriter)
         {
             SortAfterValue();
 
-            List<OutputExp> possibleRes = getPossibleResources();
+            List<OutputExp> lPossibleRes = GetPossibleResources();
 
-            writer.WriteBeginTag("p id=\"outAR\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Available resources");
+            pWriter.WriteBeginTag("p id=\"outAR\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Available resources");
 
-            writer.WriteBeginTag("span id=\"titleARArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleARArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outARContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outARContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            if (possibleRes.Count != 0)
+            if (lPossibleRes.Count != 0)
             {
-                writer.WriteBeginTag("table style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Resource");
-                writer.WriteEndTag("th");
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Resource");
+                pWriter.WriteEndTag("th");
 
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Available");
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Available");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteEndTag("tr");
 
-                foreach (OutputExp res in possibleRes)
+                foreach (OutputExp lRes in lPossibleRes)
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(res.operation);
-                    writer.WriteEndTag("td");
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lRes.Operation);
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(res.value);
-                    writer.WriteEndTag("td");
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lRes.Value);
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
                 }
-                writer.WriteEndTag("table");
+                pWriter.WriteEndTag("table");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No available resources.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No available resources.");
+                pWriter.WriteEndTag("p");
 
             }
 
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("div");
         }
 
-        private void writeVariants(HtmlTextWriter writer)
+        private void WriteVariants(HtmlTextWriter pWriter)
         {
-            HashSet<variantGroup> variants = cFrameworkWrapper.getVariantGroupSet();
+            HashSet<variantGroup> lVariants = FrameworkWrapper.GetVariantGroupSet();
 
 
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Variant groups");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Variant groups");
+            pWriter.WriteEndTag("th");
+            pWriter.WriteEndTag("tr");
 
 
-            foreach (variantGroup group in variants)
+            foreach (variantGroup lGroup in lVariants)
             {
-                if (!String.Equals(group.names, "Virtual-VG"))
+                if (!String.Equals(lGroup.names, "Virtual-VG"))
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-                    writer.WriteBeginTag("th class =\"vg\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("th class =\"vg\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("b");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(group.names);
-                    writer.WriteEndTag("b");
-                    writer.Write(" - " + group.gCardinality);
+                    pWriter.WriteBeginTag("b");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lGroup.names);
+                    pWriter.WriteEndTag("b");
+                    pWriter.Write(" - " + lGroup.gCardinality);
 
-                    writer.WriteEndTag("th");
+                    pWriter.WriteEndTag("th");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
 
-                    foreach (variant var in group.variants)
+                    foreach (variant var in lGroup.variants)
                     {
-                        writer.WriteFullBeginTag("tr");
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(var.names);
-                        writer.WriteEndTag("td");
+                        pWriter.WriteFullBeginTag("tr");
+                        pWriter.WriteBeginTag("td");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(var.names);
+                        pWriter.WriteEndTag("td");
 
-                        writer.WriteEndTag("tr");
+                        pWriter.WriteEndTag("tr");
                     }
 
                 }
             }
-            writer.WriteEndTag("table");
+            pWriter.WriteEndTag("table");
         }
 
-        private void writeConstraints(HtmlTextWriter writer)
+        private void WriteConstraints(HtmlTextWriter pWriter)
         {
-            HashSet<string> constraints = new HashSet<string>(cFrameworkWrapper.getConstraintSet());
+            HashSet<string> lConstraints = new HashSet<string>(FrameworkWrapper.GetConstraintSet());
 
-            if (constraints.Count != 0)
+            if (lConstraints.Count != 0)
             {
-                writer.WriteBeginTag("p style=\"font-size:18px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(" ");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p style=\"font-size:18px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(" ");
+                pWriter.WriteEndTag("p");
 
 
-                writer.WriteBeginTag("table style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Constraints");
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Constraints");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteEndTag("tr");
 
-                foreach (String con in constraints)
+                foreach (String lCon in lConstraints)
                 {
                     //if (checkCondition(con))
                     //{
-                        writer.WriteBeginTag("tr");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(GeneralUtilities.parseExpression(con, "infix"));
-                        writer.WriteEndTag("td");
-                        writer.WriteEndTag("tr");
+                        pWriter.WriteBeginTag("tr");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("td");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(GeneralUtilities.ParseExpression(lCon, "infix"));
+                        pWriter.WriteEndTag("td");
+                        pWriter.WriteEndTag("tr");
                     //}
                 }
-                writer.WriteEndTag("table");
+                pWriter.WriteEndTag("table");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No constraints were specified.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No constraints were specified.");
+                pWriter.WriteEndTag("p");
 
             }
         }
 
-        private void writeOperationsWithPrePostCon(HtmlTextWriter writer)
+        private void WriteOperationsWithPrePostCon(HtmlTextWriter pWriter)
         {
-            List<Operation> operations = new List<Operation>(cFrameworkWrapper.OperationSet);
+            List<Operation> lOperations = new List<Operation>(FrameworkWrapper.OperationSet);
 
-            writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write(" Operations");
+            pWriter.WriteBeginTag("p id=\"inO\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write(" Operations");
 
-            writer.WriteBeginTag("span id=\"titleOArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
+            pWriter.WriteBeginTag("span id=\"titleOArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
             //upp &#x25B2
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"inOContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"inOContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table  style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Operation");
+            pWriter.Write("Operation");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Precondition");
+            pWriter.Write("Precondition");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Postcondition");
+            pWriter.Write("Postcondition");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Requirements");
+            pWriter.Write("Requirements");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            foreach (Operation op in operations)
+            foreach (Operation lOp in lOperations)
             {
                 
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(op.Name);
+                pWriter.Write(lOp.Name);
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.Precondition != null)
+                if (lOp.Precondition != null)
                 {
-                    foreach (string pre in op.Precondition)
+                    foreach (string lPre in lOp.Precondition)
                     {
-                        if (!pre.Contains("Possible"))
+                        if (!lPre.Contains("Possible"))
                         {
-                            writer.WriteBeginTag("li");
-                            writer.Write(HtmlTextWriter.TagRightChar);
-                            writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
-                            writer.WriteEndTag("li");
+                            pWriter.WriteBeginTag("li");
+                            pWriter.Write(HtmlTextWriter.TagRightChar);
+                            pWriter.Write(GeneralUtilities.ParseExpression(lPre, "infix"));
+                            pWriter.WriteEndTag("li");
                         }
                     }
                 }
-                writer.WriteEndTag("ul");
+                pWriter.WriteEndTag("ul");
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
                 /*if (op.postcondition != null)
                 {
@@ -1351,137 +1346,137 @@ namespace ProductPlatformAnalyzer
                         writer.WriteEndTag("li");
                     }
                 }*/
-                writer.WriteEndTag("ul");
+                pWriter.WriteEndTag("ul");
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.Requirement != null)
+                if (lOp.Requirement != null)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(GeneralUtilities.parseExpression(op.Requirement, "infix"));
-                    writer.WriteEndTag("li");
+                    pWriter.WriteBeginTag("li");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(GeneralUtilities.ParseExpression(lOp.Requirement, "infix"));
+                    pWriter.WriteEndTag("li");
                 }
-                writer.WriteEndTag("ul");
+                pWriter.WriteEndTag("ul");
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("tr");
             }
 
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
 
         }
 
 
-        private void writeOperationsWithPreCon(HtmlTextWriter writer)
+        private void WriteOperationsWithPreCon(HtmlTextWriter pWriter)
         {
-            List<Operation> operations = new List<Operation>(cFrameworkWrapper.OperationSet);
+            List<Operation> lOperations = new List<Operation>(FrameworkWrapper.OperationSet);
 
-            writer.WriteBeginTag("p id=\"inO\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operations");
+            pWriter.WriteBeginTag("p id=\"inO\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operations");
 
-            writer.WriteBeginTag("span id=\"titleOArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
+            pWriter.WriteBeginTag("span id=\"titleOArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
             //upp &#x25B2
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"inOContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"inOContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table  style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Operation");
+            pWriter.Write("Operation");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Precondition");
+            pWriter.Write("Precondition");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.Write("Requirements");
+            pWriter.Write("Requirements");
 
-            writer.WriteEndTag("th");
+            pWriter.WriteEndTag("th");
 
-            foreach (Operation op in operations)
+            foreach (Operation lOp in lOperations)
             {
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write(op.Name);
+                pWriter.Write(lOp.Name);
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.Precondition != null)
+                if (lOp.Precondition != null)
                 {
-                    foreach (string pre in op.Precondition)
+                    foreach (string lPre in lOp.Precondition)
                     {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(GeneralUtilities.parseExpression(pre, "infix"));
-                        writer.WriteEndTag("li");
+                        pWriter.WriteBeginTag("li");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(GeneralUtilities.ParseExpression(lPre, "infix"));
+                        pWriter.WriteEndTag("li");
                     }
                 }
 
-                writer.WriteEndTag("ul");
+                pWriter.WriteEndTag("ul");
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                if (op.Requirement != null)
+                if (lOp.Requirement != null)
                 {
-                    writer.WriteBeginTag("li");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(op.Requirement);
-                    writer.WriteEndTag("li");
+                    pWriter.WriteBeginTag("li");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lOp.Requirement);
+                    pWriter.WriteEndTag("li");
                 }
-                writer.WriteEndTag("ul");
+                pWriter.WriteEndTag("ul");
 
-                writer.WriteEndTag("td");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("tr");
             }
 
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
 
         }
 
@@ -1640,963 +1635,963 @@ namespace ProductPlatformAnalyzer
 
         }*/
 
-        private void writeResourcesAndTraits(HtmlTextWriter writer)
+        private void WriteResourcesAndTraits(HtmlTextWriter pWriter)
         {
 
-            writer.WriteBeginTag("p id=\"inR\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Traits and resources");
+            pWriter.WriteBeginTag("p id=\"inR\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Traits and resources");
 
-            writer.WriteBeginTag("span id=\"titleRArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleRArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"inRContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"inRContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writeTraits(writer);
+            WriteTraits(pWriter);
 
-            writer.WriteBeginTag("p style=\"font-size:18px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write(" ");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("p style=\"font-size:18px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write(" ");
+            pWriter.WriteEndTag("p");
 
 
-            writeResources(writer);
+            WriteResources(pWriter);
 
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("div");
 
         }
 
-        private void writeTraits(HtmlTextWriter writer)
+        private void WriteTraits(HtmlTextWriter pWriter)
         {
 
-            HashSet<trait> traits = new HashSet<trait>(cFrameworkWrapper.TraitSet);
+            HashSet<trait> lTraits = new HashSet<trait>(FrameworkWrapper.TraitSet);
 
-            if (traits.Count != 0)
+            if (lTraits.Count != 0)
             {
-                writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("table  style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write("Trait");
+                pWriter.Write("Trait");
 
-                writer.WriteEndTag("th");
-
-
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                writer.Write("Inherit");
-
-                writer.WriteEndTag("th");
+                pWriter.WriteEndTag("th");
 
 
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write("Attributes");
+                pWriter.Write("Inherit");
 
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("th");
 
 
-                foreach (trait tra in traits)
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+
+                pWriter.Write("Attributes");
+
+                pWriter.WriteEndTag("th");
+                pWriter.WriteEndTag("tr");
+
+
+                foreach (trait lTra in lTraits)
                 {
 
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.Write(tra.names);
+                    pWriter.Write(lTra.names);
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (trait inh in tra.inherit)
+                    foreach (trait inh in lTra.inherit)
                     {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("li");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                        writer.Write(inh.names);
+                        pWriter.Write(inh.names);
 
-                        writer.WriteEndTag("li");
+                        pWriter.WriteEndTag("li");
 
                     }
 
-                    writer.WriteEndTag("ul");
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("ul");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (Tuple<string, string> att in tra.attributes)
+                    foreach (Tuple<string, string> att in lTra.attributes)
                     {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(att.Item1 + ": " + att.Item2);
-                        writer.WriteEndTag("li");
+                        pWriter.WriteBeginTag("li");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(att.Item1 + ": " + att.Item2);
+                        pWriter.WriteEndTag("li");
                     }
-                    writer.WriteEndTag("ul");
+                    pWriter.WriteEndTag("ul");
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
                 }
 
-                writer.WriteEndTag("table");
+                pWriter.WriteEndTag("table");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No Traits were specified.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No Traits were specified.");
+                pWriter.WriteEndTag("p");
 
             }
         }
 
-        private void writeResources(HtmlTextWriter writer)
+        private void WriteResources(HtmlTextWriter pWriter)
         {
 
-            HashSet<resource> resources = new HashSet<resource>(cFrameworkWrapper.ResourceSet);
+            HashSet<resource> lResources = new HashSet<resource>(FrameworkWrapper.ResourceSet);
 
-            if (resources.Count != 0)
+            if (lResources.Count != 0)
             {
-                writer.WriteBeginTag("table  style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("table  style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write("Resource");
+                pWriter.Write("Resource");
 
-                writer.WriteEndTag("th");
-
-
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-                writer.Write("Of traits");
-
-                writer.WriteEndTag("th");
+                pWriter.WriteEndTag("th");
 
 
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.Write("Attributes");
+                pWriter.Write("Of traits");
 
-                writer.WriteEndTag("th");
-
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("th");
 
 
-                foreach (resource res in resources)
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+
+                pWriter.Write("Attributes");
+
+                pWriter.WriteEndTag("th");
+
+                pWriter.WriteEndTag("tr");
+
+
+                foreach (resource lRes in lResources)
                 {
 
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.Write(res.names);
+                    pWriter.Write(lRes.names);
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (trait tra in res.traits)
+                    foreach (trait lTra in lRes.traits)
                     {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(tra.names);
-                        writer.WriteEndTag("li");
+                        pWriter.WriteBeginTag("li");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(lTra.names);
+                        pWriter.WriteEndTag("li");
                     }
-                    writer.WriteEndTag("ul");
+                    pWriter.WriteEndTag("ul");
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.WriteBeginTag("ul style=\"list-style-type:none\"");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (Tuple<string, string, string> att in res.attributes)
+                    foreach (Tuple<string, string, string> att in lRes.attributes)
                     {
-                        writer.WriteBeginTag("li");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(att.Item1 + " = " + att.Item3);
-                        writer.WriteEndTag("li");
+                        pWriter.WriteBeginTag("li");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(att.Item1 + " = " + att.Item3);
+                        pWriter.WriteEndTag("li");
                     }
-                    writer.WriteEndTag("ul");
+                    pWriter.WriteEndTag("ul");
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
                 }
 
-                writer.WriteEndTag("table");
+                pWriter.WriteEndTag("table");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No Resources were specified.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No Resources were specified.");
+                pWriter.WriteEndTag("p");
 
             }
         }
 
 
-        private void writeFalsePre(HtmlTextWriter writer)
+        private void WriteFalsePre(HtmlTextWriter pWriter)
         {
-            HashSet<String[]> conditions = getConditionsStateWithValues(getLastState());
+            HashSet<String[]> lConditions = GetConditionsStateWithValues(GetLastState());
 
-            if (conditions.Count != 0)
+            if (lConditions.Count != 0)
             {
-                writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("False preconditions in last state");
+                pWriter.WriteBeginTag("p id=\"outCon\" class=\"title\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("False preconditions in last state");
 
-                writer.WriteBeginTag("span id=\"titleConArr\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("&#x25BC");
-                writer.WriteEndTag("span");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("span id=\"titleConArr\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("&#x25BC");
+                pWriter.WriteEndTag("span");
+                pWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("div id=\"outConContent\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-
-                writer.WriteBeginTag("table style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("div id=\"outConContent\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Name");
-                writer.WriteEndTag("th");
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Condition");
-                writer.WriteEndTag("th");
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Value");
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
+                pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (String[] con in conditions)
+
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Name");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Condition");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Value");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteEndTag("tr");
+
+                foreach (String[] lCon in lConditions)
                 {
-                    if (!con[0].Contains("Post"))
+                    if (!lCon[0].Contains("Post"))
                     {
-                        writer.WriteBeginTag("tr");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(con[0]);
-                        writer.WriteEndTag("td");
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(con[1]);
-                        writer.WriteEndTag("td");
-                        writer.WriteBeginTag("td");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.Write(con[2]);
-                        writer.WriteEndTag("td");
-                        writer.WriteEndTag("tr");
+                        pWriter.WriteBeginTag("tr");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("td");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(lCon[0]);
+                        pWriter.WriteEndTag("td");
+                        pWriter.WriteBeginTag("td");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(lCon[1]);
+                        pWriter.WriteEndTag("td");
+                        pWriter.WriteBeginTag("td");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.Write(lCon[2]);
+                        pWriter.WriteEndTag("td");
+                        pWriter.WriteEndTag("tr");
                     }
                 }
-                writer.WriteEndTag("table");
-                writer.WriteEndTag("div");
+                pWriter.WriteEndTag("table");
+                pWriter.WriteEndTag("div");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No false condition in last state.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No false condition in last state.");
+                pWriter.WriteEndTag("p");
 
             }
         }
 
 
-        private void writeFalsePrePost(HtmlTextWriter writer)
+        private void WriteFalsePrePost(HtmlTextWriter pWriter)
         {
-            HashSet<String[]> conditions = getConditionsStateWithValues(getLastState());
+            HashSet<String[]> lConditions = GetConditionsStateWithValues(GetLastState());
 
-            if (conditions.Count != 0)
+            if (lConditions.Count != 0)
             {
-                writer.WriteBeginTag("p id=\"outCon\" class=\"title\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("False post/preconditions in last state");
+                pWriter.WriteBeginTag("p id=\"outCon\" class=\"title\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("False post/preconditions in last state");
 
-                writer.WriteBeginTag("span id=\"titleConArr\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("&#x25BC");
-                writer.WriteEndTag("span");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("span id=\"titleConArr\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("&#x25BC");
+                pWriter.WriteEndTag("span");
+                pWriter.WriteEndTag("p");
 
-                writer.WriteBeginTag("div id=\"outConContent\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-
-
-                writer.WriteBeginTag("table style=\"margin-left:40px\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("div id=\"outConContent\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Name");
-                writer.WriteEndTag("th");
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Condition");
-                writer.WriteEndTag("th");
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("Value");
-                writer.WriteEndTag("th");
-                writer.WriteEndTag("tr");
+                pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                foreach (String[] con in conditions)
+
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Name");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Condition");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("Value");
+                pWriter.WriteEndTag("th");
+                pWriter.WriteEndTag("tr");
+
+                foreach (String[] lCon in lConditions)
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(con[0]);
-                    writer.WriteEndTag("td");
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(con[1]);
-                    writer.WriteEndTag("td");
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(con[2]);
-                    writer.WriteEndTag("td");
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lCon[0]);
+                    pWriter.WriteEndTag("td");
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lCon[1]);
+                    pWriter.WriteEndTag("td");
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lCon[2]);
+                    pWriter.WriteEndTag("td");
+                    pWriter.WriteEndTag("tr");
                 }
-                writer.WriteEndTag("table");
-                writer.WriteEndTag("div");
+                pWriter.WriteEndTag("table");
+                pWriter.WriteEndTag("div");
             }
             else
             {
 
-                writer.WriteBeginTag("p class=\"empty\"");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("No false conditions in last state.");
-                writer.WriteEndTag("p");
+                pWriter.WriteBeginTag("p class=\"empty\"");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("No false conditions in last state.");
+                pWriter.WriteEndTag("p");
 
             }
         }
 
-        private void writeOpOrderWithArrow(HtmlTextWriter writer)
+        private void WriteOpOrderWithArrow(HtmlTextWriter pWriter)
         {
-            Boolean first = true;
+            Boolean lFirst = true;
 
-            writer.WriteBeginTag("p id=\"outOpO\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Sequence of finished operation");
+            pWriter.WriteBeginTag("p id=\"outOpO\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Sequence of finished operation");
 
-            writer.WriteBeginTag("span id=\"titleOpOArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleOpOArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outOpOContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outOpOContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("p style=\"margin-left:2.5em;\" ");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("p style=\"margin-left:2.5em;\" ");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (OutputExp exp in outputResult)
+            foreach (OutputExp lExp in OutputResult)
             {
-                OutputExp nextOp = findNextOp(exp);
-                if (nextOp != null)
-                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true") && String.Equals(exp.opState, "E"))
+                OutputExp lNextOp = FindNextOp(lExp);
+                if (lNextOp != null)
+                    if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true") && String.Equals(lExp.OpState, "E"))
                     {
-                        if (!first)
+                        if (!lFirst)
                         {
-                            writer.Write(" &rarr; ");
+                            pWriter.Write(" &rarr; ");
                         }
                         else
-                            first = false;
-                        writer.Write(exp.operation);
+                            lFirst = false;
+                        pWriter.Write(lExp.Operation);
                     }
             }
 
-            writer.WriteEndTag("p");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("p");
+            pWriter.WriteEndTag("div");
         }
 
 
-        private void writeOpOrder(HtmlTextWriter writer)
+        private void WriteOpOrder(HtmlTextWriter pWriter)
         {
-            int count = 1;
+            int lCount = 1;
 
-            writer.WriteBeginTag("p id=\"outOpO\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Sequence of finished operation");
+            pWriter.WriteBeginTag("p id=\"outOpO\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Sequence of finished operation");
 
-            writer.WriteBeginTag("span id=\"titleOpOArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleOpOArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outOpOContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outOpOContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("tr ");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.WriteBeginTag("th ");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation");
-            writer.WriteEndTag("th");
-            writer.WriteEndTag("tr");
+            pWriter.WriteBeginTag("tr ");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("th ");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation");
+            pWriter.WriteEndTag("th");
+            pWriter.WriteEndTag("tr");
 
-            outputResult.Sort((x, y) => x.state.CompareTo(y.state));
+            OutputResult.Sort((x, y) => x.State.CompareTo(y.State));
 
-            foreach (OutputExp exp in outputResult)
+            foreach (OutputExp lExp in OutputResult)
             {
-                OutputExp nextOp = findNextOp(exp);
-                if (nextOp != null)
-                    if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true") && String.Equals(exp.opState, "E"))
+                OutputExp lNextOp = FindNextOp(lExp);
+                if (lNextOp != null)
+                    if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true") && String.Equals(lExp.OpState, "E"))
                     {
 
-                        writer.WriteBeginTag("tr ");
-                        writer.Write(HtmlTextWriter.TagRightChar);
-                        writer.WriteBeginTag("td ");
-                        writer.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("tr ");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("td ");
+                        pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                        writer.Write((count++) + ". " + exp.operation);
-                        writer.WriteEndTag("td");
-                        writer.WriteEndTag("tr");
+                        pWriter.Write((lCount++) + ". " + lExp.Operation);
+                        pWriter.WriteEndTag("td");
+                        pWriter.WriteEndTag("tr");
                     }
             }
 
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
         }
 
-        private void writeOpStateTable(HtmlTextWriter writer)
+        private void WriteOpStateTable(HtmlTextWriter pWriter)
         {
             SortAfterValue();
-            List<String[]> operationState = getOpState(getLastState());
-            String[] transF;
-            String[] transI;
+            List<String[]> lOperationState = GetOpState(GetLastState());
+            String[] lTransF;
+            String[] lTransI;
 
-            writer.WriteBeginTag("p id=\"outOpLast\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation statuses in last state");
+            pWriter.WriteBeginTag("p id=\"outOpLast\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation statuses in last state");
 
-            writer.WriteBeginTag("span id=\"titleOpLastArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleOpLastArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"inOpLastContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation");
-            writer.WriteEndTag("th");
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("I");
-            writer.WriteEndTag("th");
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("E");
-            writer.WriteEndTag("th");
-
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("F");
-            writer.WriteEndTag("th");
+            pWriter.WriteBeginTag("div id=\"inOpLastContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteEndTag("tr");
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            foreach (String[] trans in operationState)
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation");
+            pWriter.WriteEndTag("th");
+
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("I");
+            pWriter.WriteEndTag("th");
+
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("E");
+            pWriter.WriteEndTag("th");
+
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("F");
+            pWriter.WriteEndTag("th");
+
+
+            pWriter.WriteEndTag("tr");
+
+            foreach (String[] lTrans in lOperationState)
             {
-                if (String.Equals("E", trans[2]))
+                if (String.Equals("E", lTrans[2]))
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    transF = operationState.Find(x => String.Equals(x[0], trans[0]) &&
+                    lTransF = lOperationState.Find(x => String.Equals(x[0], lTrans[0]) &&
                                                        String.Equals(x[2], "F"));
 
-                    transI = operationState.Find(x => String.Equals(x[0], trans[0]) &&
+                    lTransI = lOperationState.Find(x => String.Equals(x[0], lTrans[0]) &&
                                                        String.Equals(x[2], "I"));
 
-                    if (String.Equals(trans[3], "false") && String.Equals(transI[3], "false") &&
-                                                            String.Equals(transF[3], "false"))
+                    if (String.Equals(lTrans[3], "false") && String.Equals(lTransI[3], "false") &&
+                                                            String.Equals(lTransF[3], "false"))
                     {
-                        transI[3] = "-";
-                        trans[3] = "-";
-                        transF[3] = "-";
+                        lTransI[3] = "-";
+                        lTrans[3] = "-";
+                        lTransF[3] = "-";
                     }
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(trans[0]);
-                    writer.WriteEndTag("td");
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lTrans[0]);
+                    pWriter.WriteEndTag("td");
 
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    if (transI != null)
-                        writer.Write(transI[3]);
+                    if (lTransI != null)
+                        pWriter.Write(lTransI[3]);
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    if (String.Equals("E", trans[2]))
-                        writer.Write(trans[3]);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    if (String.Equals("E", lTrans[2]))
+                        pWriter.Write(lTrans[3]);
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    if (transF != null)
-                        writer.Write(transF[3]);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    if (lTransF != null)
+                        pWriter.Write(lTransF[3]);
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
                 }
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
         }
 
-        private void writeTransitionTableStatus(HtmlTextWriter writer)
+        private void WriteTransitionTableStatus(HtmlTextWriter pWriter)
         {
             SortAfterState();
-            String[] transPair;
-            List<String[]> transformations = getOpTransformations();
+            String[] lTransPair;
+            List<String[]> lTransformations = GetOpTransformations();
 
-            writer.WriteBeginTag("p id=\"outTT\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operations progressing at state");
+            pWriter.WriteBeginTag("p id=\"outTT\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operations progressing at state");
 
-            writer.WriteBeginTag("span id=\"titleTTArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleTTArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outTTContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-
-
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outTTContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation");
-            writer.WriteEndTag("th");
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("I->E");
-            writer.WriteEndTag("th");
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("E->F");
-            writer.WriteEndTag("th");
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation");
+            pWriter.WriteEndTag("th");
+
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("I->E");
+            pWriter.WriteEndTag("th");
 
 
-            writer.WriteEndTag("tr");
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("E->F");
+            pWriter.WriteEndTag("th");
 
-            if (transformations.Count == 0)
+
+            pWriter.WriteEndTag("tr");
+
+            if (lTransformations.Count == 0)
             {
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("-");
-                writer.WriteEndTag("td");
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("-");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("-");
-                writer.WriteEndTag("td");
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("-");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("-");
-                writer.WriteEndTag("td");
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("-");
+                pWriter.WriteEndTag("td");
 
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("tr");
             }
 
-            foreach (String[] trans in transformations)
+            foreach (String[] lTrans in lTransformations)
             {
-                if (String.Equals("E", trans[2]))
+                if (String.Equals("E", lTrans[2]))
                 {
-                    writer.WriteBeginTag("tr");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("tr");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    transPair = transformations.Find(x => String.Equals(x[0], trans[0]) &&
-                                                          String.Equals(x[3], trans[3]) &&
-                                                          !String.Equals(x[2], trans[2]));
+                    lTransPair = lTransformations.Find(x => String.Equals(x[0], lTrans[0]) &&
+                                                          String.Equals(x[3], lTrans[3]) &&
+                                                          !String.Equals(x[2], lTrans[2]));
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    writer.Write(trans[0]);
-                    writer.WriteEndTag("td");
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.Write(lTrans[0]);
+                    pWriter.WriteEndTag("td");
 
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    if (String.Equals("E", trans[2]))
-                        writer.Write(trans[1]);
-                    else if (transPair != null)
+                    if (String.Equals("E", lTrans[2]))
+                        pWriter.Write(lTrans[1]);
+                    else if (lTransPair != null)
                     {
-                        if (String.Equals("E", transPair[2]))
-                            writer.Write(transPair[1]);
+                        if (String.Equals("E", lTransPair[2]))
+                            pWriter.Write(lTransPair[1]);
                     }
 
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
-                    if (String.Equals("F", trans[2]))
-                        writer.Write(trans[1]);
-                    else if (transPair != null)
+                    pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    if (String.Equals("F", lTrans[2]))
+                        pWriter.Write(lTrans[1]);
+                    else if (lTransPair != null)
                     {
-                        if (String.Equals("F", transPair[2]))
-                            writer.Write(transPair[1]);
+                        if (String.Equals("F", lTransPair[2]))
+                            pWriter.Write(lTransPair[1]);
                     }
-                    writer.WriteEndTag("td");
+                    pWriter.WriteEndTag("td");
 
-                    writer.WriteEndTag("tr");
+                    pWriter.WriteEndTag("tr");
                 }
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
 
         }
 
 
-        private void writeTransitionTableState(HtmlTextWriter writer)
+        private void WriteTransitionTableState(HtmlTextWriter pWriter)
         {
             //List<String> activeOps = getActiveOps();
-            List<OutputExp> allOps = getAllOps();
-            List<String[]> opTransitions;
-            int lastState = getLastState();
+            List<OutputExp> lAllOps = GetAllOps();
+            List<String[]> lOpTransitions;
+            int lLastState = GetLastState();
 
-            writer.WriteBeginTag("p id=\"outOSS\" class=\"title\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation statuses in different states");
+            pWriter.WriteBeginTag("p id=\"outOSS\" class=\"title\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation statuses in different states");
 
-            writer.WriteBeginTag("span id=\"titleOSSArr\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("&#x25BC");
-            writer.WriteEndTag("span");
-            writer.WriteEndTag("p");
+            pWriter.WriteBeginTag("span id=\"titleOSSArr\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("&#x25BC");
+            pWriter.WriteEndTag("span");
+            pWriter.WriteEndTag("p");
 
-            writer.WriteBeginTag("div id=\"outOSSContent\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("div id=\"outOSSContent\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
 
-            writer.WriteBeginTag("table style=\"margin-left:40px\"");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("tr");
-            writer.Write(HtmlTextWriter.TagRightChar);
+            pWriter.WriteBeginTag("tr");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
 
-            writer.WriteBeginTag("th");
-            writer.Write(HtmlTextWriter.TagRightChar);
-            writer.Write("Operation");
-            writer.WriteEndTag("th");
+            pWriter.WriteBeginTag("th");
+            pWriter.Write(HtmlTextWriter.TagRightChar);
+            pWriter.Write("Operation");
+            pWriter.WriteEndTag("th");
 
-            for (int i = 0; i <= lastState + 1; i++)
+            for (int i = 0; i <= lLastState + 1; i++)
             {
-                writer.WriteBeginTag("th");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write("" + i);
-                writer.WriteEndTag("th");
+                pWriter.WriteBeginTag("th");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write("" + i);
+                pWriter.WriteEndTag("th");
             }
 
-            writer.WriteEndTag("tr");
+            pWriter.WriteEndTag("tr");
 
-            foreach (OutputExp op in allOps)
+            foreach (OutputExp op in lAllOps)
             {
-                opTransitions = getOpTransformations(op);
+                lOpTransitions = GetOpTransformations(op);
 
-                writer.WriteBeginTag("tr");
-                writer.Write(HtmlTextWriter.TagRightChar);
+                pWriter.WriteBeginTag("tr");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                writer.WriteBeginTag("td");
-                writer.Write(HtmlTextWriter.TagRightChar);
-                writer.Write(op.operation);
-                writer.WriteEndTag("td");
+                pWriter.WriteBeginTag("td");
+                pWriter.Write(HtmlTextWriter.TagRightChar);
+                pWriter.Write(op.Operation);
+                pWriter.WriteEndTag("td");
 
-                for (int i = 0; i <= lastState + 1; i++)
+                for (int i = 0; i <= lLastState + 1; i++)
                 {
-                    string transString = TransitionStateAt(opTransitions, i, op);
-                    if (!transString.Contains("F") && i == lastState + 1 && !transString.Contains("U"))
-                        writer.WriteBeginTag("td class=\"false\"");
+                    string transString = TransitionStateAt(lOpTransitions, i, op);
+                    if (!transString.Contains("F") && i == lLastState + 1 && !transString.Contains("U"))
+                        pWriter.WriteBeginTag("td class=\"false\"");
                     else
-                        writer.WriteBeginTag("td");
-                    writer.Write(HtmlTextWriter.TagRightChar);
+                        pWriter.WriteBeginTag("td");
+                    pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    writer.Write(transString);
-                    writer.WriteEndTag("td");
+                    pWriter.Write(transString);
+                    pWriter.WriteEndTag("td");
 
                 }
 
-                writer.WriteEndTag("tr");
+                pWriter.WriteEndTag("tr");
 
             }
-            writer.WriteEndTag("table");
-            writer.WriteEndTag("div");
+            pWriter.WriteEndTag("table");
+            pWriter.WriteEndTag("div");
         }
 
 
 
-        private string TransitionStateAt(List<String[]> transformations, int state, OutputExp exp)
+        private string TransitionStateAt(List<String[]> pTransformations, int pState, OutputExp pExp)
         {
-            string currentState = exp.opState;
+            string lCurrentState = pExp.OpState;
 
             try
             {
-                foreach (String[] trans in transformations)
+                foreach (String[] lTrans in pTransformations)
                 {
-                    int transState = Convert.ToInt32(trans[1]);
-                    if (transState <= state)
+                    int lTransState = Convert.ToInt32(lTrans[1]);
+                    if (lTransState <= pState)
                     {
-                        if (String.Equals(trans[2], "F"))
+                        if (String.Equals(lTrans[2], "F"))
 
-                            if (state == transState)
+                            if (pState == lTransState)
                             {
-                                return "<b> " + trans[2] + "</b>";
+                                return "<b> " + lTrans[2] + "</b>";
                             }
                             else
-                                return trans[2];
+                                return lTrans[2];
                         else
                         {
-                            currentState = trans[2];
+                            lCurrentState = lTrans[2];
                         }
 
-                        if (state == transState)
+                        if (pState == lTransState)
                         {
-                            currentState = "<b> " + currentState + "</b>";
+                            lCurrentState = "<b> " + lCurrentState + "</b>";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in TransitionStateAt in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in TransitionStateAt in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return currentState;
+            return lCurrentState;
         }
 
 
         //Returns all operation transformations
         //This function has an overload which follows
-        private List<String[]> getOpTransformations()
+        private List<String[]> GetOpTransformations()
         {
-            List<String[]> transforms = new List<String[]>();
-            String[] item = new String[4];
-            int lastState = getLastState();
+            List<String[]> lTransforms = new List<String[]>();
+            String[] lItem = new String[4];
+            int lLastState = GetLastState();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    OutputExp nextOp = findNextOp(exp);
-                    if (nextOp != null)
-                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                    OutputExp lNextOp = FindNextOp(lExp);
+                    if (lNextOp != null)
+                        if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true"))
                         {
-                            item = new String[4];
-                            item[0] = exp.operation; //Name of operation
-                            item[1] = nextOp.state.ToString(); //State after finished transition
-                            item[2] = nextOp.opState; //Operation status (I/E/F) after transition
-                            item[3] = nextOp.variant.ToString(); //Operation variant
-                            transforms.Add(item);
+                            lItem = new String[4];
+                            lItem[0] = lExp.Operation; //Name of operation
+                            lItem[1] = lNextOp.State.ToString(); //State after finished transition
+                            lItem[2] = lNextOp.OpState; //Operation status (I/E/F) after transition
+                            lItem[3] = lNextOp.Variant.ToString(); //Operation variant
+                            lTransforms.Add(lItem);
                         }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getOpTransformations in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getOpTransformations in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
-            return transforms;
+            return lTransforms;
         }
 
         //Returns all operation transformations
-        private List<String[]> getOpTransformations(OutputExp operation)
+        private List<String[]> GetOpTransformations(OutputExp pOperation)
         {
-            List<String[]> transforms = new List<String[]>();
-            String[] item = new String[4];
-            int lastState = getLastState();
+            List<String[]> lTransforms = new List<String[]>();
+            String[] lItem = new String[4];
+            int lLastState = GetLastState();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (String.Equals(exp.operation, operation.operation) &&
-                        String.Equals(exp.variant, operation.variant))
+                    if (String.Equals(lExp.Operation, pOperation.Operation) &&
+                        String.Equals(lExp.Variant, pOperation.Variant))
                     {
-                        OutputExp nextOp = findNextOp(exp);
-                        if (nextOp != null)
-                            if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
+                        OutputExp lNextOp = FindNextOp(lExp);
+                        if (lNextOp != null)
+                            if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true"))
                             {
-                                item = new String[4];
-                                item[0] = exp.operation; //Name of operation
-                                item[1] = nextOp.state.ToString(); //State after finished transition
-                                item[2] = nextOp.opState; //Operation status (I/E/F) after transition
-                                if (nextOp.variant != null)
-                                    item[3] = nextOp.variant.ToString(); //Operation variant
+                                lItem = new String[4];
+                                lItem[0] = lExp.Operation; //Name of operation
+                                lItem[1] = lNextOp.State.ToString(); //State after finished transition
+                                lItem[2] = lNextOp.OpState; //Operation status (I/E/F) after transition
+                                if (lNextOp.Variant != null)
+                                    lItem[3] = lNextOp.Variant.ToString(); //Operation variant
 
-                                transforms.Add(item);
+                                lTransforms.Add(lItem);
                             }
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getOpTransformations in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getOpTransformations in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
-            return transforms;
+            return lTransforms;
         }
 
         //Print all operation transformations up to a state
-        public void printOpTransformations(int max)
+        public void PrintOpTransformations(int pMax)
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    OutputExp nextOp = findNextOp(exp);
-                    if (nextOp != null && nextOp.state <= max)
-                        if (String.Equals(exp.value, "true") && String.Equals(nextOp.value, "true"))
-                            printMessageToConsole(exp.ToString() + " -> " + nextOp.ToString());
+                    OutputExp lNextOp = FindNextOp(lExp);
+                    if (lNextOp != null && lNextOp.State <= pMax)
+                        if (String.Equals(lExp.Value, "true") && String.Equals(lNextOp.Value, "true"))
+                            PrintMessageToConsole(lExp.ToString() + " -> " + lNextOp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printOpTransformations in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printOpTransformations in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         //Returns true is name is representing a goal selection varable
-        private bool goalState(string name, string pState)
+        private bool GoalState(string pName, string pState)
         {
             try
             {
                 for (int i = 0; i <= int.Parse(pState); i++)
                 {
-                    if (String.Equals(name, ("P" + i)))
+                    if (String.Equals(pName, ("P" + i)))
                         return true;
-                    else if (String.Equals(name, ("F" + i)))
+                    else if (String.Equals(pName, ("F" + i)))
                         return true;
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in goalState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in goalState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
             return false;
 
         }
 
         //Returns operation in next state and with the following operation status
-        private OutputExp findNextOp(OutputExp first)
+        private OutputExp FindNextOp(OutputExp pFirst)
         {
-            OutputExp next = null;
+            OutputExp lNext = null;
 
             try
             {
-                if (first.name.Contains("_"))
+                if (pFirst.Name.Contains("_"))
                 {
-                    foreach (OutputExp exp in outputResult)
+                    foreach (OutputExp exp in OutputResult)
                     {
-                        if (exp.name.Contains("_"))
+                        if (exp.Name.Contains("_"))
                         {
-                            if ((first.state + 1) == exp.state &&
-                                String.Equals(first.operation, exp.operation) &&
-                                String.Equals(nextOpState(first.opState), exp.opState) &&
-                                first.variant == exp.variant &&
-                                !String.Equals(first.opState, "U") &&
-                                !String.Equals(first.opState, "F"))
+                            if ((pFirst.State + 1) == exp.State &&
+                                String.Equals(pFirst.Operation, exp.Operation) &&
+                                String.Equals(NextOpState(pFirst.OpState), exp.OpState) &&
+                                pFirst.Variant == exp.Variant &&
+                                !String.Equals(pFirst.OpState, "U") &&
+                                !String.Equals(pFirst.OpState, "F"))
                             {
-                                next = exp;
+                                lNext = exp;
                             }
                         }
                     }
@@ -2604,263 +2599,263 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in findNextOp in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in findNextOp in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return next;
+            return lNext;
         }
 
         //Returns the following operation status
-        private string nextOpState(string lstate)
+        private string NextOpState(string pState)
         {
-            string next = null;
+            string lNext = null;
 
-            switch (lstate)
+            switch (pState)
             {
-                case "I": next = "E"; break;
-                case "E": next = "F"; break;
-                case "F": next = "F"; break;
-                case "U": next = "U"; break;
+                case "I": lNext = "E"; break;
+                case "E": lNext = "F"; break;
+                case "F": lNext = "F"; break;
+                case "U": lNext = "U"; break;
             }
-            return next;
+            return lNext;
         }
 
         //Prints false pre and post conditions for lstate
-        private void printConditionsState(int lstate)
+        private void PrintConditionsState(int pState)
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp exp in OutputResult)
                 {
-                    if (exp.state == lstate &&
-                        (String.Equals(exp.opState, "PostCondition") ||
-                        (String.Equals(exp.opState, "PreCondition"))) &&
-                        String.Equals(exp.value, "false"))
-                        printMessageToConsole(exp.ToString());
+                    if (exp.State == pState &&
+                        (String.Equals(exp.OpState, "PostCondition") ||
+                        (String.Equals(exp.OpState, "PreCondition"))) &&
+                        String.Equals(exp.Value, "false"))
+                        PrintMessageToConsole(exp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printConditionState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printConditionState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         //Returns false pre and post conditions for lstate
-        private List<String> getConditionsState(int lstate)
+        private List<String> GetConditionsState(int pState)
         {
-            List<String> con = new List<String>();
+            List<String> lCon = new List<String>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == lstate &&
-                        (String.Equals(exp.opState, "PostCondition") ||
-                        (String.Equals(exp.opState, "PreCondition"))) &&
-                        String.Equals(exp.value, "false"))
-                        con.Add(exp.ToString());
+                    if (lExp.State == pState &&
+                        (String.Equals(lExp.OpState, "PostCondition") ||
+                        (String.Equals(lExp.OpState, "PreCondition"))) &&
+                        String.Equals(lExp.Value, "false"))
+                        lCon.Add(lExp.ToString());
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getConditionState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getConditionState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return con;
+            return lCon;
         }
 
         //Returns false pre and post conditions for lstate with the pre/post condition
-        private HashSet<String[]> getConditionsStateWithValues(int lstate)
+        private HashSet<String[]> GetConditionsStateWithValues(int pState)
         {
-            HashSet<String[]> conditions = new HashSet<String[]>();
-            List<string> conValue = new List<string>();
-            string[] list;
+            HashSet<String[]> lConditions = new HashSet<String[]>();
+            List<string> lConValue = new List<string>();
+            string[] lList;
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == lstate &&
-                        (String.Equals(exp.opState, "PostCondition") ||
-                        (String.Equals(exp.opState, "PreCondition"))) &&
-                        String.Equals(exp.value, "false"))
+                    if (lExp.State == pState &&
+                        (String.Equals(lExp.OpState, "PostCondition") ||
+                        (String.Equals(lExp.OpState, "PreCondition"))) &&
+                        String.Equals(lExp.Value, "false"))
                     {
                         /*if (String.Equals(exp.opState, "PostCondition"))
                             conValue = fwrapper.getPostconditionForOperation(exp.operation);
                         else*/
-                            conValue = cFrameworkWrapper.getPreconditionForOperation(exp.operation);
-                            list = new string[3] { exp.operation + "_" + exp.opState, consToString(conValue), exp.value };
-                        conditions.Add(list);
+                            lConValue = FrameworkWrapper.GetPreconditionForOperation(lExp.Operation);
+                            lList = new string[3] { lExp.Operation + "_" + lExp.OpState, ConsToString(lConValue), lExp.Value };
+                        lConditions.Add(lList);
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getConditionStateWithValues in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getConditionStateWithValues in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return conditions;
+            return lConditions;
         }
 
         //Prints operations in lstate
-        private void printOpState(int lstate)
+        private void PrintOpState(int pState)
         {
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == lstate &&
-                       !String.Equals(exp.opState, "U") &&
-                       !String.Equals(exp.opState, "PostCondition") &&
-                       !String.Equals(exp.opState, "PreCondition"))
+                    if (lExp.State == pState &&
+                       !String.Equals(lExp.OpState, "U") &&
+                       !String.Equals(lExp.OpState, "PostCondition") &&
+                       !String.Equals(lExp.OpState, "PreCondition"))
                     {
-                        printMessageToConsole(exp.ToString());
+                        PrintMessageToConsole(lExp.ToString());
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printOpState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printOpState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
         }
 
         //Returns operations inlstate
-        private List<String[]> getOpState(int lstate)
+        private List<String[]> GetOpState(int pState)
         {
-            List<String[]> ops = new List<String[]>();
-            String[] item;
+            List<String[]> lOps = new List<String[]>();
+            String[] lItem;
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == lstate &&
-                       !String.Equals(exp.opState, "U") &&
-                       !String.Equals(exp.opState, "PostCondition") &&
-                       !String.Equals(exp.opState, "PreCondition"))
+                    if (lExp.State == pState &&
+                       !String.Equals(lExp.OpState, "U") &&
+                       !String.Equals(lExp.OpState, "PostCondition") &&
+                       !String.Equals(lExp.OpState, "PreCondition"))
                     {
-                        item = new String[4];
-                        item[0] = exp.operation;
-                        item[1] = exp.state.ToString();
-                        item[2] = exp.opState;
-                        item[3] = exp.value;
-                        ops.Add(item);
+                        lItem = new String[4];
+                        lItem[0] = lExp.Operation;
+                        lItem[1] = lExp.State.ToString();
+                        lItem[2] = lExp.OpState;
+                        lItem[3] = lExp.Value;
+                        lOps.Add(lItem);
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getOpState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getOpState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return ops;
+            return lOps;
         }
 
-        private string consToString(List<string> pcons)
+        private string ConsToString(List<string> pCons)
         {
-            string exp = "";
+            string lExp = "";
 
             try
             {
-                if (pcons.Count > 0)
+                if (pCons.Count > 0)
                 {
-                    string lTemp = pcons.First();
-                    exp = GeneralUtilities.parseExpression(lTemp, "infix");
-                    pcons.Remove(lTemp);
-                    foreach (string con in pcons)
+                    string lTemp = pCons.First();
+                    lExp = GeneralUtilities.ParseExpression(lTemp, "infix");
+                    pCons.Remove(lTemp);
+                    foreach (string con in pCons)
                     {
-                        exp = exp + "and" + GeneralUtilities.parseExpression(con, "infix");
+                        lExp = lExp + "and" + GeneralUtilities.ParseExpression(con, "infix");
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in conToString in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in conToString in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
-            return exp;
+            return lExp;
         }
 
         //Returns operations inlstate
-        private List<String> getActiveOps()
+        private List<String> GetActiveOps()
         {
-            List<String> ops = new List<String>();
+            List<String> lOps = new List<String>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == 0 &&
-                       String.Equals(exp.opState, "I") &&
-                       String.Equals(exp.value, "true") &&
-                       !String.Equals(exp.opState, "PostCondition") &&
-                       !String.Equals(exp.opState, "PreCondition"))
+                    if (lExp.State == 0 &&
+                       String.Equals(lExp.OpState, "I") &&
+                       String.Equals(lExp.Value, "true") &&
+                       !String.Equals(lExp.OpState, "PostCondition") &&
+                       !String.Equals(lExp.OpState, "PreCondition"))
                     {
-                        ops.Add(exp.operation);
+                        lOps.Add(lExp.Operation);
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getActiveOps in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getActiveOps in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return ops;
+            return lOps;
         }
 
         //Returns all operations
-        private List<OutputExp> getAllOps()
+        private List<OutputExp> GetAllOps()
         {
-            List<OutputExp> ops = new List<OutputExp>();
+            List<OutputExp> lOps = new List<OutputExp>();
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state == 0 &&
-                       String.Equals(exp.value, "true") &&
-                       !String.Equals(exp.opState, "E") &&
-                       !String.Equals(exp.opState, "F") &&
-                       !String.Equals(exp.opState, "PostCondition") &&
-                       !String.Equals(exp.opState, "PreCondition"))
+                    if (lExp.State == 0 &&
+                       String.Equals(lExp.Value, "true") &&
+                       !String.Equals(lExp.OpState, "E") &&
+                       !String.Equals(lExp.OpState, "F") &&
+                       !String.Equals(lExp.OpState, "PostCondition") &&
+                       !String.Equals(lExp.OpState, "PreCondition"))
                     {
-                        ops.Add(exp);
+                        lOps.Add(lExp);
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getActiveOps in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getActiveOps in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return ops;
+            return lOps;
         }
 
         //Returns the last state of analysis
-        private int getLastState()
+        private int GetLastState()
         {
-            int lastState = 0;
+            int lLastState = 0;
 
             try
             {
-                foreach (OutputExp exp in outputResult)
+                foreach (OutputExp lExp in OutputResult)
                 {
-                    if (exp.state > lastState)
+                    if (lExp.State > lLastState)
                     {
-                        lastState = exp.state;
+                        lLastState = lExp.State;
                     }
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in getLastState in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in getLastState in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
-            return lastState - 1;
+            return lLastState - 1;
         }
 
         /*private string replaceVirtual(string p)
@@ -2922,7 +2917,7 @@ namespace ProductPlatformAnalyzer
             return newInfixExpr;
         }*/
 
-        private bool checkCondition(string con)
+        private bool CheckCondition(string pCon)
         {
             //For each condition first we have to build its coresponding tree
             Parser lConditionParser = new Parser();
@@ -2930,18 +2925,18 @@ namespace ProductPlatformAnalyzer
 
             try
             {
-                lConditionParser.AddChild(lCnstExprTree, con);
+                lConditionParser.AddChild(lCnstExprTree, pCon);
 
-                foreach (Node<string> item in lCnstExprTree)
+                foreach (Node<string> lItem in lCnstExprTree)
                 {
                     //Then we have to traverse the tree
-                    return ParseConditionVirtual(item);
+                    return ParseConditionVirtual(lItem);
                 }
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in checkCondition in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in checkCondition in outputHandler");
+                PrintMessageToConsole(ex.Message);
             }
 
             return true;
@@ -3071,8 +3066,8 @@ namespace ProductPlatformAnalyzer
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in replaceVirtual in outputHandler");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in replaceVirtual in outputHandler");
+                PrintMessageToConsole(ex.Message);
 
                 throw ex;
             }
@@ -3109,17 +3104,17 @@ namespace ProductPlatformAnalyzer
             return null;
         }*/
 
-        public void printMessageToConsole(string pMessage)
+        public void PrintMessageToConsole(string pMessage)
         {
             try
             {
-                if (cEnableUserMessages)               
+                if (EnableUserMessages)               
                     Console.WriteLine(pMessage);
             }
             catch (Exception ex)
             {
-                printMessageToConsole("error in printMessageToConsole");
-                printMessageToConsole(ex.Message);
+                PrintMessageToConsole("error in printMessageToConsole");
+                PrintMessageToConsole(ex.Message);
             }
         }
     }
