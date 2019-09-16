@@ -62,8 +62,10 @@ namespace ProductPlatform.Test
 
         //private List<TestData> lTestDataList = new List<TestData>();
         //private List<TestOperationsData> lTestOperationList = new List<TestOperationsData>();
-        private readonly const string FileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
+        private const string FileDirectory = "..\\..\\..\\ProductPlatformAnalyzer\\Test\\";
         private string TestFilePath;
+        private Z3SolverEngineer _z3SolverEngineer = new Z3SolverEngineer();
+        private OutputHandler _outputHandler = new OutputHandler();
 
         [SetUp]
         public void Setup()
@@ -73,6 +75,10 @@ namespace ProductPlatform.Test
             var dir = TestContext.CurrentContext.TestDirectory;
             // or
             Directory.SetCurrentDirectory(dir);
+
+            _z3SolverEngineer.DefaultAnalyzerSetting(_outputHandler);
+            //LoadVariationPointsFromXMLFile();
+
         }
 
         public ProductPlatformTest()
@@ -139,47 +145,43 @@ namespace ProductPlatform.Test
         }
 
         [Test]
-        [TestCase("OperationsNoDeadlock.xml", true)]
-        [TestCase("OperationsNoDeadlock2.xml", true)]
-        [TestCase("OperationsDeadlock.xml", true)]
-        [TestCase("OperationsNResourcesNoDeadlock.xml", true)]
-        [TestCase("OperationsNResourcesNoDeadlock2.xml", true)]
-        [TestCase("OperationsNResourcesNoDeadlock3.xml", true)]
-        [TestCase("OperationsNResourcesDeadlock.xml", true)]
-        [TestCase("ParallelOperationsNoDeadlock.xml", true)]
-        [TestCase("OperationsAllUnusedNoDeadlock.xml", true)]
-        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", true)]
-        [TestCase("OperationsNoDeadlock3.xml", true)]
-        public void LoadInitialData_Test(string pTestFileName, bool pExpectedAnalysisResult)
+        [TestCase("0.0.xml", false)]
+        [TestCase("0.1.xml", false)]
+        [TestCase("0.2.xml", false)]
+        public void LoadInitialData_WhenRun_IncorrectInputData(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try
             {
-                //foreach (TestData lTestData in lTestDataList)
-                //{
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+                Console.WriteLine("LoadInitialData Test on : " + GetTestFilePath(pTestFileName));
 
-                    OutputHandler lOutputHandler = new OutputHandler();
-                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
-                    //LoadVariationPointsFromXMLFile();
+                var lDataLoaded = _z3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
-                    bool lDataLoaded = false;
+                Assert.AreEqual(lDataLoaded, pExpectedAnalysisResult);
 
-                    Console.WriteLine("LoadInitialData Test on : " + GetTestFilePath(pTestFileName));
-
-                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
-
-                    //Assert.AreEqual(lDataLoaded, lTestData.LoadDataExpectedResult);
-                    Assert.AreEqual(lDataLoaded, pExpectedAnalysisResult);
-
-                //}
-
-                //NUnit.Framework.Assert.IsTrue(true);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Initial data was not loaded!");
                 Console.WriteLine(ex.Message);
-                NUnit.Framework.Assert.Fail();
+            }
+        }
+
+        [Test]
+        [TestCase("1.0.xml", true)]
+        public void LoadInitialData_WhenRun_CorrectInputData(string pTestFileName, bool pExpectedAnalysisResult)
+        {
+            try
+            {
+                Console.WriteLine("LoadInitialData Test on : " + GetTestFilePath(pTestFileName));
+
+                var lDataLoaded = _z3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
+
+                Assert.AreEqual(lDataLoaded, pExpectedAnalysisResult);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Initial data was not loaded!");
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -199,43 +201,32 @@ namespace ProductPlatform.Test
         {
             try
             {
-                //foreach (TestData lTestData in lTestDataList)
-                //{
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+                var lDataLoaded = _z3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
-                    OutputHandler lOutputHandler = new OutputHandler();
-                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
-                    //LoadVariationPointsFromXMLFile();
+                if (lDataLoaded)
+                {
+                    Console.WriteLine("Calculate Analysis No Of Cycles on : " + GetTestFilePath(pTestFileName));
+                    int lAnalysisResult = 0;
 
-                    bool lDataLoaded = false;
+                    //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+                    //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                    //             , Build P Constraints, Number Of Models Required
+                    _z3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                                                        , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
-                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
+                    //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                    //          , Transitions Result, Analysis Timing, Unsat Core
+                    //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                    //          , Report timings, Debug Mode (Make model file), User Messages
+                    _z3SolverEngineer.SetReportType(true, false, false
+                                                    , false, false, false
+                                                    , false, false, true
+                                                    , true, true, false);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("Calculate Analysis No Of Cycles on : " + GetTestFilePath(pTestFileName));
-                        int lAnalysisResult = 0;
+                    lAnalysisResult = _z3SolverEngineer.CalculateAnalysisNoOfCycles();
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
-                                                            , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
-
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.SetReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
-
-                        lAnalysisResult = lZ3SolverEngineer.CalculateAnalysisNoOfCycles();
-
-                        Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
-                    }
-                //}
+                    Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
+                }
             }
             catch (Exception ex)
             {
@@ -389,43 +380,32 @@ namespace ProductPlatform.Test
         {
             try
             {
-                //foreach (TestData lTestData in lTestDataList)
-                //{
-                    Z3SolverEngineer lZ3SolverEngineer = new Z3SolverEngineer();
+                var lDataLoaded = _z3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
 
-                    OutputHandler lOutputHandler = new OutputHandler();
-                    lZ3SolverEngineer.DefaultAnalyzerSetting(lOutputHandler);
-                    //LoadVariationPointsFromXMLFile();
+                if (lDataLoaded)
+                {
+                    Console.WriteLine("Existance of deadlock analysis on : " + GetTestFilePath(pTestFileName));
+                    bool lAnalysisResult = false;
 
-                    bool lDataLoaded = false;
+                    //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+                    //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                    //             , Build P Constraints, Number Of Models Required
+                    _z3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                                                        , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
 
-                    lDataLoaded = lZ3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
+                    //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                    //          , Transitions Result, Analysis Timing, Unsat Core
+                    //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                    //          , Report timings, Debug Mode (Make model file), User Messages
+                    _z3SolverEngineer.SetReportType(true, false, false
+                                                    , false, false, false
+                                                    , false, false, true
+                                                    , true, true, false);
 
-                    if (lDataLoaded)
-                    {
-                        Console.WriteLine("Existance of deadlock analysis on : " + GetTestFilePath(pTestFileName));
-                        bool lAnalysisResult = false;
+                    lAnalysisResult = _z3SolverEngineer.ExistanceOfDeadlockAnalysis(true, true);
 
-                        //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
-                        //             , Build P Constraints, Number Of Models Required
-                        lZ3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
-                                                            , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
-
-                        //Parameters: Analysis Result, Analysis Detail Result, Variants Result
-                        //          , Transitions Result, Analysis Timing, Unsat Core
-                        //          , Stop between each transition, Stop at end of analysis, Create HTML Output
-                        //          , Report timings, Debug Mode (Make model file), User Messages
-                        lZ3SolverEngineer.SetReportType(true, false, false
-                                                        , false, false, false
-                                                        , false, false, true
-                                                        , true, true, false);
-
-                        lAnalysisResult = lZ3SolverEngineer.ExistanceOfDeadlockAnalysis(true, true);
-
-                        Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
-                    }
-                //}
+                    Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
+                }
             }
             catch (Exception ex)
             {

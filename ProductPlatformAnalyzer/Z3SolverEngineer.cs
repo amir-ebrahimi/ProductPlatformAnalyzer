@@ -1011,99 +1011,6 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// Load AML File data
-        /// </summary>
-        /// <param name="pFile"></param>
-        /// <returns>If the data is loaded correctly or not</returns>
-        public bool LoadAMLInitialData(string pFile)
-        {
-            bool lDataLoaded = true;
-            try
-            {
-                var document = CAEXDocument.LoadFromFile(pFile);
-                
-                var converter = new AMLConverter(document, _z3Solver);
-
-                //This function populate should return a boolean result which indicates if the population is done right or not
-                converter.Populate();
-                converter.PopulateFrameworkWrapper(_frameworkWrapper);
-            }
-            catch (Exception ex)
-            {
-                _outputHandler.PrintMessageToConsole("error in loadAMLInitialData");
-                _outputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lDataLoaded;
-        }
-
-        /// <summary>
-        /// This function loads the initial data from the external fle to internal lists
-        /// </summary>
-        /// <param name="pInitialData"></param>
-        /// <param name="pFile"></param>
-        /// <returns>If the data is loaded correctly or not</returns>
-        public bool LoadInitialData(Enumerations.InitializerSource pInitialData
-                                    , String pInitialDataFileName = "")
-        {
-            bool lDataLoaded = false;
-            try
-            {
-                Enumerations.InputFileType lInitialDataFileExtension = ReturnInputFileType(pInitialDataFileName);
-                if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.AML))
-                    lDataLoaded = LoadAMLInitialData(pInitialDataFileName);
-                else if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.XML))
-                {
-                    switch (pInitialData)
-                    {
-                        case Enumerations.InitializerSource.InitialDataFile:
-                            {
-                                //                            LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
-                                //                            lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
-                                //                            lDataLoaded = LoadInitialDataFromXMLFile("../../Test/" + endPath);
-                                lDataLoaded = LoadInitialDataFromXMLFile(pInitialDataFileName);
-                                break;
-                            }
-                        case Enumerations.InitializerSource.RandomData:
-                            {
-                                //Creating random data
-                                //Parameters: pMaxVariantGroupNumber, pMaxVariantNumber, pMaxPartNumber, pMaxOperationNumber
-                                //           ,pTrueProbability, pFalseProbability, pExpressionProbability
-                                //           ,pMaxTraitNumber, pMaxNoOfTraitAttributes, pMaxResourceNumber
-                                lDataLoaded = _randomTestCreator.createRandomData(RandomMaxVariantGroupumber
-                                                                                , RandomMaxVariantNumber
-                                                                                , RandomMaxPartNumber
-                                                                                , RandomMaxOperationNumber
-                                                                                , RandomTrueProbability
-                                                                                , RandomFalseProbability
-                                                                                , RandomExpressionProbability
-                                                                                , RandomMaxTraitNumber
-                                                                                , RandomMaxNoOfTraitAttributes
-                                                                                , RandomMaxResourceNumber
-                                                                                , RandomMaxExpressionOperandNumber
-                                                                                , RandomMaxNoOfConfigurationRules);
-
-                                if (RandomMaxPartNumber > 0)
-                                    _frameworkWrapper.UsePartInfo = true;
-                                else
-                                    _frameworkWrapper.UsePartInfo = false;
-
-                                break;
-                            }
-                        default:
-                            break;
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _outputHandler.PrintMessageToConsole("error in loadInitialData");
-                _outputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lDataLoaded;
-        }
-
-        /// <summary>
         /// This function looks at the input file name and from the extension returns the type of the file
         /// </summary>
         /// <param name="pFileName">Input file name</param>
@@ -9095,67 +9002,6 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public bool LoadInitialDataFromXMLFile(string pFilePath)
-        {
-            bool lDataLoaded = false;
-            try
-            {
-                //new instance of xdoc
-                XmlDocument xDoc = new XmlDocument();
-
-                //First load the XML file from the file path
-                xDoc.Load(pFilePath);
-                Console.WriteLine("-----------------------------------------------------------");
-                Console.WriteLine("Initial data importing...");
-
-                InitializeDataFiles();
-
-                bool lPartsLoaded = false;
-                lPartsLoaded = _frameworkWrapper.CreatePartInstances(xDoc);
-
-                bool lVariantsLoaded = false;
-                lVariantsLoaded = _frameworkWrapper.CreateVariantInstances(xDoc);
-
-                bool lVariantGroupsLoaded = false;
-                lVariantGroupsLoaded = _frameworkWrapper.CreateVariantGroupInstances(xDoc);
-
-                bool lConstraintsLoaded = false;
-                lConstraintsLoaded = _frameworkWrapper.CreateConstraintInstances(xDoc);
-
-                bool lOperationsLoaded = false;
-                lOperationsLoaded = _frameworkWrapper.CreateOperationInstances(xDoc);
-
-                bool lItemUsageRulesLoaded = false;
-                lItemUsageRulesLoaded = _frameworkWrapper.CreateItemUsageRulesInstances(xDoc);
-
-                //These two parts are not needed because the trigger field in the operationinstance object will serve this purpose
-                /*
-                bool lPartOperationLoaded = false;
-                lPartOperationLoaded = cFrameworkWrapper.createPartOperationsInstances(xDoc);
-
-                bool lVariantOperationLoaded = false;
-                lVariantOperationLoaded = cFrameworkWrapper.createVariantOperationsInstances(xDoc);
-                */
-
-                bool lTraitsLoaded = false;
-                lTraitsLoaded = _frameworkWrapper.CreateTraitInstances(xDoc);
-
-                bool lResourceLoaded = false;
-                lResourceLoaded = _frameworkWrapper.CreateResourceInstances(xDoc);
-
-
-                lDataLoaded = ((lVariantsLoaded && lVariantGroupsLoaded) && lOperationsLoaded);
-
-                Console.WriteLine("-----------------------------------------------------------");
-            }
-            catch (Exception ex)
-            {
-                _outputHandler.PrintMessageToConsole("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
-                _outputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lDataLoaded;
-        }
-
         /// <summary>
         /// This function returns the number of analysis cycles which are needed 
         /// This will be the number of operations times 2 
@@ -9370,7 +9216,161 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        #region Previous Versions
+        /// <summary>
+        /// This function loads the initial data from the external fle to internal lists
+        /// </summary>
+        /// <param name="pInitialData"></param>
+        /// <param name="pFile"></param>
+        /// <returns>If the data is loaded correctly or not</returns>
+        public bool LoadInitialData(Enumerations.InitializerSource pInitialData
+                                    , String pInitialDataFileName = "")
+        {
+            bool lDataLoaded = false;
+            try
+            {
+                Enumerations.InputFileType lInitialDataFileExtension = ReturnInputFileType(pInitialDataFileName);
+                if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.AML))
+                    lDataLoaded = LoadAMLInitialData(pInitialDataFileName);
+                else if (lInitialDataFileExtension.Equals(Enumerations.InputFileType.XML))
+                {
+                    switch (pInitialData)
+                    {
+                        case Enumerations.InitializerSource.InitialDataFile:
+                            {
+                                //                            LoadInitialDataFromXMLFile(exePath + "../../../" + endPath);
+                                //                            lFrameworkWrapper.LoadInitialDataFromXMLFile(endPath);
+                                //                            lDataLoaded = LoadInitialDataFromXMLFile("../../Test/" + endPath);
+                                lDataLoaded = LoadInitialDataFromXMLFile(pInitialDataFileName);
+                                break;
+                            }
+                        case Enumerations.InitializerSource.RandomData:
+                            {
+                                //Creating random data
+                                //Parameters: pMaxVariantGroupNumber, pMaxVariantNumber, pMaxPartNumber, pMaxOperationNumber
+                                //           ,pTrueProbability, pFalseProbability, pExpressionProbability
+                                //           ,pMaxTraitNumber, pMaxNoOfTraitAttributes, pMaxResourceNumber
+                                lDataLoaded = _randomTestCreator.createRandomData(RandomMaxVariantGroupumber
+                                                                                , RandomMaxVariantNumber
+                                                                                , RandomMaxPartNumber
+                                                                                , RandomMaxOperationNumber
+                                                                                , RandomTrueProbability
+                                                                                , RandomFalseProbability
+                                                                                , RandomExpressionProbability
+                                                                                , RandomMaxTraitNumber
+                                                                                , RandomMaxNoOfTraitAttributes
+                                                                                , RandomMaxResourceNumber
+                                                                                , RandomMaxExpressionOperandNumber
+                                                                                , RandomMaxNoOfConfigurationRules);
+
+                                if (RandomMaxPartNumber > 0)
+                                    _frameworkWrapper.UsePartInfo = true;
+                                else
+                                    _frameworkWrapper.UsePartInfo = false;
+
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _outputHandler.PrintMessageToConsole("error in loadInitialData");
+                _outputHandler.PrintMessageToConsole(ex.Message);
+            }
+            return lDataLoaded;
+        }
+
+        /// <summary>
+        /// Load AML File data
+        /// </summary>
+        /// <param name="pFile"></param>
+        /// <returns>If the data is loaded correctly or not</returns>
+        public bool LoadAMLInitialData(string pFile)
+        {
+            bool lDataLoaded = true;
+            try
+            {
+                var document = CAEXDocument.LoadFromFile(pFile);
+
+                var converter = new AMLConverter(document, _z3Solver);
+
+                //This function populate should return a boolean result which indicates if the population is done right or not
+                converter.Populate();
+                converter.PopulateFrameworkWrapper(_frameworkWrapper);
+            }
+            catch (Exception ex)
+            {
+                _outputHandler.PrintMessageToConsole("error in loadAMLInitialData");
+                _outputHandler.PrintMessageToConsole(ex.Message);
+            }
+            return lDataLoaded;
+        }
+
+        public bool LoadInitialDataFromXMLFile(string pFilePath)
+        {
+            bool lDataLoaded = false;
+            try
+            {
+                //new instance of xdoc
+                XmlDocument xDoc = new XmlDocument();
+
+                //First load the XML file from the file path
+                xDoc.Load(pFilePath);
+                Console.WriteLine("-----------------------------------------------------------");
+                Console.WriteLine("Initial data importing...");
+
+                InitializeDataFiles();
+
+                bool lPartsLoaded = false;
+                lPartsLoaded = _frameworkWrapper.CreatePartInstances(xDoc);
+
+                bool lVariantsLoaded = false;
+                lVariantsLoaded = _frameworkWrapper.CreateVariantInstances(xDoc);
+
+                bool lVariantGroupsLoaded = false;
+                lVariantGroupsLoaded = _frameworkWrapper.CreateVariantGroupInstances(xDoc);
+
+                bool lConstraintsLoaded = false;
+                lConstraintsLoaded = _frameworkWrapper.CreateConstraintInstances(xDoc);
+
+                bool lOperationsLoaded = false;
+                lOperationsLoaded = _frameworkWrapper.CreateOperationInstances(xDoc);
+
+                bool lItemUsageRulesLoaded = false;
+                lItemUsageRulesLoaded = _frameworkWrapper.CreateItemUsageRulesInstances(xDoc);
+
+                //These two parts are not needed because the trigger field in the operationinstance object will serve this purpose
+                /*
+                bool lPartOperationLoaded = false;
+                lPartOperationLoaded = cFrameworkWrapper.createPartOperationsInstances(xDoc);
+
+                bool lVariantOperationLoaded = false;
+                lVariantOperationLoaded = cFrameworkWrapper.createVariantOperationsInstances(xDoc);
+                */
+
+                bool lTraitsLoaded = false;
+                lTraitsLoaded = _frameworkWrapper.CreateTraitInstances(xDoc);
+
+                bool lResourceLoaded = false;
+                lResourceLoaded = _frameworkWrapper.CreateResourceInstances(xDoc);
+
+
+                lDataLoaded = ((lVariantsLoaded && lVariantGroupsLoaded) && lOperationsLoaded);
+
+                Console.WriteLine("-----------------------------------------------------------");
+            }
+            catch (Exception ex)
+            {
+                _outputHandler.PrintMessageToConsole("error in LoadInitialDataFromXMLFile, FilePath: " + pFilePath);
+                _outputHandler.PrintMessageToConsole(ex.Message);
+            }
+            return lDataLoaded;
+        }
+
+            #region Previous Versions
         #endregion
 
 
