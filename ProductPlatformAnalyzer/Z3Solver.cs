@@ -443,7 +443,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 Expr lFirstOperand = FindExprInExprSet(pOperand1);
                 Expr lSecondOperand = FindExprInExprSet(pOperand2);
@@ -495,7 +495,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 Expr lFirstOperand = FindExprInExprSet(pOperand1);
                 
@@ -519,7 +519,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 BoolExpr Expression1 = _iCtx.MkImplies(pOperand1, pOperand2);
                 BoolExpr Expression2 = _iCtx.MkImplies(pOperand2, pOperand1);
@@ -554,7 +554,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 BoolExpr Expression1 = _iCtx.MkImplies(pOperand1, pOperand2);
                 BoolExpr Expression2 = _iCtx.MkImplies(pOperand2, pOperand1);
@@ -975,7 +975,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindExprInExprSet(pOperand);
 
@@ -1052,7 +1052,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 Expr lOperand = FindExprInExprSet(pOperand);
 
@@ -1071,7 +1071,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                //We assume that both operands are part of the previously defined expressions
+                //We assume that both operands are Part of the previously defined expressions
                 //Hence we don't need to find them in the array of expressions
                 BoolExpr Expression = _iCtx.MkNot(pOperand);
 

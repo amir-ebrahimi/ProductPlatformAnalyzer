@@ -337,7 +337,7 @@ namespace ProductPlatformAnalyzer
                     string lSubString = pExpr.Substring(0, lSpaceIndex);
                     string lRemainderString = pExpr.Substring(lSpaceIndex + 1);
 
-                    //if the expression starts with "and", "or", any variant name
+                    //if the expression starts with "and", "or", any Variantname
                     if (pCurrentNode == null)
                     {
                         pCurrentNode = new NTree<string>(lSubString);

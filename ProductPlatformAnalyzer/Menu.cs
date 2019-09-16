@@ -275,7 +275,7 @@ namespace ProductPlatformAnalyzer
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "1.1.2V1VG2O0C0P.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "1.2.3V1VG2O0C0P.xml");
 
-                    //Different variant group cardinality
+                    //Different Variantgroup cardinality
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "2.0.3V1VG2O0C0P.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "2.1.3V1VG2O0C0P.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "2.2.3V1VG2O0C0P.xml");
@@ -303,7 +303,7 @@ namespace ProductPlatformAnalyzer
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "5.0.4V2VG2O0C0P.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "5.0.4V2VG2O0C0P.xml");
 
-                    //TODO: for a variant which is selectable what would be a good term for completing the analysis?
+                    //TODO: for a Variantwhich is selectable what would be a good term for completing the analysis?
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "2.2V1VG2O1C1PNoTransitions-1UnselectV.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "3.2V1VG2O1C1PNoTransitions.xml");
                     //lZ3SolverEngineer.ProductPlatformAnalysis(lPathPrefix + "4.2V1VG3O1C1PNoTransition.xml");
@@ -637,84 +637,84 @@ namespace ProductPlatformAnalyzer
                         break;*/
                     case "1":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.ProductModelEnumerationAnalysis);
                         break;
                     case "2":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                                             , Enumerations.AnalysisType.ProductManufacturingModelEnumerationAnalysis);
                         break;
                     case "3":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedVariantAnalysis);
                         break;
                     case "4":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedVariantAnalysis);
                         break;
                     case "5":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.VariantSelectabilityAnalysis);
                         break;
                     case "6":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedPartAnalysis);
                         break;
                     case "7":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedPartAnalysis);
                         break;
                     case "8":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.PartSelectabilityAnalysis);
                         break;
                     case "9":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.AlwaysSelectedOperationAnalysis);
                         break;
                     case "10":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.NeverSelectedOperationAnalysis);
                         break;
                     case "11":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Static
                                                             , Enumerations.AnalysisType.OperationSelectabilityAnalysis);
                         break;
                     case "12":
                         //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
-                        //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                        //             , Convert operations, Convert operation precedence rules, Convert Variantoperation relation, Convert resources, Convert goals
                         //             , Build P Constraints, Number Of Models Required
                         Z3SolverEngineer.SetVariationPoints(Enumerations.GeneralAnalysisType.Dynamic
                                                             , Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);

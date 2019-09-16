@@ -20,23 +20,23 @@ namespace ProductPlatformAnalyzer
         private CAEXTables tables = null;
 
         // data structures to be populated from the document
-        private HashSet<variantGroup> variantGroups = new HashSet<variantGroup>();
-        private HashSet<variant> variants = new HashSet<variant>();
+        private HashSet<VariantGroup> variantGroups = new HashSet<VariantGroup>();
+        private HashSet<Variant> variants = new HashSet<Variant>();
         private HashSet<string> constraints = new HashSet<string>();
-        private HashSet<resource> resources = new HashSet<resource>();
-        private HashSet<trait> traits = new HashSet<trait>();
+        private HashSet<Resource> resources = new HashSet<Resource>();
+        private HashSet<Trait> traits = new HashSet<Trait>();
         private HashSet<Operation> operations = new HashSet<Operation>();
-        private HashSet<partOperations> variantOperations = new HashSet<partOperations>();
+        //private HashSet<partOperations> variantOperations = new HashSet<partOperations>();
 
         private Z3Solver cZ3Solver;
 
         // auxiliary data structures
-        private Dictionary<string, variant> id2VariantMappings
-            = new Dictionary<string, variant>();
+        private Dictionary<string, Variant> id2VariantMappings
+            = new Dictionary<string, Variant>();
         private Dictionary<string, Operation> id2OperationMappings
             = new Dictionary<string, Operation>();
-        private Dictionary<string, trait> id2TraitMappings
-            = new Dictionary<string, trait>();
+        private Dictionary<string, Trait> id2TraitMappings
+            = new Dictionary<string, Trait>();
 
         // constructor
         public AMLConverter(CAEXDocument caex_document, Z3Solver pZ3Solver) {
@@ -93,10 +93,10 @@ namespace ProductPlatformAnalyzer
                 var parent = roleRef.GetParent();
                 if (parent is InternalElementType)
                 {
-                    // create a variant and set fields
-                    variant tempVariant = new variant
+                    // create a Variantand set fields
+                    Variant tempVariant = new Variant
                     {
-                        names = parent.Name(),
+                        Names = parent.Name(),
                         //index = indexCounter++
                     };
                     variants.Add(tempVariant);
@@ -118,7 +118,7 @@ namespace ProductPlatformAnalyzer
                     var cardinality = ie.GetAttributeValue("groupCardinality");
                     List<CAEXObject> elements = new List<CAEXObject>();
                     ie.GetInternalElementsAndExternalInterfaces(elements);
-                    List<variant> variants = new List<variant>();
+                    List<Variant> variants = new List<Variant>();
                     foreach (InternalElementType e in elements)
                     {
                         if(!e.Name().Equals(parent.Name()))
@@ -127,12 +127,12 @@ namespace ProductPlatformAnalyzer
                             variants.Add(id2VariantMappings[refID]);
                         }
                     }
-                    // create a variantGroup and set fields
-                    variantGroup tempVariantGroup = new variantGroup
+                    // create a VariantGroup and set fields
+                    VariantGroup tempVariantGroup = new VariantGroup
                     {
-                        names = parent.Name(),
-                        gCardinality = cardinality,
-                        variants = variants
+                        Names = parent.Name(),
+                        GCardinality = cardinality,
+                        Variants = variants
                     };
                     variantGroups.Add(tempVariantGroup);
                 }
@@ -241,12 +241,12 @@ namespace ProductPlatformAnalyzer
                             new Tuple<string, string>(attrName, attrType));
                     }
                     // create a trait and set field
-                    trait tempTrait = new trait
+                    Trait tempTrait = new Trait
                     {
-                        names = traitName,
+                        Names = traitName,
                         // In the AML modeling for now, trait cannot inherit trait
-                        inherit = new HashSet<trait>(),
-                        attributes = attributesField
+                        Inherit = new HashSet<Trait>(),
+                        Attributes = attributesField
                     };
                     traits.Add(tempTrait);
                     // store ID and trait
@@ -266,7 +266,7 @@ namespace ProductPlatformAnalyzer
                     var displayName = resourceName;
                     HashSet<Tuple<string, string, string>> attributesField =
                         new HashSet<Tuple<string, string, string>>();
-                    HashSet<trait> traits = new HashSet<trait>();
+                    HashSet<Trait> traits = new HashSet<Trait>();
 
                     var ie = parent as InternalElementType;
                     Dictionary<string, string> traitAttr2value =
@@ -278,7 +278,7 @@ namespace ProductPlatformAnalyzer
                     {
                         var trait = id2TraitMappings[t.ID.Value];
                         traits.Add(trait);
-                        foreach (var tuple in trait.attributes)
+                        foreach (var tuple in trait.Attributes)
                         {
                             if (traitAttr2value.ContainsKey(tuple.Item1))
                                 attributesField.Add(
@@ -287,12 +287,12 @@ namespace ProductPlatformAnalyzer
                         }             
                     }
                     // create a resource and set fields
-                    resource tempResource = new resource
+                    Resource tempResource = new Resource
                     {
-                        names = resourceName,
+                        Name = resourceName,
                         //displayName = displayName,
-                        traits = traits,
-                        attributes = attributesField
+                        //traits = traits,
+                        //attributes = attributesField
                     };
                     resources.Add(tempResource);
                 }

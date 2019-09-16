@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <!-- Simple 1 Variant 2 Operations one with pre and post condition
-      Change from case 2 is the group cardinality of the variant group which is changed, making the analysis work
+      Change from case 2 is the group cardinality of the Variantgroup which is changed, making the analysis work
 Analysis should finish -->
 
 <!-- Operations: 

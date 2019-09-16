@@ -21,8 +21,8 @@ namespace ProductPlatformAnalyzer
         public int MaxResourceNumber { get; set; }
         public int MaxExpressionOperandNumber { get; set; }
         public Dictionary<int, Operation> OperationCodeLookup { get; set; }
-        public Dictionary<int, part> PartCodeLookup { get; set; }
-        public Dictionary<int, variant> VariantCodeLookup { get; set; }
+        public Dictionary<int, Part> PartCodeLookup { get; set; }
+        public Dictionary<int, Variant> VariantCodeLookup { get; set; }
         public List<int> OverallChosenVariantCodes { get; set; }
         public List<int> OverallFreeVariantCodes { get; set; }
         public List<int> OverallChosenOperationCodes { get; set; }
@@ -62,8 +62,8 @@ namespace ProductPlatformAnalyzer
             _myRandom = new Random();
 
             OperationCodeLookup = new Dictionary<int, Operation>();
-            PartCodeLookup = new Dictionary<int, part>();
-            VariantCodeLookup = new Dictionary<int, variant>();
+            PartCodeLookup = new Dictionary<int, Part>();
+            VariantCodeLookup = new Dictionary<int, Variant>();
 
             OverallChosenVariantCodes = new List<int>();
             OverallFreeVariantCodes = new List<int>();
@@ -89,9 +89,9 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public part partLookupByCode(int pPartCode)
+        public Part partLookupByCode(int pPartCode)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
                 if (PartCodeLookup.ContainsKey(pPartCode))
@@ -107,9 +107,9 @@ namespace ProductPlatformAnalyzer
             return lResultPart;
         }
 
-        public variant variantLookupByCode(int pVariantCode)
+        public Variant VariantLookupByCode(int pVariantCode)
         {
-            variant lResultVariant = null;
+            Variant lResultVariant = null;
             try
             {
                 if (VariantCodeLookup.ContainsKey(pVariantCode))
@@ -224,11 +224,11 @@ namespace ProductPlatformAnalyzer
                 List<string> lOperands = new List<string>();
                 foreach (var lPart in _frameworkWrapper.PartSet)
                 {
-                    lOperands.Add(lPart.names);
+                    lOperands.Add(lPart.Names);
                 }
                 foreach (var lVariant in _frameworkWrapper.VariantSet)
                 {
-                    lOperands.Add(lVariant.names);
+                    lOperands.Add(lVariant.Names);
                 }
 
                 string lRandomConfigurationRule = "";
@@ -290,7 +290,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                HashSet<trait> lInheritedTraits = new HashSet<trait>();
+                HashSet<Trait> lInheritedTraits = new HashSet<Trait>();
                 HashSet<Tuple<string,string>> lTraitAttributes = new HashSet<Tuple<string,string>>();
                 for (int i = 0; i < MaxTraitNumber; i++)
                 {
@@ -379,18 +379,18 @@ namespace ProductPlatformAnalyzer
                 if (MaxPartNumber > 0)
                 {
                     List<string> lOperands = new List<string>();
-                    foreach (variant lVariant in _frameworkWrapper.VariantSet)
+                    foreach (Variant lVariant in _frameworkWrapper.VariantSet)
 	                {
-		                 lOperands.Add(lVariant.names);
+		                 lOperands.Add(lVariant.Names);
 	                }
 
-                    foreach (part lPart in _frameworkWrapper.PartSet)
+                    foreach (Part lPart in _frameworkWrapper.PartSet)
                     {
                         string lTempVariantExpr = buildRandomExpFromOperands(lOperands);
                         _frameworkWrapper.CreateItemUsageRuleInstance(lPart,lTempVariantExpr);
                     }
-                    ////Previous version: when it was variant -> parts
-                    //foreach (variant lVariant in cFrameworkWrapper.VariantSet)
+                    ////Previous version: when it was Variant-> parts
+                    //foreach (VariantlVariant in cFrameworkWrapper.VariantSet)
                     //{
                     //    resetOverallFreeOperationCodes();
                     //    HashSet<part> lRandomParts = pickASeriesOfRandomParts(true);
@@ -496,9 +496,9 @@ namespace ProductPlatformAnalyzer
             return lChosenOperations;
         }
 
-        private HashSet<variant> pickASeriesOfRandomVariants(bool pRepeatVariantsAllowed)
+        private HashSet<Variant> pickASeriesOfRandomVariants(bool pRepeatVariantsAllowed)
         {
-            HashSet<variant> lChosenVariants = new HashSet<variant>();
+            HashSet<Variant> lChosenVariants = new HashSet<Variant>();
             try
             {
                 int lNoOfVariants = _myRandom.Next(1, MaxVariantNumber);
@@ -507,7 +507,7 @@ namespace ProductPlatformAnalyzer
                 for (int i = 0; i < lNoOfVariants; i++)
                 {
                     lRandomVariantCode = _myRandom.Next(1, VariantCodeLookup.Count);
-                    lChosenVariants.Add(variantLookupByCode(lRandomVariantCode));
+                    lChosenVariants.Add(VariantLookupByCode(lRandomVariantCode));
                 }
             }
             catch (Exception ex)
@@ -518,9 +518,9 @@ namespace ProductPlatformAnalyzer
             return lChosenVariants;
         }
 
-        private HashSet<part> pickASeriesOfRandomParts(bool pRepeatPartsAllowed)
+        private HashSet<Part> pickASeriesOfRandomParts(bool pRepeatPartsAllowed)
         {
-            HashSet<part> lChosenParts = new HashSet<part>();
+            HashSet<Part> lChosenParts = new HashSet<Part>();
             try
             {
                 int lNoOfParts = _myRandom.Next(1, MaxPartNumber);
@@ -623,9 +623,9 @@ namespace ProductPlatformAnalyzer
             return lResultList;
         }
 
-        private List<variant> pickASeriesOfRandomVariants()
+        private List<Variant> pickASeriesOfRandomVariants()
         {
-            List<variant> lChosenVariants = new List<variant>();
+            List<Variant> lChosenVariants = new List<Variant>();
             try
             {
                 if (OverallFreeVariantCodes.Count > 0)
@@ -736,7 +736,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                variant lTempVariant = null;
+                Variant lTempVariant = null;
                 for (int i = 0; i < MaxVariantNumber; i++)
                 {
                     lTempVariant = _frameworkWrapper.CreateVariantInstance("V-" + i);
@@ -755,7 +755,7 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                part lTempPart = null;
+                Part lTempPart = null;
                 for (int i = 0; i < MaxPartNumber; i++)
                 {
                     lTempPart = _frameworkWrapper.CreatePartInstance("P-" + i);
@@ -983,11 +983,11 @@ namespace ProductPlatformAnalyzer
                 List<string> lOperands = new List<string>();
                 foreach (var lPart in _frameworkWrapper.PartSet)
                 {
-                    lOperands.Add(lPart.names);
+                    lOperands.Add(lPart.Names);
                 }
                 foreach (var lVariant in _frameworkWrapper.VariantSet)
                 {
-                    lOperands.Add(lVariant.names);
+                    lOperands.Add(lVariant.Names);
                 }
 
 
@@ -1032,7 +1032,7 @@ namespace ProductPlatformAnalyzer
                 {
                     resetOverallFreeOperationCodes();
 
-                    //This is because an operation can't be part of its own pre or post condition
+                    //This is because an operation can't be Part of its own pre or post condition
                     OverallFreeOperationCodes.Remove(returnOperationCode(lCurrentOperation.Name));
 
                     if (OverallFreeOperationCodes.Count > 0)

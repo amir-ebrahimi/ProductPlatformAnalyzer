@@ -219,49 +219,49 @@ namespace ProductPlatformAnalyzer
 
         #region Props
         public OutputHandler OutputHandler { get; set; }
-        public HashSet<variant> VariantSet { get; set; }
-        public Dictionary<string, variant> VariantNameLookup { get; set; }
-        public Dictionary<variant, int> VariantIndexLookup { get; set; }
-        public Dictionary<int, variant> IndexVariantLookup { get; set; }
-        public Dictionary<string, variant> VariantSymbolicNameLookup { get; set; }
-        public HashSet<variantGroup> VariantGroupSet { get; set; }
-        public HashSet<part> PartSet { get; set; }
+        public HashSet<Variant> VariantSet { get; set; }
+        public Dictionary<string, Variant> VariantNameLookup { get; set; }
+        public Dictionary<Variant, int> VariantIndexLookup { get; set; }
+        public Dictionary<int, Variant> IndexVariantLookup { get; set; }
+        public Dictionary<string, Variant> VariantSymbolicNameLookup { get; set; }
+        public HashSet<VariantGroup> VariantGroupSet { get; set; }
+        public HashSet<Part> PartSet { get; set; }
         public bool UsePartInfo { get; set; }
-        public Dictionary<string, part> PartNameLookup { get; set; }
-        public Dictionary<part, int> PartIndexLookup { get; set; }
-        public Dictionary<int, part> IndexPartLookup { get; set; }
-        public Dictionary<string, part> PartSymbolicNameLookup { get; set; }
+        public Dictionary<string, Part> PartNameLookup { get; set; }
+        public Dictionary<Part, int> PartIndexLookup { get; set; }
+        public Dictionary<int, Part> IndexPartLookup { get; set; }
+        public Dictionary<string, Part> PartSymbolicNameLookup { get; set; }
         public HashSet<Operation> OperationSet { get; set; }
         public Dictionary<string, Operation> OperationNameLookup { get; set; }
         public Dictionary<string, Operation> OperationSymbolicNameLookup { get; set; }
-        public HashSet<itemUsageRule> ItemUsageRuleSet { get; set; }
+        public HashSet<PartUsageRule> PartUsageRuleSet { get; set; }
         public HashSet<string> ConstraintSet { get; set; }
-        public HashSet<resource> ResourceSet { get; set; }
-        public Dictionary<string, resource> ResourceNameLookup { get; set; }
-        public Dictionary<string, resource> ResourceSymbolicNameLookup { get; set; }
-        public HashSet<trait> TraitSet { get; set; }
-        public Dictionary<string, trait> TraitNameLookup { get; set; }
-        public Dictionary<string, trait> TraitSymbolicNameLookup { get; set; }
+        public HashSet<Resource> ResourceSet { get; set; }
+        public Dictionary<string, Resource> ResourceNameLookup { get; set; }
+        public Dictionary<string, Resource> ResourceSymbolicNameLookup { get; set; }
+        public HashSet<Trait> TraitSet { get; set; }
+        public Dictionary<string, Trait> TraitNameLookup { get; set; }
+        public Dictionary<string, Trait> TraitSymbolicNameLookup { get; set; }
         #endregion
 
         public FrameworkWrapper(OutputHandler pOutputHandler)
         {
             OutputHandler = pOutputHandler;
 
-            VariantSet = new HashSet<variant>();
-            VariantNameLookup = new Dictionary<string, variant>();
-            VariantIndexLookup = new Dictionary<variant, int>();
-            IndexVariantLookup = new Dictionary<int, variant>();
-            VariantSymbolicNameLookup = new Dictionary<string, variant>();
+            VariantSet = new HashSet<Variant>();
+            VariantNameLookup = new Dictionary<string, Variant>();
+            VariantIndexLookup = new Dictionary<Variant, int>();
+            IndexVariantLookup = new Dictionary<int, Variant>();
+            VariantSymbolicNameLookup = new Dictionary<string, Variant>();
 
-            VariantGroupSet = new HashSet<variantGroup>();
+            VariantGroupSet = new HashSet<VariantGroup>();
 
-            PartSet = new HashSet<part>();
+            PartSet = new HashSet<Part>();
             UsePartInfo = true;
-            PartNameLookup = new Dictionary<string, part>();
-            PartIndexLookup = new Dictionary<part, int>();
-            IndexPartLookup = new Dictionary<int, part>();
-            PartSymbolicNameLookup = new Dictionary<string, part>();
+            PartNameLookup = new Dictionary<string, Part>();
+            PartIndexLookup = new Dictionary<Part, int>();
+            IndexPartLookup = new Dictionary<int, Part>();
+            PartSymbolicNameLookup = new Dictionary<string, Part>();
 
             OperationSet = new HashSet<Operation>();
             OperationNameLookup = new Dictionary<string, Operation>();
@@ -272,15 +272,15 @@ namespace ProductPlatformAnalyzer
 
             ConstraintSet = new HashSet<string>();
 
-            ItemUsageRuleSet = new HashSet<itemUsageRule>();
+            PartUsageRuleSet = new HashSet<PartUsageRule>();
 
-            ResourceSet = new HashSet<resource>();
-            ResourceNameLookup = new Dictionary<string, resource>();
-            ResourceSymbolicNameLookup = new Dictionary<string, resource>();
+            ResourceSet = new HashSet<Resource>();
+            ResourceNameLookup = new Dictionary<string, Resource>();
+            ResourceSymbolicNameLookup = new Dictionary<string, Resource>();
 
-            TraitSet = new HashSet<trait>();
-            TraitNameLookup = new Dictionary<string, trait>();
-            TraitSymbolicNameLookup = new Dictionary<string, trait>();
+            TraitSet = new HashSet<Trait>();
+            TraitNameLookup = new Dictionary<string, Trait>();
+            TraitSymbolicNameLookup = new Dictionary<string, Trait>();
         }
 
         public bool ExistVariantByName(string pVariantName)
@@ -299,9 +299,9 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
-        public variant VariantLookupByName(string pVariantName)
+        public Variant VariantLookupByName(string pVariantName)
         {
-            variant lResultVariant = null;
+            Variant lResultVariant = null;
             try
             {
                 if (VariantNameLookup.ContainsKey(pVariantName))
@@ -317,9 +317,9 @@ namespace ProductPlatformAnalyzer
             return lResultVariant;
         }
 
-        public variant VariantLookupBySymbolicName(string pVariantSymbolicName)
+        public Variant VariantLookupBySymbolicName(string pVariantSymbolicName)
         {
-            variant lResultVariant = null;
+            Variant lResultVariant = null;
             try
             {
                 if (VariantSymbolicNameLookup.ContainsKey(pVariantSymbolicName))
@@ -350,9 +350,9 @@ namespace ProductPlatformAnalyzer
             return lTempResult;
         }
 
-        public part PartLookupByName(string pPartName, bool pWithUserMsg = true)
+        public Part PartLookupByName(string pPartName, bool pWithUserMsg = true)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
                 if (PartNameLookup.ContainsKey(pPartName))
@@ -369,9 +369,9 @@ namespace ProductPlatformAnalyzer
             return lResultPart;
         }
 
-        public part PartLookupByIndex(int pPartIndex)
+        public Part PartLookupByIndex(int pPartIndex)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
                 if (IndexPartLookup.ContainsKey(pPartIndex))
@@ -387,7 +387,7 @@ namespace ProductPlatformAnalyzer
             return lResultPart;
         }
 
-        public int IndexLookupByPart(part pPart)
+        public int IndexLookupByPart(Part pPart)
         {
             int lResultIndex = 0;
             try
@@ -395,7 +395,7 @@ namespace ProductPlatformAnalyzer
                 if (PartIndexLookup.ContainsKey(pPart))
                     lResultIndex = PartIndexLookup[pPart];
                 else
-                    OutputHandler.PrintMessageToConsole("Part " + pPart.names + " not found in Dictionary!");
+                    OutputHandler.PrintMessageToConsole("Part " + pPart.Names + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
@@ -405,9 +405,9 @@ namespace ProductPlatformAnalyzer
             return lResultIndex;
         }
 
-        public variant VariantLookupByIndex(int pVariantIndex)
+        public Variant VariantLookupByIndex(int pVariantIndex)
         {
-            variant lResultVariant = null;
+            Variant lResultVariant = null;
             try
             {
                 if (IndexVariantLookup.ContainsKey(pVariantIndex))
@@ -423,7 +423,7 @@ namespace ProductPlatformAnalyzer
             return lResultVariant;
         }
 
-        public int IndexLookupByVariant(variant pVariant)
+        public int IndexLookupByVariant(Variant pVariant)
         {
             int lResultIndex = 0;
             try
@@ -431,7 +431,7 @@ namespace ProductPlatformAnalyzer
                 if (VariantIndexLookup.ContainsKey(pVariant))
                     lResultIndex = VariantIndexLookup[pVariant];
                 else
-                    OutputHandler.PrintMessageToConsole("Variant " + pVariant.names + " not found in Dictionary!");
+                    OutputHandler.PrintMessageToConsole("Variant " + pVariant.Names + " not found in Dictionary!");
             }
             catch (Exception ex)
             {
@@ -456,9 +456,9 @@ namespace ProductPlatformAnalyzer
             return lTempResult;
         }
 
-        public part PartLookupBySymbolicName(string pPartSymbolicName)
+        public Part PartLookupBySymbolicName(string pPartSymbolicName)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
                 if (PartSymbolicNameLookup.ContainsKey(pPartSymbolicName))
@@ -623,9 +623,9 @@ namespace ProductPlatformAnalyzer
             return lResultOperationInstance;
         }*/
 
-        public resource ResourceLookupByName(string pResourceName)
+        public Resource ResourceLookupByName(string pResourceName)
         {
-            resource lResultResource = null;
+            Resource lResultResource = null;
             try
             {
                 if (ResourceNameLookup.ContainsKey(pResourceName))
@@ -641,9 +641,9 @@ namespace ProductPlatformAnalyzer
             return lResultResource;
         }
 
-        public resource ResourceLookupBySymbolicName(string pResourceSymbolicName)
+        public Resource ResourceLookupBySymbolicName(string pResourceSymbolicName)
         {
-            resource lResultResource = null;
+            Resource lResultResource = null;
             try
             {
                 if (ResourceSymbolicNameLookup.ContainsKey(pResourceSymbolicName))
@@ -659,9 +659,9 @@ namespace ProductPlatformAnalyzer
             return lResultResource;
         }
 
-        public trait TraitLookupByName(string pTraitName)
+        public Trait TraitLookupByName(string pTraitName)
         {
-            trait lResultTrait = null;
+            Trait lResultTrait = null;
             try
             {
                 if (TraitNameLookup.ContainsKey(pTraitName))
@@ -677,9 +677,9 @@ namespace ProductPlatformAnalyzer
             return lResultTrait;
         }
 
-        public trait TraitLookupBySymbolicName(string pTraitSymbolicName)
+        public Trait TraitLookupBySymbolicName(string pTraitSymbolicName)
         {
-            trait lResultTrait = null;
+            Trait lResultTrait = null;
             try
             {
                 if (TraitSymbolicNameLookup.ContainsKey(pTraitSymbolicName))
@@ -756,10 +756,10 @@ namespace ProductPlatformAnalyzer
             string lVariantgroup = "";
             try
             {
-                variant lVar = VariantLookupByName(pVarName);
-                variantGroup lVarGroup = GetVariantGroup(lVar);
+                Variant lVar = VariantLookupByName(pVarName);
+                VariantGroup lVarGroup = GetVariantGroup(lVar);
                 if (lVarGroup != null)
-                    lVariantgroup = lVarGroup.names;
+                    lVariantgroup = lVarGroup.Names;
             }
             catch (Exception ex)
             {
@@ -769,7 +769,7 @@ namespace ProductPlatformAnalyzer
             return lVariantgroup;
         }
 
-        public HashSet<variantGroup> GetVariantGroupSet()
+        public HashSet<VariantGroup> GetVariantGroupSet()
         {
             return VariantGroupSet;
         }
@@ -800,15 +800,15 @@ namespace ProductPlatformAnalyzer
             return instances;
         }*/
 
-        public variantGroup GetVariantGroup(variant pVar)
+        public VariantGroup GetVariantGroup(Variant pVar)
         {
-            variantGroup lVariantGroup = null;
+            VariantGroup lVariantGroup = null;
             try
             {
-                foreach (variantGroup lVg in VariantGroupSet)
+                foreach (VariantGroup lVg in VariantGroupSet)
                 {
 
-                    foreach (variant lV in lVg.variants)
+                    foreach (Variant lV in lVg.Variants)
                     {
                         if (lV.Equals(pVar))
                             lVariantGroup = lVg;
@@ -883,10 +883,10 @@ namespace ProductPlatformAnalyzer
                     //Check syntax of Requirement field
                     lCheckResult = CheckOperationsRequirementFieldSyntax(pOperation.Requirement);
 
-                    //for each part of (Trait)+ check that the traits are existing objects
+                    //for each Part of (Trait)+ check that the traits are existing objects
                     lCheckResult = CheckExistanceOfRequirementTraits(pOperation.Requirement);
 
-                    //Check to find resource which inheritance field matches the  (Trait)+ part of the requirement field
+                    //Check to find resource which inheritance field matches the  (Trait)+ Part of the requirement field
                     lCheckResult = CheckValidityOfOperationRequirementsTraits(pOperation.Requirement);
 
                     //For the fields in the expression of the requirement add the found resource name as a prefix to fields in expression
@@ -930,12 +930,12 @@ namespace ProductPlatformAnalyzer
         }
         */
 
-        public HashSet<resource> ReturnOperationChosenResource(string pOperationName)
+        public HashSet<Resource> ReturnOperationChosenResource(string pOperationName)
         {
-            HashSet<resource> lResultResources = new HashSet<resource>();
+            HashSet<Resource> lResultResources = new HashSet<Resource>();
             try
             {
-                //IMPORTANT: Here we have assumed that the operation requirement part is in the Prefix format
+                //IMPORTANT: Here we have assumed that the operation requirement Part is in the Prefix format
                 //Also remember that the traits have been replaced
                 //The operation has the format "operand operator1 resource_name.attribute"
                 Operation lOperation = OperationLookupByName(pOperationName);
@@ -971,15 +971,15 @@ namespace ProductPlatformAnalyzer
                 //foreach (string lRequirement in lRequirementField)
                 //{
                     //Here for each requirement we look at its traits and see which resource can match them
-                    resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
+                    Resource lResultingResource = ReturnRequirementMatchingResource(lRequirement);
 
-                    //We find the attibute part of the requirement
+                    //We find the attibute Part of the requirement
                     string[] lRequirementFieldParts = lRequirement.Split(':');
                     string lAttributePart = lRequirementFieldParts[1].Trim();
 
                     //We add that resource name to add it to the field name of that requirement
                     int lIndexOfFirstOperand = lAttributePart.LastIndexOf(' ') + 1;
-                    lAttributePart = lAttributePart.Insert(lIndexOfFirstOperand, lResultingResource.names + "_");
+                    lAttributePart = lAttributePart.Insert(lIndexOfFirstOperand, lResultingResource.Name + "_");
 //                    lAttributePart = lResultingResource.names + "_" + lAttributePart;
 //                    lAttributePart = lAttributePart.Replace(", ", ", " + lResultingResource.names + ".");
 
@@ -1022,19 +1022,19 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        private resource ReturnRequirementMatchingResource(string pRequirement)
+        private Resource ReturnRequirementMatchingResource(string pRequirement)
         {
-            resource lResultingResource = new resource();
+            Resource lResultingResource = new Resource();
             try
             {
-                HashSet<trait> lRequirementTraits = ExtractRequirementFieldTraits(pRequirement);
+                HashSet<Trait> lRequirementTraits = ExtractRequirementFieldTraits(pRequirement);
 
-                HashSet<resource> lResources = new HashSet<resource>();
-                foreach (resource lResource in ResourceSet)
-                {
-                    if (lResource.traits.SequenceEqual(lRequirementTraits))
-                        lResources.Add(lResource);
-                }
+                HashSet<Resource> lResources = new HashSet<Resource>();
+                //foreach (Resource lResource in ResourceSet)
+                //{
+                //    if (lResource.traits.SequenceEqual(lRequirementTraits))
+                //        lResources.Add(lResource);
+                //}
 
                 if (lResources.Count != 0)
                     lResultingResource = lResources.First();
@@ -1086,7 +1086,7 @@ namespace ProductPlatformAnalyzer
                 var lRequirment = pRequirementField;
                 //foreach (var lRequirment in pRequirementField)
                 //{
-                    resource lResultingResource = ReturnRequirementMatchingResource(lRequirment);
+                    Resource lResultingResource = ReturnRequirementMatchingResource(lRequirment);
 
                     if (lResultingResource != null)
                         lSemanticCheck = lSemanticCheck && true;
@@ -1117,9 +1117,9 @@ namespace ProductPlatformAnalyzer
             return lRequirementFieldTraitNames;
         }
 
-        private HashSet<trait> ExtractRequirementFieldTraits(string pRequirementField)
+        private HashSet<Trait> ExtractRequirementFieldTraits(string pRequirementField)
         {
-            HashSet<trait> lRequirementFieldTraits = new HashSet<trait>();
+            HashSet<Trait> lRequirementFieldTraits = new HashSet<Trait>();
             string lRequirementFieldTraitNames = "";
             try
             {
@@ -1132,7 +1132,7 @@ namespace ProductPlatformAnalyzer
                 			 
                     foreach (var lTrait in TraitSet)
                     {
-                        if (lTrait.names == lTraitNames[i].Trim())
+                        if (lTrait.Names == lTraitNames[i].Trim())
                         {
                             lRequirementFieldTraits.Add(lTrait);
                             break;
@@ -1148,25 +1148,25 @@ namespace ProductPlatformAnalyzer
             return lRequirementFieldTraits;
         }
 
-        private string ExtractResourceTraitNames(resource pResource)
-        {
-            string lResourceTraitName = "";
-            try
-            {
-                foreach (var lTrait in pResource.traits)
-                {
-                    if (lResourceTraitName != "")
-                        lResourceTraitName += ",";
-                    lResourceTraitName += lTrait.names + " ";
-                }
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in ExtractResourceTraitNames");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResourceTraitName;
-        }
+        //private string ExtractResourceTraitNames(Resource pResource)
+        //{
+        //    string lResourceTraitName = "";
+        //    try
+        //    {
+        //        foreach (var lTrait in pResource.traits)
+        //        {
+        //            if (lResourceTraitName != "")
+        //                lResourceTraitName += ",";
+        //            lResourceTraitName += lTrait.names + " ";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in ExtractResourceTraitNames");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResourceTraitName;
+        //}
 
         private bool CheckOperationsRequirementFieldSyntax(string pRequirementField)
         {
@@ -1271,17 +1271,17 @@ namespace ProductPlatformAnalyzer
             return lResultString;
         }
 
-        public void AddVariantGroup(variantGroup pVariantGroup)
+        public void AddVariantGroup(VariantGroup pVariantGroup)
         {
             VariantGroupSet.Add(pVariantGroup);
         }
 
-        /*public void addPart(part pPart)
+        /*public void addPart(Part pPart)
         {
             PartList.Add(pPart);
         }*/
 
-        /*public void addVariant(variant pVariant)
+        /*public void addVariant(VariantpVariant)
         {
             VariantList.Add(pVariant);
         }*/
@@ -1291,7 +1291,7 @@ namespace ProductPlatformAnalyzer
             ConstraintSet.Add(pConstraint);
         }
 
-        public void AddResource(resource pResource)
+        public void AddResource(Resource pResource)
         {
             ResourceSet.Add(pResource);
         }
@@ -1315,7 +1315,7 @@ namespace ProductPlatformAnalyzer
             return tempResultResource;
         }*/
 
-        public void AddTrait(trait pTrait)
+        public void AddTrait(Trait pTrait)
         {
             TraitSet.Add(pTrait);
         }
@@ -1378,9 +1378,9 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public part GetPartFromActiveOperationName(string pActiveOperationName)
+        public Part GetPartFromActiveOperationName(string pActiveOperationName)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
                 string[] lParts = pActiveOperationName.Split('_');
@@ -1409,7 +1409,7 @@ namespace ProductPlatformAnalyzer
                         lPartIndex = Convert.ToInt32(lParts[2]);
                 }
                 else
-                    //This means that the variant for the active operation has not been mentioned so this operation should be considered for all active variants
+                    //This means that the Variantfor the active operation has not been mentioned so this operation should be considered for all active variants
                     lPartIndex = -1;
             }
             catch (Exception ex)
@@ -1434,7 +1434,7 @@ namespace ProductPlatformAnalyzer
                         lVariantIndex = Convert.ToInt32(lParts[2]);
                 }
                 else
-                    //This means that the variant for the active operation has not been mentioned so this operation should be considered for all active variants
+                    //This means that the Variantfor the active operation has not been mentioned so this operation should be considered for all active variants
                     lVariantIndex = -1;
             }
             catch (Exception ex)
@@ -1686,26 +1686,26 @@ namespace ProductPlatformAnalyzer
                       </variantGroups>
                      */
                     lDataFileXML += "   <variants>" + System.Environment.NewLine;
-                    foreach (variant lVariant in VariantSet)
+                    foreach (Variant lVariant in VariantSet)
                     {
                         lDataFileXML += "       <variant>" + System.Environment.NewLine;
-                        lDataFileXML += "           <variantName>" + lVariant.names + "</variantName>" + System.Environment.NewLine;
+                        lDataFileXML += "           <variantName>" + lVariant.Names + "</variantName>" + System.Environment.NewLine;
                         lDataFileXML += "       </variant>" + System.Environment.NewLine;
                     }
                     lDataFileXML += "   </variants>" + System.Environment.NewLine;
 
                     lDataFileXML += "   <variantGroups>" + System.Environment.NewLine;
-                    foreach (variantGroup lVariantGroup in VariantGroupSet)
+                    foreach (VariantGroup lVariantGroup in VariantGroupSet)
                     {
                         lDataFileXML += "       <variantGroup>" + System.Environment.NewLine;
-                        lDataFileXML += "           <variantGroupName>" + lVariantGroup.names + "</variantGroupName>" + System.Environment.NewLine;
-                        lDataFileXML += "           <groupCardinality>" + lVariantGroup.gCardinality + "</groupCardinality>" + System.Environment.NewLine;
-                        if (lVariantGroup.variants.Count > 0)
+                        lDataFileXML += "           <variantGroupName>" + lVariantGroup.Names + "</variantGroupName>" + System.Environment.NewLine;
+                        lDataFileXML += "           <groupCardinality>" + lVariantGroup.GCardinality + "</groupCardinality>" + System.Environment.NewLine;
+                        if (lVariantGroup.Variants.Count > 0)
                         {
                             lDataFileXML += "               <variantRefs>" + System.Environment.NewLine;
-                            foreach (variant lVariant in lVariantGroup.variants)
+                            foreach (Variant lVariant in lVariantGroup.Variants)
                             {
-                                lDataFileXML += "                   <variantRef>" + lVariant.names + "</variantRef>"+ System.Environment.NewLine;
+                                lDataFileXML += "                   <variantRef>" + lVariant.Names + "</variantRef>"+ System.Environment.NewLine;
                             }
                             lDataFileXML += "               </variantRefs>" + System.Environment.NewLine;
 
@@ -1733,20 +1733,20 @@ namespace ProductPlatformAnalyzer
                       </itemusagerules>
                      */
                     lDataFileXML += "   <parts>" + System.Environment.NewLine;
-                    foreach (part lPart in PartSet)
+                    foreach (Part lPart in PartSet)
                     {
                         lDataFileXML += "       <part>" + System.Environment.NewLine;
-                        lDataFileXML += "           <partName>" + lPart.names + "</partName>" + System.Environment.NewLine;
+                        lDataFileXML += "           <partName>" + lPart.Names + "</partName>" + System.Environment.NewLine;
                         lDataFileXML += "       </part>" + System.Environment.NewLine;
                     }
                     lDataFileXML += "   </parts>" + System.Environment.NewLine;
 
                     lDataFileXML += "   <itemusagerules>" + System.Environment.NewLine;
-                    foreach (itemUsageRule lItemUsageRule in ItemUsageRuleSet)
+                    foreach (PartUsageRule lPartUsageRule in PartUsageRuleSet)
                     {
                         lDataFileXML += "       <itemusagerule>" + System.Environment.NewLine;
-                        lDataFileXML += "           <partRef>" + lItemUsageRule.getPart().names + "</partRef>" + System.Environment.NewLine;
-                        lDataFileXML += "           <variantRef>" + lItemUsageRule.getVariantExp() + "</variantRef>" + System.Environment.NewLine;
+                        lDataFileXML += "           <partRef>" + lPartUsageRule.Part.Names + "</partRef>" + System.Environment.NewLine;
+                        lDataFileXML += "           <variantRef>" + lPartUsageRule.VariantExpression + "</variantRef>" + System.Environment.NewLine;
                         lDataFileXML += "       </itemusagerule>" + System.Environment.NewLine;
                     }
                     lDataFileXML += "   </itemusagerules>" + System.Environment.NewLine;
@@ -1786,21 +1786,21 @@ namespace ProductPlatformAnalyzer
                     </traits>
                      */
                     lDataFileXML += "   <traits>" + System.Environment.NewLine;
-                    foreach (trait lTrait in TraitSet)
+                    foreach (Trait lTrait in TraitSet)
                     {
                         lDataFileXML += "       <trait>" + System.Environment.NewLine;
-                        lDataFileXML += "           <traitName>" + lTrait.names + "</traitName>" + System.Environment.NewLine; ;
-                        if (lTrait.inherit != null)
+                        lDataFileXML += "           <traitName>" + lTrait.Names + "</traitName>" + System.Environment.NewLine; ;
+                        if (lTrait.Inherit != null)
                         {
-                            foreach (trait lInherit in lTrait.inherit)
+                            foreach (Trait lInherit in lTrait.Inherit)
                             {
-                                lDataFileXML += "           <inherit>" + lInherit.names + "</inherit>" + System.Environment.NewLine; ;
+                                lDataFileXML += "           <inherit>" + lInherit.Names + "</inherit>" + System.Environment.NewLine; ;
                             }
                         }
-                        if (lTrait.attributes != null)
+                        if (lTrait.Attributes != null)
                         {
                             lDataFileXML += "           <attributes>" + System.Environment.NewLine; ;
-                            foreach (var lAttribute in lTrait.attributes)
+                            foreach (var lAttribute in lTrait.Attributes)
                             {
                                 lDataFileXML += "               <attribute>" + System.Environment.NewLine; ;
                                 lDataFileXML += "                   <attributeType>" + lAttribute.Item1 + "</attributeType>" + System.Environment.NewLine; ;
@@ -1862,19 +1862,19 @@ namespace ProductPlatformAnalyzer
                 if (VariantNameLookup.Count > 0)
                 {
                     lDataSummary += "Variants:" + System.Environment.NewLine;
-                    foreach (variant lVariant in VariantSet)
+                    foreach (Variant lVariant in VariantSet)
                     {
-                        lDataSummary += "Variant Name: " + lVariant.names + System.Environment.NewLine;
+                        lDataSummary += "Variant Name: " + lVariant.Names + System.Environment.NewLine;
                     }
 
                     //Variantgroups
                     lDataSummary += "Variant Groups:" + System.Environment.NewLine;
-                    foreach (variantGroup lVariantGroup in VariantGroupSet)
+                    foreach (VariantGroup lVariantGroup in VariantGroupSet)
                     {
-                        lDataSummary += "Variant Group Name: " + lVariantGroup.names + System.Environment.NewLine;
-                        lDataSummary += "Variant Group Cardinality: " + lVariantGroup.gCardinality + System.Environment.NewLine;
-                        foreach (variant lVariant in lVariantGroup.variants)
-                            lDataSummary += "Variant Group Variant: " + lVariant.names + System.Environment.NewLine;
+                        lDataSummary += "Variant Group Name: " + lVariantGroup.Names + System.Environment.NewLine;
+                        lDataSummary += "Variant Group Cardinality: " + lVariantGroup.GCardinality + System.Environment.NewLine;
+                        foreach (Variant lVariant in lVariantGroup.Variants)
+                            lDataSummary += "Variant Group Variant: " + lVariant.Names + System.Environment.NewLine;
 
                     }
                 }
@@ -1883,9 +1883,9 @@ namespace ProductPlatformAnalyzer
                 if (PartNameLookup.Count > 0)
                 {
                     lDataSummary += "Parts:" + System.Environment.NewLine;
-                    foreach (part lPart in PartSet)
+                    foreach (Part lPart in PartSet)
                     {
-                        lDataSummary += "Part Name: " + lPart.names + System.Environment.NewLine;
+                        lDataSummary += "Part Name: " + lPart.Names + System.Environment.NewLine;
                         /*                    foreach (operation lManOperation in lPart.manOperations)
                                                 lDataSummary += "Part Manufacturing Operation: " + lManOperation.names + System.Environment.NewLine;*/
                     }
@@ -1907,11 +1907,11 @@ namespace ProductPlatformAnalyzer
                 if (TraitSet.Count > 0)
                 {
                     lDataSummary += "Traits:" + System.Environment.NewLine;
-                    foreach (trait lTrait in TraitSet)
+                    foreach (Trait lTrait in TraitSet)
                     {
-                        lDataSummary += "Trait Name: " + lTrait.names + System.Environment.NewLine;
+                        lDataSummary += "Trait Name: " + lTrait.Names + System.Environment.NewLine;
                         lDataSummary += "Attributes: " + System.Environment.NewLine;
-                        foreach (Tuple<string, string> lAttribute in lTrait.attributes)
+                        foreach (Tuple<string, string> lAttribute in lTrait.Attributes)
                         {
                             lDataSummary += "Attribute Name: " + lAttribute.Item2 + System.Environment.NewLine;
                             lDataSummary += "Attribute Type: " + lAttribute.Item1 + System.Environment.NewLine;
@@ -2063,14 +2063,14 @@ namespace ProductPlatformAnalyzer
         //    return lResultOperationInstance;
         //}
 
-        public part CreatePartInstance(string pName)
+        public Part CreatePartInstance(string pName)
         {
-            part lTempPart = new part();
+            Part lTempPart = new Part();
             try
             {
-                lTempPart.names = pName;
+                lTempPart.Names = pName;
                 //addPart(lTempPart);
-                part lFoundPart = PartLookupByName(pName, false);
+                Part lFoundPart = PartLookupByName(pName, false);
                 if (lFoundPart == null)
                 {
                     PartSet.Add(lTempPart);
@@ -2088,12 +2088,12 @@ namespace ProductPlatformAnalyzer
             return lTempPart;
         }
 
-        public variant CreateVariantInstance(string pName)
+        public Variant CreateVariantInstance(string pName)
         {
-            variant lTempVariant = new variant();
+            Variant lTempVariant = new Variant();
             try
             {
-                lTempVariant.names = pName;
+                lTempVariant.Names = pName;
                 //addVariant(lTempVariant);
 
                 VariantSet.Add(lTempVariant);
@@ -2110,14 +2110,14 @@ namespace ProductPlatformAnalyzer
             return lTempVariant;
         }
 
-        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, List<variant> pVariantSet)
+        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, List<Variant> pVariantSet)
         {
             try
             {
-                variantGroup lTempVariantGroup = new variantGroup();
-                lTempVariantGroup.names = pName;
-                lTempVariantGroup.gCardinality = pGroupCardinality;
-                lTempVariantGroup.variants = pVariantSet;
+                VariantGroup lTempVariantGroup = new VariantGroup();
+                lTempVariantGroup.Names = pName;
+                lTempVariantGroup.GCardinality = pGroupCardinality;
+                lTempVariantGroup.Variants = pVariantSet;
                 AddVariantGroup(lTempVariantGroup);
             }
             catch (Exception ex)
@@ -2127,13 +2127,13 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public partOperations CreatePartOperationMappingTemporaryInstance(string pPartName, List<string> pOperationSet)
         {
             partOperations lPartOperations = new partOperations();
             try
             {
-                //Here we have to check if the part name is a single part or an expression over parts
+                //Here we have to check if the Part name is a single Part or an expression over parts
 
 
                 //lPartOperations.setPartExpr(partLoopupByName(pPartName));
@@ -2159,12 +2159,12 @@ namespace ProductPlatformAnalyzer
             return lPartOperations;
         }*/
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public void CreatePartOperationMappingInstance(string pPartName, HashSet<string> pOperationSet)
         {
             try
             {
-                //Here we have to check if the part name is a single part or an expression over parts
+                //Here we have to check if the Part name is a single Part or an expression over parts
 
                 partOperations lPartOperations = new partOperations();
 
@@ -2189,20 +2189,20 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        public void CreateItemUsageRuleInstance(part pPart, string pVariantExp)
+        public void CreateItemUsageRuleInstance(Part pPart, string pVariantExp)
         {
             try
             {
-                //Here we have to check if the part name is a single part or an expression over parts
+                //Here we have to check if the Part name is a single Part or an expression over parts
 
-                itemUsageRule lItemUsageRule = new itemUsageRule();
+                PartUsageRule lPartUsageRule = new PartUsageRule();
 
                 //lVariantOperations.setVariantExpr(variantLookupByName(pVariantName));
-                lItemUsageRule.setVariantExp(pVariantExp);
-                lItemUsageRule.setPart(pPart);
+                lPartUsageRule.VariantExpression = pVariantExp;
+                lPartUsageRule.Part = pPart;
 
 
-                AddItemUsageRule(lItemUsageRule);
+                AddPartUsageRule(lPartUsageRule);
             }
             catch (Exception ex)
             {
@@ -2211,17 +2211,17 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddItemUsageRule(itemUsageRule pItemUsageRule)
+        public void AddPartUsageRule(PartUsageRule pPartUsageRule)
         {
-            ItemUsageRuleSet.Add(pItemUsageRule);
+            PartUsageRuleSet.Add(pPartUsageRule);
         }
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public void CreatePartOperationMappingInstance(string pPartExpr, HashSet<operation> pOperationSet)
         {
             try
             {
-                //Here we have to check if the part name is a single part or an expression over parts
+                //Here we have to check if the Part name is a single Part or an expression over parts
 
                 partOperations lPartOperations = new partOperations();
 
@@ -2240,12 +2240,12 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public void CreateVariantOperationMappingInstance(string pVariantExpr, HashSet<operation> pOperationSet)
         {
             try
             {
-                //Here we have to check if the part name is a single part or an expression over parts
+                //Here we have to check if the Part name is a single Part or an expression over parts
 
                 variantOperations lVariantOperations = new variantOperations();
 
@@ -2254,7 +2254,7 @@ namespace ProductPlatformAnalyzer
 
                 lVariantOperations.setOperations(pOperationSet);
 
-                //The operations which are added as a result of variant - operation relation are infact active operations
+                //The operations which are added as a result of Variant- operation relation are infact active operations
                 foreach (operation lOperation in pOperationSet)
                     addActiveOperation(lOperation);
 
@@ -2287,15 +2287,15 @@ namespace ProductPlatformAnalyzer
             return lResultTrait;
         }*/
 
-        public void CreateTraitInstance(string pName, HashSet<trait> pInherit, HashSet<Tuple<string,string>> pAttributes)
+        public void CreateTraitInstance(string pName, HashSet<Trait> pInherit, HashSet<Tuple<string,string>> pAttributes)
         {
             try
             {
-                trait lTempTrait = new trait();
+                Trait lTempTrait = new Trait();
 
-                lTempTrait.names = pName;
-                lTempTrait.inherit = pInherit;
-                lTempTrait.attributes = pAttributes;
+                lTempTrait.Names = pName;
+                lTempTrait.Inherit = pInherit;
+                lTempTrait.Attributes = pAttributes;
 
                 AddTrait(lTempTrait);
 
@@ -2309,14 +2309,14 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void CreateResourceInstance(string pName, HashSet<trait> pTraits ,HashSet<Tuple<string,string,string>> pAttributes)
+        public void CreateResourceInstance(string pName, HashSet<Trait> pTraits ,HashSet<Tuple<string,string,string>> pAttributes)
         {
             try
             {
-                resource lTempResource = new resource();
-                lTempResource.names = pName;
-                lTempResource.traits = pTraits;
-                lTempResource.attributes = pAttributes;
+                Resource lTempResource = new Resource();
+                lTempResource.Name = pName;
+                //lTempResource.traits = pTraits;
+                //lTempResource.attributes = pAttributes;
                 AddResource(lTempResource);
 
                 ResourceNameLookup.Add(pName, lTempResource);
@@ -2330,23 +2330,23 @@ namespace ProductPlatformAnalyzer
         }
 
         //Virtual variants are no longer needed
-        /*public variant createVirtualVariant(string lVariantExpr)
+        /*public VariantcreateVirtualVariant(string lVariantExpr)
         {
-            variant lResultVariant = new variant();
+            VariantlResultVariant = new variant();
             try
             {
-                //A new Virtual variant need to be build
+                //A new Virtual Variantneed to be build
                 //AND
-                //The virtual variant needs to be added to virtual variant and virtual variant group
-                variant lVirtualVariant = createVirtualVariantInstance();
+                //The virtual Variantneeds to be added to virtual Variantand virtual Variantgroup
+                VariantlVirtualVariant = createVirtualVariantInstance();
 
-                //TODO: URGENT add a relevant virtual variant and an virtual variant group
+                //TODO: URGENT add a relevant virtual Variantand an virtual Variantgroup
                 addVirtualVariantToGroup(lVirtualVariant);
 
-                //A new constraint needs to be added relating the virtual variant to the variant expression
+                //A new constraint needs to be added relating the virtual Variantto the Variantexpression
                 addVirtualVariantConstaint(lVirtualVariant, lVariantExpr);
 
-                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                //The new virtual Variantand the exression it represents needs to be added to virtual Variantlist in frameworkwrapper
                 createVirtualVariant2VariantExprInstance(lVirtualVariant, lVariantExpr);
 
                 lResultVariant = lVirtualVariant;
@@ -2360,23 +2360,23 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //Virtual parts are no longer needed
-        /*public part createVirtualPart(string lPartExpr)
+        /*public Part createVirtualPart(string lPartExpr)
         {
-            part lResultPart = new part();
+            Part lResultPart = new part();
             try
             {
-                //A new Virtual part need to be build
+                //A new Virtual Part need to be build
                 //AND
-                //The virtual part needs to be added to virtual variant and virtual variant group
-                part lVirtualPart = createVirtualPartInstance();
+                //The virtual Part needs to be added to virtual Variantand virtual Variantgroup
+                Part lVirtualPart = createVirtualPartInstance();
 
-                //TODO: URGENT add a relevant virtual variant and an virtual variant group
+                //TODO: URGENT add a relevant virtual Variantand an virtual Variantgroup
                 //addVirtualVariantToGroup(lVirtualPart);
 
-                //A new constraint needs to be added relating the virtual part to the part expression
+                //A new constraint needs to be added relating the virtual Part to the Part expression
                 addVirtualPartConstaint(lVirtualPart, lPartExpr);
 
-                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                //The new virtual Variantand the exression it represents needs to be added to virtual Variantlist in frameworkwrapper
                 createVirtualPart2PartExprInstance(lVirtualPart, lPartExpr);
 
                 lResultPart = lVirtualPart;
@@ -2390,9 +2390,9 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //Part operations are not used anymore
-        /*public part ReturnCurrentPart(partOperations pPartOperations)
+        /*public Part ReturnCurrentPart(partOperations pPartOperations)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
 
@@ -2420,9 +2420,9 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //Variant operations are not used anymore
-        /*public variant ReturnCurrentVariant(variantOperations pVariantOperations)
+        /*public VariantReturnCurrentVariant(variantOperations pVariantOperations)
         {
-            variant lResultVariant = null;
+            VariantlResultVariant = null;
             try
             {
 
@@ -2450,12 +2450,12 @@ namespace ProductPlatformAnalyzer
         }*/
 
 
-        public void AddVirtualPartConstaint(part pVirtualPart, string pPartExpr)
+        public void AddVirtualPartConstaint(Part pVirtualPart, string pPartExpr)
         {
             try
             {
-                //A new constraint needs to be added relating the virtual part to the variant expression
-                AddConstraint("-> " + pVirtualPart.names + " (" + pPartExpr + ")");
+                //A new constraint needs to be added relating the virtual Part to the Variantexpression
+                AddConstraint("-> " + pVirtualPart.Names + " (" + pPartExpr + ")");
             }
             catch (Exception ex)
             {
@@ -2464,12 +2464,12 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        public void AddVirtualVariantConstaint(variant pVirtualVariant, string pVariantExpr)
+        public void AddVirtualVariantConstaint(Variant pVirtualVariant, string pVariantExpr)
         {
             try
             {
-                //A new constraint needs to be added relating the virtual variant to the variant expression
-                AddConstraint("-> " + pVirtualVariant.names + " (" + pVariantExpr + ")");
+                //A new constraint needs to be added relating the virtual Variantto the Variantexpression
+                AddConstraint("-> " + pVirtualVariant.Names + " (" + pVariantExpr + ")");
             }
             catch (Exception ex)
             {
@@ -2478,11 +2478,11 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        /*public void createVirtualPart2PartExprInstance(part pVirtualPart, string pPartExpr)
+        /*public void createVirtualPart2PartExprInstance(Part pVirtualPart, string pPartExpr)
         {
             try
             {
-                //The new virtual part and the exression it represents needs to be added to virtual part list in frameworkwrapper
+                //The new virtual Part and the exression it represents needs to be added to virtual Part list in frameworkwrapper
                 virtualPart2PartExpr lTempVirtualPart = new virtualPart2PartExpr();
 
                 lTempVirtualPart.setVirtualPart(pVirtualPart);
@@ -2498,11 +2498,11 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        /*public void createVirtualVariant2VariantExprInstance(variant pVirtualVariant, string pVariantExpr)
+        /*public void createVirtualVariant2VariantExprInstance(VariantpVirtualVariant, string pVariantExpr)
         {
             try
             {
-                //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                //The new virtual Variantand the exression it represents needs to be added to virtual Variantlist in frameworkwrapper
                 virtualVariant2VariantExpr lTempVirtualVariant = new virtualVariant2VariantExpr();
 
                 lTempVirtualVariant.setVirtualVariant(pVirtualVariant);
@@ -2518,9 +2518,9 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        /*public part createVirtualPartInstance()
+        /*public Part createVirtualPartInstance()
         {
-            part lVirtualPart = new part();
+            Part lVirtualPart = new part();
             try
             {
                 string name = "VirtualP" + getNextVirtualPartIndex();
@@ -2539,9 +2539,9 @@ namespace ProductPlatformAnalyzer
             return lVirtualPart;
         }*/
 
-        /*public variant createVirtualVariantInstance()
+        /*public VariantcreateVirtualVariantInstance()
         {
-            variant lVirtualVariant = new variant();
+            VariantlVirtualVariant = new variant();
             try
             {
                 string name = "VirtualV" + getNextVirtualVariantIndex();
@@ -2561,11 +2561,11 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //Virtual variants are no longer needed
-        /*public void addVirtualVariantToGroup(variant pVariant)
+        /*public void addVirtualVariantToGroup(VariantpVariant)
         {
             try
             {
-                foreach (variantGroup vg in VariantGroupSet)
+                foreach (VariantGroup vg in VariantGroupSet)
                 {
                     if (string.Equals(vg.names, "Virtual-VG"))
                     {
@@ -2594,7 +2594,7 @@ namespace ProductPlatformAnalyzer
             string andVariants = variants.ElementAt(0).names;
             variants.RemoveAt(0);
 
-            foreach (variant var in variants)
+            foreach (Variantvar in variants)
             {
                 andVariants = "(and " + andVariants + " " + var.names + ")";
             }
@@ -2621,7 +2621,7 @@ namespace ProductPlatformAnalyzer
             int index = 0;
             try
             {
-                foreach (part var in PartList)
+                foreach (Part var in PartList)
                 {
                     if (var.index > index)
                         index = var.index;
@@ -2640,7 +2640,7 @@ namespace ProductPlatformAnalyzer
             int lResultIndex = 0;
             try
             {
-                foreach (part var in PartList)
+                foreach (Part var in PartList)
                 {
                     if (var.index > index)
                         index = var.index;
@@ -2655,12 +2655,12 @@ namespace ProductPlatformAnalyzer
             return lResultIndex;
         }*/
 
-        private int GetVirtualVariantIndex(variant pVirtualVariant)
+        private int GetVirtualVariantIndex(Variant pVirtualVariant)
         {
             int lVirtualVariantIndex = 0;
             try
             {
-                string lVirtualVariantName = pVirtualVariant.names;
+                string lVirtualVariantName = pVirtualVariant.Names;
                 int lStrartingIndex = lVirtualVariantName.IndexOf("VirtualVariant");
                 lVirtualVariantIndex = int.Parse(lVirtualVariantName.Remove(lStrartingIndex + 14 + 1));
             }
@@ -2672,22 +2672,22 @@ namespace ProductPlatformAnalyzer
             return lVirtualVariantIndex;
         }
 
-        private int GetVirtualPartIndex(part pVirtualPart)
-        {
-            int lVirtualPartIndex = 0;
-            try
-            {
-                string lVirtualPartName = pVirtualPart.names;
-                int lStartingIndex = lVirtualPartName.IndexOf("VirtualPart");
-                lVirtualPartIndex = int.Parse(lVirtualPartName.Remove(lStartingIndex + 14 + 1));
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in getVirtualPartIndex");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lVirtualPartIndex;
-        }
+        //private int GetVirtualPartIndex(Part pVirtualPart)
+        //{
+        //    int lVirtualPartIndex = 0;
+        //    try
+        //    {
+        //        string lVirtualPartName = pVirtualPart.Names;
+        //        int lStartingIndex = lVirtualPartName.IndexOf("VirtualPart");
+        //        lVirtualPartIndex = int.Parse(lVirtualPartName.Remove(lStartingIndex + 14 + 1));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in getVirtualPartIndex");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lVirtualPartIndex;
+        //}
 
         /*private int getMaxVirtualVariantNumber()
         {
@@ -2696,7 +2696,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (virtualVariant2VariantExpr virtualVariant2VariantExpr in cVirtualVariant2VariantExprSet)
                 {
-                    variant virtualVariant = virtualVariant2VariantExpr.getVirtualVariant();
+                    VariantvirtualVariant = virtualVariant2VariantExpr.getVirtualVariant();
 
                     lResultIndex = getVirtualVariantIndex(virtualVariant) + 1;
 
@@ -2717,7 +2717,7 @@ namespace ProductPlatformAnalyzer
             {
                 foreach (virtualPart2PartExpr virtualPart2PartExpr in cVirtualPart2PartExprSet)
                 {
-                    part virtualPart = virtualPart2PartExpr.getVirtualPart();
+                    Part virtualPart = virtualPart2PartExpr.getVirtualPart();
 
                     lResultIndex = getVirtualPartIndex(virtualPart) + 1;
 
@@ -2736,7 +2736,7 @@ namespace ProductPlatformAnalyzer
             string lResultName = "";
             try
             {
-                //Each virtual variant is named as "VirtualVariantX" which X is a number
+                //Each virtual Variantis named as "VirtualVariantX" which X is a number
                 int lMaxVirtualVariantNumber = getMaxVirtualVariantNumber();
 
                 lResultName = "VirtualVariant" + lMaxVirtualVariantNumber;
@@ -2755,7 +2755,7 @@ namespace ProductPlatformAnalyzer
             string lResultName = "";
             try
             {
-                //Each virtual part is named as "VirtualPartX" which X is a number
+                //Each virtual Part is named as "VirtualPartX" which X is a number
                 int lMaxVirtualPartNumber = getMaxVirtualPartNumber();
 
                 lResultName = "VirtualPart" + lMaxVirtualPartNumber;
@@ -2826,7 +2826,7 @@ namespace ProductPlatformAnalyzer
             return lResultAttributeText;
         }
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public HashSet<partOperations> createPartOperationTemporaryInstances(XmlDocument pXDoc)
         {
             HashSet<partOperations> lPartOperationsSet = new HashSet<partOperations>();
@@ -2876,7 +2876,7 @@ namespace ProductPlatformAnalyzer
                     {
                         HashSet<Tuple<string, string>> lAttributes = new HashSet<Tuple<string, string>>();
 
-                        HashSet<trait> lInheritTraits = new HashSet<trait>();
+                        HashSet<Trait> lInheritTraits = new HashSet<Trait>();
 
                         XmlNodeList lInheritList = lNode["inherit"].ChildNodes;
                         foreach (XmlNode lTraitName in lInheritList)
@@ -2917,7 +2917,7 @@ namespace ProductPlatformAnalyzer
                 if (lNodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    //throw new InitialDataIncompleteException("Initial data did not contain variant information! Variants not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain Variantinformation! Variants not loaded.");
                     OutputHandler.PrintMessageToConsole("Initial data did not contain resource information! Resources not loaded.");
                 }
                 else
@@ -2925,7 +2925,7 @@ namespace ProductPlatformAnalyzer
                     foreach (XmlNode lNode in lNodeList)
                     {
                         HashSet<Tuple<string, string, string>> lAttributes = new HashSet<Tuple<string, string, string>>();
-                        HashSet<trait> lTraits = new HashSet<trait>();
+                        HashSet<Trait> lTraits = new HashSet<Trait>();
                         //if (lNode["traits"] != null)
                         //{
                         //    XmlNodeList traitNamesList = lNode["traits"].ChildNodes;
@@ -3009,15 +3009,15 @@ namespace ProductPlatformAnalyzer
                 if (lNodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    //throw new InitialDataIncompleteException("Initial data did not contain variant group information! Variant groups not loaded.");
-                    OutputHandler.PrintMessageToConsole("Initial data did not contain variant group information! Variant groups not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain Variantgroup information! Variant groups not loaded.");
+                    OutputHandler.PrintMessageToConsole("Initial data did not contain Variantgroup information! Variant groups not loaded.");
 
                 }
                 else
                 {
                     foreach (XmlNode lNode in lNodeList)
                     {
-                        List<variant> lVariantGroupVariants = new List<variant>();
+                        List<Variant> lVariantGroupVariants = new List<Variant>();
 
                         XmlNodeList lVariantGroupVariantNamesNodeList = lNode["variantRefs"].ChildNodes;
                         if (lVariantGroupVariantNamesNodeList.Count > 0)
@@ -3062,8 +3062,8 @@ namespace ProductPlatformAnalyzer
                 if (lNodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    //throw new InitialDataIncompleteException("Initial data did not contain variant information! Variants not loaded.");
-                    OutputHandler.PrintMessageToConsole("Initial data did not contain variant information! Variants not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain Variantinformation! Variants not loaded.");
+                    OutputHandler.PrintMessageToConsole("Initial data did not contain Variantinformation! Variants not loaded.");
 
                 }
                 else
@@ -3107,8 +3107,8 @@ namespace ProductPlatformAnalyzer
                 {
                     UsePartInfo = false;
                     lDataLoaded = false;
-                    //throw new InitialDataIncompleteException("Initial data did not contain part information! Parts not loaded.");
-                    OutputHandler.PrintMessageToConsole("Initial data did not contain variant information! Parts not loaded.");
+                    //throw new InitialDataIncompleteException("Initial data did not contain Part information! Parts not loaded.");
+                    OutputHandler.PrintMessageToConsole("Initial data did not contain Variantinformation! Parts not loaded.");
 
                 }
                 else
@@ -3139,14 +3139,14 @@ namespace ProductPlatformAnalyzer
                 {
                     lDataLoaded = false;
                     //throw new InitialDataIncompleteException("Initial data did not contain item usage rule information! Item usage rules not loaded.");
-                    OutputHandler.PrintMessageToConsole("Initial data did not contain variant information! Item usage rules not loaded.");
+                    OutputHandler.PrintMessageToConsole("Initial data did not contain Variantinformation! Item usage rules not loaded.");
 
                 }
                 else
                 {
                     foreach (XmlNode lNode in lNodeList)
                     {
-                        part lTempPart = PartLookupByName(GetXMLNodeAttributeInnerText(lNode, "partRef"));
+                        Part lTempPart = PartLookupByName(GetXMLNodeAttributeInnerText(lNode, "partRef"));
 
                         string lTempVariantExp = GetXMLNodeAttributeInnerText(lNode, "variantRef");
 
@@ -3165,7 +3165,7 @@ namespace ProductPlatformAnalyzer
                         //        lParts.Add(partLookupByName(lItemUsageRuleItem.InnerText));
                         //    }
 
-                        //    variant lTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRef"));
+                        //    VariantlTempVariant = variantLookupByName(getXMLNodeAttributeInnerText(lNode, "variantRef"));
                         //    CreateItemUsageRuleInstance(lTempVariant
                         //                            , lParts);
 
@@ -3190,7 +3190,7 @@ namespace ProductPlatformAnalyzer
             return lDataLoaded;
         }
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public bool createPartOperationsInstances(XmlDocument pXDoc)
         {
             bool lDataLoaded = false;
@@ -3201,8 +3201,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain part - operation information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
+                    throw new InitialDataIncompleteException("Initial data did not contain Part - operation information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain Variantinformation! Data not loaded.");
 
                 }
                 else
@@ -3240,7 +3240,7 @@ namespace ProductPlatformAnalyzer
             return lDataLoaded;
         }*/
 
-        //This function is no longer needed as the relation between part and operations is defined in the trigger field of the operation
+        //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public bool createVariantOperationsInstances(XmlDocument pXDoc)
         {
             bool lDataLoaded = false;
@@ -3251,8 +3251,8 @@ namespace ProductPlatformAnalyzer
                 if (nodeList.Count.Equals(0))
                 {
                     lDataLoaded = false;
-                    throw new InitialDataIncompleteException("Initial data did not contain variant - operation information! Data not loaded.");
-                    ////cOutputHandler.printMessageToConsole("Initial data did not contain variant information! Data not loaded.");
+                    throw new InitialDataIncompleteException("Initial data did not contain Variant- operation information! Data not loaded.");
+                    ////cOutputHandler.printMessageToConsole("Initial data did not contain Variantinformation! Data not loaded.");
 
                 }
                 else

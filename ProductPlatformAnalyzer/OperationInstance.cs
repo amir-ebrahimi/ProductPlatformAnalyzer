@@ -87,7 +87,7 @@ namespace ProductPlatformAnalyzer
 
             //Here we have to create the two Action objects Action_I2E and Action_E2F
 
-            //AbstractOperation_I_TransitionNumber should be part of the precondition
+            //AbstractOperation_I_TransitionNumber should be Part of the precondition
             //pOperation.Precondition.Add(InitialVariableName);
 
             List<string> lTempPrecondition = new List<string>();
@@ -126,7 +126,7 @@ namespace ProductPlatformAnalyzer
                                             , this);
             Action_I2E = lAction_I2E;
 
-            //AbstractOperation_E_TransitionNumber should be part of the postcondition
+            //AbstractOperation_E_TransitionNumber should be Part of the postcondition
             //pOperation.Postcondition.Add(ExecutingVariableName);
 
             List<string> lTempPostcondition = new List<string>();

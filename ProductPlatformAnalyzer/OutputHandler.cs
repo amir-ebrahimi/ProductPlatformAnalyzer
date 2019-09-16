@@ -48,7 +48,7 @@ namespace ProductPlatformAnalyzer
                             Operation = Operation + lStr + " ";
                         }
                         OpState = "possible";
-                        //variant = -1;
+                        //Variant= -1;
                         State = -1;
                     }
                     else if(string.Equals(lOperationNameParts[0],"Use"))
@@ -228,7 +228,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// Prints chosen variant values for showing a finished analysis to console
+        /// Prints chosen Variantvalues for showing a finished analysis to console
         /// </summary>
         public void PrintChosenVariants()
         {
@@ -745,7 +745,7 @@ namespace ProductPlatformAnalyzer
                     //if (exp.state == -1)
                     if (lExp.OpState == null)
                     {
-                        //First we have to check if the chosen item is a variant or a part
+                        //First we have to check if the chosen item is a Variantor a part
                         if (FrameworkWrapper.ExistVariantByName(lExp.ToString()))
                         {
                             lVariantName = lExp.ToString();
@@ -930,7 +930,7 @@ namespace ProductPlatformAnalyzer
         }
 
 
-        //Returns all chosen variant groups
+        //Returns all chosen Variantgroups
         public List<string> GetChosenVariantGroups()
         {
             string lVar, lVg;
@@ -1139,7 +1139,7 @@ namespace ProductPlatformAnalyzer
 
         private void WriteVariants(HtmlTextWriter pWriter)
         {
-            HashSet<variantGroup> lVariants = FrameworkWrapper.GetVariantGroupSet();
+            HashSet<VariantGroup> lVariants = FrameworkWrapper.GetVariantGroupSet();
 
 
             pWriter.WriteBeginTag("table style=\"margin-left:40px\"");
@@ -1154,9 +1154,9 @@ namespace ProductPlatformAnalyzer
             pWriter.WriteEndTag("tr");
 
 
-            foreach (variantGroup lGroup in lVariants)
+            foreach (VariantGroup lGroup in lVariants)
             {
-                if (!String.Equals(lGroup.names, "Virtual-VG"))
+                if (!String.Equals(lGroup.Names, "Virtual-VG"))
                 {
                     pWriter.WriteBeginTag("tr");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
@@ -1167,20 +1167,20 @@ namespace ProductPlatformAnalyzer
 
                     pWriter.WriteBeginTag("b");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
-                    pWriter.Write(lGroup.names);
+                    pWriter.Write(lGroup.Names);
                     pWriter.WriteEndTag("b");
-                    pWriter.Write(" - " + lGroup.gCardinality);
+                    pWriter.Write(" - " + lGroup.GCardinality);
 
                     pWriter.WriteEndTag("th");
 
                     pWriter.WriteEndTag("tr");
 
-                    foreach (variant var in lGroup.variants)
+                    foreach (Variant var in lGroup.Variants)
                     {
                         pWriter.WriteFullBeginTag("tr");
                         pWriter.WriteBeginTag("td");
                         pWriter.Write(HtmlTextWriter.TagRightChar);
-                        pWriter.Write(var.names);
+                        pWriter.Write(var.Names);
                         pWriter.WriteEndTag("td");
 
                         pWriter.WriteEndTag("tr");
@@ -1668,7 +1668,7 @@ namespace ProductPlatformAnalyzer
         private void WriteTraits(HtmlTextWriter pWriter)
         {
 
-            HashSet<trait> lTraits = new HashSet<trait>(FrameworkWrapper.TraitSet);
+            HashSet<Trait> lTraits = new HashSet<Trait>(FrameworkWrapper.TraitSet);
 
             if (lTraits.Count != 0)
             {
@@ -1703,7 +1703,7 @@ namespace ProductPlatformAnalyzer
                 pWriter.WriteEndTag("tr");
 
 
-                foreach (trait lTra in lTraits)
+                foreach (Trait lTra in lTraits)
                 {
 
                     pWriter.WriteBeginTag("tr");
@@ -1712,7 +1712,7 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("td");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    pWriter.Write(lTra.names);
+                    pWriter.Write(lTra.Names);
 
                     pWriter.WriteEndTag("td");
 
@@ -1722,12 +1722,12 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (trait inh in lTra.inherit)
+                    foreach (Trait inh in lTra.Inherit)
                     {
                         pWriter.WriteBeginTag("li");
                         pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                        pWriter.Write(inh.names);
+                        pWriter.Write(inh.Names);
 
                         pWriter.WriteEndTag("li");
 
@@ -1742,7 +1742,7 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (Tuple<string, string> att in lTra.attributes)
+                    foreach (Tuple<string, string> att in lTra.Attributes)
                     {
                         pWriter.WriteBeginTag("li");
                         pWriter.Write(HtmlTextWriter.TagRightChar);
@@ -1772,7 +1772,7 @@ namespace ProductPlatformAnalyzer
         private void WriteResources(HtmlTextWriter pWriter)
         {
 
-            HashSet<resource> lResources = new HashSet<resource>(FrameworkWrapper.ResourceSet);
+            HashSet<Resource> lResources = new HashSet<Resource>(FrameworkWrapper.ResourceSet);
 
             if (lResources.Count != 0)
             {
@@ -1808,7 +1808,7 @@ namespace ProductPlatformAnalyzer
                 pWriter.WriteEndTag("tr");
 
 
-                foreach (resource lRes in lResources)
+                foreach (Resource lRes in lResources)
                 {
 
                     pWriter.WriteBeginTag("tr");
@@ -1817,7 +1817,7 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("td");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    pWriter.Write(lRes.names);
+                    pWriter.Write(lRes.Name);
 
                     pWriter.WriteEndTag("td");
 
@@ -1827,14 +1827,14 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (trait lTra in lRes.traits)
-                    {
-                        pWriter.WriteBeginTag("li");
-                        pWriter.Write(HtmlTextWriter.TagRightChar);
-                        pWriter.Write(lTra.names);
-                        pWriter.WriteEndTag("li");
-                    }
-                    pWriter.WriteEndTag("ul");
+                    //foreach (trait lTra in lRes.traits)
+                    //{
+                    //    pWriter.WriteBeginTag("li");
+                    //    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    //    pWriter.Write(lTra.names);
+                    //    pWriter.WriteEndTag("li");
+                    //}
+                    //pWriter.WriteEndTag("ul");
 
                     pWriter.WriteEndTag("td");
 
@@ -1844,14 +1844,14 @@ namespace ProductPlatformAnalyzer
                     pWriter.WriteBeginTag("ul style=\"list-style-type:none\"");
                     pWriter.Write(HtmlTextWriter.TagRightChar);
 
-                    foreach (Tuple<string, string, string> att in lRes.attributes)
-                    {
-                        pWriter.WriteBeginTag("li");
-                        pWriter.Write(HtmlTextWriter.TagRightChar);
-                        pWriter.Write(att.Item1 + " = " + att.Item3);
-                        pWriter.WriteEndTag("li");
-                    }
-                    pWriter.WriteEndTag("ul");
+                    //foreach (Tuple<string, string, string> att in lRes.attributes)
+                    //{
+                    //    pWriter.WriteBeginTag("li");
+                    //    pWriter.Write(HtmlTextWriter.TagRightChar);
+                    //    pWriter.Write(att.Item1 + " = " + att.Item3);
+                    //    pWriter.WriteEndTag("li");
+                    //}
+                    //pWriter.WriteEndTag("ul");
 
                     pWriter.WriteEndTag("td");
 
@@ -2868,7 +2868,7 @@ namespace ProductPlatformAnalyzer
                 {
                     // RUNA code
                     //virtualConnection con = fwrapper.findVirtualConnectionWithName(p);
-                    //foreach (variant var in con.getVariants())
+                    //foreach (Variantvar in con.getVariants())
                     //{
                     //    newP = newP + var.names + "<br>";
                     //}

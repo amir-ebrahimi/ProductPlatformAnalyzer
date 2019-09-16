@@ -114,12 +114,14 @@
     <Compile Include="OutputHandler.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Part.cs" />
+    <Compile Include="PartUsageRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomTestCreator.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="ResourceInstance.cs" />
     <Compile Include="Trait.cs" />
     <Compile Include="Variant.cs" />
+    <Compile Include="VariantGroup.cs" />
     <Compile Include="xsd\xmlfile.cs" />
     <Compile Include="Z3Solver.cs" />
     <Compile Include="Z3SolverEngineer.cs" />

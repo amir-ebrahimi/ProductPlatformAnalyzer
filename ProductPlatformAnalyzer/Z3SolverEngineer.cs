@@ -743,7 +743,7 @@ namespace ProductPlatformAnalyzer
         /// <param name="pConvertConfigurationRules">If the Configuration rules should be converted or not</param>
         /// <param name="pConvertOperations">If the operations should be converted or not</param>
         /// <param name="pConvertOperationPrecedenceRules">If the operation precedence rules should be converted or not</param>
-        /// <param name="pConvertVariantOperationRelations">If the variant operation mappings should be converted or not</param>
+        /// <param name="pConvertVariantOperationRelations">If the Variantoperation mappings should be converted or not</param>
         /// <param name="pConvertResources">If the resources should be converted or not</param>
         /// <param name="pConvertGoal">If the goal should be converted or not</param>
         /// <param name="pBuildPConstaints">If the precedence rules constraints should be kept in a local list or not</param>
@@ -956,7 +956,7 @@ namespace ProductPlatformAnalyzer
 
         /// <summary>
         /// NOT USED ANYWHERE IN PROJECT
-        /// According to the variant group least for each variant group a boolean expression is created.
+        /// According to the Variantgroup least for each Variantgroup a boolean expression is created.
         /// </summary>
         public void MakeExpressionListFromVariantGroupList()
         {
@@ -964,8 +964,8 @@ namespace ProductPlatformAnalyzer
             {
                 //List<variantGroup> localVariantGroupList = cFrameworkWrapper.VariantGroupList;
 
-                foreach (variantGroup localVariantGroup in _frameworkWrapper.VariantGroupSet)
-                    _z3Solver.AddBooleanExpression(localVariantGroup.names);
+                foreach (VariantGroup localVariantGroup in _frameworkWrapper.VariantGroupSet)
+                    _z3Solver.AddBooleanExpression(localVariantGroup.Names);
             }
             catch (Exception ex)
             {
@@ -976,14 +976,14 @@ namespace ProductPlatformAnalyzer
 
         /// <summary>
         /// NOT USED ANYWHERE IN THE PROJECT
-        /// For each part in the local list a boolean variable is created
+        /// For each Part in the local list a boolean variable is created
         /// </summary>
         public void MakeExpressionListFromPartList()
         {
             try
             {
-                foreach (part localPart in _frameworkWrapper.PartSet)
-                    _z3Solver.AddBooleanExpression(localPart.names);
+                foreach (Part localPart in _frameworkWrapper.PartSet)
+                    _z3Solver.AddBooleanExpression(localPart.Names);
             }
             catch (Exception ex)
             {
@@ -994,14 +994,14 @@ namespace ProductPlatformAnalyzer
 
         /// <summary>
         /// NOT USED ANYWHERE IN THE PROJECT
-        /// For each variant in the local list a boolean variable is created
+        /// For each Variant in the local list a boolean variable is created
         /// </summary>
         public void MakeExpressionListFromVariantList()
         {
             try
             {
-                foreach (variant localVariant in _frameworkWrapper.VariantSet)
-                    _z3Solver.AddBooleanExpression(localVariant.names);
+                foreach (Variant localVariant in _frameworkWrapper.VariantSet)
+                    _z3Solver.AddBooleanExpression(localVariant.Names);
             }
             catch (Exception ex)
             {
@@ -1143,7 +1143,7 @@ namespace ProductPlatformAnalyzer
                 if (ConvertConfigurationRules)
                     ConvertFConstraint2Z3Constraint(pExtraConfigurationRule, pOptimizer);
 
-                ////I am not sure this part would be needed here, hence I added it to the previous part.
+                ////I am not sure this Part would be needed here, hence I added it to the previous part.
                 ////if (lConvertConfigurationRules)
                 ////    AddExtraConstraint2Z3Constraint(pExtraConfigurationRule);
 
@@ -1222,7 +1222,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// This function creates the dynamic part of the product platform model which includes the opertions, the precedence rules among the operations
+        /// This function creates the dynamic Part of the product platform model which includes the opertions, the precedence rules among the operations
         /// </summary>
         /// <param name="pAnalysisComplete">If the analysis is concluded, finished</param>
         /// <param name="pTransitionNo"></param>
@@ -1622,7 +1622,7 @@ namespace ProductPlatformAnalyzer
             
             try
             {
-                ///BoolExpr lAction_Pre = cZ3Solver.AddBooleanExpression("ActionPre_K"); //Formula first part name
+                ///BoolExpr lAction_Pre = cZ3Solver.AddBooleanExpression("ActionPre_K"); //Formula first Part name
                 ///BoolExpr lAction_New_Pre = cZ3Solver.AddBooleanExpression("Action1Pre_K+1");
                 
                 ///pOldNewVariables.Add("Action1Pre_K", "Action1Pre_K+1");
@@ -1686,19 +1686,19 @@ namespace ProductPlatformAnalyzer
 
                 Dictionary<string, string> OldNewVariables = new Dictionary<string, string>();
 
-                foreach (resource lCurrentResource in _frameworkWrapper.ResourceSet)
+                foreach (Resource lCurrentResource in _frameworkWrapper.ResourceSet)
                 {
-                    BoolExpr lResource_k = _z3Solver.AddBooleanExpression(lCurrentResource.names + "_K");
-                    BoolExpr lResource_Newk = _z3Solver.AddBooleanExpression(lCurrentResource.names + "_K+1");
-                    Add2OldNewVariableList(lCurrentResource.names + "_K", lCurrentResource.names + "_K+1", OldNewVariables);
+                    BoolExpr lResource_k = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K");
+                    BoolExpr lResource_Newk = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K+1");
+                    Add2OldNewVariableList(lCurrentResource.Name + "_K", lCurrentResource.Name + "_K+1", OldNewVariables);
                 }
 
                 BoolExpr lTarget = _z3Solver.AddBooleanExpression("Target");
-                BoolExpr lAction1Pre = _z3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first part name
+                BoolExpr lAction1Pre = _z3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first Part name
                 BoolExpr lAction1PreNew = _z3Solver.AddBooleanExpression("Action1Pre_K+1");
                 Add2OldNewVariableList("Action1Pre_K", "Action1Pre_K+1", OldNewVariables);
 
-                BoolExpr lAction2Pre = _z3Solver.AddBooleanExpression("Action2Pre_K"); //Formula first part name
+                BoolExpr lAction2Pre = _z3Solver.AddBooleanExpression("Action2Pre_K"); //Formula first Part name
                 BoolExpr lAction2PreNew = _z3Solver.AddBooleanExpression("Action2Pre_K+1");
                 Add2OldNewVariableList("Action2Pre_K", "Action2Pre_K+1", OldNewVariables);
 
@@ -1725,7 +1725,7 @@ namespace ProductPlatformAnalyzer
                 //                  4 new variables of Operation1 (Operation1-PostOp2Pre_i, Operation1-PostOp2Pre_e, Operation1-PostOp2Pre_f, Operation1-PostOp2Pre_u)
                 //                  4 variables of Operation2 in transition 0 (intial, executing, finished, unused, Pre, Eff)
                 //                  3 NEW variables for Op1PostOp2Eff_i_0, Op1PostOp2Eff_e_0, Op1PostOp2Eff_Pre
-                //                  One variable for each type of resource, as the resource tatus can change as part of any operation precondition or effect
+                //                  One variable for each type of resource, as the resource tatus can change as Part of any operation precondition or effect
 
                 BoolExpr lAction1EffNew = _z3Solver.AddBooleanExpression("Action1Eff_K+1");
                 BoolExpr lAction2EffNew = _z3Solver.AddBooleanExpression("Action2Eff_K+1");
@@ -2177,28 +2177,28 @@ namespace ProductPlatformAnalyzer
                             {
                                 if (pExtraField != null)
                                 {
-                                    variant lAnalyzedVariant = null;
-                                    part lAnalyzedPart = null;
+                                    Variant lAnalyzedVariant = null;
+                                    Part lAnalyzedPart = null;
 
                                     if (pExtraField.GetType().FullName.Equals("variant"))
                                     {
-                                        lAnalyzedVariant = (variant)pExtraField;
+                                        lAnalyzedVariant = (Variant)pExtraField;
                                         if (ReportAnalysisResult)
                                         {
                                             _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
-                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
-                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.Names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.Names + " is Selectable.");
                                         }
 
                                     }
                                     else if (pExtraField.GetType().FullName.Equals("part"))
                                     {
-                                        lAnalyzedPart = (part)pExtraField;
+                                        lAnalyzedPart = (Part)pExtraField;
                                         if (ReportAnalysisResult)
                                         {
                                             _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
-                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.names);
-                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.Names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.Names + " is Selectable.");
                                         }
 
                                     }
@@ -2216,28 +2216,28 @@ namespace ProductPlatformAnalyzer
                             {
                                 if (pExtraField != null)
                                 {
-                                    variant lAnalyzedVariant = null;
-                                    part lAnalyzedPart = null;
+                                    Variant lAnalyzedVariant = null;
+                                    Part lAnalyzedPart = null;
 
                                     if (pExtraField.GetType().FullName.Equals("variant"))
                                     {
-                                        lAnalyzedVariant = (variant)pExtraField;
+                                        lAnalyzedVariant = (Variant)pExtraField;
                                         if (ReportAnalysisResult)
                                         {
                                             _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
-                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
-                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.Names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedVariant.Names + " is Selectable.");
                                         }
 
                                     }
                                     else if (pExtraField.GetType().FullName.Equals("part"))
                                     {
-                                        lAnalyzedPart = (part)pExtraField;
+                                        lAnalyzedPart = (Part)pExtraField;
                                         if (ReportAnalysisResult)
                                         {
                                             _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
-                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.names);
-                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.names + " is Selectable.");
+                                            _outputHandler.PrintMessageToConsole("Selected Part: " + lAnalyzedPart.Names);
+                                            _outputHandler.PrintMessageToConsole(lAnalyzedPart.Names + " is Selectable.");
                                         }
 
                                     }
@@ -2255,16 +2255,16 @@ namespace ProductPlatformAnalyzer
                             {
                                 if (pExtraField != null)
                                 {
-                                    part lAnalyzedVariant = (part)pExtraField;
+                                    Part lAnalyzedVariant = (Part)pExtraField;
                                     if (ReportAnalysisResult)
                                     {
                                         //Initial info
                                         _outputHandler.PrintMessageToConsole("---------------------------------------------------------------------");
-                                        _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.names);
+                                        _outputHandler.PrintMessageToConsole("Selected Variant: " + lAnalyzedVariant.Names);
 
                                         //Analysis Result
-                                        //if it does hold, then there is a configuration which is valid and this current variant is not present in it
-                                        _outputHandler.PrintMessageToConsole("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.names + ".");
+                                        //if it does hold, then there is a configuration which is valid and this current Variantis not present in it
+                                        _outputHandler.PrintMessageToConsole("There DOES exist a valid configuration which does not include " + lAnalyzedVariant.Names + ".");
                                     }
                                 }
                             }
@@ -2272,8 +2272,8 @@ namespace ProductPlatformAnalyzer
                             {
                                 if (pExtraField != null)
                                 {
-                                    part lAnalyzedVariant = _frameworkWrapper.PartLookupByName(pExtraField.ToString());
-                                    _outputHandler.PrintMessageToConsole("All valid configurations DO include " + lAnalyzedVariant.names + ".");
+                                    Part lAnalyzedVariant = _frameworkWrapper.PartLookupByName(pExtraField.ToString());
+                                    _outputHandler.PrintMessageToConsole("All valid configurations DO include " + lAnalyzedVariant.Names + ".");
                                 }
                             }
                             break;
@@ -2299,7 +2299,7 @@ namespace ProductPlatformAnalyzer
                             }
                             else if (pSatResult.Equals(Status.UNSATISFIABLE))
                             {
-                                //Here we check if this operation is in active operation or not, meaning does a variant use this operation for its assembly or not
+                                //Here we check if this operation is in active operation or not, meaning does a Variantuse this operation for its assembly or not
                                 Operation lTempOperation = _frameworkWrapper.OperationLookupByName(pExtraField.ToString());
                                 //Initial info
                                 _outputHandler.PrintMessageToConsole("----------------------------------------------------------------");
@@ -2428,7 +2428,7 @@ namespace ProductPlatformAnalyzer
         }
         
         /// <summary>
-        /// This function converts the static part of the product platform, i.e. variants, followed by the group cardinalities
+        /// This function converts the static Part of the product platform, i.e. variants, followed by the group cardinalities
         /// </summary>
         private void ConvertProductPlatform(bool pOptimizer = false)
         {
@@ -2456,9 +2456,9 @@ namespace ProductPlatformAnalyzer
             try
             {
 
-                foreach (itemUsageRule lItemUsageRule in _frameworkWrapper.ItemUsageRuleSet)
+                foreach (PartUsageRule lPartUsageRule in _frameworkWrapper.PartUsageRuleSet)
                 {
-                    ////Previous version: In this version it was variant -> parts
+                    ////Previous version: In this version it was Variant-> parts
                     ////first we have to make a string of the parts anded to gether
                     //List<string> lPartNames = new List<string>();
                     //foreach (var lPart in lItemUsageRule.getParts())
@@ -2473,9 +2473,9 @@ namespace ProductPlatformAnalyzer
                     //BoolExpr lConstraint = cZ3Solver.TwoWayImpliesOperator(lLeftHandSide, lRightHandSide);
                     //cZ3Solver.AddConstraintToSolver(lConstraint, "ItemUsageRule");
 
-                    BoolExpr lRightHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lItemUsageRule.getPart().names);
+                    BoolExpr lRightHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lPartUsageRule.Part.Names);
 
-                    BoolExpr lLeftHandSide = ConvertComplexString2BoolExpr(lItemUsageRule.getVariantExp());
+                    BoolExpr lLeftHandSide = ConvertComplexString2BoolExpr(lPartUsageRule.VariantExpression);
 
                     BoolExpr lConstraint = _z3Solver.TwoWayImpliesOperator(lLeftHandSide, lRightHandSide);
                     _z3Solver.AddConstraintToSolver(lConstraint, "ItemUsageRule");
@@ -2493,7 +2493,7 @@ namespace ProductPlatformAnalyzer
 
         ////TODO: If every analysis is correct then it should be removed!
         /// <summary>
-        /// This function converts the configuration rules, i.e. variant group cardinality and constraint rules
+        /// This function converts the configuration rules, i.e. Variantgroup cardinality and constraint rules
         /// </summary>
         /*private void convertConfigurationRules(string pExtraConfigurationRule = "")
         {
@@ -2513,7 +2513,7 @@ namespace ProductPlatformAnalyzer
 
         ////TODO: If every thing is correct should be removed!!
         /// <summary>
-        /// This function converts the dynamic part of the product platform, i.e. operations 
+        /// This function converts the dynamic Part of the product platform, i.e. operations 
         /// </summary>
         /// <param name="pState"></param>
         /*private void convertOperations(int pState)
@@ -2783,15 +2783,15 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //List<resource> lResourceList = cFrameworkWrapper.ResourceList;
-                foreach (resource lResource in _frameworkWrapper.ResourceSet)
+                foreach (Resource lResource in _frameworkWrapper.ResourceSet)
                 {
-                    string lResourceName = lResource.names;
-                    foreach (Tuple<string,string,string> lAttribute in lResource.attributes)
-                    {
-                        ConvertFResourceAttribute2Z3Constraint(lResourceName, lAttribute, pOptimizer);
+                    string lResourceName = lResource.Name;
+                    //foreach (Tuple<string,string,string> lAttribute in lResource.attributes)
+                    //{
+                    //    ConvertFResourceAttribute2Z3Constraint(lResourceName, lAttribute, pOptimizer);
 
 
-                    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -2852,15 +2852,15 @@ namespace ProductPlatformAnalyzer
                     string lPossibleToRunActiveOperationName = "Possible_to_run_" + lActiveOperation.Name;
                     _z3Solver.AddBooleanExpression(lPossibleToRunActiveOperationName);
 
-                    foreach (resource lActiveResource in _frameworkWrapper.ResourceSet)
+                    foreach (Resource lActiveResource in _frameworkWrapper.ResourceSet)
                     {
                         //This variable shows if the current operation CAN be run with the current resource
-                        string lPossibleToUseResource4OperationName = "Possible_to_use_" + lActiveResource.names + "_for_" + lActiveOperation.Name;
+                        string lPossibleToUseResource4OperationName = "Possible_to_use_" + lActiveResource.Name + "_for_" + lActiveOperation.Name;
                         _z3Solver.AddBooleanExpression(lPossibleToUseResource4OperationName);
 //                        lPossibleResourceVariablesForActiveOperation.Add(lPossibleToUseResource4OperationName);
 
                         //This variable shows if the current operation WILL be run with the current resource
-                        string lUseResource4OperationName = "Use_" + lActiveResource.names + "_for_" + lActiveOperation.Name;
+                        string lUseResource4OperationName = "Use_" + lActiveResource.Name + "_for_" + lActiveOperation.Name;
                         _z3Solver.AddBooleanExpression(lUseResource4OperationName);
                         lUseResourceVariablesForActiveOperation.Add(lUseResource4OperationName);
 
@@ -2871,7 +2871,7 @@ namespace ProductPlatformAnalyzer
                         {
                             //Active operation has requirements defined
 
-                            HashSet<resource> lOperationChosenResources = _frameworkWrapper.ReturnOperationChosenResource(lActiveOperation.Name);
+                            HashSet<Resource> lOperationChosenResources = _frameworkWrapper.ReturnOperationChosenResource(lActiveOperation.Name);
 
                             if (lOperationChosenResources.Contains(lActiveResource))
                             {
@@ -2958,8 +2958,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (variant lVariant in _frameworkWrapper.VariantSet)
-                    _z3Solver.AddBooleanExpression(lVariant.names);
+                foreach (Variant lVariant in _frameworkWrapper.VariantSet)
+                    _z3Solver.AddBooleanExpression(lVariant.Names);
             }
             catch (Exception ex)
             {
@@ -2973,8 +2973,8 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                foreach (part lPart in _frameworkWrapper.PartSet)
-                    _z3Solver.AddBooleanExpression(lPart.names);
+                foreach (Part lPart in _frameworkWrapper.PartSet)
+                    _z3Solver.AddBooleanExpression(lPart.Names);
             }
             catch (Exception ex)
             {
@@ -2985,27 +2985,27 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: is it needed?
-        /*private variant ReturnCurrentVariant(string pVariantExpression)
+        /*private VariantReturnCurrentVariant(string pVariantExpression)
         {
-            variant lResultVariant = new variant();
+            VariantlResultVariant = new variant();
             try
             {
                 if (pVariantExpression.Trim().Contains(' '))
                 {
-                    //If the variant expression does contain any spaces other than the start or ending space then it is an expression
+                    //If the Variantexpression does contain any spaces other than the start or ending space then it is an expression
 
-                    //A new Virtual variant need to be build
+                    //A new Virtual Variantneed to be build
 
-                    //The virtual variant needs to be added to virtual variant group
+                    //The virtual Variantneeds to be added to virtual Variantgroup
 
-                    //A new constraint needs to be added relating the virtual variant to the variant expression
+                    //A new constraint needs to be added relating the virtual Variantto the Variantexpression
 
-                    //The new virtual variant and the exression it represents needs to be added to virtual variant list in frameworkwrapper
+                    //The new virtual Variantand the exression it represents needs to be added to virtual Variantlist in frameworkwrapper
 
                 }
                 else
                 {
-                    //If the variant expression does NOT contain any spaces other than the start or ending space then it is a variant
+                    //If the Variantexpression does NOT contain any spaces other than the start or ending space then it is a variant
                     lResultVariant = cFrameworkWrapper.variantLookupByName(pVariantExpression);
                 }
             }
@@ -3110,7 +3110,7 @@ namespace ProductPlatformAnalyzer
                         else
                             lCurrentOperationInstance = lCurrentOperationInstance.CreateNextOperationInstance();
 
-                        ////These two lines are now carried out in the Static part of the model making
+                        ////These two lines are now carried out in the Static Part of the model making
                         ////lOperation.OperationTriggerVariable = AddZ3ModelVariable(lOperation.OperationTriggerVariableName);
                         ////lOperation.OperationRequirementVariable = AddZ3ModelVariable(lOperation.OperationRequirementVariableName);
 
@@ -3162,17 +3162,17 @@ namespace ProductPlatformAnalyzer
         {
             try
             {
-                HashSet<resource> lResourceList = _frameworkWrapper.ResourceSet;
+                HashSet<Resource> lResourceList = _frameworkWrapper.ResourceSet;
 
                 if (lResourceList.Count >0)
                 {
                     // Create a list of operations for every resource
                     foreach (var lResource in lResourceList)
                     {
-                        //This part creates a list of all resources with an empty list of the operations related to each resource
+                        //This Part creates a list of all resources with an empty list of the operations related to each resource
                         List<Operation> lOperations = new List<Operation>();
 
-                        _resourcesOperations.Add(lResource.names, lOperations);
+                        _resourcesOperations.Add(lResource.Name, lOperations);
                     }
 
                     HashSet<Operation> lOperationSet = _frameworkWrapper.OperationSet;
@@ -3209,7 +3209,7 @@ namespace ProductPlatformAnalyzer
                 // Create a list of operations for every resource
                 foreach (var lResource in lResourceList)
                 {
-                    //This part creates a list of all resources with an empty list of the operations related to each resource
+                    //This Part creates a list of all resources with an empty list of the operations related to each resource
                     List<Operation> lOperations = new List<Operation>();
 
                     lResourcesOperations.Add(lResource.names, lOperations);
@@ -3229,7 +3229,7 @@ namespace ProductPlatformAnalyzer
                 {
                     foreach (var lResource in lResourceList)
                     {
-                        //This part creates a list of all resources with an empty list of the operations related to each resource
+                        //This Part creates a list of all resources with an empty list of the operations related to each resource
                         List<Operation> lOperations = new List<Operation>();
 
                         lResourcesOperations.Add(lResource.names, lOperations);
@@ -3316,7 +3316,7 @@ namespace ProductPlatformAnalyzer
         /// In this function the instance variables for each operation are created, in these variables the operation will be assigned to a state, part, and transitionNo
         /// </summary>
         /// <param name="pOperationName">The operation for which the instance variables will be defined</param>
-        /// <param name="pPartIndex">The variant which will be assigned to this operation instance variables</param>
+        /// <param name="pPartIndex">The Variantwhich will be assigned to this operation instance variables</param>
         /// <param name="pState">The transitionNo which will be assigned to this operation instance variable</param>
         private void addCurrentPartOperationInstanceVariables(string pOperationName, int pPartIndex, int pState)
         {
@@ -3358,7 +3358,7 @@ namespace ProductPlatformAnalyzer
         /// In this function the instance variables for each operation are created, in these variables the operation will be assigned to a state, part, and transitionNo
         /// </summary>
         /// <param name="pOperationName">The operation for which the instance variables will be defined</param>
-        /// <param name="pVariantIndex">The variant which will be assigned to this operation instance variables</param>
+        /// <param name="pVariantIndex">The Variantwhich will be assigned to this operation instance variables</param>
         /// <param name="pState">The transitionNo which will be assigned to this operation instance variable</param>
         private void addCurrentVariantOperationInstanceVariables(string pOperationName, int pVariantIndex, int pState)
         {
@@ -3426,7 +3426,7 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //This function is removed in the new version when operation instances have become a seperate object
-        /*public void resetCurrentStateAndNewStateOperationVariables(operation pOperation, variant pVariant, int pState, string pConstraintSource)
+        /*public void resetCurrentStateAndNewStateOperationVariables(operation pOperation, VariantpVariant, int pState, string pConstraintSource)
         {
             try
             {
@@ -3448,7 +3448,7 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //This function is removed in the new version when operation instances have become a seperate object
-        /*public void resetCurrentStateAndNewStateOperationVariables(operation pOperation, part pPart, int pState, string pConstraintSource)
+        /*public void resetCurrentStateAndNewStateOperationVariables(operation pOperation, Part pPart, int pState, string pConstraintSource)
         {
             try
             {
@@ -3470,7 +3470,7 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //This function is removed in the new version when operation instances have become a seperate object
-        /*public void resetCurrentStateOperationVariables(operation pOperation, part pPart, int pState)
+        /*public void resetCurrentStateOperationVariables(operation pOperation, Part pPart, int pState)
         {
             try
             {
@@ -3489,7 +3489,7 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //This function is removed in the new version when operation instances have become a seperate object
-        /*public void resetCurrentStateOperationVariables(operation pOperation, variant pVariant, int pState)
+        /*public void resetCurrentStateOperationVariables(operation pOperation, VariantpVariant, int pState)
         {
             try
             {
@@ -3514,7 +3514,7 @@ namespace ProductPlatformAnalyzer
                 //Formula 2
                 //List<variantGroup> localVariantGroupsList = cFrameworkWrapper.VariantGroupList;
 
-                foreach (variantGroup lVariantGroup in _frameworkWrapper.VariantGroupSet)
+                foreach (VariantGroup lVariantGroup in _frameworkWrapper.VariantGroupSet)
                 {
                     MakeGCardinalityConstraint(lVariantGroup, pOptimizer);
                 }
@@ -3527,16 +3527,16 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: We need an enum for the Variant Group Cardinality to be used here and also used where the Variant Groups are created from the input files
-        public void MakeGCardinalityConstraint(variantGroup pVariantGroup, bool pOptimizer = false)
+        public void MakeGCardinalityConstraint(VariantGroup pVariantGroup, bool pOptimizer = false)
         {
             try
             {
                 //Formula 2
-                List<variant> lVariants = pVariantGroup.variants;
+                List<Variant> lVariants = pVariantGroup.Variants;
 
                 List<string> lVariantNames = new List<string>();
-                foreach (variant lVariant in lVariants)
-                    lVariantNames.Add(lVariant.names);
+                foreach (Variant lVariant in lVariants)
+                    lVariantNames.Add(lVariant.Names);
 
                 if (lVariantNames.Count.Equals(1))
                 {
@@ -3548,7 +3548,7 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    switch (pVariantGroup.gCardinality)
+                    switch (pVariantGroup.GCardinality)
                     {
                         case "choose exactly one":
                             {
@@ -3665,20 +3665,20 @@ namespace ProductPlatformAnalyzer
         }
         /*public void convertFOperations2Z3Constraint(int pState)
         {
-            //Loop over variant list
-            //For each variant find the variant in variant-operation mapping table
+            //Loop over Variantlist
+            //For each Variantfind the Variantin variant-operation mapping table
             //For each operation in this list make the following operation boolean variables
             List<variant> localVariantList = lFrameworkWrapper.getVariantList();
 
             //Next state of operation
             int lNewState = pState + 1;
 
-            foreach (variant lVariant in localVariantList)
+            foreach (VariantlVariant in localVariantList)
             {
                 variantOperations lVariantOperations = lFrameworkWrapper.getVariantOperations(lVariant.names);
                 if (lVariantOperations != null)
                 {
-                    variant currentVariant = lVariantOperations.getVariant();
+                    VariantcurrentVariant = lVariantOperations.getVariant();
                     List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
@@ -3710,13 +3710,13 @@ namespace ProductPlatformAnalyzer
             }
 
             //NEW FORMULA
-            //This new formula was not part of the ETFA paper but was added after that
-            foreach (variant lVariant in localVariantList)
+            //This new formula was not Part of the ETFA paper but was added after that
+            foreach (VariantlVariant in localVariantList)
             {
                 variantOperations lVariantOperations = lFrameworkWrapper.getVariantOperations(lVariant.names);
                 if (lVariantOperations != null)
                 {
-                    variant currentVariant = lVariantOperations.getVariant();
+                    VariantcurrentVariant = lVariantOperations.getVariant();
                     List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
@@ -3735,7 +3735,7 @@ namespace ProductPlatformAnalyzer
 
 
             //formula 6
-            //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
+            //In the list of operations, start with operations indexed for Variant0 and compare them with all operations indexed with one more
             //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
 
             BoolExpr formulaSix = null;
@@ -3780,7 +3780,7 @@ namespace ProductPlatformAnalyzer
 
         /// <summary>
         /// This function checks the precondition, to see if the operations in the precondition are from the active operations or inactive ones
-        /// incase they are inactive they make that part of the precondition to false
+        /// incase they are inactive they make that Part of the precondition to false
         /// </summary>
         /// <param name="pPrecondition"></param>
         /*public bool preconditionSanityCheck(string pPrecondition)
@@ -3810,7 +3810,7 @@ namespace ProductPlatformAnalyzer
             return lSanityCheckResult;
         }*/
 
-        /*public void resetOperationPrecondition(operation pOperation, variant pVariant, int pState, string pConstraintSource)
+        /*public void resetOperationPrecondition(operation pOperation, VariantpVariant, int pState, string pConstraintSource)
         {
             try
             {
@@ -3883,9 +3883,9 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pVariantExpr">Expression defined over variants</param>
         /// <returns>List of variants</returns>
-        public List<variant> GetListOfVariantsFromAVariantExpr(string pVariantExpr)
+        public List<Variant> GetListOfVariantsFromAVariantExpr(string pVariantExpr)
         {
-            List<variant> lResultVariantList = new List<variant>();
+            List<Variant> lResultVariantList = new List<Variant>();
             try
             {
                 string[] lExprParts = pVariantExpr.Split(' ');
@@ -3893,7 +3893,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lExprPart != "and" || lExprPart != "or" || lExprPart != "not")
                     {
-                        variant lVariant = _frameworkWrapper.VariantLookupByName(lExprPart);
+                        Variant lVariant = _frameworkWrapper.VariantLookupByName(lExprPart);
                         lResultVariantList.Add(lVariant);
                     }
                 }
@@ -3911,9 +3911,9 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pVariantExpr">Expression defined over parts</param>
         /// <returns>List of parts</returns>
-        public HashSet<part> GetListOfPartsFromAPartExpr(string pPartExpr)
+        public HashSet<Part> GetListOfPartsFromAPartExpr(string pPartExpr)
         {
-            HashSet<part> lResultPartList = new HashSet<part>();
+            HashSet<Part> lResultPartList = new HashSet<Part>();
             try
             {
                 string[] lExprParts = pPartExpr.Split(' ');
@@ -3921,7 +3921,7 @@ namespace ProductPlatformAnalyzer
                 {
                     if (lExprPart != "and" || lExprPart != "or" || lExprPart != "not")
                     {
-                        part lPart = _frameworkWrapper.PartLookupByName(lExprPart);
+                        Part lPart = _frameworkWrapper.PartLookupByName(lExprPart);
                         lResultPartList.Add(lPart);
                     }
                 }
@@ -3934,9 +3934,9 @@ namespace ProductPlatformAnalyzer
             return lResultPartList;
         }
 
-        //In the new version, after we created the trigger field of the operation hence removing part operation mapping, there is no more need for this function
+        //In the new version, after we created the trigger field of the operation hence removing Part operation mapping, there is no more need for this function
         /*/// <summary>
-        /// In this function we look at the part - operation mapping and return a list of parts which are related to an operation
+        /// In this function we look at the Part - operation mapping and return a list of parts which are related to an operation
         /// </summary>
         /// <param name="pOperation"></param>
         public HashSet<part> FindRelatedParts(string pOperation)
@@ -3965,9 +3965,9 @@ namespace ProductPlatformAnalyzer
             return lResultPartList;
         }*/
 
-        //In the new version, after we created the trigger field of the operation hence removing variant operation mapping, there is no more need for this function
+        //In the new version, after we created the trigger field of the operation hence removing Variantoperation mapping, there is no more need for this function
         /*/// <summary>
-        /// In this function we look at the variant - operation mapping and return a list of variants which are related to an operation
+        /// In this function we look at the Variant- operation mapping and return a list of variants which are related to an operation
         /// </summary>
         /// <param name="pOperation"></param>
         public List<variant> FindRelatedVariants(string pOperation)
@@ -4009,14 +4009,14 @@ namespace ProductPlatformAnalyzer
                     //Either operation instnce is missing operation status, or it s missing the transition no
                     if (IsOperationInstanceMissingStatus(pOperationInstanceName))
                     {
-                        //In this part operation instance is missing operation status
+                        //In this Part operation instance is missing operation status
                         //This operation instance should consider state FINISHED or UNUSED and current transition
 
-                        //We KNOW that if the status is missing then the only part in the operation instance should be the operation name
+                        //We KNOW that if the status is missing then the only Part in the operation instance should be the operation name
                         //Here we assume that the operation is mentioned correctly
                         string lOperationInstanceOperationName = pOperationInstanceName;
 
-                        //Note: In this part we want to implement weak links, which means if an operation is mentioned as a precondition 
+                        //Note: In this Part we want to implement weak links, which means if an operation is mentioned as a precondition 
                         //it means either the operation is in finished state or in an unused state
 
                         OperationInstance lTempOperationInstance = new OperationInstance(lOperationInstanceOperationName
@@ -4072,13 +4072,13 @@ namespace ProductPlatformAnalyzer
                     }
                     else
                     {
-                        //If some part of the precondition are missing, i.e. operation name, operation state, operation variant, operation transition no
+                        //If some Part of the precondition are missing, i.e. operation name, operation state, operation variant, operation transition no
                         if (IsOperationInstanceMissingStatus(pIncompleteOperationInstance))
                         {
                             //This preconditon should consider state FINISHED or state UNUSED and any variants and any transitions
                             string lOperationName = pIncompleteOperationInstance;
                             var lOperation = _frameworkWrapper.GetOperationFromOperationName(lOperationName);
-                            //Note: In this part we want to implement weak links, which means if an operation is mentioned as a precondition 
+                            //Note: In this Part we want to implement weak links, which means if an operation is mentioned as a precondition 
                             //it means either the operation is in finished state or in an unused state
                             //Hence we have to make an operation instance from it
                             if (!pKeepOriginalVariable)
@@ -4153,7 +4153,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// This function checks if an operation instance has the transition part missing
+        /// This function checks if an operation instance has the transition Part missing
         /// </summary>
         /// <param name="pOperationInstance"></param>
         /// <returns></returns>
@@ -4175,7 +4175,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// This function checks if an operation instance has the variant part missing
+        /// This function checks if an operation instance has the VariantPart missing
         /// </summary>
         /// <param name="pOperationInstance"></param>
         /// <returns></returns>
@@ -4197,7 +4197,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// This function checks if an operation instance has the state part missing
+        /// This function checks if an operation instance has the state Part missing
         /// </summary>
         /// <param name="pOperationInstanceName"></param>
         /// <returns></returns>
@@ -4219,7 +4219,7 @@ namespace ProductPlatformAnalyzer
             return lResult;
         }
 
-        /*public void resetOperationPostcondition(operation pOperation, part pPart, int pState, String pPostconditionSource)
+        /*public void resetOperationPostcondition(operation pOperation, Part pPart, int pState, String pPostconditionSource)
         {
             try
             {
@@ -4270,7 +4270,7 @@ namespace ProductPlatformAnalyzer
             }
         }*/
 
-        /*public void resetOperationPostcondition(operation pOperation, variant pVariant, int pState, String pPostconditionSource)
+        /*public void resetOperationPostcondition(operation pOperation, VariantpVariant, int pState, String pPostconditionSource)
         {
             try
             {
@@ -4413,19 +4413,19 @@ namespace ProductPlatformAnalyzer
                         //This means the precondition does not include a state
                         /*if (lOperationNameParts.Length == 2)
                         {
-                            //This means the precondition does not include a variant nor a state
+                            //This means the precondition does not include a Variantnor a state
                             HashSet<string> vInstances = cFrameworkWrapper.getvariantInstancesForOperation(lOperationNameParts[0]);
                             HashSet<BoolExpr> opExpr = new HashSet<BoolExpr>();
-                            foreach (string variant in vInstances)
+                            foreach (string Variantin vInstances)
                             {
-                                opExpr.Add((BoolExpr)cZ3Solver.FindExprInExprSet(pCon + "_" + variant + "_" + pState.ToString()));
+                                opExpr.Add((BoolExpr)cZ3Solver.FindExprInExprSet(pCon + "_" + Variant+ "_" + pState.ToString()));
 
                             }
                             lResult = (cZ3Solver.OrOperator(opExpr));
                         }
                         else*/ if (lOperationNameParts.Length == 3)
                         {
-                            //This means the precondition does includes a variant but not a state
+                            //This means the precondition does includes a Variantbut not a state
                             lResult = ((BoolExpr)_z3Solver.FindExprInExprSet(pCon + "_" + pTransitionNo.ToString()));
                         }
                         else
@@ -4460,17 +4460,17 @@ namespace ProductPlatformAnalyzer
         }
 
         //TODO: I think this can be removed!!!
-        /*private part returnCurrentVariant(partOperations pVariantOperations)
+        /*private Part returnCurrentVariant(partOperations pVariantOperations)
         {
-            part lResultVariant = new part();
+            Part lResultVariant = new part();
             try
             {
-                part lCurrentVariant = cFrameworkWrapper.ReturnCurrentPart(pVariantOperations);
+                Part lCurrentVariant = cFrameworkWrapper.ReturnCurrentPart(pVariantOperations);
 
                 //TODO: this should be done here for ALL types of variants
                 if (lCurrentVariant.names.Contains("Virtual"))
                 {
-                    //The result variant is going to be a virtual variant hence for this variant we have to add the needed operations
+                    //The result Variantis going to be a virtual Varianthence for this Variantwe have to add the needed operations
                     addVirtualPartOperationInstances(lResultVariant, pVariantOperations.getOperations());
                 }
             }
@@ -4751,7 +4751,7 @@ namespace ProductPlatformAnalyzer
                 if (!OperationMutualExecution)
                 {
                     //formula 6
-                    //In the list of operations, start with operations indexed for variant 0 and compare them with all operations indexed with one more
+                    //In the list of operations, start with operations indexed for Variant0 and compare them with all operations indexed with one more
                     //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
                     CreateFormula6();
                 }
@@ -4858,7 +4858,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //formula 6
-                //In the list of operations, start with operations indexed for part 0 and compare them with all operations indexed with one more
+                //In the list of operations, start with operations indexed for Part 0 and compare them with all operations indexed with one more
                 //For each pair (e.g. 0 and 1, 0 and 2,...) compare its current state with its new state on the operation_I
 
                 BoolExpr lFormulaSix = null;
@@ -4988,12 +4988,12 @@ namespace ProductPlatformAnalyzer
                 BoolExpr temp58Expr = null;
                 List<variant> localVariantList = lFrameworkWrapper.VariantList;
 
-                foreach (variant lVariant in localVariantList)
+                foreach (VariantlVariant in localVariantList)
                 {
                     variantOperations lVariantOperations = lFrameworkWrapper.getVariantOperations(lVariant.names);
                     if (lVariantOperations != null)
                     {
-                        variant currentVariant = lVariantOperations.getVariant();
+                        VariantcurrentVariant = lVariantOperations.getVariant();
                         List<operation> lOperationList = lVariantOperations.getOperations();
                         if (lOperationList != null)
                         {
@@ -5567,7 +5567,7 @@ namespace ProductPlatformAnalyzer
                 {
                     //We have one operator
                     ////lResult = pNode.Data;
-                    //This operand can be an operation or it can be a variant or it can be a part, if it is an operation then it has to be checked if it is in a complete operation instance format or not
+                    //This operand can be an operation or it can be a Variantor it can be a part, if it is an operation then it has to be checked if it is in a complete operation instance format or not
                     if (_frameworkWrapper.HavePartWithName(pNode.Data) || _frameworkWrapper.HaveVariantWithName(pNode.Data))
                         lResult = (BoolExpr)_z3Solver.FindExprInExprSet(pNode.Data);
                     else
@@ -5957,12 +5957,12 @@ namespace ProductPlatformAnalyzer
 
             BoolExpr lResultFormula7 = null;
 
-            foreach (variant lVariant in pVariantList)
+            foreach (VariantlVariant in pVariantList)
             {
                 variantOperations lVariantOperations = lFrameworkWrapper.getVariantOperations(lVariant.names);
                 if (lVariantOperations != null)
                 {
-                    variant currentVariant = lVariantOperations.getVariant();
+                    VariantcurrentVariant = lVariantOperations.getVariant();
                     List<operation> lOperationList = lVariantOperations.getOperations();
                     if (lOperationList != null)
                     {
@@ -5989,11 +5989,11 @@ namespace ProductPlatformAnalyzer
                             //            {
                             //                //This means the precondition does not include a state
                             //                if (lOperationNameParts.Length == 2)
-                            //                    //This means the precondition does not include a variant nor a state
+                            //                    //This means the precondition does not include a Variantnor a state
                             //                    //Needs to be properly implementet
                             //                    lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + currentVariant.index + "_" + pState.ToString());
                             //                else
-                            //                    //This means the precondition does includes a variant but not a state
+                            //                    //This means the precondition does includes a Variantbut not a state
                             //                    lOpPrecondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.precondition[0] + "_" + pState.ToString());
                             //            }
                             //            else
@@ -6024,11 +6024,11 @@ namespace ProductPlatformAnalyzer
                             //            {
                             //                //This means the postcondition does not include a state
                             //                if (lOperationNameParts.Length == 2)
-                            //                    //This means the postcondition does not include a variant nor a state
+                            //                    //This means the postcondition does not include a Variantnor a state
                             //                    //Needs to be properly implementet
                             //                    lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + currentVariant.index + "_" + pState.ToString());
                             //                else
-                            //                    //This means the postcondition does includes a variant but not a state
+                            //                    //This means the postcondition does includes a Variantbut not a state
                             //                    lOpPostcondition = lZ3Solver.FindBoolExpressionUsingName(lOperation.postcondition[0] + "_" + pState.ToString());
                             //            }
                             //            else
@@ -6094,7 +6094,7 @@ namespace ProductPlatformAnalyzer
                 //This boolean expression is used to refer to this overall goal
                 cZ3Solver.AddBooleanExpression("F7_" + pState);
 
-                foreach (part lCurrentPart in pPartList)
+                foreach (Part lCurrentPart in pPartList)
                 {
                     HashSet<operation> lOperationList = cFrameworkWrapper.getPartExprOperations(lCurrentPart.names);
                     if (lOperationList != null)
@@ -6235,14 +6235,14 @@ namespace ProductPlatformAnalyzer
                         BoolExpr lNotPreCondition = _z3Solver.NotOperator(lCurrentOperationInstance.OperationPreconditionVariable);
                         //BoolExpr lPreCondition = lCurrentOperationInstance.OperationPreconditionVariable;
 
-                        //Assumption: As the post condition is not used here this part of the formula will become false!
+                        //Assumption: As the post condition is not used here this Part of the formula will become false!
                         //BoolExpr lNotPostCondition = cZ3Solver.NotOperator(cOpPostcondition);
 
                         BoolExpr lFirstOperand = _z3Solver.AndOperator(new List<BoolExpr>() { lNotPreCondition
                                                                                     , lCurrentOperationInstance.InitialVariable });
 
                         BoolExpr lNotPostCondition = _z3Solver.NotOperator(lCurrentOperationInstance.OperationPostconditionVariable);
-                        //Assumption: The previous assumption will make this part false as well
+                        //Assumption: The previous assumption will make this Part false as well
                         BoolExpr lSecondOperand = _z3Solver.AndOperator(new List<BoolExpr>() { lNotPostCondition
                                                                                                 , lCurrentOperationInstance.ExecutingVariable });
                         //BoolExpr lSecondOperand = (BoolExpr)cZ3Solver.FindExprInExprSet(lCurrentOperationInstance.ExecutingVariableName);
@@ -6462,7 +6462,7 @@ namespace ProductPlatformAnalyzer
 
                 lModelConstraintCheck = PreAnalysis();
 
-                ////Making the static part of the model
+                ////Making the static Part of the model
                 MakeStaticPartOfProductPlatformModel("", true);
 
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
@@ -6475,7 +6475,7 @@ namespace ProductPlatformAnalyzer
 
                         lAnalysisComplete = false;
 
-                        ////Making the dynamic part of the model (Operations and transition between operation status)
+                        ////Making the dynamic Part of the model (Operations and transition between operation status)
                         MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
 
                         //Now the goal is added to the model according to the type of analysis
@@ -6485,7 +6485,7 @@ namespace ProductPlatformAnalyzer
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                        //For each variant check if this statement holds - carry out the analysis
+                        //For each Variantcheck if this statement holds - carry out the analysis
                         lInternalAnalysisResult = AnalyzeProductPlatform(lTransitionNo
                                                                 , 0
                                                                 , lAnalysisComplete);
@@ -6606,7 +6606,7 @@ namespace ProductPlatformAnalyzer
                 lModelConstraintCheck = PreAnalysis();
 
 
-                ////Making the static part of the model
+                ////Making the static Part of the model
                 MakeStaticPartOfProductPlatformModel();
 
                 for (int i = 0; i < NoOfModelsRequired; i++)
@@ -6618,7 +6618,7 @@ namespace ProductPlatformAnalyzer
 
                         _outputHandler.PrintMessageToConsole("--------------------Transition: " + lTransitionNo + " --------------------");
 
-                        ////Making the dynamic part of the model (Operations and transition between operation status)
+                        ////Making the dynamic Part of the model (Operations and transition between operation status)
                         MakeDynamicPartOfProductPlatformModel(lAnalysisComplete, lTransitionNo);
 
                         //Now the goal is added to the model
@@ -6628,7 +6628,7 @@ namespace ProductPlatformAnalyzer
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                        //For each variant check if this statement holds - carry out the analysis
+                        //For each Variantcheck if this statement holds - carry out the analysis
                         lInternalAnalysisResult = AnalyzeProductPlatform(lTransitionNo
                                                                 , 0
                                                                 , lAnalysisComplete);
@@ -6714,7 +6714,7 @@ namespace ProductPlatformAnalyzer
                 StartModelTiming();
                 //This analysis is going to be carried out in two steps:
                 //Step A, check the product platform structurally without the goal
-                //        this check is done for each seperate variant from the variant group
+                //        this check is done for each seperate Variantfrom the Variantgroup
                 //        this checks to see if any of the rules are conflicting each other
 
                 /*                if (!pVariationPointsSet)
@@ -6738,7 +6738,7 @@ namespace ProductPlatformAnalyzer
                 for (int i = 0; i < NoOfModelsRequired; i++)
                 {
                     _outputHandler.ResetOutputResult();
-                    //For each variant check if this statement holds - carry out the analysis
+                    //For each Variantcheck if this statement holds - carry out the analysis
                     lInternalAnalysisResult = AnalyzeProductPlatform(0
                                                             , i
                                                             , lAnalysisComplete
@@ -6812,16 +6812,16 @@ namespace ProductPlatformAnalyzer
 
 
                 //This is the list of all the variants/parts in the product platform
-                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
+                HashSet<Variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 //This is an empty list which is going to be filled by all he variants which are not able to be picked
-                List<variant> lUnselectableVariantList = new List<variant>();
+                List<Variant> lUnselectableVariantList = new List<Variant>();
 
                 _z3Solver.PrepareDebugDirectory();
 
                 //This analysis is going to be carried out in two steps:
                 //Step A, check the product platform structurally without the goal
-                //        this check is done for each seperate variant from the variant group
+                //        this check is done for each seperate Variantfrom the Variantgroup
                 //        this checks to see if any of the rules are conflicting each other
 
                 ////As this analysis type is a static analysis we only carry t out for the first transition
@@ -6839,16 +6839,16 @@ namespace ProductPlatformAnalyzer
                 if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                 {
                     //Then we have to go over all variants one by one, for this we use the list we previously filled
-                    foreach (variant lCurrentVariant in lVariantList)
+                    foreach (Variant lCurrentVariant in lVariantList)
                     {
 
                         _z3Solver.SolverPushFunction();
 
-                        AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names));
+                        AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.Names));
 
                         StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                        //For each variant check if this statement holds - carry out the analysis
+                        //For each Variantcheck if this statement holds - carry out the analysis
                         lInternalAnalysisResult = AnalyzeProductPlatform(lTransitionNo
                                                                 , 0
                                                                 , lAnalysisComplete);
@@ -6864,7 +6864,7 @@ namespace ProductPlatformAnalyzer
                         }
                         else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                         {
-                            //If the result of the first analysis was false that means the selected variant is in conflict with the rest of the product platform
+                            //If the result of the first analysis was false that means the selected Variantis in conflict with the rest of the product platform
                             if (!lUnselectableVariantList.Contains(lCurrentVariant))
                                 lUnselectableVariantList.Add(lCurrentVariant);
                         }
@@ -6927,16 +6927,16 @@ namespace ProductPlatformAnalyzer
 
 
                 //This is the list of all the variants/parts in the product platform
-                HashSet<part> lPartList = _frameworkWrapper.PartSet;
+                HashSet<Part> lPartList = _frameworkWrapper.PartSet;
 
                 //This is an empty list which is going to be filled by all he variants which are not able to be picked
-                List<part> lUnselectablePartList = new List<part>();
+                List<Part> lUnselectablePartList = new List<Part>();
 
                 _z3Solver.PrepareDebugDirectory();
 
                 //This analysis is going to be carried out in two steps:
                 //Step A, check the product platform structurally without the goal
-                //        this check is done for each seperate variant from the variant group
+                //        this check is done for each seperate Variantfrom the Variantgroup
                 //        this checks to see if any of the rules are conflicting each other
 
                 ////As this analysis type is a static analysis we only carry t out for the first transition
@@ -6955,15 +6955,15 @@ namespace ProductPlatformAnalyzer
                     if (_frameworkWrapper.UsePartInfo)
                     {
                         //Then we have to go over all variants one by one, for this we use the list we previously filled
-                        foreach (part lCurrentPart in lPartList)
+                        foreach (Part lCurrentPart in lPartList)
                         {
                             _z3Solver.SolverPushFunction();
 
-                            AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names));
+                            AddStandAloneConstraint2Z3Solver((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.Names));
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                            //For each variant check if this statement holds - carry out the analysis
+                            //For each Variantcheck if this statement holds - carry out the analysis
                             lInternalAnalysisResult = AnalyzeProductPlatform(lTransitionNo
                                                                     , 0
                                                                     , lAnalysisComplete);
@@ -6980,7 +6980,7 @@ namespace ProductPlatformAnalyzer
                             }
                             else if (lInternalAnalysisResult.Equals(Status.UNSATISFIABLE))
                             {
-                                //If the result of the first analysis was false that means the selected variant is in conflict with the rest of the product platform
+                                //If the result of the first analysis was false that means the selected Variantis in conflict with the rest of the product platform
                                 if (!lUnselectablePartList.Contains(lCurrentPart))
                                     lUnselectablePartList.Add(lCurrentPart);
                             }
@@ -7045,23 +7045,23 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                _outputHandler.PrintMessageToConsole("Never selected variant Analysis:");
+                _outputHandler.PrintMessageToConsole("Never selected VariantAnalysis:");
 
-                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
+                HashSet<Variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 if (lVariantList.Count > 0)
                 {
                     bool lAnalysisComplete = false;
 
-                    List<variant> lNeverSelectedVariantList = new List<variant>();
-                    List<variant> lSelectedVariantList = new List<variant>();
+                    List<Variant> lNeverSelectedVariantList = new List<Variant>();
+                    List<Variant> lSelectedVariantList = new List<Variant>();
 
                     _z3Solver.PrepareDebugDirectory();
 
                     //4. Is there any variant(s) that are NEVER selected for a configuration?
                     //V_i
-                    //SAT:  There is a configuration where this variant is selected
-                    //UNSAT: This variant is never selected
+                    //SAT:  There is a configuration where this Variantis selected
+                    //UNSAT: This Variantis never selected
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
                     _currentTransitionNumber = 0;
@@ -7079,7 +7079,7 @@ namespace ProductPlatformAnalyzer
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
                         //Then we have to go over all variants one by one
-                        foreach (variant lCurrentVariant in lVariantList)
+                        foreach (Variant lCurrentVariant in lVariantList)
                         {
 
                             _z3Solver.SolverPushFunction();
@@ -7091,7 +7091,7 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lLeftHandSide = null;
 
                             //V_i
-                            lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names);
+                            lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.Names);
 
                             lStandAloneConstraint = lLeftHandSide;
 
@@ -7099,7 +7099,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                            //For each variant check if this statement holds - carry out the analysis
+                            //For each Variantcheck if this statement holds - carry out the analysis
                             lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
@@ -7169,22 +7169,22 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                _outputHandler.PrintMessageToConsole("Always selected variant Analysis:");
+                _outputHandler.PrintMessageToConsole("Always selected VariantAnalysis:");
 
-                HashSet<variant> lVariantList = _frameworkWrapper.VariantSet;
+                HashSet<Variant> lVariantList = _frameworkWrapper.VariantSet;
 
                 if (lVariantList.Count > 0)
                 {
                     bool lAnalysisComplete = false;
 
-                    List<variant> lAlwaysSelectedVariantList = new List<variant>();
-                    List<variant> lNotSelectedVariantList = new List<variant>();
+                    List<Variant> lAlwaysSelectedVariantList = new List<Variant>();
+                    List<Variant> lNotSelectedVariantList = new List<Variant>();
 
                     _z3Solver.PrepareDebugDirectory();
 
                     //3. Is there any variant(s) that are ALWAYS selected for a configuration?
                     //!V_i
-                    //SAT: There is a configuration where this variant is NOT selected
+                    //SAT: There is a configuration where this Variantis NOT selected
                     //UNSAT: All configurations include this variant
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
@@ -7204,7 +7204,7 @@ namespace ProductPlatformAnalyzer
                     if (lModelConstraintCheck.Equals(Status.SATISFIABLE))
                     {
                         //Then we have to go over all variants one by one
-                        foreach (variant lCurrentVariant in lVariantList)
+                        foreach (Variant lCurrentVariant in lVariantList)
                         {
 
                             _z3Solver.SolverPushFunction();
@@ -7216,7 +7216,7 @@ namespace ProductPlatformAnalyzer
                             BoolExpr lLeftHandSide = null;
 
                             //!V_i
-                            lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.names));
+                            lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentVariant.Names));
 
                             lStandAloneConstraint = lLeftHandSide;
 
@@ -7224,7 +7224,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                            //For each variant check if this statement holds - carry out the analysis
+                            //For each Variantcheck if this statement holds - carry out the analysis
                             lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
@@ -7293,23 +7293,23 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                _outputHandler.PrintMessageToConsole("Always selected part Analysis:");
+                _outputHandler.PrintMessageToConsole("Always selected Part Analysis:");
 
-                HashSet<part> lPartList = _frameworkWrapper.PartSet;
+                HashSet<Part> lPartList = _frameworkWrapper.PartSet;
 
                 if (lPartList.Count > 0)
                 {
                     bool lAnalysisComplete = false;
 
-                    List<part> lAlwaysSelectedPartList = new List<part>();
-                    List<part> lNotSelectedPartList = new List<part>();
+                    List<Part> lAlwaysSelectedPartList = new List<Part>();
+                    List<Part> lNotSelectedPartList = new List<Part>();
 
                     _z3Solver.PrepareDebugDirectory();
 
                     //6. Is there any part(s) that are ALWAYS selected for a configuration?
                     //!P_i
-                    //SAT: There is a configuration in which this part is not selected
-                    //UNSAT: This part is selected in ALL configurations
+                    //SAT: There is a configuration in which this Part is not selected
+                    //UNSAT: This Part is selected in ALL configurations
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
                     _currentTransitionNumber = 0;
@@ -7328,7 +7328,7 @@ namespace ProductPlatformAnalyzer
                     {
                         if (_frameworkWrapper.UsePartInfo)
                         {
-                            foreach (part lCurrentPart in lPartList)
+                            foreach (Part lCurrentPart in lPartList)
                             {
                                 _z3Solver.SolverPushFunction();
 
@@ -7339,7 +7339,7 @@ namespace ProductPlatformAnalyzer
                                 BoolExpr lLeftHandSide = null;
 
                                 //!P_i 
-                                lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names));
+                                lLeftHandSide = _z3Solver.NotOperator((BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.Names));
 
                                 lStandAloneConstraint = lLeftHandSide;
 
@@ -7347,7 +7347,7 @@ namespace ProductPlatformAnalyzer
 
                                 StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                                //For each part check if this statement holds - carry out the analysis
+                                //For each Part check if this statement holds - carry out the analysis
                                 lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                         , 0
                                                                         , lAnalysisComplete);
@@ -7421,23 +7421,23 @@ namespace ProductPlatformAnalyzer
             {
                 StartModelTiming();
 
-                _outputHandler.PrintMessageToConsole("Never selected part Analysis:");
+                _outputHandler.PrintMessageToConsole("Never selected Part Analysis:");
 
-                HashSet<part> lPartList = _frameworkWrapper.PartSet;
+                HashSet<Part> lPartList = _frameworkWrapper.PartSet;
 
                 if (lPartList.Count > 0)
                 {
                     bool lAnalysisComplete = false;
 
-                    List<part> lNeverSelectedPartList = new List<part>();
-                    List<part> lSelectedPartList = new List<part>();
+                    List<Part> lNeverSelectedPartList = new List<Part>();
+                    List<Part> lSelectedPartList = new List<Part>();
 
                     _z3Solver.PrepareDebugDirectory();
 
                     //7. Is there any part(s) that are NEVER selected for a configuration?
                     //P_i
-                    //SAT: There is a configuration where this part is selected
-                    //UNSAT: There is NO configuration where this part is selected
+                    //SAT: There is a configuration where this Part is selected
+                    //UNSAT: There is NO configuration where this Part is selected
 
                     //This analysis only has meaning in the first transition, as it is a static analysis
                     _currentTransitionNumber = 0;
@@ -7456,7 +7456,7 @@ namespace ProductPlatformAnalyzer
                     {
                         if (_frameworkWrapper.UsePartInfo)
                         {
-                            foreach (part lCurrentPart in lPartList)
+                            foreach (Part lCurrentPart in lPartList)
                             {
                                 _z3Solver.SolverPushFunction();
 
@@ -7467,7 +7467,7 @@ namespace ProductPlatformAnalyzer
                                 BoolExpr lLeftHandSide = null;
 
                                 //P_i 
-                                lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.names);
+                                lLeftHandSide = (BoolExpr)_z3Solver.FindExprInExprSet(lCurrentPart.Names);
 
                                 lStandAloneConstraint = lLeftHandSide;
 
@@ -7475,7 +7475,7 @@ namespace ProductPlatformAnalyzer
 
                                 StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                                //For each part check if this statement holds - carry out the analysis
+                                //For each Part check if this statement holds - carry out the analysis
                                 lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                         , 0
                                                                         , lAnalysisComplete);
@@ -7604,7 +7604,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                            //For each variant check if this statement holds - carry out the analysis
+                            //For each Variantcheck if this statement holds - carry out the analysis
                             lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
@@ -7729,7 +7729,7 @@ namespace ProductPlatformAnalyzer
 
                             StopNReportModelTimingNStartAnalysisTiming("Model Creation");
 
-                            //For each variant check if this statement holds - carry out the analysis
+                            //For each Variantcheck if this statement holds - carry out the analysis
                             lInternalAnalysisResult = AnalyzeProductPlatform(_currentTransitionNumber
                                                                     , 0
                                                                     , lAnalysisComplete);
@@ -7909,7 +7909,7 @@ namespace ProductPlatformAnalyzer
         }
 
         /// <summary>
-        /// This function will give us a boolean expression of all the operation instances of a specific operation on a specific variant and a specific operation state
+        /// This function will give us a boolean expression of all the operation instances of a specific operation on a specific Variantand a specific operation state
         /// in all different transitions (or in one specific transition). All the operation instances are joined by AND
         /// </summary>
         /// <param name="pOperation"></param>
@@ -7923,7 +7923,7 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Here we have an operation and the related variant, but as the transition number is not given we are looking for
-                //for operation instances related to this variant in all of the transitions
+                //for operation instances related to this Variantin all of the transitions
 
                 //Here we calculate the maximum number of loops the analysis has to have, which is according to the maximum number of operations
                 ///int lMaxNoOfTransitions = CalculateAnalysisNoOfCycles();
@@ -7962,7 +7962,7 @@ namespace ProductPlatformAnalyzer
 
         //This function was removed in the latest version in which operation instance became an independent object
         /*/// <summary>
-        /// This function will give us a boolean expression of all the operation instances of a specific operation on a specific variant and a specific operation state
+        /// This function will give us a boolean expression of all the operation instances of a specific operation on a specific Variantand a specific operation state
         /// in all different transitions (or in one specific transition). All the operation instances are joined by AND
         /// </summary>
         /// <param name="pOperation"></param>
@@ -7970,13 +7970,13 @@ namespace ProductPlatformAnalyzer
         /// <param name="pOperationState"></param>
         /// <param name="pSpecificTransitionNo">In we need the expression for one transition</param>
         /// <returns></returns>
-        private BoolExpr OperationInAllTransitions(operation pOperation, variant pVariant, string pOperationState, int pSpecificTransitionNo = -1)
+        private BoolExpr OperationInAllTransitions(operation pOperation, VariantpVariant, string pOperationState, int pSpecificTransitionNo = -1)
         {
             BoolExpr lResultExpr = null;
             try
             {
                 //Here we have an operation and the related variant, but as the transition number is not given we are looking for
-                //for operation instances related to this variant in all of the transitions
+                //for operation instances related to this Variantin all of the transitions
 
                 int lVariantIndex = cFrameworkWrapper.indexLookupByVariant(pVariant);
 
@@ -8151,7 +8151,7 @@ namespace ProductPlatformAnalyzer
         //This function was removed in the new version where operation instance became a independent object
         /*/// <summary>
         /// This function takes an operation and returns am expression of operation instnces for that operation and ALL of the variants in ALL transitions
-        /// These any variants and in any transitions can be fixed to one specific variant and one specific transition if their respective parameters are set
+        /// These any variants and in any transitions can be fixed to one specific Variantand one specific transition if their respective parameters are set
         /// Also the operation state needs to be given
         /// </summary>
         /// <param name="pOperation"></param>
@@ -8169,7 +8169,7 @@ namespace ProductPlatformAnalyzer
             {
                 if (cFrameworkWrapper.UsePartInfo)
                 {
-                    foreach (part lCurrentPart in cFrameworkWrapper.PartSet)
+                    foreach (Part lCurrentPart in cFrameworkWrapper.PartSet)
                     {
                         int lCurrentPartIndex = cFrameworkWrapper.indexLookupByPart(lCurrentPart);
                         if (pSpecificIndex.Equals(-1))
@@ -8193,7 +8193,7 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    foreach (variant lCurrentVariant in cFrameworkWrapper.VariantSet)
+                    foreach (VariantlCurrentVariant in cFrameworkWrapper.VariantSet)
                     {
                         int lCurrentVariantIndex = cFrameworkWrapper.indexLookupByVariant(lCurrentVariant);
                         if (pSpecificIndex.Equals(-1))
@@ -8228,7 +8228,7 @@ namespace ProductPlatformAnalyzer
         //This function was removed in the new version where operation instance became a independent object
         /*/// <summary>
         /// This function takes an operation and returns am expression of operation instnces for that operation and ANY of the variants in ALL transitions
-        /// These any variants and in any transitions can be fixed to one specific variant and one specific transition if their respective parameters are set
+        /// These any variants and in any transitions can be fixed to one specific Variantand one specific transition if their respective parameters are set
         /// Also the operation state needs to be given
         /// </summary>
         /// <param name="pOperation"></param>
@@ -8246,7 +8246,7 @@ namespace ProductPlatformAnalyzer
             {
                 if (cFrameworkWrapper.UsePartInfo)
                 {
-                    foreach (part lCurrentPart in cFrameworkWrapper.PartSet)
+                    foreach (Part lCurrentPart in cFrameworkWrapper.PartSet)
                     {
                         int lCurrentPartIndex = cFrameworkWrapper.indexLookupByPart(lCurrentPart);
                         if (pSpecificIndex.Equals(-1))
@@ -8270,7 +8270,7 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    foreach (variant lCurrentVariant in cFrameworkWrapper.VariantSet)
+                    foreach (VariantlCurrentVariant in cFrameworkWrapper.VariantSet)
                     {
                         int lCurrentVariantIndex = cFrameworkWrapper.indexLookupByVariant(lCurrentVariant);
                         if (pSpecificIndex.Equals(-1))
@@ -8305,7 +8305,7 @@ namespace ProductPlatformAnalyzer
         //This function was needed before the latest version in which operation instance object was created
         /*/// <summary>
         /// This function takes an operation and returns am expression of operation instnces for that operation and ANY of the variants in ANY transitions
-        /// These any variants and in any transitions can be fixed to one specific variant and one specific transition if their respective parameters are set
+        /// These any variants and in any transitions can be fixed to one specific Variantand one specific transition if their respective parameters are set
         /// Also the operation state needs to be given
         /// </summary>
         /// <param name="pOperation"></param>
@@ -8323,7 +8323,7 @@ namespace ProductPlatformAnalyzer
             {
                 if (cFrameworkWrapper.UsePartInfo)
                 {
-                    foreach (part lCurrentPart in cFrameworkWrapper.PartSet)
+                    foreach (Part lCurrentPart in cFrameworkWrapper.PartSet)
                     {
                         int lCurrentPartIndex = cFrameworkWrapper.indexLookupByPart(lCurrentPart);
                         if (pSpecificIndex.Equals(-1))
@@ -8347,7 +8347,7 @@ namespace ProductPlatformAnalyzer
                 }
                 else
                 {
-                    foreach (variant lCurrentVariant in cFrameworkWrapper.VariantSet)
+                    foreach (VariantlCurrentVariant in cFrameworkWrapper.VariantSet)
                     {
                         int lCurrentVariantIndex = cFrameworkWrapper.indexLookupByVariant(lCurrentVariant);
                         if (pSpecificIndex.Equals(-1))
@@ -8436,7 +8436,7 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pPartList">The inputed list of parts</param>
         /// <returns>The string containing the name of all parts</returns>
-        private string ReturnPartNamesFromList(List<part> pPartList)
+        private string ReturnPartNamesFromList(List<Part> pPartList)
         {
             //TODO: This function and the following function has to be made into one which works on generic lists
             //and for that the tostring() of the items in the list has to return the names field of the items in the list
@@ -8446,14 +8446,14 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Loop over all the parts in the list
-                foreach (part lPart in pPartList)
+                foreach (Part lPart in pPartList)
                 {
-                    //if the part list is previously filled with something then add a comma before adding the next item
+                    //if the Part list is previously filled with something then add a comma before adding the next item
                     if (lPartNames != "")
                         lPartNames += " ,";
 
-                    //Add the name of the variant to the list
-                    lPartNames += lPart.names;
+                    //Add the name of the Variantto the list
+                    lPartNames += lPart.Names;
                 }
             }
             catch (Exception ex)
@@ -8470,7 +8470,7 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pVariantList">The inputed list of variants</param>
         /// <returns>The string containing the name of all variants</returns>
-        private string ReturnVariantNamesFromList(List<variant> pVariantList)
+        private string ReturnVariantNamesFromList(List<Variant> pVariantList)
         {
             //TODO: This function and the following function has to be made into one which works on generic lists
             //and for that the tostring() of the items in the list has to return the names field of the items in the list
@@ -8480,14 +8480,14 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Loop over all the variants in the list
-                foreach (variant lVariant in pVariantList)
+                foreach (Variant lVariant in pVariantList)
                 {
-                    //if the variant list is previously filled with something then add a comma before adding the next item
+                    //if the Variantlist is previously filled with something then add a comma before adding the next item
                     if (lVariantNames != "")
                         lVariantNames += " ,";
 
-                    //Add the name of the variant to the list
-                    lVariantNames += lVariant.names;
+                    //Add the name of the Variantto the list
+                    lVariantNames += lVariant.Names;
                 }
             }
             catch (Exception ex)
@@ -8504,7 +8504,7 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pOperationList">The inputed list of operations</param>
         /// <returns>The string containing the name of all operations</returns>
-        private string ReturnOperationNamesFromList(List<operation> pOperationList)
+        private string ReturnOperationNamesFromList(List<Operation> pOperationList)
         {
             //TODO: This function and the previous function has to be made into one which works on generic lists
             //and for that the tostring() of the items in the list has to return the names field of the items in the list
@@ -8514,14 +8514,14 @@ namespace ProductPlatformAnalyzer
             try
             {
                 //Loop over all the operations in the list
-                foreach (operation lOperation in pOperationList)
+                foreach (Operation lOperation in pOperationList)
                 {
                     //If the string with the operation names already has an item in it first add a comma to the end of it
                     if (lOperationNames != "")
                         lOperationNames += " ,";
 
                     //Add the name of the operation to the string
-                    lOperationNames += lOperation.names;
+                    lOperationNames += lOperation.Name;
                 }
             }
             catch (Exception ex)
@@ -8602,7 +8602,7 @@ namespace ProductPlatformAnalyzer
                 //HashSet<OperationInstance> lOperationInstanceSet = cFrameworkWrapper.OperationInstanceSet;
                 //Forall Operation Instances: (O_F_0_m OR O_U_0_m) AND (O_F_1_m OR O_U_1_m) AND ... AND (O_F_n_m OR O_U_n_m))
 
-                //TODO: This has to be fed into a class instance variable, as it is done in another part of this class as well!!
+                //TODO: This has to be fed into a class instance variable, as it is done in another Part of this class as well!!
                 //Here we calculate the maximum number of loops the analysis has to have, which is according to the maximum number of operations
                 ///int lMaxNoOfTransitions = CalculateAnalysisNoOfCycles();
 
@@ -8657,7 +8657,7 @@ namespace ProductPlatformAnalyzer
                             HashSet<string> lCurrentPartOperationInstances = new HashSet<string>();
                             foreach (var lCurrentTransitionOperationInstance in pCurrentTransitionOperationInstanceList)
                             {
-                                part lTempPart = cFrameworkWrapper.ReturnOperationPartFromOperationInstance(lCurrentTransitionOperationInstance);
+                                Part lTempPart = cFrameworkWrapper.ReturnOperationPartFromOperationInstance(lCurrentTransitionOperationInstance);
                                 int lCurrentOperationInstancePartIndex = cFrameworkWrapper.indexLookupByPart(lTempPart);
                                 string lCurrentOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(lCurrentTransitionOperationInstance);
 
@@ -8682,7 +8682,7 @@ namespace ProductPlatformAnalyzer
                             HashSet<string> lCurrentVariantOperationInstances = new HashSet<string>();
                             foreach (var lCurrentTransitionOperationInstance in pCurrentTransitionOperationInstanceList)
                             {
-                                variant lTempVariant = cFrameworkWrapper.ReturnOperationVariantFromOperationInstance(lCurrentTransitionOperationInstance);
+                                VariantlTempVariant = cFrameworkWrapper.ReturnOperationVariantFromOperationInstance(lCurrentTransitionOperationInstance);
                                 int lCurrentOperationInstanceVariantIndex = cFrameworkWrapper.indexLookupByVariant(lTempVariant);
                                 string lCurrentOperationName = cFrameworkWrapper.ReturnOperationNameFromOperationInstance(lCurrentTransitionOperationInstance);
 
@@ -8813,11 +8813,11 @@ namespace ProductPlatformAnalyzer
         }
 
         //These functions are from before the change in the operation trigger field.
-        //At that time part to operation mapping and variant to operation mapping existed
+        //At that time Part to operation mapping and Variantto operation mapping existed
         //TODO: If the analysis passed all tests these parts should be removed
-        /*public variant ParseVariantExpr(string pVariantExpr)
+        /*public VariantParseVariantExpr(string pVariantExpr)
         {
-            variant lResultVariant = null;
+            VariantlResultVariant = null;
             try
             {
 
@@ -8843,11 +8843,11 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //These functions are from before the change in the operation trigger field.
-        //At that time part to operation mapping and variant to operation mapping existed
+        //At that time Part to operation mapping and Variantto operation mapping existed
         //TODO: If the analysis passed all tests these parts should be removed
-        /*public part ParsePartExpr(string pPartExpr)
+        /*public Part ParsePartExpr(string pPartExpr)
         {
-            part lResultPart = null;
+            Part lResultPart = null;
             try
             {
 
@@ -8873,14 +8873,14 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //These functions are from before the change in the operation trigger field.
-        //At that time part to operation mapping and variant to operation mapping existed
+        //At that time Part to operation mapping and Variantto operation mapping existed
         //TODO: If the analysis passed all tests these parts should be removed
         /*public void ParsingPartExpr2OperationsMapping(string pPartExpr, HashSet<operation> pOperations)
         {
             try
             {
-                part lCurrentPart;
-                //First we have to see if our pPartExpr is a single part or an Expression of parts
+                Part lCurrentPart;
+                //First we have to see if our pPartExpr is a single Part or an Expression of parts
                 if (pPartExpr.Contains(' '))
                 {
                     //Meaning it is an expression
@@ -8916,14 +8916,14 @@ namespace ProductPlatformAnalyzer
         }*/
 
         //These functions are from before the change in the operation trigger field.
-        //At that time part to operation mapping and variant to operation mapping existed
+        //At that time Part to operation mapping and Variantto operation mapping existed
         //TODO: If the analysis passed all tests these parts should be removed
         /*public bool createPartOperationInstances(XmlDocument pXDoc)
         {
             bool lDataLoaded = false;
             try
             {
-                //First we extract the current set of part operations from the input file
+                //First we extract the current set of Part operations from the input file
                 HashSet<partOperations> lTemporaryPartOperationsList = new HashSet<partOperations>();
                 lTemporaryPartOperationsList = cFrameworkWrapper.createPartOperationTemporaryInstances(pXDoc);
 
@@ -8936,7 +8936,7 @@ namespace ProductPlatformAnalyzer
                         string lCurrentPartExpr = lPartOperation.getPartExpr();
                         HashSet<operation> lCurrentOperation = lPartOperation.getOperations();
 
-                        //Now we parse each instace of part operation so for those who have a part expression instead of part we can create Virtual parts
+                        //Now we parse each instace of Part operation so for those who have a Part expression instead of Part we can create Virtual parts
                         ParsingPartExpr2OperationsMapping(lCurrentPartExpr, lCurrentOperation);
                     }
                     lDataLoaded = true;
@@ -8982,7 +8982,7 @@ namespace ProductPlatformAnalyzer
                 //cFrameworkWrapper.OperationInstanceDictionary.Clear();
 
                 //Item usadge rules
-                _frameworkWrapper.ItemUsageRuleSet.Clear();
+                _frameworkWrapper.PartUsageRuleSet.Clear();
 
                 //Traits
                 _frameworkWrapper.TraitSet.Clear();
@@ -9025,7 +9025,7 @@ namespace ProductPlatformAnalyzer
                 //------------------------------------------------------------------------------------------------------------
                 //New version: in this version we have to calculate the number of transitions more accuratly
 
-                //First we need to have the static part of the model
+                //First we need to have the static Part of the model
 
                 List<IntExpr> lListOfOperationUsedVariables = new List<IntExpr>();
                 //We do this by defining an interger variable for each operation

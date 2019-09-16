@@ -18,7 +18,7 @@
 Map to our domain:
 6 Variants 
 0-5 Resource
-Each of the 6 Operations are triggered by the variant which uses them
+Each of the 6 Operations are triggered by the Variantwhich uses them
 And from operation 2 onwards use the right precondition to make them execute one after another
 
 V1 -> O1-O6
