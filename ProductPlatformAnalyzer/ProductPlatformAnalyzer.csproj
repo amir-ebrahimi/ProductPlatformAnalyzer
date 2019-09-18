@@ -122,11 +122,14 @@
     <Compile Include="Trait.cs" />
     <Compile Include="Variant.cs" />
     <Compile Include="VariantGroup.cs" />
-    <Compile Include="xsd\xmlfile.cs" />
     <Compile Include="Z3Solver.cs" />
     <Compile Include="Z3SolverEngineer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Test\0.JustVariantNVariantGroupInput.xml" />
+    <Content Include="Test\0.JustVariantInput.xml" />
+    <Content Include="Test\0.JustVariantGroupInput.xml" />
+    <Content Include="Test\0.JustOperationNVariantGroupInput.xml" />
     <Content Include="Test\1.4.xml" />
     <Content Include="Test\1.5.xml">
       <SubType>Designer</SubType>
@@ -209,9 +212,9 @@
     <Content Include="Debug\Debug2.txt" />
     <Content Include="Debug\Debug3.txt" />
     <Content Include="Debug\Debug4.txt" />
-    <Content Include="Test\0.0.xml" />
-    <Content Include="Test\0.1.xml" />
-    <Content Include="Test\0.2.xml" />
+    <Content Include="Test\0.NoDataInput.xml" />
+    <Content Include="Test\0.JustOperationInput.xml" />
+    <Content Include="Test\0.JustOperationNVariantInput.xml" />
     <Content Include="Test\10.2V1VG2O0C1P.xml" />
     <Content Include="Test\11.2V1VG2O0C1P.xml" />
     <Content Include="Test\12.2V1VG2O0C2P.xml" />

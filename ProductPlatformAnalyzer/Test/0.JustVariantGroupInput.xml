@@ -1,0 +1,26 @@
+﻿<?xml version="1.0"?>
+<!--File Name: 0.1.0V0VG1O0C0P.xml-->
+<!-- Simple no data which should not be accepted by the system as it does not have operation or variant! -->
+
+<!-- Operations: 
+        scan-barcode
+
+    Variants: 
+
+    VariantGroups: 
+
+    Constraints:  -->
+<testData>
+  <operations>
+  </operations>
+  <variants>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+</testData>

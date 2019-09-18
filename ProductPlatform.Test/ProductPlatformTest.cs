@@ -145,9 +145,14 @@ namespace ProductPlatform.Test
         }
 
         [Test]
-        [TestCase("0.0.xml", false)]
-        [TestCase("0.1.xml", false)]
-        [TestCase("0.2.xml", false)]
+        [TestCase("0.NoDataInput.xml", false)]    //No input data
+        [TestCase("0.JustOperationInput.xml", false)]    //Just operation
+        [TestCase("0.JustVariantInput.xml", false)]    //Just variant
+        [TestCase("0.JustVariantGroupInput.xml", false)]    //Just variant group
+        [TestCase("0.JustOperationNVariantInput.xml", false)]    //Just operation and variant
+        [TestCase("0.JustOperationNVariantGroupInput.xml", false)]    //Just operation and variant group
+        [TestCase("0.JustVariantNVariantGroupInput.xml", false)]    //Just variant and variant group
+        //We know that Variant, Variant group and Operations are needed the rest are optional
         public void LoadInitialData_WhenRun_IncorrectInputData(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try
