@@ -172,7 +172,9 @@ namespace ProductPlatform.Test
         }
 
         [Test]
-        [TestCase("1.0.xml", true)]
+        [TestCase("1.JustVariantNVariantGroupNOperation.xml", true)]    //Just Variant and Variant Group and Operation
+        [TestCase("1.JustVariantNVariantGroupNOperationNConfigurationRule.xml", true)]    //Just Variant and Variant Group and Operation and Configuration Rule
+        //We know that Variant, Variant group and Operations are needed the rest are optional
         public void LoadInitialData_WhenRun_CorrectInputData(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try

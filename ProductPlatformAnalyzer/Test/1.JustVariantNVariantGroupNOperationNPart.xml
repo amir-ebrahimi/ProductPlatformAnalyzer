@@ -1,0 +1,51 @@
+﻿<?xml version="1.0"?>
+<!-- 
+      Simple input data which should be accepted by the system as it does have variant, variant group or operations! 
+      And it also has a Part which is irrelavant for the acceptance of the input file
+
+      Operations: 
+        O1
+          trigger: V1
+
+      Variants: 
+        V1
+
+      Part:
+        P1
+
+      VariantGroups: 
+        VG1
+          choose exactly one
+        Variants: 
+          V1 
+ -->
+
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+  </variants>
+  <parts>
+    <part>
+      <partName>P1</partName>
+    </part>
+  </parts>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+  </constraints>
+</testData>

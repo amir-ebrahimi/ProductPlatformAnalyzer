@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- 
+      Simple input data which should be accepted by the system as it does have variant, variant group or operations!
+
+    Operations: 
+      O1
+        trigger: V1
+
+    Variants: 
+      V1
+
+    VariantGroups: 
+      VG1
+        choose exactly one
+      Variants: 
+        V1
+-->
+
+<testData>
+<operations>
+	<operation>
+		<operationName>O1</operationName>
+    <trigger>V1</trigger>
+	</operation>
+</operations>
+<variants>
+	<variant>
+		<variantName>V1</variantName>
+	</variant>
+</variants>
+<variantGroups>
+	<variantGroup>
+		<variantGroupName>VG1</variantGroupName>
+		<groupCardinality>choose exactly one</groupCardinality>
+		<variantRefs>
+			<variantRef>V1</variantRef>
+		</variantRefs>
+	</variantGroup>
+</variantGroups>
+<constraints>
+</constraints>
+</testData>

@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0"?>
-<!--File Name: 0.0.0V0VG0O0C0P.xml-->
-<!-- Simple no data which should not be accepted by the system as it does not have variant, variant group or operations! -->
+<!-- 
+      Simple no data which should not be accepted by the system as it does not have variant, variant group or operations!
 
-<!-- Operations: 
+    Operations: 
 
     Variants: 
 
     VariantGroups: 
 
-    Constraints:  -->
+    Constraints:
+-->
 <testData>
   <operations>
   </operations>

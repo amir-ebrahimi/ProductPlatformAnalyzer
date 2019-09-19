@@ -1,15 +1,20 @@
 ﻿<?xml version="1.0"?>
-<!--File Name: 0.2.1V0VG1O0C0P.xml-->
-<!-- Simple no data which should not be accepted by the system as it does not have operation! -->
+<!-- 
+    Simple no data which should not be accepted by the system as it does not have operation!
 
-<!-- Operations: 
-        scan-barcode
+    Operations: 
 
     Variants: 
+      V1
 
     VariantGroups: 
+      VG1
+        Choose exactly one
+      Variants:
+        V1
 
-    Constraints:  -->
+    Constraints:
+-->
 <testData>
   <operations>
     <operation>
