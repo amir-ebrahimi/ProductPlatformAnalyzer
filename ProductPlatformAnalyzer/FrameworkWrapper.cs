@@ -221,27 +221,27 @@ namespace ProductPlatformAnalyzer
         public OutputHandler OutputHandler { get; set; }
         public HashSet<Variant> VariantSet { get; set; }
         public Dictionary<string, Variant> VariantNameLookup { get; set; }
-        public Dictionary<Variant, int> VariantIndexLookup { get; set; }
-        public Dictionary<int, Variant> IndexVariantLookup { get; set; }
-        public Dictionary<string, Variant> VariantSymbolicNameLookup { get; set; }
+        //public Dictionary<Variant, int> VariantIndexLookup { get; set; }
+        //public Dictionary<int, Variant> IndexVariantLookup { get; set; }
+        //public Dictionary<string, Variant> VariantSymbolicNameLookup { get; set; }
         public HashSet<VariantGroup> VariantGroupSet { get; set; }
         public HashSet<Part> PartSet { get; set; }
         public bool UsePartInfo { get; set; }
         public Dictionary<string, Part> PartNameLookup { get; set; }
-        public Dictionary<Part, int> PartIndexLookup { get; set; }
-        public Dictionary<int, Part> IndexPartLookup { get; set; }
-        public Dictionary<string, Part> PartSymbolicNameLookup { get; set; }
+        //public Dictionary<Part, int> PartIndexLookup { get; set; }
+        //public Dictionary<int, Part> IndexPartLookup { get; set; }
+        //public Dictionary<string, Part> PartSymbolicNameLookup { get; set; }
         public HashSet<Operation> OperationSet { get; set; }
         public Dictionary<string, Operation> OperationNameLookup { get; set; }
-        public Dictionary<string, Operation> OperationSymbolicNameLookup { get; set; }
+        //public Dictionary<string, Operation> OperationSymbolicNameLookup { get; set; }
         public HashSet<PartUsageRule> PartUsageRuleSet { get; set; }
         public HashSet<string> ConstraintSet { get; set; }
         public HashSet<Resource> ResourceSet { get; set; }
         public Dictionary<string, Resource> ResourceNameLookup { get; set; }
-        public Dictionary<string, Resource> ResourceSymbolicNameLookup { get; set; }
+        //public Dictionary<string, Resource> ResourceSymbolicNameLookup { get; set; }
         public HashSet<Trait> TraitSet { get; set; }
         public Dictionary<string, Trait> TraitNameLookup { get; set; }
-        public Dictionary<string, Trait> TraitSymbolicNameLookup { get; set; }
+        //public Dictionary<string, Trait> TraitSymbolicNameLookup { get; set; }
         #endregion
 
         public FrameworkWrapper(OutputHandler pOutputHandler)
@@ -250,22 +250,22 @@ namespace ProductPlatformAnalyzer
 
             VariantSet = new HashSet<Variant>();
             VariantNameLookup = new Dictionary<string, Variant>();
-            VariantIndexLookup = new Dictionary<Variant, int>();
-            IndexVariantLookup = new Dictionary<int, Variant>();
-            VariantSymbolicNameLookup = new Dictionary<string, Variant>();
+            //VariantIndexLookup = new Dictionary<Variant, int>();
+            //IndexVariantLookup = new Dictionary<int, Variant>();
+            //VariantSymbolicNameLookup = new Dictionary<string, Variant>();
 
             VariantGroupSet = new HashSet<VariantGroup>();
 
             PartSet = new HashSet<Part>();
             UsePartInfo = true;
             PartNameLookup = new Dictionary<string, Part>();
-            PartIndexLookup = new Dictionary<Part, int>();
-            IndexPartLookup = new Dictionary<int, Part>();
-            PartSymbolicNameLookup = new Dictionary<string, Part>();
+            //PartIndexLookup = new Dictionary<Part, int>();
+            //IndexPartLookup = new Dictionary<int, Part>();
+            //PartSymbolicNameLookup = new Dictionary<string, Part>();
 
             OperationSet = new HashSet<Operation>();
             OperationNameLookup = new Dictionary<string, Operation>();
-            OperationSymbolicNameLookup = new Dictionary<string, Operation>();
+            //OperationSymbolicNameLookup = new Dictionary<string, Operation>();
 
             //OperationInstanceNameLookup = new List<KeyValuePair<string, OperationInstance>>();
             //OperationInstanceSymbolicNameLookup = new Dictionary<string, OperationInstance>();
@@ -276,11 +276,11 @@ namespace ProductPlatformAnalyzer
 
             ResourceSet = new HashSet<Resource>();
             ResourceNameLookup = new Dictionary<string, Resource>();
-            ResourceSymbolicNameLookup = new Dictionary<string, Resource>();
+            //ResourceSymbolicNameLookup = new Dictionary<string, Resource>();
 
             TraitSet = new HashSet<Trait>();
             TraitNameLookup = new Dictionary<string, Trait>();
-            TraitSymbolicNameLookup = new Dictionary<string, Trait>();
+            //TraitSymbolicNameLookup = new Dictionary<string, Trait>();
         }
 
         public bool ExistVariantByName(string pVariantName)
@@ -317,23 +317,24 @@ namespace ProductPlatformAnalyzer
             return lResultVariant;
         }
 
-        public Variant VariantLookupBySymbolicName(string pVariantSymbolicName)
-        {
-            Variant lResultVariant = null;
-            try
-            {
-                if (VariantSymbolicNameLookup.ContainsKey(pVariantSymbolicName))
-                    lResultVariant = VariantSymbolicNameLookup[pVariantSymbolicName];
-                else
-                    OutputHandler.PrintMessageToConsole("Variant " + pVariantSymbolicName + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in variantLookupBySymbolicName");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultVariant;
-        }
+        //MIGHT BE NEEDED LATER
+        //public Variant VariantLookupBySymbolicName(string pVariantSymbolicName)
+        //{
+        //    Variant lResultVariant = null;
+        //    try
+        //    {
+        //        if (VariantSymbolicNameLookup.ContainsKey(pVariantSymbolicName))
+        //            lResultVariant = VariantSymbolicNameLookup[pVariantSymbolicName];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Variant " + pVariantSymbolicName + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in variantLookupBySymbolicName");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultVariant;
+        //}
 
         public bool HaveVariantWithName(string pVariantName)
         {
@@ -369,77 +370,77 @@ namespace ProductPlatformAnalyzer
             return lResultPart;
         }
 
-        public Part PartLookupByIndex(int pPartIndex)
-        {
-            Part lResultPart = null;
-            try
-            {
-                if (IndexPartLookup.ContainsKey(pPartIndex))
-                    lResultPart = IndexPartLookup[pPartIndex];
-                else
-                    OutputHandler.PrintMessageToConsole("Part " + pPartIndex + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in partLookupByIndex");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultPart;
-        }
+        //public Part PartLookupByIndex(int pPartIndex)
+        //{
+        //    Part lResultPart = null;
+        //    try
+        //    {
+        //        if (IndexPartLookup.ContainsKey(pPartIndex))
+        //            lResultPart = IndexPartLookup[pPartIndex];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Part " + pPartIndex + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in partLookupByIndex");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultPart;
+        //}
 
-        public int IndexLookupByPart(Part pPart)
-        {
-            int lResultIndex = 0;
-            try
-            {
-                if (PartIndexLookup.ContainsKey(pPart))
-                    lResultIndex = PartIndexLookup[pPart];
-                else
-                    OutputHandler.PrintMessageToConsole("Part " + pPart.Names + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in indexLookupByPart");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultIndex;
-        }
+        //public int IndexLookupByPart(Part pPart)
+        //{
+        //    int lResultIndex = 0;
+        //    try
+        //    {
+        //        if (PartIndexLookup.ContainsKey(pPart))
+        //            lResultIndex = PartIndexLookup[pPart];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Part " + pPart.Names + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in indexLookupByPart");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultIndex;
+        //}
 
-        public Variant VariantLookupByIndex(int pVariantIndex)
-        {
-            Variant lResultVariant = null;
-            try
-            {
-                if (IndexVariantLookup.ContainsKey(pVariantIndex))
-                    lResultVariant = IndexVariantLookup[pVariantIndex];
-                else
-                    OutputHandler.PrintMessageToConsole("Variant " + pVariantIndex + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in variantLookupByIndex");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultVariant;
-        }
+        //public Variant VariantLookupByIndex(int pVariantIndex)
+        //{
+        //    Variant lResultVariant = null;
+        //    try
+        //    {
+        //        if (IndexVariantLookup.ContainsKey(pVariantIndex))
+        //            lResultVariant = IndexVariantLookup[pVariantIndex];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Variant " + pVariantIndex + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in variantLookupByIndex");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultVariant;
+        //}
 
-        public int IndexLookupByVariant(Variant pVariant)
-        {
-            int lResultIndex = 0;
-            try
-            {
-                if (VariantIndexLookup.ContainsKey(pVariant))
-                    lResultIndex = VariantIndexLookup[pVariant];
-                else
-                    OutputHandler.PrintMessageToConsole("Variant " + pVariant.Names + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in indexLookupByVariant");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultIndex;
-        }
+        //public int IndexLookupByVariant(Variant pVariant)
+        //{
+        //    int lResultIndex = 0;
+        //    try
+        //    {
+        //        if (VariantIndexLookup.ContainsKey(pVariant))
+        //            lResultIndex = VariantIndexLookup[pVariant];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Variant " + pVariant.Names + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in indexLookupByVariant");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultIndex;
+        //}
 
         public bool HavePartWithName(string pPartName)
         {
@@ -456,23 +457,23 @@ namespace ProductPlatformAnalyzer
             return lTempResult;
         }
 
-        public Part PartLookupBySymbolicName(string pPartSymbolicName)
-        {
-            Part lResultPart = null;
-            try
-            {
-                if (PartSymbolicNameLookup.ContainsKey(pPartSymbolicName))
-                    lResultPart = PartSymbolicNameLookup[pPartSymbolicName];
-                else
-                    OutputHandler.PrintMessageToConsole("Part " + pPartSymbolicName + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in partLookupBySymbolicName");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultPart;
-        }
+        //public Part PartLookupBySymbolicName(string pPartSymbolicName)
+        //{
+        //    Part lResultPart = null;
+        //    try
+        //    {
+        //        if (PartSymbolicNameLookup.ContainsKey(pPartSymbolicName))
+        //            lResultPart = PartSymbolicNameLookup[pPartSymbolicName];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Part " + pPartSymbolicName + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in partLookupBySymbolicName");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultPart;
+        //}
 
         public Operation OperationLookupByName(string pOperationName)
         {
@@ -492,23 +493,23 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public Operation OperationLookupBySymbolicName(string pOperationSymbolicName)
-        {
-            Operation lResultOperation = null;
-            try
-            {
-                if (OperationSymbolicNameLookup.ContainsKey(pOperationSymbolicName))
-                    lResultOperation = OperationSymbolicNameLookup[pOperationSymbolicName];
-                else
-                    OutputHandler.PrintMessageToConsole("Operation " + pOperationSymbolicName + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in operationLookupBySymbolicName");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultOperation;
-        }
+        //public Operation OperationLookupBySymbolicName(string pOperationSymbolicName)
+        //{
+        //    Operation lResultOperation = null;
+        //    try
+        //    {
+        //        if (OperationSymbolicNameLookup.ContainsKey(pOperationSymbolicName))
+        //            lResultOperation = OperationSymbolicNameLookup[pOperationSymbolicName];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Operation " + pOperationSymbolicName + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in operationLookupBySymbolicName");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultOperation;
+        //}
 
         //public OperationInstance operationInstanceLookup(string pOperationName, string pTransitionNumber)
         //{
@@ -641,23 +642,23 @@ namespace ProductPlatformAnalyzer
             return lResultResource;
         }
 
-        public Resource ResourceLookupBySymbolicName(string pResourceSymbolicName)
-        {
-            Resource lResultResource = null;
-            try
-            {
-                if (ResourceSymbolicNameLookup.ContainsKey(pResourceSymbolicName))
-                    lResultResource = ResourceSymbolicNameLookup[pResourceSymbolicName];
-                else
-                    OutputHandler.PrintMessageToConsole("Resource " + pResourceSymbolicName + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in resourceLookupBySymbolicName");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultResource;
-        }
+        //public Resource ResourceLookupBySymbolicName(string pResourceSymbolicName)
+        //{
+        //    Resource lResultResource = null;
+        //    try
+        //    {
+        //        if (ResourceSymbolicNameLookup.ContainsKey(pResourceSymbolicName))
+        //            lResultResource = ResourceSymbolicNameLookup[pResourceSymbolicName];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Resource " + pResourceSymbolicName + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in resourceLookupBySymbolicName");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultResource;
+        //}
 
         public Trait TraitLookupByName(string pTraitName)
         {
@@ -677,45 +678,51 @@ namespace ProductPlatformAnalyzer
             return lResultTrait;
         }
 
-        public Trait TraitLookupBySymbolicName(string pTraitSymbolicName)
-        {
-            Trait lResultTrait = null;
-            try
-            {
-                if (TraitSymbolicNameLookup.ContainsKey(pTraitSymbolicName))
-                    lResultTrait = TraitSymbolicNameLookup[pTraitSymbolicName];
-                else
-                    OutputHandler.PrintMessageToConsole("Trait " + pTraitSymbolicName + " not found in Dictionary!");
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in traitLookupBySymbolicName");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultTrait;
-        }
+        //public Trait TraitLookupBySymbolicName(string pTraitSymbolicName)
+        //{
+        //    Trait lResultTrait = null;
+        //    try
+        //    {
+        //        if (TraitSymbolicNameLookup.ContainsKey(pTraitSymbolicName))
+        //            lResultTrait = TraitSymbolicNameLookup[pTraitSymbolicName];
+        //        else
+        //            OutputHandler.PrintMessageToConsole("Trait " + pTraitSymbolicName + " not found in Dictionary!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in traitLookupBySymbolicName");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultTrait;
+        //}
 
         /// <summary>
         /// This function returns a list of operation names
         /// </summary>
         /// <returns>List of operation names</returns>
-        public HashSet<string> GetSetOfOperationNames()
+        public List<string> GetSetOfOperationNames()
         {
-            HashSet<string> lOperationNames = new HashSet<string>();
-            try
-            {
-                foreach (Operation lOperation in OperationSet)
-                {
-                    if (!lOperationNames.Contains(lOperation.Name))
-                        lOperationNames.Add(lOperation.Name);
-                }
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in getSetOfOperationNames");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lOperationNames;
+            //HashSet<string> lOperationNames = new HashSet<string>();
+            //try
+            //{
+                //foreach (Operation lOperation in OperationSet)
+                //{
+                //    if (!lOperationNames.Contains(lOperation.Name))
+                //        lOperationNames.Add(lOperation.Name);
+                //}
+
+                var lOperationNames =
+                    from operation in OperationSet
+                    select operation.Name;
+
+                return lOperationNames.ToList();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    OutputHandler.PrintMessageToConsole("error in getSetOfOperationNames");
+            //    OutputHandler.PrintMessageToConsole(ex.Message);
+            //}
         }
 
         public List<string> GetPreconditionForOperation(string opName)
@@ -1378,23 +1385,23 @@ namespace ProductPlatformAnalyzer
             return lResultOperation;
         }
 
-        public Part GetPartFromActiveOperationName(string pActiveOperationName)
-        {
-            Part lResultPart = null;
-            try
-            {
-                string[] lParts = pActiveOperationName.Split('_');
-                //ActiveOperationInstance: OperationName_State_Part_Transition
-                if (lParts.Length >= 2)
-                    lResultPart = PartLookupByIndex(int.Parse(lParts[2]));
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in getPartFromActiveOperation");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-            return lResultPart;
-        }
+        //public Part GetPartFromActiveOperationName(string pActiveOperationName)
+        //{
+        //    Part lResultPart = null;
+        //    try
+        //    {
+        //        string[] lParts = pActiveOperationName.Split('_');
+        //        //ActiveOperationInstance: OperationName_State_Part_Transition
+        //        if (lParts.Length >= 2)
+        //            lResultPart = PartLookupByIndex(int.Parse(lParts[2]));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in getPartFromActiveOperation");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lResultPart;
+        //}
 
         public int GetPartIndexFromActiveOperation(string pActiveOperationName)
         {
@@ -1987,7 +1994,7 @@ namespace ProductPlatformAnalyzer
             return lResultPostconditionStr;
         }
 
-        public Operation CreateOperationInstance(string pName
+        public Operation CreateOperationInstanceNLocalSets(string pName
                                             , string pTriggers
                                             , string pRequirements
                                             , string pPrecondition
@@ -2002,12 +2009,12 @@ namespace ProductPlatformAnalyzer
 
                 OperationSet.Add(lTempOperation);
                 OperationNameLookup.Add(pName, lTempOperation);
-                OperationSymbolicNameLookup.Add("O" + OperationSymbolicNameLookup.Count + 1, lTempOperation);
+                //OperationSymbolicNameLookup.Add("O" + OperationSymbolicNameLookup.Count + 1, lTempOperation);
 
             }
             catch (Exception ex)
             {
-                OutputHandler.PrintMessageToConsole("error in CreateOperationInstance");
+                OutputHandler.PrintMessageToConsole("error in CreateOperationInstanceNLocalSets");
                 OutputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTempOperation;
@@ -2063,69 +2070,70 @@ namespace ProductPlatformAnalyzer
         //    return lResultOperationInstance;
         //}
 
-        public Part CreatePartInstance(string pName)
+        public Part CreatePartInstanceNLocalSets(string pName)
         {
-            Part lTempPart = new Part();
+            Part lTempPart = null;
             try
             {
-                lTempPart.Names = pName;
-                //addPart(lTempPart);
+                lTempPart = new Part(pName);
+
+                //TODO: This lookup might not be needed later on
                 Part lFoundPart = PartLookupByName(pName, false);
                 if (lFoundPart == null)
                 {
                     PartSet.Add(lTempPart);
                     PartNameLookup.Add(pName, lTempPart);
-                    IndexPartLookup.Add(PartIndexLookup.Count + 1, lTempPart);
-                    PartIndexLookup.Add(lTempPart, PartIndexLookup.Count + 1);
-                    PartSymbolicNameLookup.Add("P" + PartSymbolicNameLookup.Count + 1, lTempPart);
+                    //IndexPartLookup.Add(PartIndexLookup.Count + 1, lTempPart);
+                    //PartIndexLookup.Add(lTempPart, PartIndexLookup.Count + 1);
+                    //PartSymbolicNameLookup.Add("P" + PartSymbolicNameLookup.Count + 1, lTempPart);
                 }
             }
             catch (Exception ex)
             {
-                OutputHandler.PrintMessageToConsole("error in CreatePartInstance");
+                OutputHandler.PrintMessageToConsole("error in CreatePartInstanceNLocalSets");
                 OutputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTempPart;
         }
 
-        public Variant CreateVariantInstance(string pName)
+        public Variant CreateVariantInstanceNLocalSets(string pName)
         {
-            Variant lTempVariant = new Variant();
+            Variant lTempVariant = null;
             try
             {
-                lTempVariant.Names = pName;
-                //addVariant(lTempVariant);
+                lTempVariant = new Variant(pName);
 
                 VariantSet.Add(lTempVariant);
                 VariantNameLookup.Add(pName, lTempVariant);
-                IndexVariantLookup.Add(VariantIndexLookup.Count + 1, lTempVariant);
-                VariantIndexLookup.Add(lTempVariant, VariantIndexLookup.Count + 1);
-                VariantSymbolicNameLookup.Add("V" + VariantSymbolicNameLookup.Count + 1, lTempVariant);
+                //IndexVariantLookup.Add(VariantIndexLookup.Count + 1, lTempVariant);
+                //VariantIndexLookup.Add(lTempVariant, VariantIndexLookup.Count + 1);
+                //VariantSymbolicNameLookup.Add("V" + VariantSymbolicNameLookup.Count + 1, lTempVariant);
             }
             catch (Exception ex)
             {
-                OutputHandler.PrintMessageToConsole("error in CreateVariantInstance, pName: " + pName);
+                OutputHandler.PrintMessageToConsole("error in CreateVariantInstanceNLocalSets");
                 OutputHandler.PrintMessageToConsole(ex.Message);
             }
             return lTempVariant;
         }
 
-        public void CreateVariantGroupInstance(string pName, string pGroupCardinality, List<Variant> pVariantSet)
-        {
-            try
-            {
-                VariantGroup lTempVariantGroup = new VariantGroup();
-                lTempVariantGroup.Names = pName;
-                lTempVariantGroup.GCardinality = pGroupCardinality;
-                lTempVariantGroup.Variants = pVariantSet;
-                AddVariantGroup(lTempVariantGroup);
-            }
-            catch (Exception ex)
-            {
-                OutputHandler.PrintMessageToConsole("error in CreateVariantGroupInstance");
-                OutputHandler.PrintMessageToConsole(ex.Message);
-            }
-        }
+        //public VariantGroup CreateVariantGroupInstance(string pName, string pGroupCardinality, List<Variant> pVariantSet)
+        //{
+        //    VariantGroup lTempVariantGroup = new VariantGroup();
+        //    try
+        //    {
+        //        lTempVariantGroup.Names = pName;
+        //        lTempVariantGroup.GCardinality = pGroupCardinality;
+        //        lTempVariantGroup.Variants = pVariantSet;
+        //        AddVariantGroup(lTempVariantGroup);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OutputHandler.PrintMessageToConsole("error in CreateVariantGroupInstance");
+        //        OutputHandler.PrintMessageToConsole(ex.Message);
+        //    }
+        //    return lTempVariantGroup;
+        //}
 
         //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public partOperations CreatePartOperationMappingTemporaryInstance(string pPartName, List<string> pOperationSet)
@@ -2287,46 +2295,44 @@ namespace ProductPlatformAnalyzer
             return lResultTrait;
         }*/
 
-        public void CreateTraitInstance(string pName, HashSet<Trait> pInherit, HashSet<Tuple<string,string>> pAttributes)
+        public Trait CreateTraitInstanceNLocalSets(string pName, HashSet<Trait> pInherit, HashSet<Tuple<string,string>> pAttributes)
         {
+            Trait lTempTrait = null;
             try
             {
-                Trait lTempTrait = new Trait();
-
-                lTempTrait.Names = pName;
-                lTempTrait.Inherit = pInherit;
-                lTempTrait.Attributes = pAttributes;
+                lTempTrait = new Trait(pName, pAttributes, pInherit);
 
                 AddTrait(lTempTrait);
 
                 TraitNameLookup.Add(pName, lTempTrait);
-                TraitSymbolicNameLookup.Add("T" + TraitSymbolicNameLookup.Count + 1, lTempTrait);
+                //TraitSymbolicNameLookup.Add("T" + TraitSymbolicNameLookup.Count + 1, lTempTrait);
             }
             catch (Exception ex)
             {
                 OutputHandler.PrintMessageToConsole("error in createTraitInstance, pName: " + pName);
                 OutputHandler.PrintMessageToConsole(ex.Message);
             }
+            return lTempTrait;
         }
 
-        public void CreateResourceInstance(string pName, HashSet<Trait> pTraits ,HashSet<Tuple<string,string,string>> pAttributes)
+        public Resource CreateResourceInstanceNLocalSets(string pName, HashSet<Trait> pTraits ,HashSet<Tuple<string,string,string>> pAttributes)
         {
+            Resource lTempResource = null;
             try
             {
-                Resource lTempResource = new Resource();
-                lTempResource.Name = pName;
-                //lTempResource.traits = pTraits;
-                //lTempResource.attributes = pAttributes;
+                lTempResource = new Resource(pName);
+
                 AddResource(lTempResource);
 
                 ResourceNameLookup.Add(pName, lTempResource);
-                ResourceSymbolicNameLookup.Add("R" + ResourceSymbolicNameLookup.Count + 1, lTempResource);
+                //ResourceSymbolicNameLookup.Add("R" + ResourceSymbolicNameLookup.Count + 1, lTempResource);
             }
             catch (Exception ex)
             {
                 OutputHandler.PrintMessageToConsole("error in CreateResourceInstance, pName: " + pName);
                 OutputHandler.PrintMessageToConsole(ex.Message);
             }
+            return lTempResource;
         }
 
         //Virtual variants are no longer needed
@@ -2891,7 +2897,7 @@ namespace ProductPlatformAnalyzer
                                             , GetXMLNodeAttributeInnerText(lAttribute, "attributeName")));
                         }
 
-                        CreateTraitInstance(GetXMLNodeAttributeInnerText(lNode, "traitName")
+                        CreateTraitInstanceNLocalSets(GetXMLNodeAttributeInnerText(lNode, "traitName")
                                                                 , lInheritTraits
                                                                 , lAttributes);
                     }
@@ -2952,7 +2958,7 @@ namespace ProductPlatformAnalyzer
 
                         //var lResourceName = getXMLNodeAttributeInnerText(lNode, "resourceName");
 
-                        CreateResourceInstance(GetXMLNodeAttributeInnerText(lNode, "resourceName")
+                        CreateResourceInstanceNLocalSets(GetXMLNodeAttributeInnerText(lNode, "resourceName")
                                             , lTraits
                                             , lAttributes);
 
@@ -3022,15 +3028,23 @@ namespace ProductPlatformAnalyzer
                         XmlNodeList lVariantGroupVariantNamesNodeList = lNode["variantRefs"].ChildNodes;
                         if (lVariantGroupVariantNamesNodeList.Count > 0)
                         {
+                            var lVariantGroupName = GetXMLNodeAttributeInnerText(lNode, "variantGroupName");
+                            var lVariantGroupCardinality = GetXMLNodeAttributeInnerText(lNode, "groupCardinality");
+
                             foreach (XmlNode lVariantGroupVariantName in lVariantGroupVariantNamesNodeList)
                             {
                                 string lVariantName = lVariantGroupVariantName.InnerText;
-                                lVariantGroupVariants.Add(VariantLookupByName(lVariantName));
+                                var lVariant = VariantLookupByName(lVariantName);
+
+                                lVariantGroupVariants.Add(lVariant);
                             }
 
-                            CreateVariantGroupInstance(GetXMLNodeAttributeInnerText(lNode, "variantGroupName")
-                                                    , GetXMLNodeAttributeInnerText(lNode, "groupCardinality")
+                            var lVariantGroup = new VariantGroup(lVariantGroupName
+                                                    , lVariantGroupCardinality
                                                     , lVariantGroupVariants);
+
+                            foreach (var lVariant in lVariantGroupVariants)
+                                lVariant.MyVariantGroup = lVariantGroup;
 
                             lDataLoaded = true;
                         }
@@ -3082,7 +3096,7 @@ namespace ProductPlatformAnalyzer
                                                 , int.Parse(getXMLNodeAttributeInnerText(lNode, "variantIndex"))
                                                 , getXMLNodeAttributeInnerText(lNode, "variantDisplayName")
                                                 , lVariantManufacturingOperations);*/
-                        CreateVariantInstance(GetXMLNodeAttributeInnerText(lNode, "variantName"));
+                        CreateVariantInstanceNLocalSets(GetXMLNodeAttributeInnerText(lNode, "variantName"));
                     }
                     lDataLoaded = true;
                 }
@@ -3115,7 +3129,7 @@ namespace ProductPlatformAnalyzer
                 {
                     foreach (XmlNode lNode in lNodeList)
                     {
-                        CreatePartInstance(GetXMLNodeAttributeInnerText(lNode, "partName"));
+                        CreatePartInstanceNLocalSets(GetXMLNodeAttributeInnerText(lNode, "partName"));
                     }
                     lDataLoaded = true;
                 }

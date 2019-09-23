@@ -7562,8 +7562,10 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: This operation is NEVER used
 
                     bool lAnalysisComplete = false;
-                    HashSet<string> lNeverSelectedOperationNameList = new HashSet<string>();
-                    HashSet<string> lSelectedOperationNameList = new HashSet<string>();
+                    //HashSet<string> lNeverSelectedOperationNameList = new HashSet<string>();
+                    List<string> lNeverSelectedOperationNameList = new List<string>();
+                    //HashSet<string> lSelectedOperationNameList = new HashSet<string>();
+                    List<string> lSelectedOperationNameList = new List<string>();
 
                     _z3Solver.PrepareDebugDirectory();
 
@@ -7686,8 +7688,10 @@ namespace ProductPlatformAnalyzer
                     //UNSAT: There is one configuration where this operation is used
 
                     bool lAnalysisComplete = false;
-                    HashSet<string> lAlwaysSelectedOperationNameList = new HashSet<string>();
-                    HashSet<string> lUnusedOperationNameList = new HashSet<string>();
+                    //HashSet<string> lAlwaysSelectedOperationNameList = new HashSet<string>();
+                    List<string> lAlwaysSelectedOperationNameList = new List<string>();
+                    //HashSet<string> lUnusedOperationNameList = new HashSet<string>();
+                    List<string> lUnusedOperationNameList = new List<string>();
 
                     _z3Solver.PrepareDebugDirectory();
 
@@ -7803,11 +7807,11 @@ namespace ProductPlatformAnalyzer
                 //O_i
 
                 bool lAnalysisComplete = false;
-                HashSet<string> lUnselectableOperationNameSet = new HashSet<string>();
+                //HashSet<string> lUnselectableOperationNameSet = new HashSet<string>();
                 //HashSet<OperationInstance> lOperationInstanceList = cFrameworkWrapper.OperationInstanceSet;
 
                 //To start all operations are unselectable unless otherwise proven
-                lUnselectableOperationNameSet = _frameworkWrapper.GetSetOfOperationNames();
+                var lUnselectableOperationNameSet = _frameworkWrapper.GetSetOfOperationNames();
 
                 ////In this analysis we only want to check the first transition, and check if each operation is in the initial status in the first transition or not
                 ////Hence there is no need to loop over all transitions like previous types of analysis
@@ -8573,7 +8577,7 @@ namespace ProductPlatformAnalyzer
         /// </summary>
         /// <param name="pOperationNameSet">List of operation names</param>
         /// <returns>string of all operation names</returns>
-        private string ReturnOperationNamesStringFromOperationNameList(HashSet<string> pOperationNameSet)
+        private string ReturnOperationNamesStringFromOperationNameList(List<string> pOperationNameSet)
         {
             string lOperationNamesString = "";
             try
@@ -8957,15 +8961,15 @@ namespace ProductPlatformAnalyzer
                 //Parts
                 _frameworkWrapper.PartSet.Clear();
                 _frameworkWrapper.PartNameLookup.Clear();
-                _frameworkWrapper.PartIndexLookup.Clear();
-                _frameworkWrapper.PartSymbolicNameLookup.Clear();
+                //_frameworkWrapper.PartIndexLookup.Clear();
+                //_frameworkWrapper.PartSymbolicNameLookup.Clear();
 
                 //Variants
                 _frameworkWrapper.VariantSet.Clear();
                 _frameworkWrapper.VariantNameLookup.Clear();
-                _frameworkWrapper.IndexVariantLookup.Clear();
-                _frameworkWrapper.VariantIndexLookup.Clear();
-                _frameworkWrapper.VariantSymbolicNameLookup.Clear();
+                //_frameworkWrapper.IndexVariantLookup.Clear();
+                //_frameworkWrapper.VariantIndexLookup.Clear();
+                //_frameworkWrapper.VariantSymbolicNameLookup.Clear();
 
                 //Variant group
                 _frameworkWrapper.VariantGroupSet.Clear();
@@ -8976,7 +8980,7 @@ namespace ProductPlatformAnalyzer
                 //Operations
                 _frameworkWrapper.OperationSet.Clear();
                 _frameworkWrapper.OperationNameLookup.Clear();
-                _frameworkWrapper.OperationSymbolicNameLookup.Clear();
+                //_frameworkWrapper.OperationSymbolicNameLookup.Clear();
 
                 //cFrameworkWrapper.OperationInstanceSet.Clear();
                 //cFrameworkWrapper.OperationInstanceDictionary.Clear();
@@ -8987,12 +8991,12 @@ namespace ProductPlatformAnalyzer
                 //Traits
                 _frameworkWrapper.TraitSet.Clear();
                 _frameworkWrapper.TraitNameLookup.Clear();
-                _frameworkWrapper.TraitSymbolicNameLookup.Clear();
+                //_frameworkWrapper.TraitSymbolicNameLookup.Clear();
 
                 //Resources
                 _frameworkWrapper.ResourceSet.Clear();
                 _frameworkWrapper.ResourceNameLookup.Clear();
-                _frameworkWrapper.ResourceSymbolicNameLookup.Clear();
+                //_frameworkWrapper.ResourceSymbolicNameLookup.Clear();
 
             }
             catch (Exception ex)

@@ -12,6 +12,20 @@ namespace ProductPlatformAnalyzer
         public HashSet<Tuple<string,string>> Attributes { get; set; }
         public HashSet<Trait> Inherit { get; set; }
 
+        public Trait()
+        {
+
+        }
+
+        public Trait(string pNames
+                    , HashSet<Tuple<string,string>> pAttributes
+                    , HashSet<Trait> pInherit)
+        {
+            Names = pNames;
+            Attributes = pAttributes;
+            Inherit = pInherit;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

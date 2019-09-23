@@ -9,12 +9,16 @@ namespace ProductPlatformAnalyzer
     public class Resource
     {
         public string Name { get; set; }
-        //private string _name;
-        //public string Name
-        //{
-        //    get { return _name; }
-        //    set { _name = value; }
-        //}
+
+        public Resource()
+        {
+
+        }
+
+        public Resource(string pName)
+        {
+            Name = pName;
+        }
 
         //Hash function then remove dictionary from framework also overload the equals for this object
         public override bool Equals(object pObj)

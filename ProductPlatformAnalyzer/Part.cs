@@ -10,6 +10,16 @@ namespace ProductPlatformAnalyzer
     {
         public string Names { get; set; }
 
+        public Part()
+        {
+
+        }
+
+        public Part(string pNames)
+        {
+            Names = pNames;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

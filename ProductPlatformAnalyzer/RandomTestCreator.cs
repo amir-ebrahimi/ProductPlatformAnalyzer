@@ -296,7 +296,7 @@ namespace ProductPlatformAnalyzer
                 {
                     string lTraitName = "T" + i;
                     lTraitAttributes = makeRandomSetOfTraitAttributes(lTraitName);
-                    _frameworkWrapper.CreateTraitInstance(lTraitName
+                    _frameworkWrapper.CreateTraitInstanceNLocalSets(lTraitName
                                                             , lInheritedTraits
                                                             , lTraitAttributes);
                 }
@@ -410,10 +410,21 @@ namespace ProductPlatformAnalyzer
             try
             {
                 for (int i = 0; i < MaxVariantGroupNumber; i++)
+                {
+                    VariantGroup lVariantGroup = null;
                     if (OverallFreeVariantCodes.Count > 0)
-                        _frameworkWrapper.CreateVariantGroupInstance("VG-" + i
-                                                                        , pickRandomGroupCardinality()
-                                                                        , pickASeriesOfRandomVariants());
+                    {
+                        var lRandomGroupCardinality = pickRandomGroupCardinality();
+                        var lRandomVariants = pickASeriesOfRandomVariants();
+
+                        lVariantGroup = new VariantGroup("VG-" + i
+                                                        , lRandomGroupCardinality
+                                                        , lRandomVariants);
+
+                        foreach (var lVariant in lRandomVariants)
+                            lVariant.MyVariantGroup = lVariantGroup;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -739,7 +750,7 @@ namespace ProductPlatformAnalyzer
                 Variant lTempVariant = null;
                 for (int i = 0; i < MaxVariantNumber; i++)
                 {
-                    lTempVariant = _frameworkWrapper.CreateVariantInstance("V-" + i);
+                    lTempVariant = _frameworkWrapper.CreateVariantInstanceNLocalSets("V-" + i);
                     VariantCodeLookup.Add(i, lTempVariant);
                 }
 
@@ -758,7 +769,7 @@ namespace ProductPlatformAnalyzer
                 Part lTempPart = null;
                 for (int i = 0; i < MaxPartNumber; i++)
                 {
-                    lTempPart = _frameworkWrapper.CreatePartInstance("P-" + i);
+                    lTempPart = _frameworkWrapper.CreatePartInstanceNLocalSets("P-" + i);
                     PartCodeLookup.Add(i, lTempPart);
                 }
 

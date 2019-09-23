@@ -10,6 +10,18 @@ namespace ProductPlatformAnalyzer
     {
         public string Names { get; set; }
 
+        public VariantGroup MyVariantGroup { get; set; }
+
+        public Variant()
+        {
+
+        }
+
+        public Variant(string pNames)
+        {
+            Names = pNames;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

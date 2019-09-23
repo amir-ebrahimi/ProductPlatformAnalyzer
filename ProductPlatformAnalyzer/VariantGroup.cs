@@ -12,6 +12,18 @@ namespace ProductPlatformAnalyzer
         public string GCardinality { get; set; }
         public List<Variant> Variants { get; set; }
 
+        public VariantGroup()
+        {
+
+        }
+
+        public VariantGroup(string pNames, string pGCardinality, List<Variant> pVariants)
+        {
+            Names = pNames;
+            GCardinality = pGCardinality;
+            Variants = pVariants;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

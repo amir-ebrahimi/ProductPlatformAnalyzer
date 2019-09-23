@@ -138,6 +138,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\1.7.xml" />
+    <Content Include="Test\1.JustVariantNVariantGroupNOperationNConfigurationRule.xml" />
+    <Content Include="Test\1.JustVariantNVariantGroupNOperationNPart.xml" />
     <Content Include="Test\3.0.xml" />
     <Content Include="Test\3.1.xml">
       <SubType>Designer</SubType>
@@ -278,7 +280,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\TestData11.xml" />
-    <Content Include="Test\1.0.xml">
+    <Content Include="Test\1.JustVariantNVariantGroupNOperation.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Test\SpecialCase.2Variant2Operation1Precondition.xml" />
