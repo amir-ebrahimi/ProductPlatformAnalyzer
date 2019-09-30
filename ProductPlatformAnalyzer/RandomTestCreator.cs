@@ -796,12 +796,19 @@ namespace ProductPlatformAnalyzer
                 for (int i = 0; i < MaxOperationNumber; i++)
                 {
                     
-                    lTempOperation = _frameworkWrapper.CreateOperationInstance("O-" + i
-                                                                            , lOperationTrigger
-                                                                            , lOperationRequiremnt
-                                                                            , lOperationPrecondition
-                                                                            , lOperationPostcondition
-                                                                            , lResource);
+                    //lTempOperation = _frameworkWrapper.CreateOperationInstance("O-" + i
+                    //                                                        , lOperationTrigger
+                    //                                                        , lOperationRequiremnt
+                    //                                                        , lOperationPrecondition
+                    //                                                        , lOperationPostcondition
+                    //                                                        , lResource);
+                    lTempOperation = new Operation("O-" + i
+                                                , lOperationTrigger
+                                                , lOperationRequiremnt
+                                                , lOperationPrecondition
+                                                , lOperationPostcondition
+                                                , lResource);
+
                     //Creating a list for operation lookup by code, ONLY for use with in this class
                     OperationCodeLookup.Add(i, lTempOperation);
 

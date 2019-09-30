@@ -3448,12 +3448,18 @@ namespace ProductPlatformAnalyzer
 
                         var lOperationName = GetXMLNodeAttributeInnerText(lNode, "operationName");
                         
-                        var lOperation  = CreateOperationInstance(lOperationName
-                                                                , lTriggers
-                                                                , lOperationRequirement
-                                                                , lOperationPrecondition
-                                                                , lOperationPostcondition
-                                                                , lOperationResource);
+                        //var lOperation  = CreateOperationInstance(lOperationName
+                        //                                        , lTriggers
+                        //                                        , lOperationRequirement
+                        //                                        , lOperationPrecondition
+                        //                                        , lOperationPostcondition
+                        //                                        , lOperationResource);
+                        var lOperation = new Operation(lOperationName
+                                                    , lTriggers
+                                                    , lOperationRequirement
+                                                    , lOperationPrecondition
+                                                    , lOperationPostcondition
+                                                    , lOperationResource);
 
                     }
                     

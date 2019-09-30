@@ -57,7 +57,7 @@ namespace ProductPlatform.Test
     //}
 
     [TestFixture]
-    public class ProductPlatformTest
+    public class Z3SolverEngineer_Tests
     {
 
         //private List<TestData> lTestDataList = new List<TestData>();
@@ -81,7 +81,7 @@ namespace ProductPlatform.Test
 
         }
 
-        public ProductPlatformTest()
+        public Z3SolverEngineer_Tests()
         {
 
             //Parameter list: Data file name, load data result, Variant Selectability Result, Operation Selectability Result
