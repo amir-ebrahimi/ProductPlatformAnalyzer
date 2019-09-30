@@ -2117,23 +2117,29 @@ namespace ProductPlatformAnalyzer
             return lTempVariant;
         }
 
-        //public VariantGroup CreateVariantGroupInstance(string pName, string pGroupCardinality, List<Variant> pVariantSet)
-        //{
-        //    VariantGroup lTempVariantGroup = new VariantGroup();
-        //    try
-        //    {
-        //        lTempVariantGroup.Names = pName;
-        //        lTempVariantGroup.GCardinality = pGroupCardinality;
-        //        lTempVariantGroup.Variants = pVariantSet;
-        //        AddVariantGroup(lTempVariantGroup);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OutputHandler.PrintMessageToConsole("error in CreateVariantGroupInstance");
-        //        OutputHandler.PrintMessageToConsole(ex.Message);
-        //    }
-        //    return lTempVariantGroup;
-        //}
+        public VariantGroup CreateVariantGroupInstanceNLocalSets(string pName, string pGroupCardinality, List<Variant> pVariantSet)
+        {
+            VariantGroup lTempVariantGroup = null;
+            try
+            {
+                //lTempVariantGroup.Names = pName;
+                //lTempVariantGroup.GCardinality = pGroupCardinality;
+                //lTempVariantGroup.Variants = pVariantSet;
+                lTempVariantGroup = new VariantGroup(pName
+                                                    , pGroupCardinality
+                                                    , pVariantSet);
+
+                VariantGroupSet.Add(lTempVariantGroup);
+
+                //AddVariantGroup(lTempVariantGroup);
+            }
+            catch (Exception ex)
+            {
+                OutputHandler.PrintMessageToConsole("error in CreateVariantGroupInstanceNLocalSets");
+                OutputHandler.PrintMessageToConsole(ex.Message);
+            }
+            return lTempVariantGroup;
+        }
 
         //This function is no longer needed as the relation between Part and operations is defined in the trigger field of the operation
         /*public partOperations CreatePartOperationMappingTemporaryInstance(string pPartName, List<string> pOperationSet)
@@ -3039,9 +3045,9 @@ namespace ProductPlatformAnalyzer
                                 lVariantGroupVariants.Add(lVariant);
                             }
 
-                            var lVariantGroup = new VariantGroup(lVariantGroupName
-                                                    , lVariantGroupCardinality
-                                                    , lVariantGroupVariants);
+                            var lVariantGroup = CreateVariantGroupInstanceNLocalSets(lVariantGroupName
+                                                                                    , lVariantGroupCardinality
+                                                                                    , lVariantGroupVariants);
 
                             foreach (var lVariant in lVariantGroupVariants)
                                 lVariant.MyVariantGroup = lVariantGroup;
@@ -3454,12 +3460,12 @@ namespace ProductPlatformAnalyzer
                         //                                        , lOperationPrecondition
                         //                                        , lOperationPostcondition
                         //                                        , lOperationResource);
-                        var lOperation = new Operation(lOperationName
-                                                    , lTriggers
-                                                    , lOperationRequirement
-                                                    , lOperationPrecondition
-                                                    , lOperationPostcondition
-                                                    , lOperationResource);
+                        var lOperation = CreateOperationInstanceNLocalSets(lOperationName
+                                                                        , lTriggers
+                                                                        , lOperationRequirement
+                                                                        , lOperationPrecondition
+                                                                        , lOperationPostcondition
+                                                                        , lOperationResource);
 
                     }
                     

@@ -140,6 +140,9 @@
     <Content Include="Test\1.7.xml" />
     <Content Include="Test\1.JustVariantNVariantGroupNOperationNConfigurationRule.xml" />
     <Content Include="Test\1.JustVariantNVariantGroupNOperationNPart.xml" />
+    <Content Include="Test\2.AllOfOperationTriggersAreActive.xml" />
+    <Content Include="Test\2.NoneOfOperationsTriggersAreActive.xml" />
+    <Content Include="Test\2.SomeOfOperationTriggersAreActive.xml" />
     <Content Include="Test\3.0.xml" />
     <Content Include="Test\3.1.xml">
       <SubType>Designer</SubType>

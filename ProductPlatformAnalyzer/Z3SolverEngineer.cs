@@ -9006,30 +9006,18 @@ namespace ProductPlatformAnalyzer
             }
         }
 
-        /// <summary>
-        /// This function returns the number of analysis cycles which are needed 
-        /// This will be the number of operations times 2 
-        /// as each operation will have two transitions between its states
-        /// </summary>
-        /// <returns>The number of cycles needed for the analysis</returns>
         public int CalculateAnalysisNoOfCycles()
         {
             int lResultNoOfCycles = 0;
             try
             {
                 //NoOfCycles = NumOfOperations * NumOfTransitions
-                ////TODO: It should be the second one because that would be more accurate but at the time of this calculation the number of active operations is not known! Maybe can be fixed!
-                int lNoOfOperations = _frameworkWrapper.OperationSet.Count();
-                //int lNoOfOperations = lFrameworkWrapper.getNumberOfActiveOperations();
 
-
-                //Each operation will have two transitions
-                //lResultNoOfCycles = (lNoOfOperations * 2) + 1;
-
-                //------------------------------------------------------------------------------------------------------------
                 //New version: in this version we have to calculate the number of transitions more accuratly
 
                 //First we need to have the static Part of the model
+                MakeStaticPartOfProductPlatformModel("", true);
+                
 
                 List<IntExpr> lListOfOperationUsedVariables = new List<IntExpr>();
                 //We do this by defining an interger variable for each operation
@@ -9064,13 +9052,9 @@ namespace ProductPlatformAnalyzer
                 //Then we will try to maximize the function which is built from adding up these variables on the operations
                 //(declare-const MaxNoOfOpsUsed Int)
                 Expr lMaximizeVariable = _z3Solver.AddIntegerExpression("MaxNoOfOperationUsed", "Optimizer");
-                //Expr lMaximizeVariable = cZ3Solver.FindExprInExprSet("MaxNoOfOperationUsed");
-                //(assert (= MaxNoOfOpsUsed (+ O1_Used O2_Used)))
-                
-                IntExpr lAddedOperationUsedVariables = _z3Solver.AddOperator(lListOfOperationUsedVariables);
-                //IntExpr l2Expr = cZ3Solver.Number2Expr(2);
-                //IntExpr lTempExpr = cZ3Solver.MulOperator(new List<IntExpr>() { lAddedOperationUsedVariables, lAddedOperationUsedVariables });
 
+                //(assert (= MaxNoOfOpsUsed (+ O1_Used O2_Used)))
+                IntExpr lAddedOperationUsedVariables = _z3Solver.AddOperator(lListOfOperationUsedVariables);
                 _z3Solver.AddConstraintToOptimizer(_z3Solver.EqualOperator(lMaximizeVariable
                                                                         , lAddedOperationUsedVariables), "InitializingTheMaxVariable");
 

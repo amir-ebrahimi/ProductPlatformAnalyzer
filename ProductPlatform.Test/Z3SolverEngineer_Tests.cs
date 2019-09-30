@@ -193,18 +193,10 @@ namespace ProductPlatform.Test
         }
 
         [Test]
-        [TestCase("OperationsNoDeadlock.xml", 6)]
-        [TestCase("OperationsNoDeadlock2.xml", 6)]
-        [TestCase("OperationsDeadlock.xml", 6)]
-        [TestCase("OperationsNResourcesNoDeadlock.xml", 6)]
-        [TestCase("OperationsNResourcesNoDeadlock2.xml", 6)]
-        [TestCase("OperationsNResourcesNoDeadlock3.xml", 4)]
-        [TestCase("OperationsNResourcesDeadlock.xml", 4)]
-        [TestCase("ParallelOperationsNoDeadlock.xml", 6)]
-        [TestCase("OperationsAllUnusedNoDeadlock.xml", 6)]
-        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", 6)]
-        [TestCase("OperationsNoDeadlock3.xml", 40)]
-        public void CalculateAnalysisNoOfCycles_Test(string pTestFileName, int pExpectedAnalysisResult)
+        [TestCase("2.NoneOfOperationTriggersAreActive.xml", 0)]
+        [TestCase("2.AllOfOperationTriggersAreActive.xml", 10)]
+        [TestCase("2.SomeOfOperationTriggersAreActive.xml", 6)]
+        public void CalculateAnalysisNoOfCycles_SomeOrAllOperationsAreTriggered_ReturnMaximumNumberOfActiveOperations(string pTestFileName, int pExpectedAnalysisResult)
         {
             try
             {
@@ -371,18 +363,18 @@ namespace ProductPlatform.Test
         //}
 
 
-        [Test]
-        [TestCase("OperationsNoDeadlock.xml", false)]
-        [TestCase("OperationsNoDeadlock2.xml", false)]
-        [TestCase("OperationsDeadlock.xml", true)]
-        [TestCase("OperationsNResourcesNoDeadlock.xml", false)]
-        [TestCase("OperationsNResourcesNoDeadlock2.xml", false)]
-        [TestCase("OperationsNResourcesNoDeadlock3.xml", false)]
-        [TestCase("OperationsNResourcesDeadlock.xml", true)]
-        [TestCase("ParallelOperationsNoDeadlock.xml", false)]
-        [TestCase("OperationsAllUnusedNoDeadlock.xml", false)]
-        [TestCase("ParallelOperationsSameResourceNoDeadlock.xml", false)]
-        [TestCase("OperationsNoDeadlock3.xml", false)]
+        //[Test]
+        //[TestCase("OperationsNoDeadlock.xml", false)]
+        //[TestCase("OperationsNoDeadlock2.xml", false)]
+        //[TestCase("OperationsDeadlock.xml", true)]
+        //[TestCase("OperationsNResourcesNoDeadlock.xml", false)]
+        //[TestCase("OperationsNResourcesNoDeadlock2.xml", false)]
+        //[TestCase("OperationsNResourcesNoDeadlock3.xml", false)]
+        //[TestCase("OperationsNResourcesDeadlock.xml", true)]
+        //[TestCase("ParallelOperationsNoDeadlock.xml", false)]
+        //[TestCase("OperationsAllUnusedNoDeadlock.xml", false)]
+        //[TestCase("ParallelOperationsSameResourceNoDeadlock.xml", false)]
+        //[TestCase("OperationsNoDeadlock3.xml", false)]
         public void ExistanceOfDeadlockAnalysis_Test(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0"?>
+<!-- 
+      Simple input data in which there are 5 operations of which none become active operations due to their trigger condition
+
+    Operations: 
+      O1
+        trigger: V1
+      O2
+        trigger: V1
+      O3
+        trigger: V1
+      O4
+        trigger: V1
+      O5
+        trigger: V1
+
+    Variants: 
+      V1
+      V2
+
+    VariantGroups: 
+      VG1
+        choose exactly one
+      Variants: 
+        V1
+        V2
+        
+    Constraint:
+      V2
+-->
+
+<testData>
+  <operations>
+    <operation>
+      <operationName>O1</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O2</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O3</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O4</operationName>
+      <trigger>V1</trigger>
+    </operation>
+    <operation>
+      <operationName>O5</operationName>
+      <trigger>V1</trigger>
+    </operation>
+  </operations>
+  <variants>
+    <variant>
+      <variantName>V1</variantName>
+    </variant>
+    <variant>
+      <variantName>V2</variantName>
+    </variant>
+  </variants>
+  <variantGroups>
+    <variantGroup>
+      <variantGroupName>VG1</variantGroupName>
+      <groupCardinality>choose exactly one</groupCardinality>
+      <variantRefs>
+        <variantRef>V1</variantRef>
+        <variantRef>V2</variantRef>
+      </variantRefs>
+    </variantGroup>
+  </variantGroups>
+  <constraints>
+    <constraint>
+      <logic>V2</logic>
+    </constraint>
+  </constraints>
+</testData>
