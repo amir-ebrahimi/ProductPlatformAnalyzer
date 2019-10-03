@@ -1454,10 +1454,11 @@ namespace ProductPlatformAnalyzer
                             lActionDependencyTracking += "Action2 Precondition: " + ReturnPreconditionsAsString(lAction2.Precondition) + Environment.NewLine;
                             lActionDependencyTracking += "Action2 Effect: " + lAction2.Effect + " -> ";
 
-                            lTempActionsDependency = Check2ActionsDependency(dependencySolver, lCurrentOperation1Instance
-                                                                            , lCurrentOperation2Instance
-                                                                            , lNextOperation1Instance
-                                                                            , lNextOperation2Instance
+                            lTempActionsDependency = Check2ActionsDependency(dependencySolver
+                                                                            //, lCurrentOperation1Instance
+                                                                            //, lCurrentOperation2Instance
+                                                                            //, lNextOperation1Instance
+                                                                            //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
                                                                             , lAction1_New
@@ -1492,10 +1493,11 @@ namespace ProductPlatformAnalyzer
                             lActionDependencyTracking += "Action2 Precondition: " + ReturnPreconditionsAsString(lAction2.Precondition) + Environment.NewLine;
                             lActionDependencyTracking += "Action2 Effect: " + lAction2.Effect + " -> ";
 
-                            lTempActionsDependency = Check2ActionsDependency(dependencySolver, lCurrentOperation1Instance
-                                                                            , lCurrentOperation2Instance
-                                                                            , lNextOperation1Instance
-                                                                            , lNextOperation2Instance
+                            lTempActionsDependency = Check2ActionsDependency(dependencySolver
+                                                                            //, lCurrentOperation1Instance
+                                                                            //, lCurrentOperation2Instance
+                                                                            //, lNextOperation1Instance
+                                                                            //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
                                                                             , lAction1_New
@@ -1530,10 +1532,11 @@ namespace ProductPlatformAnalyzer
                             lActionDependencyTracking += "Action2 Precondition: " + ReturnPreconditionsAsString(lAction2.Precondition) + Environment.NewLine;
                             lActionDependencyTracking += "Action2 Effect: " + lAction2.Effect + " -> ";
 
-                            lTempActionsDependency = Check2ActionsDependency(dependencySolver, lCurrentOperation1Instance
-                                                                            , lCurrentOperation2Instance
-                                                                            , lNextOperation1Instance
-                                                                            , lNextOperation2Instance
+                            lTempActionsDependency = Check2ActionsDependency(dependencySolver
+                                                                            //, lCurrentOperation1Instance
+                                                                            //, lCurrentOperation2Instance
+                                                                            //, lNextOperation1Instance
+                                                                            //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
                                                                             , lAction1_New
@@ -1568,10 +1571,11 @@ namespace ProductPlatformAnalyzer
                             lActionDependencyTracking += "Action2 Precondition: " + ReturnPreconditionsAsString(lAction2.Precondition) + Environment.NewLine;
                             lActionDependencyTracking += "Action2 Effect: " + lAction2.Effect + " -> ";
 
-                            lTempActionsDependency = Check2ActionsDependency(dependencySolver, lCurrentOperation1Instance
-                                                                            , lCurrentOperation2Instance
-                                                                            , lNextOperation1Instance
-                                                                            , lNextOperation2Instance
+                            lTempActionsDependency = Check2ActionsDependency(dependencySolver
+                                                                            //, lCurrentOperation1Instance
+                                                                            //, lCurrentOperation2Instance
+                                                                            //, lNextOperation1Instance
+                                                                            //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
                                                                             , lAction1_New
@@ -1663,14 +1667,14 @@ namespace ProductPlatformAnalyzer
         }
 
         public Status Check2ActionsDependency(Z3Solver lZ3Solver
-                                            , OperationInstance pOperationInstance1
-                                            , OperationInstance pOperationInstance2
-                                            , OperationInstance pNextOperationInstance1
-                                            , OperationInstance pNextOperationInstance2
-                                            , Action pAction1
-                                            , Action pAction2
-                                            , Action pAction1_New
-                                            , Action pAction2_New)
+                                            //, OperationInstance pOperationInstance1_CurrentTransition
+                                            //, OperationInstance pOperationInstance2_CurrentTransition
+                                            //, OperationInstance pOperationInstance1_NextTransition
+                                            //, OperationInstance pOperationInstance2_NextTransition
+                                            , Action pAction1_CurrentTransition
+                                            , Action pAction2_CurrentTransition
+                                            , Action pAction1_NextTransition
+                                            , Action pAction2_NextTransition)
         {
             Status lResult = Status.UNSATISFIABLE;
             try
@@ -1684,39 +1688,45 @@ namespace ProductPlatformAnalyzer
                 //This line will make copy of the created model in an external file
                 _z3Solver.DebugMode = true;
 
-                Dictionary<string, string> OldNewVariables = new Dictionary<string, string>();
+                Dictionary<string, string> CurrentNNextTransitionVariableNames = new Dictionary<string, string>();
 
+                //For each resource add two variables for the current transition status (K) and for the next transition status (K+1)
                 foreach (Resource lCurrentResource in _frameworkWrapper.ResourceSet)
                 {
-                    BoolExpr lResource_k = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K");
-                    BoolExpr lResource_Newk = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K+1");
-                    Add2OldNewVariableList(lCurrentResource.Name + "_K", lCurrentResource.Name + "_K+1", OldNewVariables);
+                    BoolExpr lResource_CurrentTransitionVariable = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K");
+                    BoolExpr lResource_NextTransitionVariable = _z3Solver.AddBooleanExpression(lCurrentResource.Name + "_K+1");
+                    Add2OldNewVariableList(lCurrentResource.Name + "_K"
+                                        , lCurrentResource.Name + "_K+1"
+                                        , CurrentNNextTransitionVariableNames);
                 }
 
-                BoolExpr lTarget = _z3Solver.AddBooleanExpression("Target");
-                BoolExpr lAction1Pre = _z3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first Part name
-                BoolExpr lAction1PreNew = _z3Solver.AddBooleanExpression("Action1Pre_K+1");
-                Add2OldNewVariableList("Action1Pre_K", "Action1Pre_K+1", OldNewVariables);
+                BoolExpr lTargetVariable = _z3Solver.AddBooleanExpression("Target");
+
+                //AddingCurrentNNextTransitionVariables("Action1Pre_K", "Action1Pre_K+1", CurrentNNextTransitionVariableNames);
+                BoolExpr lAction1Pre_CurrentTransitionVariable = _z3Solver.AddBooleanExpression("Action1Pre_K"); //Formula first Part name
+                BoolExpr lAction1Pre_NextTransitionVariable = _z3Solver.AddBooleanExpression("Action1Pre_K+1");
+                Add2OldNewVariableList("Action1Pre_K"
+                                    , "Action1Pre_K+1"
+                                    , CurrentNNextTransitionVariableNames);
 
                 BoolExpr lAction2Pre = _z3Solver.AddBooleanExpression("Action2Pre_K"); //Formula first Part name
                 BoolExpr lAction2PreNew = _z3Solver.AddBooleanExpression("Action2Pre_K+1");
-                Add2OldNewVariableList("Action2Pre_K", "Action2Pre_K+1", OldNewVariables);
+                Add2OldNewVariableList("Action2Pre_K"
+                                    , "Action2Pre_K+1"
+                                    , CurrentNNextTransitionVariableNames);
 
                 //First we create the needed variables mentioned in the precondition expression
-                ///BoolExpr lTempAction1Pre = CreatePreconditionNeededVariablesNReturnBoolExpr(pAction1.Precondition, "K");
+                CarryOutNeededActionsOnPrecondition(lAction1Pre_CurrentTransitionVariable
+                                                    , pAction1_CurrentTransition
+                                                    , lAction1Pre_NextTransitionVariable
+                                                    , pAction1_NextTransition
+                                                    , CurrentNNextTransitionVariableNames);
 
-                ///string lTempAction1PreStr = GeneralUtilities.RemoveSpecialCharsFromString(lTempAction1Pre.ToString(), new char[] { '(', ')' });
-
-                ///cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator( lAction1Pre, lTempAction1Pre ), "Action1Precondition");
-
-                ///BoolExpr lTempAction2Pre = CreatePreconditionNeededVariablesNReturnBoolExpr(pAction2.Precondition, "K");
-
-                ///string lTempAction2PreStr = GeneralUtilities.RemoveSpecialCharsFromString(lTempAction2Pre.ToString(), new char[] { '(', ')' });
-
-                ///cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator( lAction2Pre, lTempAction2Pre ), "Action2Precondition");
-                CarryOutNeededActionsOnPrecondition(lAction1Pre, pAction1, lAction1PreNew, pAction1_New, OldNewVariables);
-
-                CarryOutNeededActionsOnPrecondition(lAction2Pre, pAction2, lAction2PreNew, pAction2_New, OldNewVariables);
+                CarryOutNeededActionsOnPrecondition(lAction2Pre
+                                                    , pAction2_CurrentTransition
+                                                    , lAction2PreNew
+                                                    , pAction2_NextTransition
+                                                    , CurrentNNextTransitionVariableNames);
 
                 //We need to build the model as a string according to Operation1 and Operation2
                 //This string has to be added to the model in the form of a BoolExpr, String => BoolExpr
@@ -1736,89 +1746,139 @@ namespace ProductPlatformAnalyzer
                 //HashSet<OperationInstance> lOperationInstances4Operation1 = cFrameworkWrapper.getOperationInstancesForOneOperationInOneTrasition(pOperation1, 0);
 
 
-                //foreach (var lCurrentOperationInstance in lOperationInstances4Operation1)
-                //{
-                AddZ3ModelVariable(pOperationInstance1.OperationPreconditionVariableName);
+                //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.OperationPreconditionVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.OperationPreconditionVariableName);
 
-                AddZ3ModelVariable(pOperationInstance1.InitialVariableName);
+                //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.InitialVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.InitialVariableName);
 
                 //OperationInstance lNextOperation1Instance = getNextTransitionOperationInstance(pOperationInstance1);
 
-                AddZ3ModelVariable(pNextOperationInstance1.InitialVariableName);
-                Add2OldNewVariableList(pOperationInstance1.InitialVariableName
-                                    , pNextOperationInstance1.InitialVariableName
-                                    , OldNewVariables);
+                //AddZ3ModelVariable(pOperationInstance1_NextTransition.InitialVariableName);
+                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.InitialVariableName);
 
-                AddZ3ModelVariable(pOperationInstance1.ExecutingVariableName);
-                AddZ3ModelVariable(pNextOperationInstance1.ExecutingVariableName);
-                Add2OldNewVariableList(pOperationInstance1.ExecutingVariableName
-                                    , pNextOperationInstance1.ExecutingVariableName
-                                    , OldNewVariables);
 
-                AddZ3ModelVariable(pOperationInstance1.FinishedVariableName);
-                AddZ3ModelVariable(pNextOperationInstance1.FinishedVariableName);
+                //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.InitialVariableName
+                //                    , pOperationInstance1_NextTransition.InitialVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.InitialVariableName
+                                    , pAction1_NextTransition.MyOperationInstance.InitialVariableName
+                                    , CurrentNNextTransitionVariableNames);
 
-                Add2OldNewVariableList(pOperationInstance1.FinishedVariableName
-                                    , pNextOperationInstance1.FinishedVariableName
-                                    , OldNewVariables);
+                //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.ExecutingVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.ExecutingVariableName);
 
-                AddZ3ModelVariable(pOperationInstance1.UnusedVariableName);
+                //AddZ3ModelVariable(pOperationInstance1_NextTransition.ExecutingVariableName);
+                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.ExecutingVariableName);
 
-                BoolExpr lPickOne1 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance1.InitialVariableName
-                                                                                , pOperationInstance1.ExecutingVariableName
-                                                                                , pOperationInstance1.FinishedVariableName
-                                                                                , pOperationInstance1.UnusedVariableName });
-                BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pNextOperationInstance1.InitialVariableName
-                                                                                , pNextOperationInstance1.ExecutingVariableName
-                                                                                , pNextOperationInstance1.FinishedVariableName
-                                                                                , pNextOperationInstance1.UnusedVariableName });
+                //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.ExecutingVariableName
+                //                    , pOperationInstance1_NextTransition.ExecutingVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.ExecutingVariableName
+                                    , pAction1_NextTransition.MyOperationInstance.ExecutingVariableName
+                                    , CurrentNNextTransitionVariableNames);
+
+                //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.FinishedVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.FinishedVariableName);
+
+                //AddZ3ModelVariable(pOperationInstance1_NextTransition.FinishedVariableName);
+                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.FinishedVariableName);
+
+                //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.FinishedVariableName
+                //                    , pOperationInstance1_NextTransition.FinishedVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.FinishedVariableName
+                                    , pAction1_NextTransition.MyOperationInstance.FinishedVariableName
+                                    , CurrentNNextTransitionVariableNames);
+
+                //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.UnusedVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.UnusedVariableName);
+
+                //BoolExpr lPickOne1 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance1_CurrentTransition.InitialVariableName
+                //                                                                , pOperationInstance1_CurrentTransition.ExecutingVariableName
+                //                                                                , pOperationInstance1_CurrentTransition.FinishedVariableName
+                //                                                                , pOperationInstance1_CurrentTransition.UnusedVariableName });
+                BoolExpr lPickOne1 = _z3Solver.PickOneOperator(new List<string> { pAction1_CurrentTransition.MyOperationInstance.InitialVariableName
+                                                                                , pAction1_CurrentTransition.MyOperationInstance.ExecutingVariableName
+                                                                                , pAction1_CurrentTransition.MyOperationInstance.FinishedVariableName
+                                                                                , pAction1_CurrentTransition.MyOperationInstance.UnusedVariableName });
+
+                //BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pOperationInstance1_NextTransition.InitialVariableName
+                //                                                                , pOperationInstance1_NextTransition.ExecutingVariableName
+                //                                                                , pOperationInstance1_NextTransition.FinishedVariableName
+                //                                                                , pOperationInstance1_NextTransition.UnusedVariableName });
+                BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pAction1_NextTransition.MyOperationInstance.InitialVariableName
+                                                                                , pAction1_NextTransition.MyOperationInstance.ExecutingVariableName
+                                                                                , pAction1_NextTransition.MyOperationInstance.FinishedVariableName
+                                                                                , pAction1_NextTransition.MyOperationInstance.UnusedVariableName });
                 _z3Solver.AddConstraintToSolver(lPickOne1, "PickOne1_K");
                 _z3Solver.AddConstraintToSolver(lPickOne1New, "PickOne1_K+1");
 
-                //}
-
                 //Now for creating operation instance variables for the current operation 2 and in transition 0
-                //HashSet<OperationInstance> lOperationInstances4Operation2 = cFrameworkWrapper.getOperationInstancesForOneOperationInOneTrasition(pOperation2, 0);
 
 
-                //foreach (var lCurrentOperationInstance in lOperationInstances4Operation2)
-                //{
-                AddZ3ModelVariable(pOperationInstance2.OperationPreconditionVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.OperationPreconditionVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.OperationPreconditionVariableName);
 
-                AddZ3ModelVariable(pOperationInstance2.InitialVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.InitialVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.InitialVariableName);
 
                 //OperationInstance lNextOperation2Instance = getNextTransitionOperationInstance(pOperationInstance2);
 
-                AddZ3ModelVariable(pNextOperationInstance2.InitialVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_NextTransition.InitialVariableName);
+                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.InitialVariableName);
 
-                Add2OldNewVariableList(pOperationInstance2.InitialVariableName
-                                    , pNextOperationInstance2.InitialVariableName
-                                    , OldNewVariables);
+                //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.InitialVariableName
+                //                    , pOperationInstance2_NextTransition.InitialVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.InitialVariableName
+                                    , pAction2_NextTransition.MyOperationInstance.InitialVariableName
+                                    , CurrentNNextTransitionVariableNames);
 
-                AddZ3ModelVariable(pOperationInstance2.ExecutingVariableName);
-                AddZ3ModelVariable(pNextOperationInstance2.ExecutingVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.ExecutingVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.ExecutingVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_NextTransition.ExecutingVariableName);
+                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.ExecutingVariableName);
 
-                Add2OldNewVariableList(pOperationInstance2.ExecutingVariableName
-                                    , pNextOperationInstance2.ExecutingVariableName
-                                    , OldNewVariables);
+                //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.ExecutingVariableName
+                //                    , pOperationInstance2_NextTransition.ExecutingVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.ExecutingVariableName
+                                    , pAction2_NextTransition.MyOperationInstance.ExecutingVariableName
+                                    , CurrentNNextTransitionVariableNames);
 
-                AddZ3ModelVariable(pOperationInstance2.FinishedVariableName);
-                AddZ3ModelVariable(pNextOperationInstance2.FinishedVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.FinishedVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.FinishedVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_NextTransition.FinishedVariableName);
+                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.FinishedVariableName);
 
-                Add2OldNewVariableList(pOperationInstance2.FinishedVariableName
-                                    , pNextOperationInstance2.FinishedVariableName
-                                    , OldNewVariables);
+                //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.FinishedVariableName
+                //                    , pOperationInstance2_NextTransition.FinishedVariableName
+                //                    , CurrentNNextTransitionVariableNames);
+                Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.FinishedVariableName
+                                    , pAction2_NextTransition.MyOperationInstance.FinishedVariableName
+                                    , CurrentNNextTransitionVariableNames);
 
-                AddZ3ModelVariable(pOperationInstance2.UnusedVariableName);
+                //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.UnusedVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.UnusedVariableName);
 
-                BoolExpr lPickOne2 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance2.InitialVariableName
-                                                                                , pOperationInstance2.ExecutingVariableName
-                                                                                , pOperationInstance2.FinishedVariableName
-                                                                                , pOperationInstance2.UnusedVariableName });
-                BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pNextOperationInstance2.InitialVariableName
-                                                                                , pNextOperationInstance2.ExecutingVariableName
-                                                                                , pNextOperationInstance2.FinishedVariableName
-                                                                                , pNextOperationInstance2.UnusedVariableName });
+                //BoolExpr lPickOne2 = _z3Solver.PickOneOperator(new List<string> { pOperationInstance2_CurrentTransition.InitialVariableName
+                //                                                                , pOperationInstance2_CurrentTransition.ExecutingVariableName
+                //                                                                , pOperationInstance2_CurrentTransition.FinishedVariableName
+                //                                                                , pOperationInstance2_CurrentTransition.UnusedVariableName });
+                BoolExpr lPickOne2 = _z3Solver.PickOneOperator(new List<string> { pAction2_CurrentTransition.MyOperationInstance.InitialVariableName
+                                                                                , pAction2_CurrentTransition.MyOperationInstance.ExecutingVariableName
+                                                                                , pAction2_CurrentTransition.MyOperationInstance.FinishedVariableName
+                                                                                , pAction2_CurrentTransition.MyOperationInstance.UnusedVariableName });
+
+                //BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pOperationInstance2_NextTransition.InitialVariableName
+                //                                                                , pOperationInstance2_NextTransition.ExecutingVariableName
+                //                                                                , pOperationInstance2_NextTransition.FinishedVariableName
+                //                                                                , pOperationInstance2_NextTransition.UnusedVariableName });
+                BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pAction2_NextTransition.MyOperationInstance.InitialVariableName
+                                                                                , pAction2_NextTransition.MyOperationInstance.ExecutingVariableName
+                                                                                , pAction2_NextTransition.MyOperationInstance.FinishedVariableName
+                                                                                , pAction2_NextTransition.MyOperationInstance.UnusedVariableName });
                 _z3Solver.AddConstraintToSolver(lPickOne2, "PickOne2_K");
                 _z3Solver.AddConstraintToSolver(lPickOne2New, "PickOne2_K+1");
                 //}
@@ -1832,34 +1892,42 @@ namespace ProductPlatformAnalyzer
                 ///BoolExpr lTempBoolExpr = convertComplexString2BoolExpr(lAction1PreNew_Name,"K+1");
                 ///cZ3Solver.AddConstraintToSolver(cZ3Solver.TwoWayImpliesOperator(lAction1PreNew, lTempBoolExpr), "Action1NewVariables");
 
-                string lAction1EffNew_Name = ReplaceStringVariables(pAction1.Effect, OldNewVariables);
+                string lAction1EffNew_Name = ReplaceStringVariables(pAction1_CurrentTransition.Effect
+                                                                    , CurrentNNextTransitionVariableNames);
                 lAction1EffNew = ConvertComplexString2BoolExpr(lAction1EffNew_Name);
 
-                string lAction2EffNew_Name = ReplaceStringVariables(pAction2.Effect, OldNewVariables);
+                string lAction2EffNew_Name = ReplaceStringVariables(pAction2_CurrentTransition.Effect
+                                                                    , CurrentNNextTransitionVariableNames);
                 lAction2EffNew = ConvertComplexString2BoolExpr(lAction2EffNew_Name);
 
-                BoolExpr lTempBoolExpr1 = MakingOtherVariablesSameExpression(pAction1.Effect, OldNewVariables);
-                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr1, lOtherVarSame1), "OtherVarsStaySame1");
+                BoolExpr lTempBoolExpr1 = MakingOtherVariablesSameExpression(pAction1_CurrentTransition.Effect
+                                                                            , CurrentNNextTransitionVariableNames);
+                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr1
+                                                                                , lOtherVarSame1)
+                                                , "OtherVarsStaySame1");
 
-                BoolExpr lTempBoolExpr2 = MakingOtherVariablesSameExpression(pAction2.Effect, OldNewVariables);
-                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr2, lOtherVarSame2), "OtherVarsStaySame2");
+                BoolExpr lTempBoolExpr2 = MakingOtherVariablesSameExpression(pAction2_CurrentTransition.Effect
+                                                                            , CurrentNNextTransitionVariableNames);
+                _z3Solver.AddConstraintToSolver(_z3Solver.TwoWayImpliesOperator(lTempBoolExpr2
+                                                                                , lOtherVarSame2)
+                                                , "OtherVarsStaySame2");
 
-                BoolExpr lRightHandSide1 = _z3Solver.AndOperator(new List<BoolExpr>(){ lAction1Pre
-                                                                                        , _z3Solver.NotOperator(lAction1PreNew)
+                BoolExpr lRightHandSide1 = _z3Solver.AndOperator(new List<BoolExpr>(){ lAction1Pre_CurrentTransitionVariable
+                                                                                        , _z3Solver.NotOperator(lAction1Pre_NextTransitionVariable)
                                                                                         , lAction2Pre
                                                                                         , lAction2EffNew
                                                                                         , lOtherVarSame1});
 
                 BoolExpr lRightHandSide2 = _z3Solver.AndOperator(new List<BoolExpr>(){ lAction2Pre
                                                                                         , _z3Solver.NotOperator(lAction2PreNew)
-                                                                                        , lAction1Pre
+                                                                                        , lAction1Pre_CurrentTransitionVariable
                                                                                         , lAction1EffNew
                                                                                         , lOtherVarSame2});
 
                 BoolExpr lTempExpr = _z3Solver.OrOperator(new List<BoolExpr>() { lRightHandSide1, lRightHandSide2 });
 
                 //BoolExpr lFormula = cZ3Solver.TwoWayImpliesOperator(lTarget, lRightHandSide);
-                BoolExpr lFormula = _z3Solver.TwoWayImpliesOperator(lTarget, lTempExpr);
+                BoolExpr lFormula = _z3Solver.TwoWayImpliesOperator(lTargetVariable, lTempExpr);
                 _z3Solver.AddConstraintToSolver(lFormula, "ActionsDependencyFormula");
 
                 //The satisfiability of the model is checked
@@ -1871,6 +1939,18 @@ namespace ProductPlatformAnalyzer
                 _outputHandler.PrintMessageToConsole(ex.Message);
             }
             return lResult;
+        }
+
+        private void AddingCurrentNNextTransitionVariables(string pCurrentTransitionVariableName
+                                                            , string pNextTransitionVariableName
+                                                            , Dictionary<string,string> pCurrentNNextTransitionVariableNamesPairs)
+        {
+            _z3Solver.AddBooleanExpression(pCurrentTransitionVariableName); //Formula first Part name
+            _z3Solver.AddBooleanExpression(pNextTransitionVariableName);
+            Add2OldNewVariableList(pCurrentTransitionVariableName
+                                , pNextTransitionVariableName
+                                , pCurrentNNextTransitionVariableNamesPairs);
+
         }
 
         public void Add2OldNewVariableList(string pKey, string pValue, Dictionary<string,string> pDictionary)

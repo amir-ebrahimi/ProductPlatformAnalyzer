@@ -363,6 +363,75 @@ namespace ProductPlatform.Test
         //}
 
 
+        [Test]
+        //[TestCase("OperationsNoDeadlock.xml", false)]
+        //[TestCase("OperationsNoDeadlock2.xml", false)]
+        //[TestCase("OperationsDeadlock.xml", true)]
+        //[TestCase("OperationsNResourcesNoDeadlock.xml", false)]
+        //[TestCase("OperationsNResourcesNoDeadlock2.xml", false)]
+        //[TestCase("OperationsNResourcesNoDeadlock3.xml", false)]
+        //[TestCase("OperationsNResourcesDeadlock.xml", true)]
+        //[TestCase("ParallelOperationsNoDeadlock.xml", false)]
+        //[TestCase("OperationsAllUnusedNoDeadlock.xml", false)]
+        //[TestCase("ParallelOperationsSameResourceNoDeadlock.xml", false)]
+        //[TestCase("OperationsNoDeadlock3.xml", false)]
+        public void ExistanceOfDeadlockAnalysis_ReadInputModel_NoDeadlockExists(string pTestFileName, bool pExpectedAnalysisResult)
+        {
+            try
+            {
+                var lDataLoaded = _z3SolverEngineer.LoadInitialData(Enumerations.InitializerSource.InitialDataFile, GetTestFilePath(pTestFileName));
+
+                if (lDataLoaded)
+                {
+                    Console.WriteLine("Existance of deadlock analysis on : " + GetTestFilePath(pTestFileName));
+                    bool lAnalysisResult = false;
+
+                    //Parameters: General Analysis Type, Analysis Type, Convert variants, Convert configuration rules
+                    //             , Convert operations, Convert operation precedence rules, Convert variant operation relation, Convert resources, Convert goals
+                    //             , Build P Constraints, Number Of Models Required
+                    _z3SolverEngineer.SetVariationPoints(ProductPlatformAnalyzer.Enumerations.GeneralAnalysisType.Dynamic
+                                                        , ProductPlatformAnalyzer.Enumerations.AnalysisType.ExistanceOfDeadlockAnalysis);
+
+                    //Parameters: Analysis Result, Analysis Detail Result, Variants Result
+                    //          , Transitions Result, Analysis Timing, Unsat Core
+                    //          , Stop between each transition, Stop at end of analysis, Create HTML Output
+                    //          , Report timings, Debug Mode (Make model file), User Messages
+                    _z3SolverEngineer.SetReportType(true, false, false
+                                                    , false, false, false
+                                                    , false, false, true
+                                                    , true, true, false);
+
+                    lAnalysisResult = _z3SolverEngineer.ExistanceOfDeadlockAnalysis(true, true);
+
+                    Assert.AreEqual(lAnalysisResult, pExpectedAnalysisResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Existance Of Deadlock Analysis failed!");
+                Console.WriteLine(ex.Message);
+                Assert.Fail();
+            }
+        }
+
+        //public void ConvertComplexString2BoolExpr_GivenBooleanExpression_ReturnBooleanResult(string pBooleanExpression, bool pExpectedBooleanResult)
+        //{
+        //    try
+        //    {
+        //        bool lResult = false;
+
+        //        lResult = _z3SolverEngineer.ConvertComplexString2BoolExpr((BoolExpr)pBooleanExpression);
+
+        //        Assert.AreEqual(lResult, pExpectedBooleanResult);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Exception in ConvertComplexString2BoolExpr_GivenBooleanExpression_ReturnBooleanResult");
+        //        Console.WriteLine(ex.Message);
+        //        Assert.Fail();
+        //    }
+        //}
+
         //[Test]
         //[TestCase("OperationsNoDeadlock.xml", false)]
         //[TestCase("OperationsNoDeadlock2.xml", false)]
@@ -375,7 +444,7 @@ namespace ProductPlatform.Test
         //[TestCase("OperationsAllUnusedNoDeadlock.xml", false)]
         //[TestCase("ParallelOperationsSameResourceNoDeadlock.xml", false)]
         //[TestCase("OperationsNoDeadlock3.xml", false)]
-        public void ExistanceOfDeadlockAnalysis_Test(string pTestFileName, bool pExpectedAnalysisResult)
+        public void ExistanceOfDeadlockAnalysis_ReadInputModel_ModelHASADeadlock(string pTestFileName, bool pExpectedAnalysisResult)
         {
             try
             {

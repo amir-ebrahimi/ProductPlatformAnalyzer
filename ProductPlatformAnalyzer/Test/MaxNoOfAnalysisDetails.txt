@@ -1,0 +1,75 @@
+Process of optimizing the number of needed loops according to the number of active operations:
+
+foreach (operation oi in operationSet)
+{
+    //(declare-const Oi_Used Int)
+	//(assert (< Oi_Used 2))
+	
+	//(declare-const Oi_Trigger Bool)
+	//(assert (and (=> Oi_Trigger (oi trigger expression)) (=> (oi trigger expression) Oi_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+	//(assert (=> Oi_Trigger (= Oi_Used 1)))
+	//(assert (=> (not Oi_Trigger) (= Oi_Used 0)))
+	
+}
+
+//(declare-const MaxNoOfOpsUsed Int)
+//(assert (= MaxNoOfOpsUsed (+ all oi_Used variables)))
+
+//(maximize MaxNoOfOpsUsed)
+
+The test cases for this function should be cases where 
+	1. none of the operations are active
+	2. all the operations are active
+	3. some of the operations are active
+
+	
+(declare-const O1_Used Int)
+(assert (< O1_Used 2))
+	
+(declare-const O1_Trigger Bool)
+(assert (and (=> O1_Trigger (V1)) (=> (V1) O1_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+(assert (=> O1_Trigger (= O1_Used 1)))
+(assert (=> (not O1_Trigger) (= O1_Used 0)))
+
+(declare-const O2_Used Int)
+(assert (< O2_Used 2))
+	
+(declare-const O2_Trigger Bool)
+(assert (and (=> O2_Trigger (V1)) (=> (V1) O2_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+(assert (=> O2_Trigger (= O2_Used 1)))
+(assert (=> (not O2_Trigger) (= O2_Used 0)))
+
+(declare-const O3_Used Int)
+(assert (< O3_Used 2))
+	
+(declare-const O3_Trigger Bool)
+(assert (and (=> O3_Trigger (V1)) (=> (V1) O3_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+(assert (=> O3_Trigger (= O3_Used 1)))
+(assert (=> (not O3_Trigger) (= O3_Used 0)))
+
+(declare-const O4_Used Int)
+(assert (< O4_Used 2))
+	
+(declare-const O4_Trigger Bool)
+(assert (and (=> O4_Trigger (V1)) (=> (V1) O4_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+(assert (=> O4_Trigger (= O4_Used 1)))
+(assert (=> (not O4_Trigger) (= O4_Used 0)))
+
+(declare-const O5_Used Int)
+(assert (< O5_Used 2))
+	
+(declare-const O5_Trigger Bool)
+(assert (and (=> O5_Trigger (V1)) (=> (V1) O5_Trigger))); Constraint 2 , Source: Operation_Trigger_Initializing
+	
+(assert (=> O5_Trigger (= O5_Used 1)))
+(assert (=> (not O5_Trigger) (= O5_Used 0)))
+
+(declare-const MaxNoOfOpsUsed Int)
+(assert (= MaxNoOfOpsUsed (+ o1_Used o2_Used o3_Used o4_Used o5_Used)))
+
+(maximize MaxNoOfOpsUsed)

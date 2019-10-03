@@ -1,0 +1,4 @@
+Test cases for the loading of the program:
+
+	Starting with 0: They cover cases of NOT enough data to load correctly (e.g. One of Variant, Variant Group, Operation Is missing)
+	Strating with 1: They cover cases of ENOUGH data to load correctly (e.g. All Variant, Variant Group, and Operation is present)
