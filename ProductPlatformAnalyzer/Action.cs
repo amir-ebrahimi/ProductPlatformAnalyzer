@@ -54,12 +54,14 @@ namespace ProductPlatformAnalyzer
 
         public Action NextI2EAction()
         {
-            return MyOperationInstance.Action_I2E;
+            //return MyOperationInstance.Action_I2E;
+            return MyOperationInstance.NextOperationInstance().Action_I2E;
         }
 
         public Action NextE2FAction()
         {
-            return MyOperationInstance.Action_E2F;
+            //return MyOperationInstance.Action_E2F;
+            return MyOperationInstance.NextOperationInstance().Action_E2F;
         }
     }
 }
