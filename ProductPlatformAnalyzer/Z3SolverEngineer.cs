@@ -14,6 +14,11 @@ using System.Diagnostics;
 
 namespace ProductPlatformAnalyzer
 {
+    public class Actions2TestDependency
+    {
+
+    }
+
     public class Z3SolverEngineer
     {
         private FrameworkWrapper _frameworkWrapper;
@@ -1461,8 +1466,9 @@ namespace ProductPlatformAnalyzer
                                                                             //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
-                                                                            , lAction1_New
-                                                                            , lAction2_New);
+                                                                            //, lAction1_New
+                                                                            //, lAction2_New
+                                                                            );
 
                             if (lTempActionsDependency.Equals(Status.SATISFIABLE))
                             {
@@ -1500,8 +1506,9 @@ namespace ProductPlatformAnalyzer
                                                                             //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
-                                                                            , lAction1_New
-                                                                            , lAction2_New);
+                                                                            //, lAction1_New
+                                                                            //, lAction2_New
+                                                                            );
 
                             if (lTempActionsDependency.Equals(Status.SATISFIABLE))
                             {
@@ -1539,8 +1546,9 @@ namespace ProductPlatformAnalyzer
                                                                             //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
-                                                                            , lAction1_New
-                                                                            , lAction2_New);
+                                                                            //, lAction1_New
+                                                                            //, lAction2_New
+                                                                            );
 
                             if (lTempActionsDependency.Equals(Status.SATISFIABLE))
                             {
@@ -1578,8 +1586,9 @@ namespace ProductPlatformAnalyzer
                                                                             //, lNextOperation2Instance
                                                                             , lAction1
                                                                             , lAction2
-                                                                            , lAction1_New
-                                                                            , lAction2_New);
+                                                                            //, lAction1_New
+                                                                            //, lAction2_New
+                                                                            );
 
                             if (lTempActionsDependency.Equals(Status.SATISFIABLE))
                             {
@@ -1620,7 +1629,7 @@ namespace ProductPlatformAnalyzer
         public void CarryOutNeededActionsOnPrecondition(BoolExpr pAction_Pre
                                                         , Action pAction
                                                         , BoolExpr pAction_New_Pre
-                                                        , Action pAction_New
+                                                        //, Action pAction_New
                                                         , Dictionary<string, string> pOldNewVariables)
         {
             
@@ -1635,7 +1644,7 @@ namespace ProductPlatformAnalyzer
                 {
                     BoolExpr lTempAction_Pre = CreatePreconditionNeededVariablesNReturnBoolExpr(pAction.Precondition, "K", false);
 
-                    BoolExpr lTempAction_New_Pre = CreatePreconditionNeededVariablesNReturnBoolExpr(pAction_New.Precondition, "K+1", false);
+                    BoolExpr lTempAction_New_Pre = CreatePreconditionNeededVariablesNReturnBoolExpr(pAction.NextMyTypeAction().Precondition, "K+1", false);
 
                     string lTempAction_PreStr = GeneralUtilities.RemoveSpecialCharsFromString(lTempAction_Pre.ToString(), new char[] { '(', ')' });
 
@@ -1673,8 +1682,9 @@ namespace ProductPlatformAnalyzer
                                             //, OperationInstance pOperationInstance2_NextTransition
                                             , Action pAction1_CurrentTransition
                                             , Action pAction2_CurrentTransition
-                                            , Action pAction1_NextTransition
-                                            , Action pAction2_NextTransition)
+                                            //, Action pAction1_NextTransition
+                                            //, Action pAction2_NextTransition
+                                            )
         {
             Status lResult = Status.UNSATISFIABLE;
             try
@@ -1719,13 +1729,13 @@ namespace ProductPlatformAnalyzer
                 CarryOutNeededActionsOnPrecondition(lAction1Pre_CurrentTransitionVariable
                                                     , pAction1_CurrentTransition
                                                     , lAction1Pre_NextTransitionVariable
-                                                    , pAction1_NextTransition
+                                                    //, pAction1_CurrentTransition.NextMyTypeAction()
                                                     , CurrentNNextTransitionVariableNames);
 
                 CarryOutNeededActionsOnPrecondition(lAction2Pre
                                                     , pAction2_CurrentTransition
                                                     , lAction2PreNew
-                                                    , pAction2_NextTransition
+                                                    //, pAction2_CurrentTransition.NextMyTypeAction()
                                                     , CurrentNNextTransitionVariableNames);
 
                 //We need to build the model as a string according to Operation1 and Operation2
@@ -1755,40 +1765,40 @@ namespace ProductPlatformAnalyzer
                 //OperationInstance lNextOperation1Instance = getNextTransitionOperationInstance(pOperationInstance1);
 
                 //AddZ3ModelVariable(pOperationInstance1_NextTransition.InitialVariableName);
-                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.InitialVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName);
 
 
                 //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.InitialVariableName
                 //                    , pOperationInstance1_NextTransition.InitialVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.InitialVariableName
-                                    , pAction1_NextTransition.MyOperationInstance.InitialVariableName
+                                    , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.ExecutingVariableName);
                 AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.ExecutingVariableName);
 
                 //AddZ3ModelVariable(pOperationInstance1_NextTransition.ExecutingVariableName);
-                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.ExecutingVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName);
 
                 //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.ExecutingVariableName
                 //                    , pOperationInstance1_NextTransition.ExecutingVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.ExecutingVariableName
-                                    , pAction1_NextTransition.MyOperationInstance.ExecutingVariableName
+                                    , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.FinishedVariableName);
                 AddZ3ModelVariable(pAction1_CurrentTransition.MyOperationInstance.FinishedVariableName);
 
                 //AddZ3ModelVariable(pOperationInstance1_NextTransition.FinishedVariableName);
-                AddZ3ModelVariable(pAction1_NextTransition.MyOperationInstance.FinishedVariableName);
+                AddZ3ModelVariable(pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName);
 
                 //Add2OldNewVariableList(pOperationInstance1_CurrentTransition.FinishedVariableName
                 //                    , pOperationInstance1_NextTransition.FinishedVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction1_CurrentTransition.MyOperationInstance.FinishedVariableName
-                                    , pAction1_NextTransition.MyOperationInstance.FinishedVariableName
+                                    , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance1_CurrentTransition.UnusedVariableName);
@@ -1807,10 +1817,10 @@ namespace ProductPlatformAnalyzer
                 //                                                                , pOperationInstance1_NextTransition.ExecutingVariableName
                 //                                                                , pOperationInstance1_NextTransition.FinishedVariableName
                 //                                                                , pOperationInstance1_NextTransition.UnusedVariableName });
-                BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pAction1_NextTransition.MyOperationInstance.InitialVariableName
-                                                                                , pAction1_NextTransition.MyOperationInstance.ExecutingVariableName
-                                                                                , pAction1_NextTransition.MyOperationInstance.FinishedVariableName
-                                                                                , pAction1_NextTransition.MyOperationInstance.UnusedVariableName });
+                BoolExpr lPickOne1New = _z3Solver.PickOneOperator(new List<string> { pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName
+                                                                                , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName
+                                                                                , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName
+                                                                                , pAction1_CurrentTransition.NextMyTypeAction().MyOperationInstance.UnusedVariableName });
                 _z3Solver.AddConstraintToSolver(lPickOne1, "PickOne1_K");
                 _z3Solver.AddConstraintToSolver(lPickOne1New, "PickOne1_K+1");
 
@@ -1826,37 +1836,37 @@ namespace ProductPlatformAnalyzer
                 //OperationInstance lNextOperation2Instance = getNextTransitionOperationInstance(pOperationInstance2);
 
                 //AddZ3ModelVariable(pOperationInstance2_NextTransition.InitialVariableName);
-                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.InitialVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName);
 
                 //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.InitialVariableName
                 //                    , pOperationInstance2_NextTransition.InitialVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.InitialVariableName
-                                    , pAction2_NextTransition.MyOperationInstance.InitialVariableName
+                                    , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.ExecutingVariableName);
                 AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.ExecutingVariableName);
                 //AddZ3ModelVariable(pOperationInstance2_NextTransition.ExecutingVariableName);
-                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.ExecutingVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName);
 
                 //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.ExecutingVariableName
                 //                    , pOperationInstance2_NextTransition.ExecutingVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.ExecutingVariableName
-                                    , pAction2_NextTransition.MyOperationInstance.ExecutingVariableName
+                                    , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.FinishedVariableName);
                 AddZ3ModelVariable(pAction2_CurrentTransition.MyOperationInstance.FinishedVariableName);
                 //AddZ3ModelVariable(pOperationInstance2_NextTransition.FinishedVariableName);
-                AddZ3ModelVariable(pAction2_NextTransition.MyOperationInstance.FinishedVariableName);
+                AddZ3ModelVariable(pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName);
 
                 //Add2OldNewVariableList(pOperationInstance2_CurrentTransition.FinishedVariableName
                 //                    , pOperationInstance2_NextTransition.FinishedVariableName
                 //                    , CurrentNNextTransitionVariableNames);
                 Add2OldNewVariableList(pAction2_CurrentTransition.MyOperationInstance.FinishedVariableName
-                                    , pAction2_NextTransition.MyOperationInstance.FinishedVariableName
+                                    , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName
                                     , CurrentNNextTransitionVariableNames);
 
                 //AddZ3ModelVariable(pOperationInstance2_CurrentTransition.UnusedVariableName);
@@ -1875,10 +1885,10 @@ namespace ProductPlatformAnalyzer
                 //                                                                , pOperationInstance2_NextTransition.ExecutingVariableName
                 //                                                                , pOperationInstance2_NextTransition.FinishedVariableName
                 //                                                                , pOperationInstance2_NextTransition.UnusedVariableName });
-                BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pAction2_NextTransition.MyOperationInstance.InitialVariableName
-                                                                                , pAction2_NextTransition.MyOperationInstance.ExecutingVariableName
-                                                                                , pAction2_NextTransition.MyOperationInstance.FinishedVariableName
-                                                                                , pAction2_NextTransition.MyOperationInstance.UnusedVariableName });
+                BoolExpr lPickOne2New = _z3Solver.PickOneOperator(new List<string> { pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.InitialVariableName
+                                                                                , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.ExecutingVariableName
+                                                                                , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.FinishedVariableName
+                                                                                , pAction2_CurrentTransition.NextMyTypeAction().MyOperationInstance.UnusedVariableName });
                 _z3Solver.AddConstraintToSolver(lPickOne2, "PickOne2_K");
                 _z3Solver.AddConstraintToSolver(lPickOne2New, "PickOne2_K+1");
                 //}

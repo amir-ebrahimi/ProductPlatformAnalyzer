@@ -58,6 +58,19 @@ namespace ProductPlatformAnalyzer
             return MyOperationInstance.NextOperationInstance().Action_I2E;
         }
 
+        public Action NextMyTypeAction()
+        {
+            switch (Type)
+            {
+                case Enumerations.ActionType.I2E:
+                    return this.MyOperationInstance.NextOperationInstance().Action_I2E;
+                case Enumerations.ActionType.E2F:
+                    return this.MyOperationInstance.NextOperationInstance().Action_E2F;
+                default:
+                    return this.MyOperationInstance.NextOperationInstance().Action_I2E;
+            }
+        }
+
         public Action NextE2FAction()
         {
             //return MyOperationInstance.Action_E2F;
